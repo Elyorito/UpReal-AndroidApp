@@ -16,14 +16,14 @@
                 <!--Header-->
     <string name="scan">Scan</string>
     <string name="history_product">Produit Consultés</string>
-    <string name="list">Mes Listes</string>
+    <string name="list">Mes listes</string>
     <string name="news">Actualités</string>
     <string name="catalog">Catalogue</string>
     <string name="shop">Magasins</string>
     <string name="services">Services</string>
         <!--With Account-->
     <string name="loyalty_cards">Cartes de fidélité et Bons</string>
-    <string name="loyalty">Cartes de fidélité</string>
+    <string name="loyalty">Fidélité</string>
     <string name="parrainage">Mes filleuls</string>
     <string name="acheivement">Succès</string>
 
