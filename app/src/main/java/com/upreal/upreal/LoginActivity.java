@@ -1,17 +1,27 @@
 package com.upreal.upreal;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import home.HomeActivity;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements View.OnClickListener {
 
+    private Button but_loginToMain;
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        but_loginToMain = (Button) findViewById(R.id.button_loginToMain);
+        but_loginToMain.setOnClickListener(this);
     }
 
 
@@ -35,5 +45,17 @@ public class LoginActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_loginToMain:
+                intent = (Intent) new Intent(v.getContext(), HomeActivity.class);
+                startActivity(intent);
+                return;
+            default:
+                return;
+        }
     }
 }

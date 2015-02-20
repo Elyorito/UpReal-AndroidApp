@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="ColorPrimary">#FF5722</color>
+    <color name="ColorPrimaryDark">#E64A19</color>
+    <color name="ColorTabs">#8A140E</color>
+
+    <!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+        <!--<item android:state_selected="true" android:color="@android:color/white" />-->
+        <!--<item android:state_focused="true" android:color="@android:color/white" />-->
+        <!--<item android:state_pressed="true" android:color="@android:color/white" />-->
+        <!--<item android:color="#8a140e" />-->
+    <!--</selector>-->
+</resources>
