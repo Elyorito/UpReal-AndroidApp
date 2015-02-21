@@ -30,8 +30,17 @@
     <!--No use-->
     <string name="profile">Profil</string>
 
+    <!--HomeNavigationDrawerR-->
+    <string name="price">Prix</string>
+    <string name="search">Rechercher</string>
+    <string name="rate">Note et Avis</string>
+    <!--HomePage-->
+    <string name="last_reduc">Dernières réductions</string>
+    
     <!--ProductSearch-->
     <string name="product">Produit</string>
     <string name="user">Utilisateur</string>
 
+    <!--Camera-->
+    <string name="action_camera">Camera</string>
 </resources>

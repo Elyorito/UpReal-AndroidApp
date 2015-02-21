@@ -41,6 +41,9 @@ public class HomeActivity extends ActionBarActivity {
     private RecyclerView.LayoutManager mLayoutManagerHome;
     private DrawerLayout DrawerHome;
 
+    private ViewPager mViewpager_slideshow;
+    private SlideViewPagerAdapter mAdapterSlide;
+
     //RecyclerView NavDrawerL
     private RecyclerView mRecyclerViewL;
     private RecyclerView.Adapter mAdapterL;
@@ -61,6 +64,8 @@ public class HomeActivity extends ActionBarActivity {
     private String ITEM_WACCOUNT[];
     private String ACCOUNT[];
 
+    private String PRODUCTREDUC[];
+    private String PRODUCTREDUCPRICE[];
     private static boolean toggleAccount = false;
 
 
@@ -78,6 +83,10 @@ public class HomeActivity extends ActionBarActivity {
                 this.getString(R.string.catalog), this.getString(R.string.shop), this.getString(R.string.loyalty_cards), this.getString(R.string.parrainage), this.getString(R.string.acheivement), this.getString(R.string.services)};
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
+        PRODUCTREDUC = new String[] {"P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis"};
+
+        PRODUCTREDUCPRICE = new String[] {"1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé"};
+
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
@@ -85,9 +94,14 @@ public class HomeActivity extends ActionBarActivity {
         /*RecyclerView MainView Home*/
         mRecyclerViewHome = (RecyclerView) findViewById(R.id.RecyclerView_Home);
         mRecyclerViewHome.setHasFixedSize(true);
-        mRecyclerViewHome.setLayoutManager(new GridLayoutManager(this, 2));
-        mAdapterHome = new AdapterHome(CARDHOME, HomeActivity.this);
+        mRecyclerViewHome.setLayoutManager(new GridLayoutManager(this, 1));
+//        mAdapterHome = new AdapterHome(CARDHOME, HomeActivity.this);
+        mAdapterHome = new AdapterHome(PRODUCTREDUC, PRODUCTREDUCPRICE, HomeActivity.this);
         mRecyclerViewHome.setAdapter(mAdapterHome);
+
+        mViewpager_slideshow = (ViewPager) findViewById(R.id.viewpager_home);
+        mAdapterSlide = new SlideViewPagerAdapter(this);
+        mViewpager_slideshow.setAdapter(mAdapterSlide);
 
         /*RecyclerView NavigDrawL*/
 
@@ -122,6 +136,10 @@ public class HomeActivity extends ActionBarActivity {
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
                     Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
+                    if (rv.getChildPosition(child) == 1){
+                        Intent intent = new Intent(rv.getContext(), scan.CameraActivity.class);
+                        rv.getContext().startActivity(intent);
+                    }
                     return true;
                 }
                 return false;
