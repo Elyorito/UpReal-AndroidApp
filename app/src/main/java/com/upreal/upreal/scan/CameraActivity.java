@@ -1,8 +1,7 @@
-package scan;
+package com.upreal.upreal.scan;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.RectF;
@@ -12,7 +11,6 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureFailure;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
@@ -44,8 +42,6 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import static android.view.TextureView.SurfaceTextureListener;
 
 
 /**

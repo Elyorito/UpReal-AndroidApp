@@ -1,15 +1,13 @@
-package product;
+package com.upreal.upreal.product;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.upreal.upreal.R;
 
-import view.SlidingTabLayout;
+import com.upreal.upreal.view.SlidingTabLayout;
 
 /**
  * Created by Elyo on 16/02/2015.
@@ -48,6 +46,7 @@ public class ProductSearchActivity extends ActionBarActivity {
         mViewPager.setAdapter(adapter);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
+        mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 }

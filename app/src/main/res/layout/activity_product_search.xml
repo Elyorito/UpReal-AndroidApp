@@ -15,12 +15,12 @@
         android:orientation="vertical"
         android:weightSum="3">
 
-        <view.SlidingTabLayout
+        <com.upreal.upreal.view.SlidingTabLayout
             android:id="@+id/sliding_tab"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".5">
-        </view.SlidingTabLayout>
+        </com.upreal.upreal.view.SlidingTabLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="product.ProductActivity"
+    tools:context="com.upreal.upreal.product.ProductActivity"
     android:weightSum="5">
 
     <include
@@ -27,7 +27,7 @@
         android:layout_weight="3"
         android:weightSum="4">
 
-        <view.SlidingTabLayout
+        <com.upreal.upreal.view.SlidingTabLayout
             android:id="@+id/sliding_tab"
             android:background="@color/material_blue_grey_900"
             android:layout_height="0dp"

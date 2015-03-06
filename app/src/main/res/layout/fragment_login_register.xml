@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp">
+
+    <EditText
+            android:id="@+id/edittext_register_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom utilisateur"/>
+
+        <EditText
+            android:id="@+id/edittext_register_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edittext_register_id"
+            android:hint="@string/password"/>
+
+        <EditText
+            android:id="@+id/edittext_register_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edittext_register_password"
+            android:hint="@string/confirm_password"/>
+
+        <EditText
+            android:id="@+id/edittext_register_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edittext_register_password2"
+            android:hint="@string/adresse_email"/>
+
+        <CheckedTextView
+            android:id="@+id/checktext_cgu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edittext_register_email"
+            android:checked="false"
+            android:text="@string/cgu"/>
+
+        <Button
+            android:id="@+id/button_login_connect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:layout_below="@+id/checktext_cgu"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp">
+
+    <TextView
+            android:id="@+id/textview_rs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ou Via Reseau Social"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/button_google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview_rs"
+            android:text="@string/google"
+            android:background="@android:color/holo_red_light"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/button_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_google"
+            android:text="@string/facebook"
+            android:background="@android:color/holo_blue_dark"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/button_twitter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_facebook"
+            android:text="@string/twitter"
+            android:background="@android:color/holo_blue_bright"
+            android:layout_margin="10dp"/>
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

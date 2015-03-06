@@ -1,4 +1,4 @@
-package scan;
+package com.upreal.upreal.scan;
 
 import android.media.Image;
 

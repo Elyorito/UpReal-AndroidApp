@@ -1,13 +1,5 @@
-package home;
+package com.upreal.upreal.home;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 
 /**
  * Created by Elyo on 06/02/2015.
@@ -36,8 +25,6 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
 
         TextView list_item;
         Button but_account;
-        Button but_social;
-
 
 
         public ViewHolder(View itemView, int ViewType) {
@@ -50,7 +37,6 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
             else {
 
                 but_account = (Button) itemView.findViewById(R.id.but_account_connect);
-                but_social = (Button) itemView.findViewById(R.id.but_social_connect);;
                 Holderid = 0;
             }
         }
@@ -88,7 +74,6 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
         }
         else {
             holder.but_account.setOnClickListener(this);
-            holder.but_social.setOnClickListener(this);
         }
     }
 
@@ -97,8 +82,6 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
         switch (v.getId()) {
             case R.id.but_account_connect:
                    break;
-            case R.id.but_social_connect:
-                break;
         }
     }
 

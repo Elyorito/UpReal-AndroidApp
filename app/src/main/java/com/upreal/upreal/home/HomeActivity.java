@@ -1,29 +1,30 @@
-package home;
+package com.upreal.upreal.home;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
 
-import product.ProductActivity;
+import com.upreal.upreal.login.LoginActivity;
+import com.upreal.upreal.product.ProductActivity;
+import com.upreal.upreal.scan.CameraActivity;
 
 import static android.view.GestureDetector.*;
 
@@ -59,6 +60,8 @@ public class HomeActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggleR;
 
 
+    private Intent intent;
+
     private String CARDHOME[];
     private String ITEM_WTACCOUNT[];
     private String ITEM_WACCOUNT[];
@@ -68,12 +71,19 @@ public class HomeActivity extends ActionBarActivity {
     private String PRODUCTREDUCPRICE[];
     private static boolean toggleAccount = false;
 
+    public static final String ACTION_CLOSE_HOME = "HomeActivity.ACTION_CLOSE";
+    private IntentFilter intentFilter;
+    private HomeReceiver homeReceiver;
+
+    public HomeActivity(){};
+    public HomeActivity(Boolean account) {
+        toggleAccount = account;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         CARDHOME = new String[]{getString(R.string.profile), getString(R.string.scan),getString(R.string.news), getString(R.string.loyalty), getString(R.string.list), getString(R.string.acheivement)};
         ITEM_WTACCOUNT = new String[]{this.getString(R.string.scan),this.getString(R.string.history_product),
                 this.getString(R.string.list),this.getString(R.string.news),
@@ -107,7 +117,7 @@ public class HomeActivity extends ActionBarActivity {
 
         mRecyclerViewL = (RecyclerView) findViewById(R.id.RecyclerView_NavigationDrawer);
         mRecyclerViewL.setHasFixedSize(true);
-        if (!toggleAccount)
+        if (toggleAccount)
             mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
         else
             mAdapterL = new AdapterNavDrawerConnectHome(ACCOUNT, ITEM_WTACCOUNT);
@@ -136,11 +146,21 @@ public class HomeActivity extends ActionBarActivity {
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
                     Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
-                    if (rv.getChildPosition(child) == 1){
-                        Intent intent = new Intent(rv.getContext(), scan.CameraActivity.class);
-                        rv.getContext().startActivity(intent);
+                    switch (rv.getChildPosition(child)) {
+                        case 0://Connect
+                            intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
+                            homeReceiver = new HomeReceiver();
+                            registerReceiver(homeReceiver, intentFilter);
+                            intent = new Intent(rv.getContext(), LoginActivity.class);
+                            rv.getContext().startActivity(intent);
+                            return true;
+                        case 1://Scan
+                            intent = new Intent(rv.getContext(), CameraActivity.class);
+                            rv.getContext().startActivity(intent);
+                            return true;
+                        default:
+                            return false;
                     }
-                    return true;
                 }
                 return false;
             }
@@ -206,6 +226,22 @@ public class HomeActivity extends ActionBarActivity {
         };
         DrawerR.setDrawerListener(mDrawerToggleR);
         mDrawerToggleR.syncState();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(homeReceiver);
+    }
+
+    public class HomeReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_CLOSE_HOME)) {
+                HomeActivity.this.finish();
+            }
+        }
     }
 
     @Override

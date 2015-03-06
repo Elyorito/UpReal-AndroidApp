@@ -1,4 +1,4 @@
-package home;
+package com.upreal.upreal.home;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

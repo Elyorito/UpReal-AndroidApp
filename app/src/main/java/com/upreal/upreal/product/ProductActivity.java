@@ -1,6 +1,5 @@
-package product;
+package com.upreal.upreal.product;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +9,7 @@ import android.view.MenuItem;
 
 import com.upreal.upreal.R;
 
-import view.SlidingTabLayout;
+import com.upreal.upreal.view.SlidingTabLayout;
 
 
 /**
@@ -38,15 +37,11 @@ public class ProductActivity extends ActionBarActivity {
         mViewPager.setAdapter(adapter);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
+        mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
                 return getResources().getColor(R.color.ColorTabs);
-            }
-
-            @Override
-            public int getDividerColor(int position) {
-                return 0;
             }
         });
 

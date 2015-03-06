@@ -1,9 +1,7 @@
-package home;
+package com.upreal.upreal.home;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 
 import com.upreal.upreal.R;
 
-import utils.CircleImageView;
+import com.upreal.upreal.utils.CircleImageView;
 
 /**
  * Created by Elyo on 06/02/2015.

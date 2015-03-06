@@ -1,15 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/home_app_bar"/>
+
+    <com.upreal.upreal.view.SlidingTabLayout
+        android:id="@+id/login_sliding_tab"
+        android:background="@color/material_deep_teal_200"
         android:layout_height="wrap_content"
-        android:id="@+id/button_loginToMain"
-        android:background="@drawable/logo"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="match_parent"
+        android:elevation="2dp"/>
 
-</RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/login_viewpager"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+
+</LinearLayout>

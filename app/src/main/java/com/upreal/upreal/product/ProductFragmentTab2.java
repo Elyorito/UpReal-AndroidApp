@@ -1,4 +1,4 @@
-package product;
+package com.upreal.upreal.product;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,10 +1,8 @@
-package home;
+package com.upreal.upreal.home;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +11,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.product.ProductSearchActivity;
 
 import static android.widget.TextView.OnEditorActionListener;
 
@@ -110,7 +108,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.but_done_search:
-                Intent intent = new Intent(v.getContext(), product.ProductSearchActivity.class);
+                Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
                 v.getContext().startActivity(intent);
                 return;
             default:
@@ -125,7 +123,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
         if(actionId == EditorInfo.IME_ACTION_DONE) {
             ViewHolder holder = (ViewHolder) v.getTag();
             holder.search.setText("Searching!...");
-            Intent intent = new Intent(v.getContext(), product.ProductSearchActivity.class);
+            Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
             v.getContext().startActivity(intent);
             notifyDataSetChanged();
             return true;
