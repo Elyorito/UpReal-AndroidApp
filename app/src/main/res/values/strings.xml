@@ -20,7 +20,7 @@
     <string name="news">Actualités</string>
     <string name="catalog">Catalogue</string>
     <string name="shop">Magasins</string>
-    <string name="services">Services</string>
+    <string name="settings">Paramètres</string>
         <!--With Account-->
     <string name="loyalty_cards">Cartes de fidélité et Bons</string>
     <string name="loyalty">Fidélité</string>
@@ -51,9 +51,16 @@
     <string name="select_connexion">Connexion</string>
     <string name="select_register">Inscription</string>
 
+    <!--ProductPage-->
+    <string name="commentary">Commentaire</string>
+    <string name="social">Social</string>
+    <string name="options">Options</string>
+
     <!--ProductSearch-->
     <string name="product">Produit</string>
     <string name="user">Utilisateur</string>
+    <string name="brand">Marque</string>
+    <string name="store">Magasins</string>
 
     <!--Camera-->
     <string name="action_camera">Camera</string>

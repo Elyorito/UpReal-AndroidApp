@@ -3,6 +3,7 @@ package com.upreal.upreal.login;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,9 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.home.HomeActivity;
+import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
+import com.upreal.upreal.utils.User;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -28,10 +31,12 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
     private EditText login;
     private EditText password;
     private Button connect;
+    public SessionManagerUser sessionManagerUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login_connect, container, false);
+        sessionManagerUser = new SessionManagerUser(getActivity());
         login = (EditText) v.findViewById(R.id.edittext_login_mail);
         password = (EditText) v.findViewById(R.id.edittext_login_password);
         connect = (Button) v.findViewById(R.id.button_login_connect);
@@ -55,14 +60,32 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 if (login.getText().length() == 0 || password.getText().length() == 0)
                     Toast.makeText(v.getContext(), "Login or password empty", Toast.LENGTH_SHORT).show();
                 else
-                    new RetreiveInfoFromServer().execute();
+                    new RetrieveInfoFromServer().execute();
                 break;
             default:
                 break;
         }
     }
 
-    private class RetreiveInfoFromServer extends AsyncTask<Void, Void, Boolean> {
+    private class RetrieveUser extends AsyncTask<Void, Void, User> {
+
+        User user = new User();
+        @Override
+        protected User doInBackground(Void... params) {
+
+            SoapUserManager um = new SoapUserManager();
+            user = um.getUserByUsername(sessionManagerUser.getRegisterLoginUser()[0]);
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+            sessionManagerUser.setUser(user);
+        }
+    }
+
+    private class RetrieveInfoFromServer extends AsyncTask<Void, Void, Boolean> {
 
         private Boolean info_serv;
 
@@ -80,8 +103,9 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             if (!s) {
                 builder.create().show();
             } else {
-
-                HomeActivity homeActivity = new HomeActivity(true);
+                sessionManagerUser.setRegisterLoginUser(login.getText().toString(), password.getText().toString());
+                new RetrieveUser().execute();
+                HomeActivity homeActivity = new HomeActivity();
                 Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
                 Intent intent = new Intent(getActivity().getApplicationContext(), homeActivity.getClass());
                 getActivity().sendBroadcast(close);

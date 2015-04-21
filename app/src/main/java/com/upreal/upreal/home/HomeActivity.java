@@ -25,6 +25,7 @@ import com.upreal.upreal.R;
 import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.scan.CameraActivity;
+import com.upreal.upreal.utils.SessionManagerUser;
 
 import static android.view.GestureDetector.*;
 
@@ -39,9 +40,6 @@ public class HomeActivity extends ActionBarActivity {
     //RecyclerView Home
     private RecyclerView mRecyclerViewHome;
     private RecyclerView.Adapter mAdapterHome;
-    private RecyclerView.LayoutManager mLayoutManagerHome;
-    private DrawerLayout DrawerHome;
-
     private ViewPager mViewpager_slideshow;
     private SlideViewPagerAdapter mAdapterSlide;
 
@@ -76,21 +74,33 @@ public class HomeActivity extends ActionBarActivity {
     private HomeReceiver homeReceiver;
 
     public HomeActivity(){};
-    public HomeActivity(Boolean account) {
-        toggleAccount = account;
-    }
+    private SessionManagerUser sessionManagerUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        sessionManagerUser = new SessionManagerUser(getApplicationContext());
+/*
+        sessionManagerUser.deleteALL();
+*/
+
+
+        toggleAccount = sessionManagerUser.isLogged();
+
         CARDHOME = new String[]{getString(R.string.profile), getString(R.string.scan),getString(R.string.news), getString(R.string.loyalty), getString(R.string.list), getString(R.string.acheivement)};
         ITEM_WTACCOUNT = new String[]{this.getString(R.string.scan),this.getString(R.string.history_product),
                 this.getString(R.string.list),this.getString(R.string.news),
-                this.getString(R.string.catalog), this.getString(R.string.shop), this.getString(R.string.services)};
-        ITEM_WACCOUNT = new String[]{this.getString(R.string.scan),this.getString(R.string.history_product),
-                this.getString(R.string.list),this.getString(R.string.news),
-                this.getString(R.string.catalog), this.getString(R.string.shop), this.getString(R.string.loyalty_cards), this.getString(R.string.parrainage), this.getString(R.string.acheivement), this.getString(R.string.services)};
+                this.getString(R.string.catalog), this.getString(R.string.shop), this.getString(R.string.settings)};
+        ITEM_WACCOUNT = new String[]{this.getString(R.string.scan),
+                this.getString(R.string.list),
+                this.getString(R.string.news),
+                this.getString(R.string.catalog),
+                this.getString(R.string.shop),
+                this.getString(R.string.loyalty_cards),
+                this.getString(R.string.parrainage),
+                this.getString(R.string.acheivement),
+                this.getString(R.string.settings)};
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
         PRODUCTREDUC = new String[] {"P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis"};
@@ -99,8 +109,10 @@ public class HomeActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-
-
+        if (!sessionManagerUser.isLogged()) {
+            String tab[] = sessionManagerUser.getRegisterLoginUser();
+           Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
+        }
         /*RecyclerView MainView Home*/
         mRecyclerViewHome = (RecyclerView) findViewById(R.id.RecyclerView_Home);
         mRecyclerViewHome.setHasFixedSize(true);
@@ -117,10 +129,10 @@ public class HomeActivity extends ActionBarActivity {
 
         mRecyclerViewL = (RecyclerView) findViewById(R.id.RecyclerView_NavigationDrawer);
         mRecyclerViewL.setHasFixedSize(true);
-        if (toggleAccount)
+        if (!toggleAccount)
             mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
         else
-            mAdapterL = new AdapterNavDrawerConnectHome(ACCOUNT, ITEM_WTACCOUNT);
+            mAdapterL = new AdapterNavDrawerConnectHome(ACCOUNT, ITEM_WACCOUNT);
         mRecyclerViewL.setAdapter(mAdapterL);
 
         /*RecyclerView NavigDrawR*/
@@ -146,22 +158,25 @@ public class HomeActivity extends ActionBarActivity {
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
                     Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
-                    switch (rv.getChildPosition(child)) {
-                        case 0://Connect
-                            intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
-                            homeReceiver = new HomeReceiver();
-                            registerReceiver(homeReceiver, intentFilter);
-                            intent = new Intent(rv.getContext(), LoginActivity.class);
-                            rv.getContext().startActivity(intent);
-                            return true;
-                        case 1://Scan
-                            intent = new Intent(rv.getContext(), CameraActivity.class);
-                            rv.getContext().startActivity(intent);
-                            return true;
-                        default:
-                            return false;
+                    if (sessionManagerUser.isLogged()) {
+                        switch (rv.getChildPosition(child)) {
+                            case 0://Connect
+                                intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
+                                homeReceiver = new HomeReceiver();
+                                registerReceiver(homeReceiver, intentFilter);
+                                intent = new Intent(rv.getContext(), LoginActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 1://Scan
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            default:
+                                return false;
+                        }
                     }
                 }
+
                 return false;
             }
 
@@ -231,7 +246,8 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(homeReceiver);
+        if (homeReceiver != null)
+            unregisterReceiver(homeReceiver);
     }
 
     public class HomeReceiver extends BroadcastReceiver {
@@ -256,9 +272,7 @@ public class HomeActivity extends ActionBarActivity {
             case R.id.action_settings:
                 return true;
             case R.id.action_search:
-                Toast.makeText(HomeActivity.this, "Search!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this.getApplicationContext(), ProductActivity.class);
-                startActivity(intent);
+                Toast.makeText(HomeActivity.this, "Search !!", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

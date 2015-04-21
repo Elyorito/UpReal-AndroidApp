@@ -14,6 +14,7 @@ import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -34,25 +35,65 @@ public class SoapUserManager {
         }
     }
 
-    /*public Boolean registerAccount(String username, String password) {
+    public User getUserByUsername(String username) {
+        User user = new User();
+        String methodName = "getUserByUsername";
+        int result = 0;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("username", username);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodName, envelope);
+            testHttpResponse(ht);
+            SoapObject res2 = (SoapObject) envelope.getResponse();
+
+            user.setId(Integer.parseInt(res2.getPropertyAsString("id").toString()));
+            user.setUsername(res2.getPropertyAsString("username").toString());
+            user.setFirstname(res2.getPropertyAsString("firstname").toString());
+            user.setLastname(res2.getPropertyAsString("lastname").toString());
+            user.setEmail(res2.getPropertyAsString("email").toString());
+            user.setPassword(res2.getPropertyAsString("password").toString());
+            user.setPhone(Integer.parseInt(res2.getPropertyAsString("phone").toString()));
+            user.setId_address(Integer.parseInt(res2.getPropertyAsString("id_address").toString()));
+            user.setShort_desc(res2.getPropertyAsString("short_desc").toString());
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return user;
+    }
+
+    public int registerAccount(String id, String password, String email) {
         String data = null;
         String methodname = "registerAccount";
+        int result = 0;
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("username", username);
+        request.addProperty("username", id);
         request.addProperty("password", password);
-        request.addProperty("password", password);
-
+        request.addProperty("email", email);
+        request.addProperty("firstname", "ss");
+        request.addProperty("lastname", "ss");
+        request.addProperty("phone", 000);
+        request.addProperty("address_id", 1);
+        request.addProperty("short_desc", "ss");
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
         HttpTransportSE ht = getHttpTransportSE();
         try {
             ht.call(methodname, envelope);
             testHttpResponse(ht);
-            SoapPrimitive resultsBoolean= (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
 
-            data = resultsBoolean.toString();
-            result = Boolean.parseBoolean(data);
+            data = results.toString();
+            result = Integer.parseInt(data);
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
@@ -61,8 +102,7 @@ public class SoapUserManager {
             q.printStackTrace();
         }
         return result;
-    }*/
-
+    }
 
     public Boolean connectAccount(String username, String password) {
         Boolean result = false;
@@ -92,7 +132,8 @@ public class SoapUserManager {
         return result;
     }
 
-    public String isUsernameTaken(String username) {
+    public Boolean isUsernameTaken(String username) {
+        boolean result = true;
         String data = null;
         String methodname = "isUsernameTaken";
 
@@ -107,7 +148,7 @@ public class SoapUserManager {
             SoapPrimitive resultsString = (SoapPrimitive)envelope.getResponse();
 
             data = resultsString.toString();
-
+            result = Boolean.parseBoolean(data);
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
@@ -115,7 +156,32 @@ public class SoapUserManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return data;
+        return result;
+    }
+
+    public User getAccountInfoUsername(int id) {
+        User user = new User();
+
+        String methodName = "getAccountInfo";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id", id);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodName, envelope);
+            testHttpResponse(ht);
+            SoapObject res2 = (SoapObject) envelope.getResponse();
+
+            user.setId(Integer.parseInt(res2.getPropertyAsString("id").toString()));
+            user.setUsername(res2.getPropertyAsString("username").toString());
+        } catch (SocketTimeoutException t){
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return user;
     }
 
     private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {

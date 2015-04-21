@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="UsefulArray">
+        <item>Utile</item>
+        <item>Inutile</item>
+        <item>Spam</item>
+    </array>
+</resources>

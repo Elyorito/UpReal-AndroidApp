@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.product.AdapterOption;
 import com.upreal.upreal.product.ProductSearchActivity;
 
 import static android.widget.TextView.OnEditorActionListener;
@@ -28,6 +31,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
     private static final int TYPE_BUT_DONE = 3;
 
     private Context context;
+    private String mSearchName;
 
     public class ViewHolder extends  RecyclerView.ViewHolder{
         int HolderId;
@@ -57,6 +61,9 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
         }
     }
 
+    public AdapterNavDrawerSearchHome(String searchProduct) {
+        this.mSearchName = searchProduct;
+    }
     AdapterNavDrawerSearchHome(Context mContext) {
         context = mContext;
     }
@@ -99,34 +106,50 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
     @Override
     public void onBindViewHolder(final AdapterNavDrawerSearchHome.ViewHolder holder, int position) {
         //holder.search.setText("Search !");
-
-
+        /*holder.but_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.search.getText().toString().isEmpty()) {
+                    Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
+                    intent.putExtra("searchname", holder.search.getText().toString());
+                    v.getContext().startActivity(intent);
+                }
+            }
+        });*/
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.but_done_search:
-                Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
-                v.getContext().startActivity(intent);
-                return;
-            default:
-                return;
+        if (mSearchName == null || mSearchName.isEmpty()) {
+            Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
+            intent.putExtra("searchname", mSearchName);
+            v.getContext().startActivity(intent);
         }
     }
-
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
         if(actionId == EditorInfo.IME_ACTION_DONE) {
             ViewHolder holder = (ViewHolder) v.getTag();
-            holder.search.setText("Searching!...");
+
+            mSearchName = holder.search.getText().toString();
             Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
+            //intent.putExtra("searchname", holder.search.getText().toString());
             v.getContext().startActivity(intent);
             notifyDataSetChanged();
             return true;
+        } else if (actionId == (EditorInfo.IME_ACTION_NEXT)) {
+            ViewHolder holder = (ViewHolder) v.getTag();
+            mSearchName = holder.search.getText().toString();
         }
         return false;
     }

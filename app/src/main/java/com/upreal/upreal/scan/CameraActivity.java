@@ -1,6 +1,134 @@
 package com.upreal.upreal.scan;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.TextureView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.upreal.upreal.R;
+import com.upreal.upreal.product.AdapterCommentary;
+import com.upreal.upreal.utils.RateComment;
+import com.upreal.upreal.utils.SoapGlobalManager;
+import com.upreal.upreal.utils.SoapUserManager;
+import com.upreal.upreal.utils.User;
+import com.upreal.upreal.zxing.IntentIntegrator;
+import com.upreal.upreal.zxing.IntentResult;
+
+import java.util.List;
+
+public class CameraActivity extends Activity implements View.OnClickListener {
+
+    /*
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_camera);
+            if (null == savedInstanceState) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, Camera2Fragment.newInstance())
+                        .commit();
+            }
+        }
+    */
+    private Button scanner;
+    private TextView formatTxt, contentTxt;
+
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
+
+        scanner = (Button) findViewById(R.id.scanner);
+        formatTxt = (TextView)findViewById(R.id.scan_format);
+        contentTxt = (TextView)findViewById(R.id.scan_content);
+        scanner.setOnClickListener(this);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanningResult != null) {
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            formatTxt.setText("FORMAT: " + scanFormat);
+            contentTxt.setText("CONTENT: " + scanContent);
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+/*        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                // Handle successful scan
+                Toast toast = Toast.makeText(this, "Content:" + contents + " Format:" + format , Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 25, 400);
+                toast.show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 25, 400);
+                toast.show();
+
+            }
+        }*/
+    }
+
+    /*private class RetrieveComment extends AsyncTask<Void, Void, List<RateComment>> {
+
+        User user = new User();
+
+        @Override
+        protected List<RateComment> doInBackground(Void... params) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+            listComment = gm.getRateComment(0, prod.getId(), 0, 1, 0);
+            SoapUserManager um = new SoapUserManager();
+            for (int i = 0; i < listComment.size(); i++) {
+                user = um.getAccountInfoUsername(Integer.parseInt(listComment.get(i).getmNameUser().toString()));
+                listComment.get(i).setmNameUser(user.getUsername());
+            }
+            return listComment;
+        }
+
+        @Override
+        protected void onPostExecute(List<RateComment> rateComments) {
+            super.onPostExecute(rateComments);
+            Toast.makeText(getActivity().getApplicationContext(), "userName[" + user.getUsername() +"]", Toast.LENGTH_SHORT).show();
+           *//* Toast.makeText(getActivity().getApplicationContext(), "ProdID[" + Integer.toString(prod.getId()) +"]", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getActivity().getApplicationContext(), "Size Rate[" + Integer.toString(rateComments.size()) +"]", Toast.LENGTH_SHORT).show();*//*
+*//*            new RetrieveUsernameComment().execute();*//*
+            mAdapter = new AdapterCommentary(rateComments);
+            recyclerView.setAdapter(mAdapter);
+        }
+    }*/
+
+    public void onClick(View v) {
+        if (v.getId() == R.id.scanner) {
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            // Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+            //startActivityForResult(intent, 0);
+            scanIntegrator.initiateScan();
+        }
+    }
+}
+
+/*
+package com.upreal.upreal.scan;
+
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -44,9 +172,11 @@ import java.util.Comparator;
 import java.util.List;
 
 
+*/
 /**
  * Created by Elyo on 20/02/2015.
- */
+ *//*
+
 public class CameraActivity extends Activity {
     private static String[] cameraIdPhone;
     private TextView mCameraIdText;
@@ -216,9 +346,11 @@ public class CameraActivity extends Activity {
                             mState = 3;//STATE_WAITING_NON_PRECAPTURE
                             captureStillPicture();
                         }
-                        /*else {
+                        */
+/*else {
                             runPrecaptureSequence();
-                        }*/
+                        }*//*
+
                     }
                     break;
                 }
@@ -317,22 +449,29 @@ public class CameraActivity extends Activity {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request,
                                                TotalCaptureResult result) {
-           /*         showToast("Saved: " + mFile);
-                    unlockFocus();*/
+           */
+/*         showToast("Saved: " + mFile);
+                    unlockFocus();*//*
+
                 }
             };
 
-   /*         mCaptureSession.stopRepeating();
-            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);*/
+   */
+/*         mCaptureSession.stopRepeating();
+            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);*//*
+
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
-    /**
+    */
+/**
      * Unlock the focus. This method should be called when still image capture sequence is finished.
-     */
-    /*private void unlockFocus() {
+     *//*
+
+    */
+/*private void unlockFocus() {
         try {
             // Reset the autofucos trigger
             mPreviewBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
@@ -349,7 +488,8 @@ public class CameraActivity extends Activity {
             e.printStackTrace();
         }
     }
-*/
+*//*
+
     private void configureTransform(int viewWidth, int viewHeight) {
 
         if (null == mTextureView || null == mPreviewSize) {
@@ -388,7 +528,9 @@ public class CameraActivity extends Activity {
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new CompareSizesByArea());
                 mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
-                        ImageFormat.JPEG, /*maxImages*/2);
+                        ImageFormat.JPEG, */
+/*maxImages*//*
+2);
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
 
@@ -451,7 +593,8 @@ public class CameraActivity extends Activity {
         }
     }
 
-    /**
+    */
+/**
      * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
      * width and height are at least as large as the respective requested values, and whose aspect
      * ratio matches with the specified value.
@@ -461,7 +604,8 @@ public class CameraActivity extends Activity {
      * @param height      The minimum desired height
      * @param aspectRatio The aspect ratio
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
-     */
+     *//*
+
     private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<Size>();
@@ -483,18 +627,24 @@ public class CameraActivity extends Activity {
         }
     }
 
-    /**
+    */
+/**
      * Saves a JPEG {@link Image} into the specified {@link File}.
-     */
+     *//*
+
     private static class ImageSaver implements Runnable {
 
-        /**
+        */
+/**
          * The JPEG image
-         */
+         *//*
+
         private final Image mImage;
-        /**
+        */
+/**
          * The file we save the image into.
-         */
+         *//*
+
         private final File mFile;
 
         public ImageSaver(Image image, File file) {
@@ -540,3 +690,4 @@ public class CameraActivity extends Activity {
 
     }
 }
+*/

@@ -22,13 +22,13 @@ public class ProductSearchActivity extends ActionBarActivity {
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
     private ProductViewPagerSearchAdapter adapter;
-
+    private String searchname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_search);
-
+        searchname = getIntent().getStringExtra("searchname");
 //        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView_ProductSearch);
 //        mRecyclerView.setHasFixedSize(true);
 //        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -37,12 +37,12 @@ public class ProductSearchActivity extends ActionBarActivity {
 //        mAdapter = new ProductSearchAdapter(sProduct);
 //        mRecyclerView.setAdapter(mAdapter);
 
-        Title = new CharSequence[]{getString(R.string.product), getString(R.string.user)};
+        Title = new CharSequence[]{getString(R.string.product), getString(R.string.user), getString(R.string.brand, getString(R.string.store)), getString(R.string.store)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new ProductViewPagerSearchAdapter(getSupportFragmentManager(), Title, 2);
+        adapter = new ProductViewPagerSearchAdapter(getSupportFragmentManager(), Title, 4, searchname);
         mViewPager.setAdapter(adapter);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
