@@ -10,14 +10,14 @@ public class Product implements Parcelable{
 
     private int id;
     private String name;
-    private int ean;
+    private String ean;
     private String picture;
     private String brand;
 
     public Product() {
     }
 
-    public Product(int id, String name, int ean, String picture, String brand) {
+    public Product(int id, String name, String ean, String picture, String brand) {
         this.id = id;
         this.name = name;
         this.ean = ean;
@@ -41,11 +41,11 @@ public class Product implements Parcelable{
         this.name = name;
     }
 
-    public int getEan() {
+    public String getEan() {
         return ean;
     }
 
-    public void setEan(int ean) {
+    public void setEan(String ean) {
         this.ean = ean;
     }
 
@@ -74,7 +74,7 @@ public class Product implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.name);
-        dest.writeInt(this.ean);
+        dest.writeString(this.ean);
         dest.writeString(this.picture);
         dest.writeString(this.brand);
     }
@@ -95,7 +95,7 @@ public class Product implements Parcelable{
     public Product(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
-        this.ean = in.readInt();
+        this.ean = in.readString();
         this.picture = in.readString();
         this.brand = in.readString();
 

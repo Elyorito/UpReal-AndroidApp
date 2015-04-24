@@ -70,7 +70,7 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
     @Override
     public void onBindViewHolder(AdapterNavDrawerConnectHome.ViewHolder holder, int position) {
         if (holder.Holderid == 1) {
-            holder.list_item.setText(mNavWithoutAccount[position]);
+            holder.list_item.setText(mNavWithoutAccount[position - 1]);
         }
         else {
             holder.but_account.setOnClickListener(this);

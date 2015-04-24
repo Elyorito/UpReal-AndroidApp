@@ -103,8 +103,6 @@
             android:background="@android:color/holo_blue_bright"
             android:layout_margin="10dp"/>
 
-
-
     </RelativeLayout>
 
 </LinearLayout>

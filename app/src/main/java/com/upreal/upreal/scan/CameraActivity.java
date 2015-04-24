@@ -61,20 +61,6 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         contentTxt = (TextView)findViewById(R.id.scan_content);
         scanner.setOnClickListener(this);
         builder = new AlertDialog.Builder(CameraActivity.this);
-        builder.setTitle("Product Not Found !")
-                .setMessage("Would you like to add this product in our Database?")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "GO TO ADD PRODUCT", Toast.LENGTH_SHORT).show();
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        }).create();
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -165,6 +151,22 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         protected void onPostExecute(Product prod) {
             super.onPostExecute(prod);
             if (prod == null) {
+                builder.setTitle("Product Not Found !")
+                        .setMessage("Would you like to add this product in our Database?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getApplicationContext(), AddProductFromScan.class);
+                                intent.putExtra("ean", contentTxt.getText().toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getApplicationContext().startActivity(intent);
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).create();
                 builder.show();
                 return;
             }

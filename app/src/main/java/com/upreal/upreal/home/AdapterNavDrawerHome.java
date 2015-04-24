@@ -78,20 +78,21 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
     @Override
     public void onBindViewHolder(AdapterNavDrawerHome.ViewHolder holder, int position) {
         if (holder.Holderid == 1) {
-            holder.textView.setText(mNavTitles[position - 1]);
+            holder.textView.setText(mNavTitles[position]);
         }
         else {
-            if (position == 0)
+            if (position == 0) {
                 holder.connexion_name.setText("UserTest");
-                Bitmap bmp = ((BitmapDrawable)holder.mImageViewProfile.getDrawable()).getBitmap();
+                Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);
                 holder.mImageViewProfile.setImageBitmap(output);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return mNavTitles.length + 1;
+        return mNavTitles.length;
     }
 
     @Override

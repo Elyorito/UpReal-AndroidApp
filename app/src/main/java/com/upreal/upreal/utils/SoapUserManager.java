@@ -77,13 +77,8 @@ public class SoapUserManager {
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", id);
-        request.addProperty("password", password);
         request.addProperty("email", email);
-        request.addProperty("firstname", "ss");
-        request.addProperty("lastname", "ss");
-        request.addProperty("phone", 000);
-        request.addProperty("address_id", 1);
-        request.addProperty("short_desc", "ss");
+        request.addProperty("password", password);
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
         HttpTransportSE ht = getHttpTransportSE();

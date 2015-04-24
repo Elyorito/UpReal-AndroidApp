@@ -81,9 +81,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-/*
         sessionManagerUser.deleteALL();
-*/
 
 
         toggleAccount = sessionManagerUser.isLogged();
@@ -158,9 +156,24 @@ public class HomeActivity extends ActionBarActivity {
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
                     Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
-                        if (!sessionManagerUser.isLogged()) {
-                            Toast.makeText(HomeActivity.this, "Is NOT LOG", Toast.LENGTH_SHORT).show();
+                    if (!sessionManagerUser.isLogged()) {
+                        Toast.makeText(HomeActivity.this, "Is NOT LOG", Toast.LENGTH_SHORT).show();
+                        switch (rv.getChildPosition(child)) {
+                            case 0://Connect
+                                intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
+                                homeReceiver = new HomeReceiver();
+                                registerReceiver(homeReceiver, intentFilter);
+                                intent = new Intent(rv.getContext(), LoginActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 1://Scan
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            default:
+                                return false;
                         }
+                    }
                     if (sessionManagerUser.isLogged()) {
                         switch (rv.getChildPosition(child)) {
                             case 0://Connect
