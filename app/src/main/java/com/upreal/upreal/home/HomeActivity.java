@@ -129,7 +129,7 @@ public class HomeActivity extends ActionBarActivity {
 
         mRecyclerViewL = (RecyclerView) findViewById(R.id.RecyclerView_NavigationDrawer);
         mRecyclerViewL.setHasFixedSize(true);
-        if (!toggleAccount)
+        if (toggleAccount)
             mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
         else
             mAdapterL = new AdapterNavDrawerConnectHome(ACCOUNT, ITEM_WACCOUNT);
@@ -158,6 +158,9 @@ public class HomeActivity extends ActionBarActivity {
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
                     Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
+                        if (!sessionManagerUser.isLogged()) {
+                            Toast.makeText(HomeActivity.this, "Is NOT LOG", Toast.LENGTH_SHORT).show();
+                        }
                     if (sessionManagerUser.isLogged()) {
                         switch (rv.getChildPosition(child)) {
                             case 0://Connect

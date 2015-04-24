@@ -22,7 +22,7 @@ public class SessionManagerUser {
 
     public boolean isLogged() {
         boolean isL = sharedPreferences.getBoolean("isLogged", false);
-        if (!isL)
+        if (isL)
             return true;
         return false;
     }

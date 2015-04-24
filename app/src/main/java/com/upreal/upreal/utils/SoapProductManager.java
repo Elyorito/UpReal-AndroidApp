@@ -50,7 +50,7 @@ public class SoapProductManager {
     }
 */
 
-    public List<Product> getProductbyEAN(String ean) {
+    public Product getProductbyEAN(String ean) {
 
         List<Product> listprod = new ArrayList<Product>();
 
@@ -59,7 +59,7 @@ public class SoapProductManager {
         String methodname = "getProductByEAN";
         Product prod = new Product();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("ean", Integer.parseInt(ean));
+        request.addProperty("ean", ean);
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
@@ -70,16 +70,29 @@ public class SoapProductManager {
             testHttpResponse(ht);
 
             SoapObject res0 = (SoapObject) envelope.bodyIn;
-            /*SoapObject results= (SoapObject)envelope.getResponse();*/
+            SoapObject results= (SoapObject)envelope.getResponse();
+/*
             Vector<SoapObject> results = (Vector<SoapObject>) envelope.getResponse();
+*/
+            if (results == null)
+                return null;
+
+            prod.setId(Integer.parseInt(results.getPropertyAsString("id")));
+            prod.setName(results.getPropertyAsString("name").toString());
+            prod.setEan(Integer.parseInt(results.getPropertyAsString("ean").toString()));
+            prod.setBrand(results.getPropertyAsString("brand").toString());
+            prod.setId(Integer.parseInt(results.getPropertyAsString("id").toString()));
+
 /*
             nbProduct = results.getAttributeCount();
 */
 /*
             data = results.getProperty("Product").toString();
 */
+/*
             for (SoapObject res : results)
                 listprod.add(this.convertToQuery(res, data));
+*/
 
 /*
             if (results instanceof SoapObject) {
@@ -94,7 +107,7 @@ public class SoapProductManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return listprod;
+        return prod;
     }
 
 

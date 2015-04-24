@@ -1,6 +1,7 @@
 package com.upreal.upreal.scan;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,13 +18,18 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.product.AdapterCommentary;
+import com.upreal.upreal.product.ProductActivity;
+import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
+import com.upreal.upreal.utils.SoapProduct;
+import com.upreal.upreal.utils.SoapProductManager;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.User;
 import com.upreal.upreal.zxing.IntentIntegrator;
 import com.upreal.upreal.zxing.IntentResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CameraActivity extends Activity implements View.OnClickListener {
@@ -42,6 +48,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     */
     private Button scanner;
     private TextView formatTxt, contentTxt;
+    private AlertDialog.Builder builder;
 
     /** Called when the activity is first created. */
     @Override
@@ -53,6 +60,21 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
         scanner.setOnClickListener(this);
+        builder = new AlertDialog.Builder(CameraActivity.this);
+        builder.setTitle("Product Not Found !")
+                .setMessage("Would you like to add this product in our Database?")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "GO TO ADD PRODUCT", Toast.LENGTH_SHORT).show();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        }).create();
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -61,7 +83,9 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
             formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText("CONTENT: " + scanContent);
+            contentTxt.setText(scanContent);
+            new RetrieveScannedProduct().execute();
+
         } else {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
@@ -116,11 +140,38 @@ public class CameraActivity extends Activity implements View.OnClickListener {
 
     public void onClick(View v) {
         if (v.getId() == R.id.scanner) {
+
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             // Intent intent = new Intent("com.google.zxing.client.android.SCAN");
             //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
             //startActivityForResult(intent, 0);
             scanIntegrator.initiateScan();
+        }
+    }
+
+    public class RetrieveScannedProduct extends AsyncTask<String, Void, Product> {
+
+        private Product prod = new Product();
+
+        @Override
+        protected Product doInBackground(String... params) {
+
+            SoapProductManager pm = new SoapProductManager();
+            prod = pm.getProductbyEAN(contentTxt.getText().toString());
+            return prod;
+        }
+
+        @Override
+        protected void onPostExecute(Product prod) {
+            super.onPostExecute(prod);
+            if (prod == null) {
+                builder.show();
+                return;
+            }
+            Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+            intent.putExtra("listprod", prod);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
         }
     }
 }

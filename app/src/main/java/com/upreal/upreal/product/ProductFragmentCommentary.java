@@ -104,6 +104,7 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
         }
     }
 }

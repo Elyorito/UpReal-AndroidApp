@@ -71,11 +71,8 @@ public class SoapGlobalManager {
         String methodname = "getRate";
         RateComment rate = new RateComment();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("id_user", idUser);
         request.addProperty("id_product", idProduct);
-        request.addProperty("id_ovr_rate", idOvrRate);
         request.addProperty("type", type);
-        request.addProperty("id_article", idArticle);
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
