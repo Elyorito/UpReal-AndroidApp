@@ -78,7 +78,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
     @Override
     public void onBindViewHolder(AdapterNavDrawerHome.ViewHolder holder, int position) {
         if (holder.Holderid == 1) {
-            holder.textView.setText(mNavTitles[position]);
+            holder.textView.setText(mNavTitles[position - 1]);
         }
         else {
             if (position == 0) {
