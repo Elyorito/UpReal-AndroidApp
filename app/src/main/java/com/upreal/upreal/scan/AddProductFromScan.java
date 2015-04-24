@@ -93,6 +93,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                             intent.putExtra("listprod", product);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getApplicationContext().startActivity(intent);
                         }
                     }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
@@ -100,7 +101,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
-            });
+            }).create().show();
         }
     }
 }
