@@ -22,8 +22,11 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 
+import com.upreal.upreal.list.ListActivity;
 import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.product.ProductActivity;
+import com.upreal.upreal.scan.Camera2Activity;
+import com.upreal.upreal.scan.Camera2Fragment;
 import com.upreal.upreal.scan.CameraActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
 
@@ -81,10 +84,8 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-/*
-        sessionManagerUser.deleteALL();
+        /*sessionManagerUser.deleteALL();
 */
-
 
         toggleAccount = sessionManagerUser.isLogged();
 
@@ -172,6 +173,14 @@ public class HomeActivity extends ActionBarActivity {
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
+
+  /*                              intent = new Intent(rv.getContext(), Camera2Activity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+  */                          case 2://Lists
+                                intent = new Intent(rv.getContext(), ListActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
                             default:
                                 return false;
                         }
@@ -186,6 +195,38 @@ public class HomeActivity extends ActionBarActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 1://Scan
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 2://Lists
+                                intent = new Intent(rv.getContext(), ListActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 3://News
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 4://Catalogue
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 5://Shop
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 6://Loyalty
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 7://Filleuls
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 8://Achievment
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 9://Scan
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;

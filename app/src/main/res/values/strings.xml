@@ -73,4 +73,12 @@
     <string name="at_the_shop">Dans le magasin</string>
     <string name="submit">Soumettre</string>
     <string name="cancel">Annuler</string>
+    
+    <!--ListHome-->
+    <string name="liked_product">Produit aimés</string>
+    <string name="followed_user">Utilisateurs suivis</string>
+    <string name="product_seen_history">Historique des produits consultés</string>
+    <string name="my_commentary">Mes commentaires</string>
+    <string name="my_barter_product_list">Ma liste de produit à troquer</string>
+    <string name="customized_list">Mes listes personnalisées</string>
 </resources>

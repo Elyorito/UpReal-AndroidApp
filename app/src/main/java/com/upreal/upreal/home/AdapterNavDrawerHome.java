@@ -48,7 +48,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
     }
 
     AdapterNavDrawerHome(String Account[], String Titles[]) {
-        this.mNavAccount = Account;
+            this.mNavAccount = Account;
         this.mNavTitles = Titles;
 
     }

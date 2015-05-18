@@ -29,5 +29,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:21.0.+"
     compile "com.android.support:recyclerview-v7:21.0.+"
     compile "com.android.support:cardview-v7:21.0.+"
+    compile "com.github.clans:fab:1.5.0"
     compile "com.google.code.ksoap2-android:ksoap2-android:3.4.0"
 }
