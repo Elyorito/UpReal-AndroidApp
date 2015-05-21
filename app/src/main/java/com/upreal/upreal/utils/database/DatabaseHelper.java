@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } else {
                 this.getReadableDatabase();
                 /*try {
-                //  copyDataBase();
+                 copyDataBase();
                 }catch (IOException e){
                     throw new Error("Error while copying Database");
                 }*/
@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 this.getReadableDatabase();
                 copyDataBase(db);
             }catch (IOException e){
-                throw new RuntimeException("Error while creating database/", e);
+                throw new RuntimeException("Error while creating database", e);
             }
         }
         return (myDatabase = SQLiteDatabase.openDatabase(db.getPath(), null, SQLiteDatabase.OPEN_READWRITE));
@@ -104,5 +104,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
 
+        /*db.execSQL(DatabaseQueriesCreation.ProductCreate);
+        db.execSQL(DatabaseQueriesCreation.AddressCreate);
+        db.execSQL(DatabaseQueriesCreation.UserCreate);
+        db.execSQL(DatabaseQueriesCreation.ListsCreate);
+        db.execSQL(DatabaseQueriesCreation.ItemsCreate);*/
     }
 }

@@ -1,6 +1,7 @@
 package com.upreal.upreal.list;
 
 import android.app.AlertDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.upreal.upreal.R;
+import com.upreal.upreal.utils.database.DatabaseHelper;
+import com.upreal.upreal.utils.database.DatabaseQuery;
 
 /**
  * Created by Elyo on 11/05/2015.
@@ -20,6 +23,10 @@ import com.upreal.upreal.R;
 public class ListActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
+
+    private SQLiteDatabase mDatabase;
+    private DatabaseHelper mDbHelper;
+    private DatabaseQuery mDbQuery;
 
     //RecyclerView List Base
     private RecyclerView mRecyclerViewList;
@@ -42,6 +49,19 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+
+        //Init Database
+        mDbHelper = new DatabaseHelper(this);
+        mDbQuery = new DatabaseQuery(mDbHelper);
+        mDatabase = mDbHelper.openDataBase();
+        ////
+/*
+
+        mDbQuery.MyRawQuery("INSERT INTO Product (name, ean, picture, brand) VALUES ('coca', '53022', 'picture', 'Coca Cola');");
+*/
+
+        mDbQuery.InsertData(new String("product"), new String[]{"name", "ean", "picture", "brand"}, new String[]{"coca", "53022", "picture", "Coca Cola"});
 
         base_list = new String[] {getString(R.string.liked_product)
                 , getString(R.string.followed_user)
@@ -90,6 +110,7 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
          switch (v.getId()) {
              case R.id.fabaddlist:
                  builder.create().show();
+                 Toast.makeText(v.getContext(), mDbQuery.MyRawQuery("SELECT * FROM PRODUCT")[0], Toast.LENGTH_SHORT).show();
                  return;
              default:
                  return;
