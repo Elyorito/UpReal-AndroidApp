@@ -71,7 +71,7 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
 
         User user = new User();
         @Override
-        protected User doInBackground(Void... params) {
+            protected User doInBackground(Void... params) {
 
             SoapUserManager um = new SoapUserManager();
             user = um.getUserByUsername(sessionManagerUser.getRegisterLoginUser()[0]);

@@ -2,6 +2,10 @@ package com.upreal.upreal.scan;
 
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.utils.Product;
+import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.SoapUserManager;
+import com.upreal.upreal.utils.User;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,7 +32,9 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.test.ActivityTestCase;
@@ -542,6 +548,9 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
     //This is the output file for our picture.
     private File mFile;
 
+    //This contains the image's byte
+    private byte[] mBytes;
+
     /**
      * This a callback object for the ImageReader. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -550,9 +559,13 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
             = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            ImageSaver is = new ImageSaver(reader.acquireNextImage(), mFile);
+            mBytes = is.getImageBytes();
+            new RetrieveProductFromImage().execute();
+            mBackgroundHandler.post(is);
         }
     };
+
 
     private static class ImageSaver implements Runnable {
 
@@ -561,6 +574,8 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
 
         // The file we save the image into
         private final File mFile;
+
+        private byte[] mBytes;
 
         public ImageSaver(Image image, File file) {
             mImage = image;
@@ -572,6 +587,7 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
+            mBytes = bytes;
             FileOutputStream output = null;
             try {
                 output = new FileOutputStream(mFile);
@@ -590,6 +606,28 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
                     }
                 }
             }
+        }
+
+        public byte[] getImageBytes() {
+            return mBytes;
+        }
+    }
+
+    private class RetrieveProductFromImage extends AsyncTask<Void, Void, Product> {
+
+        Product product = new Product();
+        @Override
+        protected Product doInBackground(Void... params) {
+
+            SoapProductManager pm = new SoapProductManager();
+
+            product = pm.scanProduct(mBytes);
+            return product;
+        }
+
+        @Override
+        protected void onPostExecute(Product product) {
+            super.onPostExecute(product);
         }
     }
 

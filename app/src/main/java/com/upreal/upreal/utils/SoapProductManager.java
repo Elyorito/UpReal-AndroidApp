@@ -9,6 +9,9 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.Proxy;
@@ -251,6 +254,42 @@ public class SoapProductManager {
             q.printStackTrace();
         }
         return listprod;
+    }
+
+    public Product scanProduct(byte[] imageBytes) {
+
+        String methodname = "scanProduct";
+        Product prod = new Product();
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("imageBytes", imageBytes);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            SoapObject results = (SoapObject) envelope.getResponse();
+
+            if (results == null)
+                return null;
+
+            prod.setId(Integer.parseInt(results.getPropertyAsString("id")));
+            prod.setName(results.getPropertyAsString("name").toString());
+            prod.setEan(results.getPropertyAsString("ean").toString());
+            prod.setBrand(results.getPropertyAsString("brand").toString());
+            prod.setId(Integer.parseInt(results.getPropertyAsString("id").toString()));
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return prod;
     }
 
     private Product convertToQuery(SoapObject soapObject, String data) {
