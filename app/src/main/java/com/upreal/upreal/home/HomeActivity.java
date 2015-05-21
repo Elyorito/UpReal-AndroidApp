@@ -195,7 +195,12 @@ public class HomeActivity extends ActionBarActivity {
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 1://Scan
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
+
+//                                intent = new Intent(rv.getContext(), CameraActivity.class);
+//                                rv.getContext().startActivity(intent);
+//                                return true;
+
+                                intent = new Intent(rv.getContext(), Camera2Activity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 2://Lists
