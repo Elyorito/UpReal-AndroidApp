@@ -587,11 +587,11 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
-            mBytes = bytes;
             FileOutputStream output = null;
             try {
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
+                mBytes = bytes;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -613,15 +613,14 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
         }
     }
 
-    private class RetrieveProductFromImage extends AsyncTask<Void, Void, Product> {
+    private class RetrieveProductFromImage extends AsyncTask<byte[], Void, Product> {
 
         Product product = new Product();
         @Override
-        protected Product doInBackground(Void... params) {
+        protected Product doInBackground(byte[]... params) {
 
             SoapProductManager pm = new SoapProductManager();
-
-            product = pm.scanProduct(mBytes);
+            product = pm.scanProduct(params[0]);
             return product;
         }
 

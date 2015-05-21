@@ -257,7 +257,10 @@ public class SoapProductManager {
     }
 
     public Product scanProduct(byte[] imageBytes) {
-
+/*        Log.v("Test:", "coucou");
+        for (byte b : imageBytes) {
+            Log.v("Test:", "b: " + b);
+        }*/
         String methodname = "scanProduct";
         Product prod = new Product();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
