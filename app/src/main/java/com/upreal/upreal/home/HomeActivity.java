@@ -170,14 +170,14 @@ public class HomeActivity extends ActionBarActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 1://Scan
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
+//                                intent = new Intent(rv.getContext(), CameraActivity.class);
+//                                rv.getContext().startActivity(intent);
+//                                return true;
 
-  /*                              intent = new Intent(rv.getContext(), Camera2Activity.class);
+                                intent = new Intent(rv.getContext(), Camera2Activity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
-  */                          case 2://Lists
+                           case 2://Lists
                                 intent = new Intent(rv.getContext(), ListActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
@@ -188,11 +188,11 @@ public class HomeActivity extends ActionBarActivity {
                     if (sessionManagerUser.isLogged()) {
                         switch (rv.getChildPosition(child)) {
                             case 0://Connect
-                                intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
+                                /*intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
                                 homeReceiver = new HomeReceiver();
                                 registerReceiver(homeReceiver, intentFilter);
                                 intent = new Intent(rv.getContext(), LoginActivity.class);
-                                rv.getContext().startActivity(intent);
+                                rv.getContext().startActivity(intent);*/
                                 return true;
                             case 1://Scan
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
