@@ -2,35 +2,21 @@ package com.upreal.upreal.scan;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
-import com.upreal.upreal.product.AdapterCommentary;
 import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.utils.Product;
-import com.upreal.upreal.utils.RateComment;
-import com.upreal.upreal.utils.SoapGlobalManager;
-import com.upreal.upreal.utils.SoapProduct;
 import com.upreal.upreal.utils.SoapProductManager;
-import com.upreal.upreal.utils.SoapUserManager;
-import com.upreal.upreal.utils.User;
-import com.upreal.upreal.zxing.IntentIntegrator;
-import com.upreal.upreal.zxing.IntentResult;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CameraActivity extends Activity implements View.OnClickListener {
 
@@ -49,6 +35,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     private Button scanner;
     private TextView formatTxt, contentTxt;
     private AlertDialog.Builder builder;
+    private Intent intent;
 
     /** Called when the activity is first created. */
     @Override
@@ -61,8 +48,29 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         contentTxt = (TextView)findViewById(R.id.scan_content);
         scanner.setOnClickListener(this);
         builder = new AlertDialog.Builder(CameraActivity.this);
+
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+        if(requestCode == 0){
+            if(resultCode == RESULT_OK){
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                Log.d("xZing", "contents: "+contents+" format: "+format); // Handle successful scan
+                formatTxt.setText("FORMAT: " + format);
+                contentTxt.setText(contents);
+                new RetrieveScannedProduct().execute();
+
+            }
+            else if(resultCode == RESULT_CANCELED){ // Handle cancel
+                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 25, 400);
+                toast.show();
+                Log.i("xZing", "Cancelled");
+            }
+        }
+    }
+/*
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
@@ -77,6 +85,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
+*/
 /*        if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
@@ -93,7 +102,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
 
             }
         }*/
-    }
+//    }
 
     /*private class RetrieveComment extends AsyncTask<Void, Void, List<RateComment>> {
 
@@ -127,11 +136,18 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.scanner) {
 
+            intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+            startActivityForResult(intent, 0);
+/*
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+*/
             // Intent intent = new Intent("com.google.zxing.client.android.SCAN");
             //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
             //startActivityForResult(intent, 0);
+/*
             scanIntegrator.initiateScan();
+*/
         }
     }
 
