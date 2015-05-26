@@ -1,5 +1,6 @@
 package com.upreal.upreal.utils;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.ksoap2.HeaderProperty;
@@ -9,15 +10,10 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -261,13 +257,14 @@ public class SoapProductManager {
         for (byte b : imageBytes) {
             Log.v("Test:", "b: " + b);
         }*/
+
         String methodname = "scanProduct";
         Product prod = new Product();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("imageBytes", imageBytes);
+        //request.addProperty("imageBytes", imageBytes);
+        request.addProperty("image", Base64.encodeToString(imageBytes, Base64.DEFAULT));
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
         HttpTransportSE ht = getHttpTransportSE();
         try {
 

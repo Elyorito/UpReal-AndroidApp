@@ -561,13 +561,12 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
         public void onImageAvailable(ImageReader reader) {
             ImageSaver is = new ImageSaver(reader.acquireNextImage(), mFile);
             mBytes = is.getImageBytes();
-            new RetrieveProductFromImage().execute();
             mBackgroundHandler.post(is);
         }
     };
 
 
-    private static class ImageSaver implements Runnable {
+    private class ImageSaver implements Runnable {
 
         // The JPEG image
         private final Image mImage;
@@ -575,7 +574,7 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
         // The file we save the image into
         private final File mFile;
 
-        private byte[] mBytes;
+        private byte[] mBytes = null;
 
         public ImageSaver(Image image, File file) {
             mImage = image;
@@ -589,9 +588,10 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
             buffer.get(bytes);
             FileOutputStream output = null;
             try {
+                mBytes = bytes;
+                new RetrieveProductFromImage().execute(mBytes);
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
-                mBytes = bytes;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
