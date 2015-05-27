@@ -42,11 +42,11 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
         }
     }
 
-    AdapterCommentary(List<RateComment> list) {
+    public AdapterCommentary(List<RateComment> list) {
         this.listComment = list;
     }
 
-    AdapterCommentary(String User[], String Comment[], String Rating[]){
+    public AdapterCommentary(String User[], String Comment[], String Rating[]){
         this.mUser = User;
         this.mComment = Comment;
         this.mRating = Rating;

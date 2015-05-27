@@ -84,8 +84,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-        /*sessionManagerUser.deleteALL();
-*/
+        sessionManagerUser.deleteALL();
 
         toggleAccount = sessionManagerUser.isLogged();
 
@@ -169,14 +168,16 @@ public class HomeActivity extends ActionBarActivity {
                                 intent = new Intent(rv.getContext(), LoginActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
-                            case 1://Scan
-//                                intent = new Intent(rv.getContext(), CameraActivity.class);
-//                                rv.getContext().startActivity(intent);
-//                                return true;
+                            case 1: //Scan
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
 
+/*
                                 intent = new Intent(rv.getContext(), Camera2Activity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
+*/
                            case 2://Lists
                                 intent = new Intent(rv.getContext(), ListActivity.class);
                                 rv.getContext().startActivity(intent);

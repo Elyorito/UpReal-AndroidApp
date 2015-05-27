@@ -27,7 +27,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
         }
     }
 
-    AdapterOption(String OPTION[]) {
+    public AdapterOption(String OPTION[]) {
         this.mOPTION = OPTION;
     }
 

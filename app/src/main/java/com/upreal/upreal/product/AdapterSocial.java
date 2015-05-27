@@ -27,6 +27,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
 
     private String mSOCIALOPT[];
     private Product mProduct;
+    private User mUser;
     private SessionManagerUser sessionManagerUser;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,6 +49,12 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         this.sessionManagerUser = sessionManagerUser;
     }
 
+    public AdapterSocial(String SOCIALOPT[], User user, SessionManagerUser sessionManagerUser) {
+        this.mSOCIALOPT = SOCIALOPT;
+        this.mUser = user;
+        this.sessionManagerUser = sessionManagerUser;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_product_social, viewGroup, false);
@@ -62,22 +69,45 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         viewHolder.mCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (i) {
-                    case 0: //Like
-                        Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
-                        new SendLike().execute();
-                        break;
-                    case 1: //Commenter
-                        Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2: //Similar product
-                        Toast.makeText(v.getContext(), "Similar Product", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3: //Share
-                        Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
-                        break;
+                if (getItemCount() != 3) {
+                    switch (i) {
+                        case 0: //Like
+                            Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
+                            new SendLike().execute();
+                            break;
+                        case 1: //Commenter
+                            Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2: //Similar product
+                            Toast.makeText(v.getContext(), "Similar Product", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 3: //Share
+                            Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                } else {
+                    switch (i) {
+                        case 0: //Like
+                            Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
+                            new SendLike().execute();
+                            break;
+                        case 1: //Commenter
+                            Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 3: // Troc
+                            Toast.makeText(v.getContext(), "Troc", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 4: // Send Message
+                            Toast.makeText(v.getContext(),"Message", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 5: //Share
+                            Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
                 }
             }
+
+            ;
         });
     }
 
@@ -90,19 +120,19 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
     public void onClick(View v) {
     }
 
-    private class SendLike extends AsyncTask<Void, Void, Boolean> {
-        Boolean isSuccess = false;
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            SoapProductUtilManager pum = new SoapProductUtilManager();
-            isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 1);
-            return isSuccess;
-        }
+        private class SendLike extends AsyncTask<Void, Void, Boolean> {
+            Boolean isSuccess = false;
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                SoapProductUtilManager pum = new SoapProductUtilManager();
+                isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 1);
+                return isSuccess;
+            }
 
-        @Override
-        protected void onPostExecute(Boolean b) {
-            super.onPostExecute(b);
+            @Override
+            protected void onPostExecute(Boolean b) {
+                super.onPostExecute(b);
 
+            }
         }
-    }
 }

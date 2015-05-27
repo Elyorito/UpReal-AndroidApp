@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.upreal.upreal.product.ProductActivity"
+    tools:context="com.upreal.upreal.product.UserActivity"
     android:weightSum="5">
 
     <include
@@ -14,8 +14,8 @@
         android:layout_width="match_parent"/>
 
     <include
-        android:id="@+id/product_info"
-        layout="@layout/product_info"
+        android:id="@+id/user_info"
+        layout="@layout/user_info"
         android:layout_height="0dp"
         android:layout_width="match_parent"
         android:layout_weight="2"/>
