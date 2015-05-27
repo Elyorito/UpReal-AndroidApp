@@ -36,7 +36,7 @@ public class SessionManagerUser {
 
     public void setUser(User user) {
         editor.putInt("id", user.getId());
-        editor.putString("firstame", user.getFirstname());
+        editor.putString("firstname", user.getFirstname());
         editor.putString("lastname", user.getLastname());
         editor.putString("email", user.getEmail());
         editor.putInt("phone", user.getPhone());
@@ -56,6 +56,21 @@ public class SessionManagerUser {
         tab[1] = sharedPreferences.getString("password", null);
 
         return tab;
+    }
+
+
+    public User getUser() {
+        User user = new User();
+
+        user.setId(sharedPreferences.getInt("id", -1));
+        user.setFirstname(sharedPreferences.getString("fistname", null));
+        user.setUsername(sharedPreferences.getString("username", null));
+        user.setLastname(sharedPreferences.getString("lastname", null));
+        user.setEmail(sharedPreferences.getString("email", null));
+        user.setPhone(sharedPreferences.getInt("phone", -1));
+        user.setId_address(sharedPreferences.getInt("id_address", -1));
+        user.setShort_desc(sharedPreferences.getString("short_desc", null));
+        return user;
     }
 
     public void deleteALL() {

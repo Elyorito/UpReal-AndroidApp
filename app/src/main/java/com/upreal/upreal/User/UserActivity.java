@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -43,25 +44,40 @@ public class UserActivity extends ActionBarActivity {
         userDesc = (TextView) findViewById(R.id.user_desc);
         userLocal = (TextView) findViewById(R.id.user_local);
 
-        user = getIntent().getExtras().getParcelable("listuser");
+        sessionManagerUser = new SessionManagerUser(getApplicationContext());
+        toggleAccount = sessionManagerUser.isLogged();
+
+        if (getIntent().getExtras() == null) {
+            user = sessionManagerUser.getUser();
+            Log.v("sessions", "Work");
+        } else {
+            user = getIntent().getExtras().getParcelable("listuser");
+            Log.v("research", "Work");
+        }
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
 
-        userDesc.setText(user.getFirstname()+user.getLastname());
+        if (user.getFirstname() == null && user.getLastname() == null) {
+            String fistLast;
+            fistLast = "First name and last name not given";
+            userDesc.setText(fistLast); // change it to string !!
+        } else
+            userDesc.setText(user.getFirstname()+" "+user.getLastname());
 //        userLocal.setText(Need service get address from IdAddress);
-        sessionManagerUser = new SessionManagerUser(getApplicationContext());
-
-        toggleAccount = sessionManagerUser.isLogged();
 
         CharSequence Tab[] = null;
-        if (!toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
+        if (toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
             // User
             Tab = new CharSequence[]{getString(R.string.commentary), getString(R.string.options)};
+            Log.v("Options", "Here");
         }
         else {
             // Other User
             Tab = new CharSequence[] {getString(R.string.commentary), getString(R.string.social)};
+            Log.v("Social", "Here");
+            Log.v("session ID", String.valueOf(sessionManagerUser.getUserId()));
+            Log.v("user ID", String.valueOf(user.getId()));
         }
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);

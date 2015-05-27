@@ -185,13 +185,18 @@ public class SoapUserManager {
 
             user.setId(Integer.parseInt(res2.getPropertyAsString("id").toString()));
             user.setUsername(res2.getPropertyAsString("username").toString());
-            user.setFirstname(res2.getPropertyAsString("firstname").toString());
-            user.setLastname(res2.getPropertyAsString("lastname").toString());
+            if (res2.getPropertyAsString("firstname") != null)
+                user.setFirstname(res2.getPropertyAsString("firstname").toString());
+            if (res2.getPropertyAsString("lastname") != null)
+                user.setLastname(res2.getPropertyAsString("lastname").toString());
             user.setEmail(res2.getPropertyAsString("email").toString());
             user.setPassword(res2.getPropertyAsString("password").toString());
-            user.setPhone(Integer.parseInt(res2.getPropertyAsString("phone").toString()));
-            user.setId_address(Integer.parseInt(res2.getPropertyAsString("id_address").toString()));
-            user.setShort_desc(res2.getPropertyAsString("short_desc").toString());
+            if (res2.getPropertyAsString("phone") != null)
+                user.setPhone(Integer.parseInt(res2.getPropertyAsString("phone").toString()));
+            if (res2.getPropertyAsString("id_address") != null)
+                user.setId_address(Integer.parseInt(res2.getPropertyAsString("id_address").toString()));
+            if (res2.getPropertyAsString("short_desc") != null)
+                user.setShort_desc(res2.getPropertyAsString("short_desc").toString());
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -205,23 +210,18 @@ public class SoapUserManager {
     private User convertToQuery(SoapObject soapObject, String data) {
         User user = new User();
         user.setEmail(soapObject.getPropertyAsString("email").toString());
-        Log.v("Email", user.getEmail());
-/*        user.setFirstname(soapObject.getPropertyAsString("firstname").toString());
-        Log.v("Fn", user.getFirstname());*/
+        if (soapObject.getPropertyAsString("firstname") != null)
+            user.setFirstname(soapObject.getPropertyAsString("firstname").toString());
         user.setId(Integer.parseInt(soapObject.getPropertyAsString("id").toString()));
-        Log.v("id", String.valueOf(user.getId()));
-/*        user.setId_address(Integer.parseInt(soapObject.getPropertyAsString("id_address").toString()));
-        Log.v("address", String.valueOf(user.getId_address()));*/
+        if (soapObject.getPropertyAsString("id_address") != null)
+            user.setId_address(Integer.parseInt(soapObject.getPropertyAsString("id_address").toString()));
         user.setUsername(soapObject.getPropertyAsString("username").toString());
-        Log.v("username", user.getUsername());
-/*        user.setLastname(soapObject.getPropertyAsString("lastname").toString());
-        Log.v("lastname", user.getLastname());*/
-
-/*        user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone").toString()));
-        Log.v("phone", String.valueOf(user.getPhone()));
-
-        user.setShort_desc(soapObject.getPropertyAsString("short_desc").toString());
-        Log.v("short desc", user.getShort_desc());*/
+        if (soapObject.getPropertyAsString("lastname") != null)
+            user.setLastname(soapObject.getPropertyAsString("lastname").toString());
+        if (soapObject.getPropertyAsString("phone") != null)
+            user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone").toString()));
+        if (soapObject.getPropertyAsString("short_desc") != null)
+         user.setShort_desc(soapObject.getPropertyAsString("short_desc").toString());
 /*
         prod.setPicture(soapObject.getPropertyAsString("picture").toString());
 */
@@ -263,11 +263,8 @@ public class SoapUserManager {
 /*
             data = results.getProperty("Product").toString();
                 */
-                Log.v("nbResult", String.valueOf(results.size()));
                 for (SoapObject res : results) {
-                    Log.v("test", "test");
-                listuser.add(this.convertToQuery(res, data));
-
+                    listuser.add(this.convertToQuery(res, data));
             }
 /*
             if (results instanceof SoapObject) {

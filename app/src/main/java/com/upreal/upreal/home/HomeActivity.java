@@ -28,6 +28,7 @@ import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.scan.Camera2Activity;
 import com.upreal.upreal.scan.Camera2Fragment;
 import com.upreal.upreal.scan.CameraActivity;
+import com.upreal.upreal.user.UserActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
 
 import static android.view.GestureDetector.*;
@@ -84,7 +85,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-        sessionManagerUser.deleteALL();
+        //sessionManagerUser.deleteALL();
 
         toggleAccount = sessionManagerUser.isLogged();
 
@@ -189,11 +190,11 @@ public class HomeActivity extends ActionBarActivity {
                     if (sessionManagerUser.isLogged()) {
                         switch (rv.getChildPosition(child)) {
                             case 0://Connect
-                                /*intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
+                                intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
                                 homeReceiver = new HomeReceiver();
                                 registerReceiver(homeReceiver, intentFilter);
-                                intent = new Intent(rv.getContext(), LoginActivity.class);
-                                rv.getContext().startActivity(intent);*/
+                                intent = new Intent(rv.getContext(), UserActivity.class);
+                                rv.getContext().startActivity(intent);
                                 return true;
                             case 1://Scan
 
