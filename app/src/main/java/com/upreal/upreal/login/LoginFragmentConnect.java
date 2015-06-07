@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,9 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
 
             SoapUserManager um = new SoapUserManager();
             user = um.getUserByUsername(sessionManagerUser.getRegisterLoginUser()[0]);
+            Log.v("User info", sessionManagerUser.getRegisterLoginUser()[0]);
+            Log.v("User FirstName", user.getFirstname());
+
             return user;
         }
 

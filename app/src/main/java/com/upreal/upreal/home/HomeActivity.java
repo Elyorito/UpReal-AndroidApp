@@ -101,7 +101,9 @@ public class HomeActivity extends ActionBarActivity {
                 this.getString(R.string.loyalty_cards),
                 this.getString(R.string.parrainage),
                 this.getString(R.string.acheivement),
-                this.getString(R.string.settings)};
+                this.getString(R.string.settings),
+                "Deconnection",
+        "lol"};
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
         PRODUCTREDUC = new String[] {"P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis"};
@@ -233,9 +235,16 @@ public class HomeActivity extends ActionBarActivity {
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
-                            case 9://Scan
+                            case 9://Parameter
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
+                                return true;
+                            case 10://Deconnexion
+                                sessionManagerUser.deleteCurrentUser();
+                                intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
+                                homeReceiver = new HomeReceiver();
+                                registerReceiver(homeReceiver, intentFilter);
+                                mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
                                 return true;
                             default:
                                 return false;

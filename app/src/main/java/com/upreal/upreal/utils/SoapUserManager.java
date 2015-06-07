@@ -169,7 +169,7 @@ public class SoapUserManager {
     }
 
     public User getUserByUsername(String username) {
-        User user = new User();
+        User user = null;
         String methodName = "getUserByUsername";
         int result = 0;
 
@@ -183,20 +183,23 @@ public class SoapUserManager {
             testHttpResponse(ht);
             SoapObject res2 = (SoapObject) envelope.getResponse();
 
-            user.setId(Integer.parseInt(res2.getPropertyAsString("id").toString()));
-            user.setUsername(res2.getPropertyAsString("username").toString());
-            if (res2.getPropertyAsString("firstname") != null)
-                user.setFirstname(res2.getPropertyAsString("firstname").toString());
-            if (res2.getPropertyAsString("lastname") != null)
-                user.setLastname(res2.getPropertyAsString("lastname").toString());
-            user.setEmail(res2.getPropertyAsString("email").toString());
-            user.setPassword(res2.getPropertyAsString("password").toString());
-            if (res2.getPropertyAsString("phone") != null)
-                user.setPhone(Integer.parseInt(res2.getPropertyAsString("phone").toString()));
-            if (res2.getPropertyAsString("id_address") != null)
-                user.setId_address(Integer.parseInt(res2.getPropertyAsString("id_address").toString()));
-            if (res2.getPropertyAsString("short_desc") != null)
-                user.setShort_desc(res2.getPropertyAsString("short_desc").toString());
+            user = convertToQuery(res2, null);
+/*
+            user.setId(Integer.parseInt(res2.getPropertyAsString("id")));
+            user.setUsername(res2.getPropertyAsString("username"));
+            if (!res2.hasProperty("firstname"))
+                user.setFirstname(res2.getPropertyAsString("firstname"));
+            if (!res2.hasProperty("lastname"))
+                user.setLastname(res2.getPropertyAsString("lastname"));
+            user.setEmail(res2.getPropertyAsString("email"));
+            user.setPassword(res2.getPropertyAsString("password"));
+            if (!res2.hasProperty("phone"))
+                user.setPhone(Integer.parseInt(res2.getPropertyAsString("phone")));
+            if (!res2.hasProperty("id_address"))
+                user.setId_address(Integer.parseInt(res2.getPropertyAsString("id_address")));
+            if (!res2.hasProperty("short_desc"))
+                user.setShort_desc(res2.getPropertyAsString("short_desc"));
+*/
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -207,21 +210,22 @@ public class SoapUserManager {
         }
         return user;
     }
+
     private User convertToQuery(SoapObject soapObject, String data) {
         User user = new User();
-        user.setEmail(soapObject.getPropertyAsString("email").toString());
-        if (soapObject.getPropertyAsString("firstname") != null)
-            user.setFirstname(soapObject.getPropertyAsString("firstname").toString());
-        user.setId(Integer.parseInt(soapObject.getPropertyAsString("id").toString()));
-        if (soapObject.getPropertyAsString("id_address") != null)
-            user.setId_address(Integer.parseInt(soapObject.getPropertyAsString("id_address").toString()));
-        user.setUsername(soapObject.getPropertyAsString("username").toString());
-        if (soapObject.getPropertyAsString("lastname") != null)
-            user.setLastname(soapObject.getPropertyAsString("lastname").toString());
-        if (soapObject.getPropertyAsString("phone") != null)
-            user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone").toString()));
-        if (soapObject.getPropertyAsString("short_desc") != null)
-         user.setShort_desc(soapObject.getPropertyAsString("short_desc").toString());
+        user.setEmail(soapObject.getPropertyAsString("email"));
+        if (soapObject.hasProperty("firstname"))
+            user.setFirstname(soapObject.getPropertyAsString("firstname"));
+        user.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));
+        if (soapObject.hasProperty("id_address"))
+            user.setId_address(Integer.parseInt(soapObject.getPropertyAsString("id_address")));
+        user.setUsername(soapObject.getPropertyAsString("username"));
+        if (soapObject.hasProperty("lastname"))
+            user.setLastname(soapObject.getPropertyAsString("lastname"));
+        if (soapObject.hasProperty("phone"))
+            user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone")));
+        if (soapObject.hasProperty("short_desc"))
+         user.setShort_desc(soapObject.getPropertyAsString("short_desc"));
 /*
         prod.setPicture(soapObject.getPropertyAsString("picture").toString());
 */
@@ -235,9 +239,10 @@ public class SoapUserManager {
 */
         return user;
     }
+
     public List<User> getListUser(String searchName) {
 
-        List<User> listuser = new ArrayList<User>();
+        List<User> listUsers = new ArrayList<User>();
 
         int nbUser;
         String data = null;
@@ -256,16 +261,30 @@ public class SoapUserManager {
 
             SoapObject res0 = (SoapObject) envelope.bodyIn;
             /*SoapObject results= (SoapObject)envelope.getResponse();*/
-            Vector<SoapObject> results = (Vector<SoapObject>) envelope.getResponse();
+            Object response = envelope.getResponse();
+
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listUsers.add(this.convertToQuery(res, data));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listUsers.add(this.convertToQuery(result, data));
+            }
 /*
             nbProduct = results.getAttributeCount();
 */
 /*
             data = results.getProperty("Product").toString();
                 */
+/*
                 for (SoapObject res : results) {
-                    listuser.add(this.convertToQuery(res, data));
+                    listUsers.add(this.convertToQuery(res, data));
             }
+*/
 /*
             if (results instanceof SoapObject) {
                 data = results.getProperty("ean").toString();
@@ -279,6 +298,6 @@ public class SoapUserManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return listuser;
+        return listUsers;
     }
 }
