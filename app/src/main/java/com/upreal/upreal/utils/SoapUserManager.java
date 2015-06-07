@@ -37,7 +37,7 @@ public class SoapUserManager {
     }
 
     public int registerAccount(String id, String password, String email) {
-        String data = null;
+        String data;
         String methodname = "registerAccount";
         int result = 0;
 
@@ -133,8 +133,8 @@ public class SoapUserManager {
             testHttpResponse(ht);
             SoapObject res2 = (SoapObject) envelope.getResponse();
 
-            user.setId(Integer.parseInt(res2.getPropertyAsString("id").toString()));
-            user.setUsername(res2.getPropertyAsString("username").toString());
+            user.setId(Integer.parseInt(res2.getPropertyAsString("id")));
+            user.setUsername(res2.getPropertyAsString("username"));
         } catch (SocketTimeoutException t){
             t.printStackTrace();
         } catch (IOException i) {
@@ -145,7 +145,7 @@ public class SoapUserManager {
         return user;
     }
 
-    private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
+    private SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
         envelope.implicitTypes = true;
@@ -154,7 +154,7 @@ public class SoapUserManager {
         return envelope;
     }
 
-    private final HttpTransportSE getHttpTransportSE() {
+    private HttpTransportSE getHttpTransportSE() {
         HttpTransportSE ht = new HttpTransportSE(Proxy.NO_PROXY,MAIN_REQUEST_URL,60000);
         ht.debug = true;
         ht.setXmlVersionTag("<?xml version=\"1.0\" encoding= \"UTF-8\" ?>");
@@ -171,7 +171,6 @@ public class SoapUserManager {
     public User getUserByUsername(String username) {
         User user = null;
         String methodName = "getUserByUsername";
-        int result = 0;
 
         SoapObject request = new SoapObject(NAMESPACE, methodName);
         request.addProperty("username", username);
@@ -183,7 +182,7 @@ public class SoapUserManager {
             testHttpResponse(ht);
             SoapObject res2 = (SoapObject) envelope.getResponse();
 
-            user = convertToQuery(res2, null);
+            user = convertToQuery(res2);
 /*
             user.setId(Integer.parseInt(res2.getPropertyAsString("id")));
             user.setUsername(res2.getPropertyAsString("username"));
@@ -211,7 +210,7 @@ public class SoapUserManager {
         return user;
     }
 
-    private User convertToQuery(SoapObject soapObject, String data) {
+    private User convertToQuery(SoapObject soapObject) {
         User user = new User();
         user.setEmail(soapObject.getPropertyAsString("email"));
         if (soapObject.hasProperty("firstname"))
@@ -242,17 +241,13 @@ public class SoapUserManager {
 
     public List<User> getListUser(String searchName) {
 
-        List<User> listUsers = new ArrayList<User>();
-
-        int nbUser;
-        String data = null;
+        List<User> listUsers = new ArrayList<>();
         String methodname = "getUserByUsername";
-        User user = new User();
+
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", searchName);
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
         HttpTransportSE ht = getHttpTransportSE();
         try {
 
@@ -268,11 +263,11 @@ public class SoapUserManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listUsers.add(this.convertToQuery(res, data));
+                    listUsers.add(this.convertToQuery(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listUsers.add(this.convertToQuery(result, data));
+                listUsers.add(this.convertToQuery(result));
             }
 /*
             nbProduct = results.getAttributeCount();
