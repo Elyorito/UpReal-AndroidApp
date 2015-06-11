@@ -59,9 +59,9 @@ public class UserActivity extends ActionBarActivity {
         userUsername.setText(user.getUsername());
 
         if (user.getFirstname() == null && user.getLastname() == null) {
-            String fistLast;
-            fistLast = "First name and last name not given";
-            userDesc.setText(fistLast); // change it to string !!
+            String firstLast;
+            firstLast = "Information not given";
+            userDesc.setText(firstLast); // change it to string !!
         } else
             userDesc.setText(user.getFirstname()+" "+user.getLastname());
 //        userLocal.setText(Need service get address from IdAddress);
