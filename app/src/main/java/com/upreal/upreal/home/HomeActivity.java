@@ -102,7 +102,7 @@ public class HomeActivity extends ActionBarActivity {
                 this.getString(R.string.parrainage),
                 this.getString(R.string.acheivement),
                 this.getString(R.string.settings),
-                "Deconnection",
+                "Deconnexion",
         "lol"};
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
