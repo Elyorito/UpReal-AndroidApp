@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:divider="?android:dividerHorizontal"
+            android:showDividers="middle">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp">
+
+                <ImageView
+                    android:id="@+id/image_product"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/ic_action_camera"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:contentDescription="@string/profilePicture" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="true"
+                android:id="@+id/name">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/firstName"
+                    android:id="@+id/firstName" />
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/lastName"
+                    android:id="@+id/lastName"
+                    android:capitalize="characters" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingTop="10dp"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/myInfo"
+                    android:id="@+id/myInfo"
+                    android:textColor="#ffff1726" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:clickable="true"
+                    android:paddingTop="10dp"
+                    android:id="@+id/phone">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/iPhoneNumber"
+                        android:src="@drawable/phone"
+                        android:contentDescription="@string/phoneNumber" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/phoneNumber"
+                        android:id="@+id/phoneNumber" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/allowNumber"
+                        android:gravity="right"
+                        android:src="@drawable/phone_no" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:clickable="true"
+                    android:id="@+id/address">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/home"
+                        android:src="@drawable/home"
+                        android:contentDescription="@string/address" />
+
+                    <TextView
+                        android:paddingTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/address"
+                        android:id="@+id/homeAddress" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/description"
+                        android:src="@drawable/desc"
+                        android:contentDescription="@string/shortDesc" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/shortDesc"
+                        android:id="@+id/textView"
+                        android:textColor="#ffff1726" />
+                </LinearLayout>
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/shortDesc"
+                    android:clickable="true"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
