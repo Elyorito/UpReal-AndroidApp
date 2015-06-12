@@ -16,6 +16,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.jar.Attributes;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -34,6 +35,61 @@ public class SoapUserManager {
             Log.v("SOAP RETURN", "Request XML:\n" + ht.requestDump);
             Log.v("SOAP RETURN", "\n\n\nResponse XML:\n" + ht.responseDump);
         }
+    }
+
+    public String getAddressInfo(int id) {
+        String methodname = "getAddressInfo";
+        String result = null;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            result = results.toString();
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
+    }
+
+    //change int phone into String
+
+    public boolean updateAccount(int id, String firstName, String lastName, int phone, String address) {
+        String methodname = "updateAccount";
+        boolean result = false;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("firstname", firstName);
+        request.addProperty("lastname", lastName);
+        request.addProperty("phone", phone);
+        request.addProperty("addresse", address);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            result = Boolean.getBoolean(results.toString());
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
     }
 
     public int registerAccount(String id, String password, String email) {
