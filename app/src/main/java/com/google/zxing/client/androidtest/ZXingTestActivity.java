@@ -93,7 +93,7 @@ public final class ZXingTestActivity extends Activity {
       builder.setTitle(
           getString(R.string.app_name) + ' ' + versionName + " (" + versionCode + ')');
       builder.setMessage(getString(R.string.about_message));
-      builder.setPositiveButton(R.string.ok_button, null);
+      builder.setPositiveButton(R.string.button_ok, null);
       builder.show();
 
     }
@@ -252,7 +252,7 @@ public final class ZXingTestActivity extends Activity {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(title);
     builder.setMessage(message);
-    builder.setPositiveButton(R.string.ok_button, null);
+    builder.setPositiveButton(R.string.button_ok, null);
     builder.show();
   }
 

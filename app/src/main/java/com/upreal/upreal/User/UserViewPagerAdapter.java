@@ -37,7 +37,8 @@ public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if (!toggleAccount && sessionManagerUser.getUserId() == mUser.getId()) {
+        if (toggleAccount && sessionManagerUser.getUserId() == mUser.getId()) {
+
             switch (position) {
                 case 0: //Commentary
                     UserFragmentCommentary com = new UserFragmentCommentary();

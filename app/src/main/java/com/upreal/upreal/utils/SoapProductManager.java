@@ -50,7 +50,6 @@ public class SoapProductManager {
 */
 
     public int registerProduct(String name, String brand, String desc, String barcode, String noticedPrice, String shop) {
-        String data = null;
         int id = 0;
         String methodname = "registerProduct";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
@@ -86,12 +85,8 @@ public class SoapProductManager {
 
     public Product getProductInfo(int id) {
 
-        List<Product> listprod = new ArrayList<Product>();
-
-        int nbProduct;
-        String data = null;
         String methodname = "getProductInfo";
-        Product prod = new Product();
+        Product prod = null;
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id", id);
 
@@ -111,12 +106,7 @@ public class SoapProductManager {
             if (results == null)
                 return null;
 
-            prod.setId(Integer.parseInt(results.getPropertyAsString("id")));
-            prod.setName(results.getPropertyAsString("name").toString());
-            prod.setEan(results.getPropertyAsString("ean").toString());
-            prod.setBrand(results.getPropertyAsString("brand").toString());
-            prod.setId(Integer.parseInt(results.getPropertyAsString("id").toString()));
-
+            prod = convertToQuery(results);
 /*
             nbProduct = results.getAttributeCount();
 */
@@ -146,13 +136,8 @@ public class SoapProductManager {
 
 
     public Product getProductbyEAN(String ean) {
-
-        List<Product> listprod = new ArrayList<Product>();
-
-        int nbProduct;
-        String data = null;
         String methodname = "getProductByEAN";
-        Product prod = new Product();
+        Product prod = null;
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("ean", ean);
 
@@ -172,11 +157,7 @@ public class SoapProductManager {
             if (results == null)
                 return null;
 
-            prod.setId(Integer.parseInt(results.getPropertyAsString("id")));
-            prod.setName(results.getPropertyAsString("name").toString());
-            prod.setEan(results.getPropertyAsString("ean").toString());
-            prod.setBrand(results.getPropertyAsString("brand").toString());
-            prod.setId(Integer.parseInt(results.getPropertyAsString("id").toString()));
+            prod = convertToQuery(results);
 
 /*
             nbProduct = results.getAttributeCount();
@@ -206,13 +187,8 @@ public class SoapProductManager {
     }
 
     public List<Product> getProduct(String searchName) {
-
-        List<Product> listprod = new ArrayList<Product>();
-
-        int nbProduct;
-        String data = null;
+        List<Product> listProds = new ArrayList<>();
         String methodname = "getProduct";
-        Product prod = new Product();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("keyword", searchName);
 
@@ -226,16 +202,24 @@ public class SoapProductManager {
 
             SoapObject res0 = (SoapObject) envelope.bodyIn;
             /*SoapObject results= (SoapObject)envelope.getResponse();*/
-            Vector<SoapObject> results = (Vector<SoapObject>) envelope.getResponse();
+            Object response = envelope.getResponse();
 /*
             nbProduct = results.getAttributeCount();
 */
 /*
             data = results.getProperty("Product").toString();
-*/
-            for (SoapObject res : results)
-                listprod.add(this.convertToQuery(res, data));
 
+*/            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listProds.add(this.convertToQuery(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listProds.add(this.convertToQuery(result));
+            }
 /*
             if (results instanceof SoapObject) {
                 data = results.getProperty("ean").toString();
@@ -249,7 +233,7 @@ public class SoapProductManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return listprod;
+        return listProds;
     }
 
     public Product scanProduct(byte[] imageBytes) {
@@ -276,12 +260,7 @@ public class SoapProductManager {
 
             if (results == null)
                 return null;
-
-            prod.setId(Integer.parseInt(results.getPropertyAsString("id")));
-            prod.setName(results.getPropertyAsString("name").toString());
-            prod.setEan(results.getPropertyAsString("ean").toString());
-            prod.setBrand(results.getPropertyAsString("brand").toString());
-            prod.setId(Integer.parseInt(results.getPropertyAsString("id").toString()));
+            prod = convertToQuery(results);
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
@@ -292,12 +271,12 @@ public class SoapProductManager {
         return prod;
     }
 
-    private Product convertToQuery(SoapObject soapObject, String data) {
+    private Product convertToQuery(SoapObject soapObject) {
         Product prod = new Product();
-        prod.setName(soapObject.getPropertyAsString("name").toString());
-        prod.setEan(soapObject.getPropertyAsString("ean").toString());
-        prod.setBrand(soapObject.getPropertyAsString("brand").toString());
-        prod.setId(Integer.parseInt(soapObject.getPropertyAsString("id").toString()));
+        prod.setName(soapObject.getPropertyAsString("name"));
+        prod.setEan(soapObject.getPropertyAsString("ean"));
+        prod.setBrand(soapObject.getPropertyAsString("brand"));
+        prod.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));
 /*
         prod.setPicture(soapObject.getPropertyAsString("picture").toString());
 */
@@ -312,7 +291,7 @@ public class SoapProductManager {
         return prod;
     }
 
-    private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
+    private SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
         envelope.implicitTypes = true;
@@ -321,14 +300,14 @@ public class SoapProductManager {
         return envelope;
     }
 
-    private final HttpTransportSE getHttpTransportSE() {
+    private HttpTransportSE getHttpTransportSE() {
         HttpTransportSE ht = new HttpTransportSE(Proxy.NO_PROXY,MAIN_REQUEST_URL,60000);
         ht.debug = true;
         ht.setXmlVersionTag("<?xml version=\"1.0\" encoding= \"UTF-8\" ?>");
         return ht;
     }
 
-    private final List<HeaderProperty> getHeader() {
+    private List<HeaderProperty> getHeader() {
         List<HeaderProperty> header = new ArrayList<HeaderProperty>();
         HeaderProperty headerPropertyObj = new HeaderProperty("cookie", SoapProductManager.SESSION_ID);
         header.add(headerPropertyObj);
