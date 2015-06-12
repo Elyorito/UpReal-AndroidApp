@@ -238,5 +238,9 @@
     <string name="shortDesc">Une courte description</string>
     <string name="title">Title</string>
     <string name="changeName">Vous voulez changer votre prénom et/ou votre nom ?</string>
+    <string name="noInfo">Information not given</string>
+    <string name="changeAddress">Vous voulez modifier votre addresse ?</string>
+    <string name="changePhoneNumber">Vous voulez configurer vos données téléphoniques ?</string>
+    <string name="update">Modifier</string>
 
 </resources>
