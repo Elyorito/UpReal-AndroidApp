@@ -168,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:hint="@string/postal_code"
-                            android:id="@+id/PostalCode" />
+                            android:id="@+id/postalCode" />
                     </LinearLayout>
 
                 </LinearLayout>

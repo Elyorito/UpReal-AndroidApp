@@ -247,7 +247,7 @@
     <string name="not_defined">Non renseigné</string>
     <string name="city">Votre ville</string>
     <string name="postal_code">Votre code postal</string>
-    <string name="address2">Complement d\'addresse</string>
+    <string name="address2">Complement d\'adresse</string>
     <string name="display_number">Numéro affiché ?</string>
     <string name="country">Votre pays</string>
 

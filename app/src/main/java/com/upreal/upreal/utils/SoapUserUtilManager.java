@@ -50,16 +50,32 @@ public class SoapUserUtilManager {
             SoapObject result= (SoapObject)envelope.getResponse();
             if (result.hasProperty("id"))
                 address.setId(Integer.parseInt(result.getPropertyAsString("id")));
-            if (result.hasProperty("address"))
+            if (result.hasProperty("address")) {
                 address.setAddress(result.getPropertyAsString("address"));
+                if (address.getAddress().equals("anyType{}"))
+                    address.setAddress("");
+            }
             else
                 address.setAddress(String.valueOf(R.string.not_defined));
-            if (result.hasProperty("address_2"))
+            if (result.hasProperty("address_2")) {
                 address.setAddress2(result.getPropertyAsString("address_2"));
+                if (address.getAddress2().equals("anyType{}"))
+                    address.setAddress2("");
+            }
             else
                 address.setAddress2(String.valueOf(R.string.not_defined));
-            if (result.hasProperty("city"))
+            if (result.hasProperty("country")) {
+                address.setCountry(result.getPropertyAsString("country"));
+                if (address.getCountry().equals("anyType{}"))
+                    address.setCountry("");
+            }
+            else
+                address.setCountry(String.valueOf(R.string.not_defined));
+            if (result.hasProperty("city")) {
                 address.setCity(result.getPropertyAsString("city"));
+                if (address.getCity().equals("anyType{}"))
+                    address.setCity("");
+            }
             else
                 address.setCity(String.valueOf(R.string.not_defined));
             if (result.hasProperty("postal_code"))
@@ -84,9 +100,9 @@ public class SoapUserUtilManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id", address.getId());
         request.addProperty("address", address.getAddress());
-        request.addProperty("address2", address.getAddress2());
-        request.addProperty("country", address.getCountry());
+        request.addProperty("address_2", address.getAddress2());
         request.addProperty("city", address.getCity());
+        request.addProperty("country", address.getCountry());
         request.addProperty("postal_code", address.getPostalCode());
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);

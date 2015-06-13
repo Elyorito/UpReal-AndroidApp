@@ -39,7 +39,7 @@ public class SoapUserManager {
 
     //change int phone into String
 
-    public boolean updateAccount(int id, String firstName, String lastName, int phone, int id_address) {
+    public boolean updateAccount(int id, String firstName, String lastName, int phone, int id_address, String shortDesc) {
         String methodname = "updateAccount";
         boolean result = false;
 
@@ -48,6 +48,7 @@ public class SoapUserManager {
         request.addProperty("lastname", lastName);
         request.addProperty("phone", phone);
         request.addProperty("address_id", id_address);
+        request.addProperty("short_desc", shortDesc);
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
         HttpTransportSE ht = getHttpTransportSE();
