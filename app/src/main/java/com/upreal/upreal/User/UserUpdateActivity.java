@@ -2,6 +2,7 @@ package com.upreal.upreal.user;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upreal.upreal.R;
 
@@ -78,7 +80,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
         phone = (LinearLayout) findViewById(R.id.phone);
         phoneNumber = (TextView) findViewById(R.id.phoneNumber);
-        if (user.getPhone() == -1)
+        if (user.getPhone() == -1 || user.getPhone() == 0)
             phoneNumber.setText(R.string.not_defined);
         else
             phoneNumber.setText(String.valueOf(user.getPhone()));
@@ -86,6 +88,11 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
         address = (LinearLayout) findViewById(R.id.address);
         homeAddress = (TextView) findViewById(R.id.homeAddress);
+        homeAddress2 = (TextView) findViewById(R.id.homeAddress2);
+        country = (TextView) findViewById(R.id.country);
+
+        city = (TextView) findViewById(R.id.city);
+        postalCode = (TextView) findViewById(R.id.postalCode);
         if (user.getId_address() != -1)
             new getAddress().execute(user.getId_address());
 
@@ -116,7 +123,9 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 layout = inflater.inflate(R.layout.alertbox_name, null);
                 builder.setView(layout);
                 final EditText eFirstName = (EditText) layout.findViewById(R.id.eFirstName);
+                eFirstName.setText(firstName.getText().toString());
                 final EditText eLastName = (EditText) layout.findViewById(R.id.eLastName);
+                eLastName.setText(lastName.getText().toString());
                 builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -134,11 +143,12 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 builder.show();
                 break;
             case R.id.phone:
-                Log.v("phone","Phone");
+                Log.v("phone", "Phone");
                 builder.setTitle(R.string.change_phone_number);
                 layout = inflater.inflate(R.layout.alertbox_phone, null);
                 builder.setView(layout);
                 final EditText ePhoneNumber = (EditText) layout.findViewById(R.id.ePhoneNumber);
+                ePhoneNumber.setText(phoneNumber.getText().toString());
                 builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -160,10 +170,15 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 layout = inflater.inflate(R.layout.alertbox_address, null);
                 builder.setView(layout);
                 final EditText eAddress = (EditText) layout.findViewById(R.id.eAddress);
+                eAddress.setText(homeAddress.getText().toString());
                 final EditText eAddress2 = (EditText) layout.findViewById(R.id.eAddress2);
+                eAddress2.setText(homeAddress2.getText().toString());
                 final EditText eCountry = (EditText) layout.findViewById(R.id.eCountry);
+                eCountry.setText(country.getText().toString());
                 final EditText eCity = (EditText) layout.findViewById(R.id.eCity);
+                eCity.setText(city.getText().toString());
                 final EditText ePostalCode = (EditText) layout.findViewById(R.id.ePostalCode);
+                ePostalCode.setText(postalCode.getText().toString());
                 builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -186,9 +201,9 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 Log.v("update","update");
 
                 userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
-                        country.getText().toString(), city.getText().toString(), Integer.parseInt(postalCode.getText().toString()));
+                        country.getText().toString(), city.getText().toString(), (postalCode.getText().toString().equals("")) ? 0 : Integer.parseInt(postalCode.getText().toString()));
                 new updateUser(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
-                        Integer.getInteger(phoneNumber.getText().toString()), userAddress).execute();
+                        (phoneNumber.getText().toString().equals("")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
                 break;
             default:
                 break;
@@ -208,7 +223,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             homeAddress2.setText(result.getAddress2());
             country.setText(result.getCountry());
             city.setText(result.getCity());
-            postalCode.setText((result.getPostalCode() == 0) ? String.valueOf(R.string.not_defined) : String.valueOf(result.getPostalCode()));
+            postalCode.setText((result.getPostalCode() == 0) ? "" : String.valueOf(result.getPostalCode()));
         }
     }
 
@@ -219,33 +234,39 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         private int phone;
         private Address add;
         private int id_address;
+        private String shortDesc;
 
-        updateUser(int id, String firstName, String lastName, int phone, Address address) {
+        updateUser(int id, String firstName, String lastName, int phone, Address address, String shortDesc) {
             this.id = id;
             this.fn = firstName;
             this.ln = lastName;
             this.phone = phone;
             this.add = address;
+            this.shortDesc = shortDesc;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             SoapUserManager pm = new SoapUserManager();
             SoapUserUtilManager pm2 = new SoapUserUtilManager();
+            Boolean result = false;
+
             if (user.getId_address() == -1) {
                 id_address = pm2.registerAddress(this.add);
-                pm.updateAccount(this.id, this.fn, this.ln, this.phone, id_address);
-
+                return pm.updateAccount(this.id, this.fn, this.ln, this.phone, id_address, this.shortDesc);
             }
             else {
-                pm2.updateAddress(this.add);
-                pm.updateAccount(this.id, this.fn, this.ln, this.phone, user.getId_address());
+                result = pm2.updateAddress(this.add);
+                result = ((pm.updateAccount(this.id, this.fn, this.ln, this.phone, user.getId_address(), this.shortDesc) == result));
+                return result;
             }
-            return false;
         }
 
         protected void onPostExecute(Boolean success) {
-
+            if (success)
+                finish();
+            else
+                Toast.makeText(getApplicationContext(), "Nothing to update", Toast.LENGTH_SHORT).show();
         }
     }
 }

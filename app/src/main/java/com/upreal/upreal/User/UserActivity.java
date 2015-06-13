@@ -1,5 +1,6 @@
 package com.upreal.upreal.user;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +11,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.utils.Address;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.SoapUserUtilManager;
 import com.upreal.upreal.utils.User;
 import com.upreal.upreal.view.SlidingTabLayout;
 
@@ -29,6 +32,7 @@ public class UserActivity extends ActionBarActivity {
     private TextView userLocal;
 
     private User user;
+    private Address address;
     private SlidingTabLayout mSlidingTabLayout;
     private CharSequence title;
 
@@ -57,12 +61,16 @@ public class UserActivity extends ActionBarActivity {
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
-
+        userLocal.setText("Address " + R.string.not_defined);
+        if (user.getId_address() != -1)
+            new getAddress().execute(user.getId_address());
         if (user.getFirstname() == null && user.getLastname() == null) {
             userDesc.setText(R.string.no_info);
         } else
             userDesc.setText(user.getFirstname()+" "+user.getLastname());
 //        userLocal.setText(Need service get address from IdAddress);
+
+
 
         CharSequence Tab[] = null;
         if (toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
@@ -109,5 +117,22 @@ public class UserActivity extends ActionBarActivity {
         if (id == R.id.action_settings)
             return true;
         return super.onOptionsItemSelected(item);
+    }
+
+    private class getAddress extends AsyncTask<Integer, Void, Address> {
+        SoapUserUtilManager pm = new SoapUserUtilManager();
+
+        @Override
+        protected Address doInBackground(Integer... params) {
+            return pm.getAddressInfo(params[0]);
+        }
+
+        protected void onPostExecute(Address result) {
+            userLocal.setText(result.getAddress() + "\n"
+                    + result.getAddress2() + "\n"
+                    + result.getCountry() + " "
+                    + result.getCity() + "\n"
+                    + ((result.getPostalCode() == 0) ? "" : String.valueOf(result.getPostalCode())));
+        }
     }
 }

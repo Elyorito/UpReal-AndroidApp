@@ -12,7 +12,7 @@ public class Address {
     private int postalCode;
     // + date
 
-    public Address (int id, String address, String address2, String city, String country, int postalCode) {
+    public Address (int id, String address, String address2, String country, String city, int postalCode) {
         this.id = id;
         this.address = address;
         this.address2 = address2;
