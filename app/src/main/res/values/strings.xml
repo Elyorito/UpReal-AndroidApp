@@ -251,4 +251,8 @@
     <string name="display_number">Numéro affiché ?</string>
     <string name="country">Votre pays</string>
 
+    <!--ListStore-->
+    <string name="store_name">Magasins</string>
+    <string name="store_distance">Distance</string>
+
 </resources>

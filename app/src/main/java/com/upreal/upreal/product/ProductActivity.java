@@ -1,5 +1,6 @@
 package com.upreal.upreal.product;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -7,11 +8,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
 
+import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
@@ -27,7 +31,7 @@ import java.util.List;
 /**
  * Created by Elyo on 11/02/2015.
  */
-public class ProductActivity extends ActionBarActivity {
+public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
@@ -40,7 +44,7 @@ public class ProductActivity extends ActionBarActivity {
     private TextView prodName;
     private TextView prodCategorie;
     private TextView prodShortDesc;
-
+    private Button geoloc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,9 @@ public class ProductActivity extends ActionBarActivity {
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
         prodShortDesc = (TextView) findViewById(R.id.product_desc);
 */
+        geoloc = (Button) findViewById(R.id.geoloc);
+        geoloc.setOnClickListener(this);
+
         prod = getIntent().getExtras().getParcelable("listprod");
 
         title = new String(prod.getName());
@@ -91,5 +98,18 @@ public class ProductActivity extends ActionBarActivity {
         if (id == R.id.action_settings)
             return true;
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.geoloc:
+                Intent intent = new Intent(v.getContext(), GeolocalisationActivity.class);
+                intent.putExtra("id_product", prod.getId());
+                v.getContext().startActivity(intent);
+                break ;
+            default:
+                break ;
+        }
     }
 }
