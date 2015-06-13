@@ -3,11 +3,13 @@ package com.upreal.upreal.product;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.list.AdapterListHomeCustom;
+import com.upreal.upreal.user.UserUpdateActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.database.DatabaseHelper;
@@ -81,18 +84,22 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
         viewHolder.mCardOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (i) {
-                    case 0://Edit
+                if (getItemCount() != 1) {
+                    switch (i) {
+                        case 0://Edit
 
-                        break;
-                    case 1://Add list
+                            break;
+                        case 1://Add list
+/*
                         mDbHelper = new DatabaseHelper(v.getContext());
                         mDbQuery = new DatabaseQuery(mDbHelper);
                         mDatabase = mDbHelper.openDataBase();
 
                         final String[] lists = mDbQuery.QueryGetElement("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
                         mDatabase.close();
-                        /*Builder MultiChoice List*/
+                        */
+/*Builder MultiChoice List*//*
+
                         builder = new AlertDialog.Builder(v.getContext());
                         LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
@@ -113,17 +120,23 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                         if (editList.getText().length() <= 0) {
                                             dialog.cancel();
                                         }
+*/
 /*
                                         mDbQuery.InsertData(new String("lists"), new String[]{"name", "public", "nb_items", "id_user"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
                                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
                                         // TODO Auto-generated method stub
-                         */
-                            /*Refresh list item [BUG]*//*
+                         *//*
+
+                            */
+/*Refresh list item [BUG]*//*
+*/
+/*
 
                                         mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);
                                         mAdapterListCust.notifyDataSetChanged();
                                         mRecyclerViewListCust.getAdapter().notifyDataSetChanged();
-*/
+*//*
+
                                         dialog.dismiss();
                                     }
                                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -149,12 +162,16 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 for (int i = 0; i < checkedList.size(); i++) {
+*/
 /*
                                     String getid[] = mDbQuery.MyRawQuery("SELECT id FROM LISTS WHERE NAME=" + "'" + lists[checkedList.get(i)] + "'") ;
-*/
+*//*
 
+
+*/
 /*
-                                    Toast.makeText(dialogView.getContext(), "LIST CHECKED= " + lists[checkedList.get(i)]+ "USERID=" + Integer.toString(mSessionManagerUser.getUserId())+ "ListID=" + getid[0], Toast.LENGTH_SHORT).show();*/
+                                    Toast.makeText(dialogView.getContext(), "LIST CHECKED= " + lists[checkedList.get(i)]+ "USERID=" + Integer.toString(mSessionManagerUser.getUserId())+ "ListID=" + getid[0], Toast.LENGTH_SHORT).show();*//*
+
                                 }
                                 Snackbar.make(dialogView, "Produit a bien ete ajouter", Snackbar.LENGTH_SHORT).show();
                             }
@@ -168,12 +185,21 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                         break;
                     case 2://Troc
 
-                        break;
-                    case 3://More details
+*/
+                            break;
+                        case 3://More details
 
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    Log.v("User Option", "On est bien arriver");
+                    if (i == 0) {
+                        Log.v("Editer mon compte", "tralala");
+                        Intent intent = new Intent(v.getContext(), UserUpdateActivity.class);
+                        v.getContext().startActivity(intent);
+                    }
                 }
             }
         });

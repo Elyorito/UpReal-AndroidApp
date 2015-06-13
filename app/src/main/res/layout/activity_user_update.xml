@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+<!--    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecyclerView_userUpdate"
+        android:layout_margin="20dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </android.support.v7.widget.RecyclerView>-->
     <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -76,21 +82,25 @@
                     android:layout_height="fill_parent"
                     android:clickable="true"
                     android:paddingTop="10dp"
-                    android:id="@+id/phone">
+                    android:id="@+id/phone"
+                    android:longClickable="false"
+                    android:focusable="true">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:id="@+id/iPhoneNumber"
                         android:src="@drawable/phone"
-                        android:contentDescription="@string/phoneNumber" />
+                        android:contentDescription="@string/phoneNumber"
+                        android:clickable="false"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="@string/phoneNumber"
-                        android:id="@+id/phoneNumber" />
+                        android:id="@+id/phoneNumber"
+                        android:clickable="false"/>
 
                     <ImageView
                         android:layout_width="30dp"
@@ -162,5 +172,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

@@ -37,31 +37,6 @@ public class SoapUserManager {
         }
     }
 
-    public String getAddressInfo(int id) {
-        String methodname = "getAddressInfo";
-        String result = null;
-
-        SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("id", id);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
-        try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
-
-            result = results.toString();
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (Exception q) {
-            q.printStackTrace();
-        }
-        return result;
-    }
-
     //change int phone into String
 
     public boolean updateAccount(int id, String firstName, String lastName, int phone, String address) {

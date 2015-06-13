@@ -13,6 +13,6 @@
         android:layout_marginBottom="4dp"
         android:inputType="phone"
         android:ems="10"
-        android:id="@+id/update"
+        android:id="@+id/ePhoneNumber"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>
