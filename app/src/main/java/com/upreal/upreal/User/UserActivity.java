@@ -59,7 +59,7 @@ public class UserActivity extends ActionBarActivity {
         userUsername.setText(user.getUsername());
 
         if (user.getFirstname() == null && user.getLastname() == null) {
-            userDesc.setText(R.string.noInfo); // change it to string !!
+            userDesc.setText(R.string.no_info);
         } else
             userDesc.setText(user.getFirstname()+" "+user.getLastname());
 //        userLocal.setText(Need service get address from IdAddress);

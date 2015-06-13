@@ -2,6 +2,8 @@ package com.upreal.upreal.utils;
 
 import android.util.Log;
 
+import com.upreal.upreal.R;
+
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -33,9 +35,9 @@ public class SoapUserUtilManager {
         }
     }
 
-    public String getAddressInfo(int id) {
+    public Address getAddressInfo(int id) {
         String methodname = "getAddressInfo";
-        String result = null;
+        Address address = new Address();
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id", id);
@@ -45,9 +47,87 @@ public class SoapUserUtilManager {
         try {
             ht.call(methodname, envelope);
             testHttpResponse(ht);
+            SoapObject result= (SoapObject)envelope.getResponse();
+            if (result.hasProperty("id"))
+                address.setId(Integer.parseInt(result.getPropertyAsString("id")));
+            if (result.hasProperty("address"))
+                address.setAddress(result.getPropertyAsString("address"));
+            else
+                address.setAddress(String.valueOf(R.string.not_defined));
+            if (result.hasProperty("address_2"))
+                address.setAddress2(result.getPropertyAsString("address_2"));
+            else
+                address.setAddress2(String.valueOf(R.string.not_defined));
+            if (result.hasProperty("city"))
+                address.setCity(result.getPropertyAsString("city"));
+            else
+                address.setCity(String.valueOf(R.string.not_defined));
+            if (result.hasProperty("postal_code"))
+                address.setPostalCode(Integer.parseInt(result.getPropertyAsString("postal_code")));
+            else
+                address.setPostalCode(0);
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return address;
+    }
+
+    public boolean updateAddress(Address address) {
+        String methodname = "updateAddress";
+        boolean result = false;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", address.getId());
+        request.addProperty("address", address.getAddress());
+        request.addProperty("address2", address.getAddress2());
+        request.addProperty("country", address.getCountry());
+        request.addProperty("city", address.getCity());
+        request.addProperty("postal_code", address.getPostalCode());
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
             SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
 
-            result = results.toString();
+            result = Boolean.getBoolean(results.toString());
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
+    }
+
+    public int registerAddress(Address address) {
+        String methodname = "register";
+        int result = -1;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("address", address.getAddress());
+        request.addProperty("address2", address.getAddress2());
+        request.addProperty("country", address.getCountry());
+        request.addProperty("city", address.getCity());
+        request.addProperty("postal_code", address.getPostalCode());
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            result = Integer.getInteger(results.toString());
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {

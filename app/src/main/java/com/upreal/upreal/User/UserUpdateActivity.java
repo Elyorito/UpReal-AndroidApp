@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.upreal.upreal.R;
 
+import com.upreal.upreal.utils.Address;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.SoapUserUtilManager;
@@ -35,14 +36,21 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
     private TextView phoneNumber;
     private ImageView phoneAllow;
 
+    private Address userAddress;
+
     private LinearLayout address;
     private TextView homeAddress;
+    private TextView homeAddress2;
+    private TextView city;
+    private TextView postalCode;
+    private TextView country;
 
     private EditText short_desc;
 
     private Button update;
 
     private SessionManagerUser sessionManagerUser;
+    User user;
 /*    RecyclerView rv;*/
 
     AlertDialog.Builder builder;
@@ -55,7 +63,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_user_update);
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-        User user = sessionManagerUser.getUser();
+        user = sessionManagerUser.getUser();
 
    /*     rv = (RecyclerView)findViewById(R.id.RecyclerView_userUpdate);
         rv.setHasFixedSize(true);
@@ -71,16 +79,14 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         phone = (LinearLayout) findViewById(R.id.phone);
         phoneNumber = (TextView) findViewById(R.id.phoneNumber);
         if (user.getPhone() == -1)
-            phoneNumber.setText(R.string.notDefined);
+            phoneNumber.setText(R.string.not_defined);
         else
             phoneNumber.setText(String.valueOf(user.getPhone()));
         phoneAllow = (ImageView) findViewById(R.id.allowNumber);
 
         address = (LinearLayout) findViewById(R.id.address);
         homeAddress = (TextView) findViewById(R.id.homeAddress);
-        if (user.getId_address() == -1)
-            homeAddress.setText(R.string.notDefined);
-        else
+        if (user.getId_address() != -1)
             new getAddress().execute(user.getId_address());
 
         short_desc = (EditText) findViewById(R.id.shortDesc);
@@ -106,13 +112,14 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.name:
                 Log.v("Name", "Name");
-                builder.setTitle(R.string.changeName);
-                builder.setView(inflater.inflate(R.layout.alertbox_name, null))
-                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                builder.setTitle(R.string.change_name);
+                layout = inflater.inflate(R.layout.alertbox_name, null);
+                builder.setView(layout);
+                final EditText eFirstName = (EditText) layout.findViewById(R.id.eFirstName);
+                final EditText eLastName = (EditText) layout.findViewById(R.id.eLastName);
+                builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText eFirstName = (EditText) findViewById(R.id.eFirstName);
-                        EditText eLastName = (EditText) findViewById(R.id.eLastName);
 
                         firstName.setText(eFirstName.getText().toString());
                         lastName.setText(eLastName.getText().toString());
@@ -128,15 +135,16 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.phone:
                 Log.v("phone","Phone");
-                builder.setTitle(R.string.changePhoneNumber); // change to String
-                builder.setView(inflater.inflate(R.layout.alertbox_phone, null))
-                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                EditText ePhoneNumber = (EditText) findViewById(R.id.ePhoneNumber);
-                                phoneNumber.setText(ePhoneNumber.getText().toString());
-                            }
-                        })
+                builder.setTitle(R.string.change_phone_number);
+                layout = inflater.inflate(R.layout.alertbox_phone, null);
+                builder.setView(layout);
+                final EditText ePhoneNumber = (EditText) layout.findViewById(R.id.ePhoneNumber);
+                builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        phoneNumber.setText(ePhoneNumber.getText().toString());
+                    }
+                })
                         .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -148,45 +156,59 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             case R.id.address:
                 Log.v("address", "Address");
 
-                builder.setTitle(R.string.changeAddress);
+                builder.setTitle(R.string.change_address);
                 layout = inflater.inflate(R.layout.alertbox_address, null);
                 builder.setView(layout);
-                final EditText eAddress = (EditText) this.findViewById(R.id.eAddress);
+                final EditText eAddress = (EditText) layout.findViewById(R.id.eAddress);
+                final EditText eAddress2 = (EditText) layout.findViewById(R.id.eAddress2);
+                final EditText eCountry = (EditText) layout.findViewById(R.id.eCountry);
+                final EditText eCity = (EditText) layout.findViewById(R.id.eCity);
+                final EditText ePostalCode = (EditText) layout.findViewById(R.id.ePostalCode);
                 builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     homeAddress.setText(eAddress.getText().toString());
+                    homeAddress2.setText(eAddress2.getText().toString());
+                    country.setText(eCountry.getText().toString());
+                    city.setText(eCity.getText().toString());
+                    postalCode.setText(ePostalCode.getText().toString());
                 }
                 });
                 builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
                 builder.show();
                 break;
             case R.id.update:
                 Log.v("update","update");
 
+                userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
+                        country.getText().toString(), city.getText().toString(), Integer.parseInt(postalCode.getText().toString()));
                 new updateUser(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
-                        Integer.getInteger(phoneNumber.getText().toString()), homeAddress.getText().toString()).execute();
+                        Integer.getInteger(phoneNumber.getText().toString()), userAddress).execute();
                 break;
             default:
                 break;
         }
     }
 
-    private class getAddress extends AsyncTask<Integer, Void, String> {
+    private class getAddress extends AsyncTask<Integer, Void, Address> {
         SoapUserUtilManager pm = new SoapUserUtilManager();
 
         @Override
-        protected String doInBackground(Integer... params) {
+        protected Address doInBackground(Integer... params) {
             return pm.getAddressInfo(params[0]);
         }
 
-        protected void onPostExecute(String result) {
-            homeAddress.setText(result);
+        protected void onPostExecute(Address result) {
+            homeAddress.setText(result.getAddress());
+            homeAddress2.setText(result.getAddress2());
+            country.setText(result.getCountry());
+            city.setText(result.getCity());
+            postalCode.setText((result.getPostalCode() == 0) ? String.valueOf(R.string.not_defined) : String.valueOf(result.getPostalCode()));
         }
     }
 
@@ -195,9 +217,10 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         private String fn;
         private String ln;
         private int phone;
-        private String add;
+        private Address add;
+        private int id_address;
 
-        updateUser(int id, String firstName, String lastName, int phone, String address) {
+        updateUser(int id, String firstName, String lastName, int phone, Address address) {
             this.id = id;
             this.fn = firstName;
             this.ln = lastName;
@@ -208,8 +231,17 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         @Override
         protected Boolean doInBackground(Void... params) {
             SoapUserManager pm = new SoapUserManager();
+            SoapUserUtilManager pm2 = new SoapUserUtilManager();
+            if (user.getId_address() == -1) {
+                id_address = pm2.registerAddress(this.add);
+                pm.updateAccount(this.id, this.fn, this.ln, this.phone, id_address);
 
-            return pm.updateAccount(this.id, this.fn, this.ln, this.phone, this.add);
+            }
+            else {
+                pm2.updateAddress(this.add);
+                pm.updateAccount(this.id, this.fn, this.ln, this.phone, user.getId_address());
+            }
+            return false;
         }
 
         protected void onPostExecute(Boolean success) {
