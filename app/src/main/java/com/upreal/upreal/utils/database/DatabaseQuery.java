@@ -3,6 +3,7 @@ package com.upreal.upreal.utils.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 /**
  * Created by Nunkh on 21/05/15.
@@ -50,6 +51,33 @@ public class DatabaseQuery {
             return resQuery;
         }
 
+        public String[] QueryGetProduct(String table, String[] tableColumns, String where, String[] wArgs, String groupby, String having, String orderby) {
+
+            int nbList = 0;
+            int i = 0;
+            Cursor c;
+            String[] resQuery;
+
+            nbList = QueryNbElements(table, tableColumns);
+
+            resQuery = new String[tableColumns.length];
+                    /*resQuery = new String[nbList];*/
+            c = mDatabase.query(table, tableColumns, where, wArgs, groupby, having, orderby);
+            if (c.moveToFirst()) {
+                resQuery[0] = c.getString(c.getColumnIndex(tableColumns[0]));
+                resQuery[1] = c.getString(c.getColumnIndex(tableColumns[1]));
+                resQuery[2] = c.getString(c.getColumnIndex(tableColumns[2]));
+                if (c.getString(c.getColumnIndex(tableColumns[3])) == null)
+                resQuery[3] = "";
+                else
+                resQuery[3] = c.getString(c.getColumnIndex(tableColumns[3]));
+                resQuery[4] = c.getString(c.getColumnIndex(tableColumns[4]));
+
+            }
+            c.close();
+            return resQuery;
+        }
+
         public String[] QueryGetElement(String table, String[] tableColumns, String where, String[] wArgs, String groupby, String having, String orderby) {
 
             int nbList = 0;
@@ -58,13 +86,19 @@ public class DatabaseQuery {
             String[] resQuery;
 
             nbList = QueryNbElements(table, tableColumns);
-            resQuery = new String[nbList];
+
+            resQuery = new String[tableColumns.length];
+            /*resQuery = new String[nbList];*/
             c = mDatabase.query(table, tableColumns, where, wArgs, groupby, having, orderby);
             if (c.moveToFirst()) {
+/*
                 while (!c.isAfterLast()) {
-                    resQuery[i] = c.getString(c.getColumnIndex(tableColumns[0]));
+*/
+                while (i < tableColumns.length) {
+                    resQuery[i] = c.getString(c.getColumnIndex(tableColumns[i]));
+                    /*resQuery[i] = c.getString(i);*/
                     i++;
-                    c.moveToNext();
+                    //c.moveToNext();
                 }
             }
             c.close();
@@ -76,10 +110,12 @@ public class DatabaseQuery {
             int i = 0;
             String[] resQuery = new String[10];
 
+            for (int k = 0; k < 9; k++)
+                resQuery[k] = "";
             c = mDatabase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 while (!c.isAfterLast()) {
-                    resQuery[i] = c.getString(0);
+                    resQuery[i] = c.getString(i);
                     i++;
                     c.moveToNext();
                 }

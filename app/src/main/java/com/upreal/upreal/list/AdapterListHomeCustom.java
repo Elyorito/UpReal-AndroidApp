@@ -1,5 +1,6 @@
 package com.upreal.upreal.list;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,8 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     private static final int TYPE_CUSTOM = 1;
 
     //private AlertDialog.Builder builder;
-    private String mDelimiter[];
-    private String mListCust[];
+    private String[] mDelimiter;
+    private String[][] mListCust;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
@@ -38,9 +39,10 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
         }
     }
 
-    AdapterListHomeCustom(String[] list_cust, String delimiter[]) {
-        this.mDelimiter = delimiter;
+    AdapterListHomeCustom(String[][] list_cust, String delimiter[]) {
+
         this.mListCust = list_cust;
+        this.mDelimiter = delimiter;
     }
 
     @Override
@@ -61,14 +63,29 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     }
 
     @Override
-    public void onBindViewHolder(AdapterListHomeCustom.ViewHolder holder, int position) {
-//        holder.list_name.setText(mBase_list[position]);
+    public void onBindViewHolder(AdapterListHomeCustom.ViewHolder holder, final int position) {
         if (holder.HolderId == 1) {
-            holder.list_name.setText(mListCust[position]);
+            holder.list_name.setText(mListCust[position - 1][0]);
         } else
         if (holder.HolderId == 0) {
             holder.list_name.setText(mDelimiter[0]);
         }
+        holder.list_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.rowtextlist:
+                        if (position != 0) {
+                            Intent intent = new Intent(v.getContext(), ListCustomActivity.class);
+                            intent.putExtra("listcustom", mListCust[position - 1]);
+                            v.getContext().startActivity(intent);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -83,7 +100,9 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     }
 
     @Override
-    public int getItemCount() {
-        return mListCust.length;
+    public int getItemCount() {/*
+        if (mListCust.length == 0)
+            return mListCust.length;*/
+        return mListCust.length + 1;
     }
 }

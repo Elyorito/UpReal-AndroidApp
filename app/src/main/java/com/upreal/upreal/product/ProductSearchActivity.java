@@ -16,7 +16,6 @@ public class ProductSearchActivity extends ActionBarActivity {
 
     private CharSequence Title[];
 
-
     private Toolbar toolbar;
 
     private ViewPager mViewPager;
@@ -39,6 +38,7 @@ public class ProductSearchActivity extends ActionBarActivity {
 
         Title = new CharSequence[]{getString(R.string.product), getString(R.string.user), getString(R.string.brand, getString(R.string.store)), getString(R.string.store)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setTitle(R.string.search);
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);

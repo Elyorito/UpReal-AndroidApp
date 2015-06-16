@@ -55,6 +55,8 @@
     <string name="commentary">Commentaire</string>
     <string name="social">Social</string>
     <string name="options">Options</string>
+    <string name="add_product_in_which_list">Dans quelle liste voulez vous l\'ajouter ?</string>
+    <string name="create_custom_list">Créer une liste personnalisée?</string>
 
     <!--ProductSearch-->
     <string name="product">Produit</string>
@@ -81,6 +83,10 @@
     <string name="my_commentary">Mes commentaires</string>
     <string name="my_barter_product_list">Ma liste de produit à troquer</string>
     <string name="customized_list">Mes listes personnalisées</string>
+    <string name="add_name_list">Veuillez ajouter un nom de liste</string>
+    <string name="add_list">Ajout d\'une nouvelle liste</string>
+    <string name="list_name_empty">Problème lors de la création de la liste</string>
+    <string name="name_list_correct">Veuillez rentrer un nom de liste correct</string>
 
     <!--Barcode Scanner-->
     <string name="about_menu">About</string>

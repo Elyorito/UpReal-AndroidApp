@@ -27,6 +27,7 @@ public class LoginActivity extends ActionBarActivity {
         setContentView(R.layout.activity_login);
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setTitle(R.string.connexion);
         setSupportActionBar(toolbar);
         Tab = new CharSequence[]{getString(R.string.select_connexion), getString(R.string.select_register)};
 

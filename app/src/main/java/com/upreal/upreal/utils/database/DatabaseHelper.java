@@ -16,7 +16,7 @@ import java.io.OutputStream;
  * Created by Nunkh on 21/05/15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String  DB_NAME = "uprealdb.sqlite";
+    private static String  DB_NAME = "upreal.sqlite";
     private SQLiteDatabase myDatabase;
     private final Context mContext;
 
@@ -42,6 +42,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
     }
 
+    public boolean deleteDataBase() {
+        return this.mContext.deleteDatabase("upreal.sqlite");
+    }
+
     private boolean checkDataBase(){
         boolean checkdb = false;
         try{
@@ -59,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public SQLiteDatabase openDataBase() throws SQLException {
 
         File db = mContext.getDatabasePath(DB_NAME);
-
+       /* deleteDataBase();*/
         if (!checkDataBase()) {
             try {
                 this.getReadableDatabase();

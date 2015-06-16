@@ -65,6 +65,25 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
         if (holder.HolderId == 0) {
             holder.list_name.setText(mBase_list[position]);
         }
+        holder.list_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case 0://Product liked
+                        break;
+                    case 1://Follow User
+                        break;
+                    case 2:// History
+                        break;
+                    case 3:// Commentary
+                        break;
+                    case 4:// List troc product
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override

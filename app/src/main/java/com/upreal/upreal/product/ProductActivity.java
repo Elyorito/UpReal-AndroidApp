@@ -1,5 +1,6 @@
 package com.upreal.upreal.product;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,8 @@ import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.database.DatabaseHelper;
+import com.upreal.upreal.utils.database.DatabaseQuery;
 import com.upreal.upreal.view.SlidingTabLayout;
 
 import org.w3c.dom.Text;
@@ -61,6 +64,7 @@ public class ProductActivity extends ActionBarActivity {
 */
         CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -88,8 +92,17 @@ public class ProductActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings)
+        if (id == R.id.action_settings) {
+            SQLiteDatabase mDatabase;
+            DatabaseHelper mDbHelper;
+            DatabaseQuery mDbQuery;
+            mDbHelper = new DatabaseHelper(getApplicationContext());
+            mDbQuery = new DatabaseQuery(mDbHelper);
+            mDatabase = mDbHelper.openDataBase();
+            mDbHelper.deleteDataBase();
+            mDatabase.close();
             return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

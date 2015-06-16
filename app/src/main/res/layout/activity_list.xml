@@ -44,7 +44,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_phi"
+            android:src="@drawable/ic_action_new"
             fab:fab_colorNormal="@color/ColorPrimary"
             fab:fab_colorPressed="@color/ColorPrimary"
             fab:fab_colorRipple="@color/ColorPrimary"/>

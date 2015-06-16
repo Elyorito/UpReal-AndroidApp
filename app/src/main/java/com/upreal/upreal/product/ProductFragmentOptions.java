@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.utils.Product;
+import com.upreal.upreal.utils.SessionManagerUser;
 
 /**
  * Created by Elyo on 12/03/2015.
@@ -25,13 +27,16 @@ public class ProductFragmentOptions extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_product_options, container, false);
+        SessionManagerUser sessionManagerUser = new SessionManagerUser(v.getContext());
+        Bundle b = getArguments();
+        Product prod = b.getParcelable("product");
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_Product_options);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         OPTION = new String[] {"Editer", "Ajouter dans une liste", "Mettre a troquer", "Plus d'info"};
-        mAdapter = new AdapterOption(OPTION);
+        mAdapter = new AdapterOption(OPTION, prod, sessionManagerUser);
         recyclerView.setAdapter(mAdapter);
 
         return v;

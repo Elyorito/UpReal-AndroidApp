@@ -85,6 +85,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
+        Toast.makeText(getApplicationContext(), "IdUser=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_SHORT).show();
         //sessionManagerUser.deleteALL();
 
         toggleAccount = sessionManagerUser.isLogged();

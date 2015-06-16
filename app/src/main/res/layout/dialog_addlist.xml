@@ -3,16 +3,22 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/phoneNumber"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/ePhoneNumber"
-        android:layout_gravity="center_horizontal" />
+        android:text="@string/add_name_list" />
+
+    <EditText
+        android:id="@+id/namelist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint=""/>
 </LinearLayout>
