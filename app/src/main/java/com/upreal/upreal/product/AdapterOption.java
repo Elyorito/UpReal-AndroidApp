@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -90,7 +91,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
 
                             break;
                         case 1://Add list
-/*
+
                         mDbHelper = new DatabaseHelper(v.getContext());
                         mDbQuery = new DatabaseQuery(mDbHelper);
                         mDatabase = mDbHelper.openDataBase();
@@ -232,26 +233,25 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             break;
                     }
                 } else {
-                Log.v("User Option", "On est bien arriver");
+                    Log.v("User Option", "On est bien arriver");
                     if (i == 0) {
                         Log.v("Editer mon compte", "tralala");
                         Intent intent = new Intent(v.getContext(), UserUpdateActivity.class);
                         v.getContext().startActivity(intent);
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
  
 
-        @Override
-        public int getItemCount () {
-            return mOPTION.length;
-        }
+    @Override
+    public int getItemCount () {
+        return mOPTION.length;
+    }
 
-        @Override
-        public void onClick (View v){
-        }
+    @Override
+    public void onClick (View v){
     }
 }

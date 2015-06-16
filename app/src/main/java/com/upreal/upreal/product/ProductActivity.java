@@ -1,5 +1,7 @@
 package com.upreal.upreal.product;
 
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -7,15 +9,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
 
+import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.database.DatabaseHelper;
+import com.upreal.upreal.utils.database.DatabaseQuery;
 import com.upreal.upreal.view.SlidingTabLayout;
 
 import org.w3c.dom.Text;
@@ -27,7 +34,7 @@ import java.util.List;
 /**
  * Created by Elyo on 11/02/2015.
  */
-public class ProductActivity extends ActionBarActivity {
+public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
@@ -41,6 +48,7 @@ public class ProductActivity extends ActionBarActivity {
     private TextView prodCategorie;
     private TextView prodShortDesc;
 
+    private Button geoloc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
