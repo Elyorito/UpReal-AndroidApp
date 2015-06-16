@@ -1,6 +1,5 @@
 package com.upreal.upreal.product;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -17,8 +16,6 @@ import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductManager;
-import com.upreal.upreal.utils.database.DatabaseHelper;
-import com.upreal.upreal.utils.database.DatabaseQuery;
 import com.upreal.upreal.view.SlidingTabLayout;
 
 import org.w3c.dom.Text;
@@ -54,6 +51,9 @@ public class ProductActivity extends ActionBarActivity {
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
         prodShortDesc = (TextView) findViewById(R.id.product_desc);
 */
+        geoloc = (Button) findViewById(R.id.geoloc);
+        geoloc.setOnClickListener(this);
+
         prod = getIntent().getExtras().getParcelable("listprod");
 
         title = new String(prod.getName());
@@ -104,5 +104,18 @@ public class ProductActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.geoloc:
+                Intent intent = new Intent(v.getContext(), GeolocalisationActivity.class);
+                intent.putExtra("id_product", prod.getId());
+                v.getContext().startActivity(intent);
+                break ;
+            default:
+                break ;
+        }
     }
 }

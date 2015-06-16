@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+<!--    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecyclerView_userUpdate"
+        android:layout_margin="20dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </android.support.v7.widget.RecyclerView>-->
     <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -26,7 +32,7 @@
                     android:layout_height="fill_parent"
                     android:src="@drawable/ic_action_camera"
                     android:gravity="center_horizontal|center_vertical"
-                    android:contentDescription="@string/profilePicture" />
+                    android:contentDescription="@string/profile_picture" />
             </LinearLayout>
 
             <LinearLayout
@@ -40,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/firstName"
+                    android:text="@string/first_name"
                     android:id="@+id/firstName" />
 
                 <Space
@@ -51,9 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/lastName"
-                    android:id="@+id/lastName"
-                    android:capitalize="characters" />
+                    android:text="@string/last_name"
+                    android:id="@+id/lastName" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/myInfo"
+                    android:text="@string/my_info"
                     android:id="@+id/myInfo"
                     android:textColor="#ffff1726" />
 
@@ -76,28 +81,33 @@
                     android:layout_height="fill_parent"
                     android:clickable="true"
                     android:paddingTop="10dp"
-                    android:id="@+id/phone">
+                    android:id="@+id/phone"
+                    android:longClickable="false"
+                    android:focusable="true">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:id="@+id/iPhoneNumber"
                         android:src="@drawable/phone"
-                        android:contentDescription="@string/phoneNumber" />
+                        android:contentDescription="@string/phone_number"
+                        android:clickable="false"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/phoneNumber"
-                        android:id="@+id/phoneNumber" />
+                        android:hint="@string/phone_number"
+                        android:id="@+id/phoneNumber"
+                        android:clickable="false"/>
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:id="@+id/allowNumber"
                         android:gravity="right"
-                        android:src="@drawable/phone_no" />
+                        android:src="@drawable/phone_no"
+                        android:contentDescription="@string/display_number" />
 
                 </LinearLayout>
 
@@ -115,16 +125,56 @@
                         android:src="@drawable/home"
                         android:contentDescription="@string/address" />
 
-                    <TextView
-                        android:paddingTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/address"
-                        android:id="@+id/homeAddress" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:paddingTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:hint="@string/address"
+                            android:id="@+id/homeAddress" />
+
+                        <TextView
+                            android:paddingTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:hint="@string/address2"
+                            android:id="@+id/homeAddress2" />
+
+                        <TextView
+                            android:paddingTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:hint="@string/country"
+                            android:id="@+id/country" />
+
+                        <TextView
+                            android:paddingTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:hint="@string/city"
+                            android:id="@+id/city" />
+
+                        <TextView
+                            android:paddingTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:hint="@string/postal_code"
+                            android:id="@+id/postalCode" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
+                    android:paddingTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
@@ -134,13 +184,13 @@
                         android:layout_height="30dp"
                         android:id="@+id/description"
                         android:src="@drawable/desc"
-                        android:contentDescription="@string/shortDesc" />
+                        android:contentDescription="@string/short_desc" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/shortDesc"
+                        android:text="@string/short_desc"
                         android:id="@+id/textView"
                         android:textColor="#ffff1726" />
                 </LinearLayout>
@@ -162,5 +212,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

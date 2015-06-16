@@ -39,7 +39,7 @@ public class UserFragmentSearch extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 2));
         //Test
-        new RetreiveUser().execute();
+        new RetrieveUser().execute();
 /*//test
         mAdapter = new ProductSearchAdapter(sProduct);
 */
@@ -49,7 +49,7 @@ public class UserFragmentSearch extends Fragment {
         return v;
     }
 
-    private class RetreiveUser extends AsyncTask<Void, Void, List<User>> {
+    private class RetrieveUser extends AsyncTask<Void, Void, List<User>> {
 
         private String list_user;
         private List<User> listuser = new ArrayList<User>();
@@ -67,13 +67,6 @@ public class UserFragmentSearch extends Fragment {
             super.onPostExecute(list);
             int nb = list.size();
 
-
-            for (int i = 0; i < nb; i++) {
-                Toast.makeText(getActivity().getApplicationContext(), "Trollol", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity().getApplicationContext(), Integer.toString(list.size()), Toast.LENGTH_SHORT).show();
-
-                Toast.makeText(getActivity().getApplicationContext(), "SEARCH Name[" + list.get(i).getUsername() + "]", Toast.LENGTH_SHORT).show();
-            }
             listUser = list;
             mAdapter = new UserSearchAdapter(listUser);
             mRecyclerView.setAdapter(mAdapter);

@@ -26,15 +26,15 @@
         android:orientation="vertical"
         android:background="@android:color/holo_blue_dark">
 
-            <TextView
-                android:id="@+id/product_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/renseignement"
-                android:layout_margin="5dp"
-                android:textAppearance="@android:style/TextAppearance.Medium"/>
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/renseignement"
+            android:layout_margin="5dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"/>
 
-            <TextView
+        <TextView
                 android:id="@+id/product_categorie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_margin="5dp"
                 android:textAppearance="@android:style/TextAppearance.Medium"/>
 
-            <TextView
+        <TextView
                 android:id="@+id/product_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,6 +50,11 @@
                 android:layout_margin="5dp"
                 android:textAppearance="@android:style/TextAppearance.Medium"/>
 
+        <Button
+            android:id="@+id/geoloc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Localise-moi"/>
     </LinearLayout>
 
 </LinearLayout>

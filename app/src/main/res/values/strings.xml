@@ -235,18 +235,30 @@
     <string name="search_book_contents">Search Book Contents</string>
     <string name="share_via_barcode">Share via barcode</string>
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
-    <string name="myInfo">Mes informations</string>
-    <string name="lastName">NOM</string>
-    <string name="firstName">Prénom</string>
-    <string name="phoneNumber">Numéro de téléphone</string>
-    <string name="profilePicture">Votre avatar</string>
+
+    <!-- Update info -->
+    <string name="my_info">Mes informations</string>
+    <string name="last_name">NOM</string>
+    <string name="first_name">Prénom</string>
+    <string name="phone_number">Numéro de téléphone</string>
+    <string name="profile_picture">Votre avatar</string>
     <string name="address">Votre adresse</string>
-    <string name="shortDesc">Une courte description</string>
+    <string name="short_desc">Une courte description</string>
     <string name="title">Title</string>
-    <string name="changeName">Vous voulez changer votre prénom et/ou votre nom ?</string>
-    <string name="noInfo">Information not given</string>
-    <string name="changeAddress">Vous voulez modifier votre addresse ?</string>
-    <string name="changePhoneNumber">Vous voulez configurer vos données téléphoniques ?</string>
+    <string name="change_name">Vous voulez changer votre prénom et/ou votre nom ?</string>
+    <string name="no_info">Information not given</string>
+    <string name="change_address">Vous voulez modifier votre addresse ?</string>
+    <string name="change_phone_number">Vous voulez configurer vos données téléphoniques ?</string>
     <string name="update">Modifier</string>
+    <string name="not_defined">Non renseigné</string>
+    <string name="city">Votre ville</string>
+    <string name="postal_code">Votre code postal</string>
+    <string name="address2">Complement d\'adresse</string>
+    <string name="display_number">Numéro affiché ?</string>
+    <string name="country">Votre pays</string>
+
+    <!--ListStore-->
+    <string name="store_name">Magasins</string>
+    <string name="store_distance">Distance</string>
 
 </resources>
