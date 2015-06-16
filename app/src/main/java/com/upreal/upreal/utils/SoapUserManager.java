@@ -44,10 +44,11 @@ public class SoapUserManager {
         boolean result = false;
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
         request.addProperty("firstname", firstName);
         request.addProperty("lastname", lastName);
         request.addProperty("phone", phone);
-        request.addProperty("address_id", id_address);
+        request.addProperty("id_address", id_address);
         request.addProperty("short_desc", shortDesc);
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
