@@ -2,7 +2,6 @@ package com.upreal.upreal.user;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,17 +29,12 @@ import com.upreal.upreal.utils.User;
  * Created by Eric on 11/06/2015.
  */
 public class UserUpdateActivity extends Activity implements View.OnClickListener {
-    private LinearLayout name;
     private TextView firstName;
     private TextView lastName;
 
-    private LinearLayout phone;
     private TextView phoneNumber;
-    private ImageView phoneAllow;
+    //private ImageView phoneAllow;
 
-    private Address userAddress;
-
-    private LinearLayout address;
     private TextView homeAddress;
     private TextView homeAddress2;
     private TextView city;
@@ -48,8 +42,6 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
     private TextView country;
 
     private EditText short_desc;
-
-    private Button update;
 
     private SessionManagerUser sessionManagerUser;
     User user;
@@ -72,21 +64,21 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);*/
-        name = (LinearLayout) findViewById(R.id.name);
+        LinearLayout name = (LinearLayout) findViewById(R.id.name);
         firstName = (TextView) findViewById(R.id.firstName);
         firstName.setText(user.getFirstname());
         lastName = (TextView) findViewById(R.id.lastName);
         lastName.setText(user.getLastname());
 
-        phone = (LinearLayout) findViewById(R.id.phone);
+        LinearLayout phone = (LinearLayout) findViewById(R.id.phone);
         phoneNumber = (TextView) findViewById(R.id.phoneNumber);
         if (user.getPhone() == -1 || user.getPhone() == 0)
             phoneNumber.setText(R.string.not_defined);
         else
             phoneNumber.setText(String.valueOf(user.getPhone()));
-        phoneAllow = (ImageView) findViewById(R.id.allowNumber);
+        //phoneAllow = (ImageView) findViewById(R.id.allowNumber);
 
-        address = (LinearLayout) findViewById(R.id.address);
+        LinearLayout address = (LinearLayout) findViewById(R.id.address);
         homeAddress = (TextView) findViewById(R.id.homeAddress);
         homeAddress2 = (TextView) findViewById(R.id.homeAddress2);
         country = (TextView) findViewById(R.id.country);
@@ -99,12 +91,14 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         short_desc = (EditText) findViewById(R.id.shortDesc);
         short_desc.setText(user.getShort_desc());
 
-        update = (Button) findViewById(R.id.update);
+        Button update = (Button) findViewById(R.id.update);
+        Button cancel = (Button) findViewById(R.id.cancel);
 
         name.setOnClickListener(this);
         phone.setOnClickListener(this);
         address.setOnClickListener(this);
         update.setOnClickListener(this);
+        cancel.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
         inflater = this.getLayoutInflater();
@@ -200,11 +194,14 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             case R.id.update:
                 Log.v("update","update");
 
-                userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
+                Address userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
                         country.getText().toString(), city.getText().toString(), (postalCode.getText().toString().equals("")) ? 0 : Integer.parseInt(postalCode.getText().toString()));
                 new updateUser(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
                         (phoneNumber.getText().toString().equals("")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
                 break;
+
+            case R.id.cancel:
+                finish();
             default:
                 break;
         }
@@ -249,7 +246,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         protected Boolean doInBackground(Void... params) {
             SoapUserManager pm = new SoapUserManager();
             SoapUserUtilManager pm2 = new SoapUserUtilManager();
-            Boolean result = false;
+            Boolean result;
 
             if (user.getId_address() == -1) {
                 id_address = pm2.registerAddress(this.add);
@@ -257,7 +254,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             }
             else {
                 result = pm2.updateAddress(this.add);
-                result = ((pm.updateAccount(this.id, this.fn, this.ln, this.phone, user.getId_address(), this.shortDesc) == result));
+                result = (pm.updateAccount(this.id, this.fn, this.ln, this.phone, user.getId_address(), this.shortDesc) == result);
                 return result;
             }
         }

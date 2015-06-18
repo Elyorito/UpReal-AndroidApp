@@ -283,8 +283,8 @@ public class SoapUserManager {
             user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone")));
         if (soapObject.hasProperty("short_desc") && soapObject.getProperty("short_desc") != null)
          user.setShort_desc(soapObject.getPropertyAsString("short_desc"));
-        if (soapObject.hasProperty("id"))
-            user.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            user.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
 /*
         prod.setPicture(soapObject.getPropertyAsString("picture").toString());
 */

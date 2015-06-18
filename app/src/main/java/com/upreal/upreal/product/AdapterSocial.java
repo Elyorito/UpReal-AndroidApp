@@ -123,8 +123,9 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                             break;
                     }
                 } else {
+                    // User
                     switch (i) {
-                        case 0: //Like
+                        case 0: // Suivre
                             Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
                             new SendLike().execute();
                             break;

@@ -22,52 +22,38 @@ import com.upreal.upreal.view.SlidingTabLayout;
  */
 public class UserActivity extends ActionBarActivity {
 
-    private Toolbar toolbar;
-
-    private ViewPager mViewPager;
-    private UserViewPagerAdapter adapter;
-
-    private TextView userUsername;
-    private TextView userDesc;
     private TextView userLocal;
 
-    private User user;
     private Address address;
-    private SlidingTabLayout mSlidingTabLayout;
     private CharSequence title;
-
-    private SessionManagerUser sessionManagerUser;
-    private static boolean toggleAccount = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        userUsername = (TextView) findViewById(R.id.user_username);
-        userDesc = (TextView) findViewById(R.id.user_desc);
+        TextView userUsername = (TextView) findViewById(R.id.user_username);
+        TextView userDesc = (TextView) findViewById(R.id.user_desc);
         userLocal = (TextView) findViewById(R.id.user_local);
 
-        sessionManagerUser = new SessionManagerUser(getApplicationContext());
-        toggleAccount = sessionManagerUser.isLogged();
+        SessionManagerUser sessionManagerUser = new SessionManagerUser(getApplicationContext());
+        boolean toggleAccount = sessionManagerUser.isLogged();
 
-        if (getIntent().getExtras() == null) {
+        User user;
+        if (getIntent().getExtras() == null)
             user = sessionManagerUser.getUser();
-            Log.v("sessions", "Work");
-        } else {
+        else
             user = getIntent().getExtras().getParcelable("listuser");
-            Log.v("research", "Work");
-        }
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
-        userLocal.setText("Address " + R.string.not_defined);
-        if (user.getId_address() != -1)
+        userLocal.setText("Address " + getResources().getString(R.string.not_defined));
+        if (user.getId_address() != -1 && user.getId_address() != 0)
             new getAddress().execute(user.getId_address());
-        if (user.getFirstname() == null && user.getLastname() == null) {
+        if (user.getFirstname() == null && user.getLastname() == null)
             userDesc.setText(R.string.no_info);
-        } else
-            userDesc.setText(user.getFirstname()+" "+user.getLastname());
+        else
+            userDesc.setText(user.getFirstname() + " " + user.getLastname());
 //        userLocal.setText(Need service get address from IdAddress);
 
 
@@ -86,14 +72,14 @@ public class UserActivity extends ActionBarActivity {
             Log.v("user ID", String.valueOf(user.getId()));
         }
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new UserViewPagerAdapter(getSupportFragmentManager(), Tab, 2, user, getApplicationContext());
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        UserViewPagerAdapter adapter = new UserViewPagerAdapter(getSupportFragmentManager(), Tab, 2, user, getApplicationContext());
         mViewPager.setAdapter(adapter);
 
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
+        SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override

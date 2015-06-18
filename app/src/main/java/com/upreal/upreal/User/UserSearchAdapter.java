@@ -72,7 +72,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.but_cardview_go_product:
-                        Toast.makeText(v.getContext(), "Fiche Product :[" + list.get(position).getUsername() + "]", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Fiche User :[" + list.get(position).getUsername() + "| " + Integer.toString(list.get(position).getId_address()) + "]", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(v.getContext(), UserActivity.class);
                         intent.putExtra("listuser", list.get(position));
                         v.getContext().startActivity(intent);
