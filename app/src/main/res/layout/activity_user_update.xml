@@ -203,12 +203,29 @@
                     android:inputType="textMultiLine" />
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/update"
-                android:layout_gravity="center"
-                android:id="@+id/update" />
+            <LinearLayout
+                android:paddingTop="20dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:id="@+id/cancel"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_horizontal" />
+
+                <Button
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/update"
+                    android:id="@+id/update"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

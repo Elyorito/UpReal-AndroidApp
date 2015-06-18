@@ -71,7 +71,10 @@ public class SoapGlobalManager {
         String methodname = "getRate";
         RateComment rate = new RateComment();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("id_product", idProduct);
+        if (idUser != 0)
+            request.addProperty("id_user", idUser);
+        if (idProduct != 0)
+            request.addProperty("id_product", idProduct);
         request.addProperty("type", type);
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
@@ -84,15 +87,29 @@ public class SoapGlobalManager {
 
             SoapObject res0 = (SoapObject) envelope.bodyIn;
             /*SoapObject results= (SoapObject)envelope.getResponse();*/
-            Vector<SoapObject> results = (Vector<SoapObject>) envelope.getResponse();
+            Object response = envelope.getResponse();
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listRate.add(this.convertToQuery(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listRate.add(this.convertToQuery(result));
+            }
+
 /*
             nbProduct = results.getAttributeCount();
 */
 /*
             data = results.getProperty("Product").toString();
 */
+/*
             for (SoapObject res : results)
                 listRate.add(this.convertToQuery(res, data));
+*/
 
 /*
             if (results instanceof SoapObject) {
@@ -110,7 +127,7 @@ public class SoapGlobalManager {
         return listRate;
     }
 
-    private RateComment convertToQuery(SoapObject soapObject, String data) {
+    private RateComment convertToQuery(SoapObject soapObject) {
         RateComment rate = new RateComment();
         rate.setmTextComment(soapObject.getPropertyAsString("commentary").toString());
         rate.setmNameUser(soapObject.getPropertyAsString("id_user").toString());

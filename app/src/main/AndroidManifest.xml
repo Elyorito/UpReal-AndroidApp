@@ -51,6 +51,12 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".user.UserChangePwd"
+            android:label="UpReal"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
 
         <activity
             android:name=".product.ProductSearchActivity"
