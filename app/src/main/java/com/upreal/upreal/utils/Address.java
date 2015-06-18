@@ -1,9 +1,12 @@
 package com.upreal.upreal.utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Eric on 13/06/2015.
  */
-public class Address {
+public class Address implements Parcelable {
     private int id;
     private String address;
     private String address2;
@@ -69,5 +72,42 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.address);
+        dest.writeString(this.address2);
+        dest.writeString(this.city);
+        dest.writeString(this.country);
+        dest.writeInt(this.postalCode);
+    }
+
+    public static final Creator<Address> CREATOR = new Parcelable.Creator<Address>() {
+
+        @Override
+        public Address createFromParcel(Parcel source) {
+            return new Address(source);
+        }
+
+        @Override
+        public Address[] newArray(int size) {
+            return new Address[size];
+        }
+    };
+
+    public Address(Parcel in) {
+        this.id = in.readInt();
+        this.address = in.readString();
+        this.address2 = in.readString();
+        this.city = in.readString();
+        this.country = in.readString();
+        this.postalCode = in.readInt();
     }
 }

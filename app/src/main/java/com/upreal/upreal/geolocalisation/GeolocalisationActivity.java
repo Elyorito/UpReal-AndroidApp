@@ -1,14 +1,20 @@
 package com.upreal.upreal.geolocalisation;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,14 +22,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import com.upreal.upreal.R;
-
-import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Address;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,95 +47,39 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
     private GoogleMap map;
 
     private Toolbar toolbar;
+    private Button seeAll;
 
     private RecyclerView mRecyclerViewList;
     private RecyclerView.Adapter mAdapterList;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private String base_list[];
-    private String delimiter[];
 
-    private List<Address> stores;
     private int idProduct = -1;
     private int idStore = -1;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_geolocalisation);
+    private List<Address> stores = new ArrayList<>();
+    private List<String> distances = new ArrayList<>();
+    private List<String> prices = new ArrayList<>();
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
+    private List<Address> storeToList(Address store) {
+        List<Address> tmp = new ArrayList<Address>();
 
-        createMapView();
-        addMarker("Test", 0, 0);
-
-        gClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        mLocRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-
-        idProduct = getIntent().getExtras().getInt("id_product");
-        idStore = getIntent().getExtras().getInt("id_store");
-
-        if (idProduct != -1) {
-
-        }
-        else if (idStore != -1) {
-
-        }
-
-        base_list = new String[] {getString(R.string.store_name),
-                getString(R.string.store_distance),
-                getString(R.string.price)};
-        delimiter = new String[] {getString(R.string.customized_list)};
-
-        mRecyclerViewList = (RecyclerView) findViewById(R.id.address_list);
-        mRecyclerViewList.setHasFixedSize(true);
-        mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapterList = new AdapterListStore(base_list, delimiter);
-        mRecyclerViewList.setAdapter(mAdapterList);
-        mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-            }
-        });
+        tmp.add(store);
+        return tmp;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        gClient.connect();
-    }
+    private List<String> stringToList(String s) {
+        List<String> tmp = new ArrayList<String>();
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (gClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(gClient, this);
-            gClient.disconnect();
-        }
+        tmp.add(s);
+        return tmp;
     }
 
     private void createMapView() {
         try {
             if (map == null) {
                 map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_view)).getMap();
-
                 if (map == null) {
                     Toast.makeText(getApplicationContext(), "Error creating map", Toast.LENGTH_SHORT).show();
                 }
-
             }
         }
         catch (NullPointerException e) {
@@ -137,11 +89,16 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
 
     private void addMarker(String label, double latitude, double longitude) {
         if (map != null) {
+            Log.i(TAG, "Adding new marker " + label + ".");
             map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(label).draggable(false));
+        }
+        else {
+            Log.i(TAG, "Map is null.");
         }
     }
 
     private void updateCurrentPosition(Location location) {
+        Log.i(TAG, "Position updated.");
         addMarker("Me", location.getLatitude(), location.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
     }
@@ -156,6 +113,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
             updateCurrentPosition(location);
         }
         else {
+            Log.i(TAG, "Trying to locate user.");
             LocationServices.FusedLocationApi.requestLocationUpdates(gClient, mLocRequest, this);
         }
     }
@@ -183,5 +141,35 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
     @Override
     public void onLocationChanged(Location location) {
         updateCurrentPosition(location);
+    }
+
+    class RetrieveAddress extends AsyncTask<List<Address>, Void, List<android.location.Address>> {
+
+        @Override
+        protected List<android.location.Address> doInBackground(List<Address>... params) {
+
+            List<android.location.Address> addresses = new ArrayList<android.location.Address>();
+            android.location.Address address;
+
+            for (Address a : params[0]) {
+                address = WebLocationManager.getLocationInfo(a.getAddress() + ", " + a.getPostalCode() + " " + a.getCity() + ", " + a.getCountry()).get(0);
+                if (address != null) {
+                    addresses.add(address);
+                }
+            }
+            return addresses;
+        }
+
+        protected void onPostExecute(List<android.location.Address> addresses) {
+            map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude())));
+            if (addresses != null && !addresses.isEmpty()) {
+                for (android.location.Address a : addresses) {
+                    addMarker(a.getAddressLine(0), a.getLatitude(), a.getLongitude());
+                }
+            }
+            else {
+                Log.i(TAG, "No location found.");
+            }
+        }
     }
 }
