@@ -22,6 +22,7 @@ import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductUtilManager;
 import com.upreal.upreal.utils.SoapUserManager;
+import com.upreal.upreal.utils.SoapUserUtilManager;
 import com.upreal.upreal.utils.User;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
@@ -109,7 +110,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                                 listLike = v.getContext().getString(R.string.liked_product);
                                 mDbHelper = new DatabaseHelper(v.getContext());
                                 mDbQuery = new DatabaseQuery(mDbHelper);
-                                new SendLike().execute();
+                                new SendLike(0).execute();
                             }
                             break;
                         case 1: //Commenter
@@ -127,7 +128,28 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                     switch (i) {
                         case 0: // Suivre
                             Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
-                            new SendLike().execute();
+                            if (sessionManagerUser.getUserId() <= 0) {
+                                builder = new AlertDialog.Builder(v.getContext());
+                                builder.setTitle("Suivre cet utilisateur ?").setMessage("Connectez vous pour pouvoir le suivre.")
+                                        .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                                                v.getContext().startActivity(intent);
+                                                dialog.dismiss();
+                                            }
+                                        }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                }).create().show();
+                            } else {
+                                listLike = v.getContext().getString(R.string.liked_product);
+                                mDbHelper = new DatabaseHelper(v.getContext());
+                                mDbQuery = new DatabaseQuery(mDbHelper);
+                                new SendLike(1).execute();
+                            }
                             break;
                         case 1: //Commenter
                             Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
@@ -160,11 +182,23 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
 
         private class SendLike extends AsyncTask<Void, Void, Boolean> {
             Boolean isSuccess = false;
+            private int type;
+
+            public SendLike(int type) {
+                this.type = type;
+            }
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                SoapProductUtilManager pum = new SoapProductUtilManager();
-                isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 1);
+                if (this.type == 0) {
+                    SoapProductUtilManager pum = new SoapProductUtilManager();
+                    isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 1);
+                } else if (this.type == 1) {
+                    SoapUserUtilManager pum = new SoapUserUtilManager();
+/*
+                    isSuccess = pum.rateUser(sessionManagerUser.getUserId(), )
+*/
+                }
                 return isSuccess;
             }
 
@@ -184,6 +218,14 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                 } else {
 
                 }
+            }
+
+            public int getType() {
+                return type;
+            }
+
+            public void setType(int type) {
+                this.type = type;
             }
         }
 }
