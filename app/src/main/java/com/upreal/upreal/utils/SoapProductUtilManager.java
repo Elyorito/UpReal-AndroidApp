@@ -36,12 +36,12 @@ public class SoapProductUtilManager {
         }
     }
 
-    public Boolean rateProduct(int idUser, int idProduct, int mark) {
+    public Boolean rateProduct(int idUser, int idTarget, int mark) {
         Boolean isSuccess = false;
         String methodName = "rateProduct";
         SoapObject request = new SoapObject(NAMESPACE, methodName);
         request.addProperty("id_user", idUser);
-        request.addProperty("id_product", idProduct);
+        request.addProperty("id_target", idTarget);
         request.addProperty("mark", mark);
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);

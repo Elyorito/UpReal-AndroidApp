@@ -1,8 +1,11 @@
 package com.upreal.upreal.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +26,7 @@ import static android.widget.TextView.OnEditorActionListener;
 /**
  * Created by Elyo on 15/02/2015.
  */
-public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavDrawerSearchHome.ViewHolder> implements OnEditorActionListener, View.OnClickListener{
+public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavDrawerSearchHome.ViewHolder> implements View.OnClickListener{
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_PRICE = 1;
@@ -56,6 +59,15 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                 HolderId = 1;
             } else if (ViewType == TYPE_HEADER){
                 search = (EditText) itemView.findViewById(R.id.edittext_search);
+                search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (!hasFocus) {
+                            ((Activity) v.getContext()).onBackPressed();
+                            mSearchName = search.getText().toString();
+                        }
+                    }
+                });
                 HolderId = 0;
             }
         }
@@ -94,7 +106,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_search_home, parent, false);
 
             ViewHolder vhHeader = new ViewHolder(v, viewType);
-            vhHeader.search.setOnEditorActionListener(AdapterNavDrawerSearchHome.this);
             vhHeader.search.setHint("produit, marque, magasin, utilisateur");
             vhHeader.search.setTag(vhHeader);
             return vhHeader;
@@ -133,25 +144,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             intent.putExtra("searchname", mSearchName);
             v.getContext().startActivity(intent);
         }
-    }
-
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-        if(actionId == EditorInfo.IME_ACTION_DONE) {
-            ViewHolder holder = (ViewHolder) v.getTag();
-
-            mSearchName = holder.search.getText().toString();
-            Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
-            //intent.putExtra("searchname", holder.search.getText().toString());
-            v.getContext().startActivity(intent);
-            notifyDataSetChanged();
-            return true;
-        } else if (actionId == (EditorInfo.IME_ACTION_NEXT)) {
-            ViewHolder holder = (ViewHolder) v.getTag();
-            mSearchName = holder.search.getText().toString();
-        }
-        return false;
     }
 
     @Override
