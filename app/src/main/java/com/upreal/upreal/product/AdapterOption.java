@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.list.AdapterListHomeCustom;
+import com.upreal.upreal.user.UserChangePwd;
 import com.upreal.upreal.user.UserUpdateActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SessionManagerUser;
@@ -85,10 +86,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
         viewHolder.mCardOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getItemCount() != 1) {
+                if (getItemCount() != 2) {
                     switch (i) {
                         case 0://Edit
-
                             break;
                         case 1://Add list
 
@@ -237,6 +237,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                     if (i == 0) {
                         Log.v("Editer mon compte", "tralala");
                         Intent intent = new Intent(v.getContext(), UserUpdateActivity.class);
+                        v.getContext().startActivity(intent);
+                    } else if (i == 1) {
+                        Intent intent = new Intent(v.getContext(), UserChangePwd.class);
                         v.getContext().startActivity(intent);
                     }
                 }

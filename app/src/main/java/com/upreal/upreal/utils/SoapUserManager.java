@@ -1,7 +1,6 @@
 package com.upreal.upreal.utils;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
@@ -16,7 +15,6 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.jar.Attributes;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -69,6 +67,33 @@ public class SoapUserManager {
         return result;
     }
 
+    public Boolean updatePassword(int id, String old, String newP) {
+        String methodname = "changePassword";
+        boolean result = false;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", id);
+        request.addProperty("old_password", old);
+        request.addProperty("new_password", newP);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            result = Boolean.valueOf(results.toString());
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
+    }
+
     public int registerAccount(String id, String password, String email) {
         String data;
         String methodname = "registerAccount";
@@ -100,7 +125,7 @@ public class SoapUserManager {
 
     public Boolean connectAccount(String username, String password) {
         Boolean result = false;
-        String data = null;
+        String data;
         String methodname = "connectAccount";
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
@@ -194,8 +219,8 @@ public class SoapUserManager {
         return ht;
     }
 
-    private final List<HeaderProperty> getHeader() {
-        List<HeaderProperty> header = new ArrayList<HeaderProperty>();
+    private List<HeaderProperty> getHeader() {
+        List<HeaderProperty> header = new ArrayList<>();
         HeaderProperty headerPropertyObj = new HeaderProperty("cookie", SoapUserManager.SESSION_ID);
         header.add(headerPropertyObj);
         return header;
@@ -246,17 +271,17 @@ public class SoapUserManager {
     private User convertToQuery(SoapObject soapObject) {
         User user = new User();
         user.setEmail(soapObject.getPropertyAsString("email"));
-        if (soapObject.hasProperty("firstname"))
-            user.setFirstname(soapObject.getPropertyAsString("firstname"));
+        if (soapObject.hasProperty("firstname") && soapObject.getProperty("firstname") != null)
+            user.setFirstname(soapObject.getProperty("firstname").toString());
         user.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));
-        if (soapObject.hasProperty("id_address"))
+        if (soapObject.hasProperty("id_address") && soapObject.getProperty("id_address") != null)
             user.setId_address(Integer.parseInt(soapObject.getPropertyAsString("id_address")));
         user.setUsername(soapObject.getPropertyAsString("username"));
-        if (soapObject.hasProperty("lastname"))
+        if (soapObject.hasProperty("lastname") && soapObject.getProperty("lastname") != null)
             user.setLastname(soapObject.getPropertyAsString("lastname"));
-        if (soapObject.hasProperty("phone"))
+        if (soapObject.hasProperty("phone") && soapObject.getProperty("phone") != null)
             user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone")));
-        if (soapObject.hasProperty("short_desc"))
+        if (soapObject.hasProperty("short_desc") && soapObject.getProperty("short_desc") != null)
          user.setShort_desc(soapObject.getPropertyAsString("short_desc"));
         if (soapObject.hasProperty("id"))
             user.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));

@@ -273,10 +273,14 @@ public class SoapProductManager {
 
     private Product convertToQuery(SoapObject soapObject) {
         Product prod = new Product();
-        prod.setName(soapObject.getPropertyAsString("name"));
-        prod.setEan(soapObject.getPropertyAsString("ean"));
-        prod.setBrand(soapObject.getPropertyAsString("brand"));
-        prod.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));
+        if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
+        prod.setName(soapObject.getProperty("name").toString());
+        if (soapObject.hasProperty("ean") && soapObject.getProperty("ean") != null)
+        prod.setEan(soapObject.getProperty("ean").toString());
+        if (soapObject.hasProperty("brand") && soapObject.getProperty("brand") != null)
+        prod.setBrand(soapObject.getProperty("brand").toString());
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+        prod.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
 /*
         prod.setPicture(soapObject.getPropertyAsString("picture").toString());
 */

@@ -143,6 +143,9 @@ public class User implements Parcelable {
         dest.writeString(this.lastname);
         dest.writeString(this.email);
         dest.writeString(this.password);
+        dest.writeInt(this.phone);
+        dest.writeInt(this.id_address);
+        dest.writeString(this.short_desc);
     }
     public static final Creator<User> CREATOR = new Parcelable.Creator<User>() {
 
@@ -164,5 +167,8 @@ public class User implements Parcelable {
         this.lastname = in.readString();
         this.email = in.readString();
         this.password = in.readString();
+        this.phone = in.readInt();
+        this.id_address = in.readInt();
+        this.short_desc = in.readString();
     }
 }

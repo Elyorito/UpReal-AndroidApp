@@ -81,7 +81,7 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
                             public void onClick(DialogInterface dialog, int which) {
 
                             }
-                        }).setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();

@@ -48,37 +48,37 @@ public class SoapUserUtilManager {
             ht.call(methodname, envelope);
             testHttpResponse(ht);
             SoapObject result= (SoapObject)envelope.getResponse();
-            if (result.hasProperty("id"))
-                address.setId(Integer.parseInt(result.getPropertyAsString("id")));
-            if (result.hasProperty("address")) {
+            if (result.hasProperty("id") && result.getProperty("id") != null)
+                address.setId(Integer.parseInt(result.getProperty("id").toString()));
+            if (result.hasProperty("address") && result.getProperty("address") != null) {
                 address.setAddress(result.getPropertyAsString("address"));
                 if (address.getAddress().equals("anyType{}"))
                     address.setAddress("");
             }
             else
                 address.setAddress(String.valueOf(R.string.not_defined));
-            if (result.hasProperty("address_2")) {
+            if (result.hasProperty("address_2") && result.getProperty("address_2") != null) {
                 address.setAddress2(result.getPropertyAsString("address_2"));
                 if (address.getAddress2().equals("anyType{}"))
                     address.setAddress2("");
             }
             else
                 address.setAddress2(String.valueOf(R.string.not_defined));
-            if (result.hasProperty("country")) {
+            if (result.hasProperty("country") && result.getProperty("country") != null) {
                 address.setCountry(result.getPropertyAsString("country"));
                 if (address.getCountry().equals("anyType{}"))
                     address.setCountry("");
             }
             else
                 address.setCountry(String.valueOf(R.string.not_defined));
-            if (result.hasProperty("city")) {
+            if (result.hasProperty("city") && result.getProperty("city") != null) {
                 address.setCity(result.getPropertyAsString("city"));
                 if (address.getCity().equals("anyType{}"))
                     address.setCity("");
             }
             else
                 address.setCity(String.valueOf(R.string.not_defined));
-            if (result.hasProperty("postal_code"))
+            if (result.hasProperty("postal_code") && result.getProperty("postal_code") != null)
                 address.setPostalCode(Integer.parseInt(result.getPropertyAsString("postal_code")));
             else
                 address.setPostalCode(0);
