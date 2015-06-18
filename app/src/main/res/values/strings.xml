@@ -246,11 +246,11 @@
     <string name="short_desc">Une courte description</string>
     <string name="title">Title</string>
     <string name="change_name">Vous voulez changer votre prénom et/ou votre nom ?</string>
-    <string name="no_info">Information not given</string>
+    <string name="no_info">Information non renseigné</string>
     <string name="change_address">Vous voulez modifier votre addresse ?</string>
     <string name="change_phone_number">Vous voulez configurer vos données téléphoniques ?</string>
     <string name="update">Modifier</string>
-    <string name="not_defined">Non renseigné</string>
+    <string name="not_defined">non renseigné</string>
     <string name="city">Votre ville</string>
     <string name="postal_code">Votre code postal</string>
     <string name="address2">Complement d\'adresse</string>
@@ -266,6 +266,7 @@
     <string name="store_distance">Distance</string>
     <string name="password_not_same">Les mots de passes ne sont pas identiques</string>
     <string name="wrong_password">Mauvais mot de passe</string>
+    <string name="your_comment">Votre commentaire</string>
 
 
 </resources>

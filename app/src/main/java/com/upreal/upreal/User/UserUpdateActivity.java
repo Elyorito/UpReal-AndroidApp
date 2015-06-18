@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,7 +113,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             case R.id.name:
                 Log.v("Name", "Name");
                 builder.setTitle(R.string.change_name);
-                layout = inflater.inflate(R.layout.alertbox_name, null);
+                layout = inflater.inflate(R.layout.dialog_name, null);
                 builder.setView(layout);
                 final EditText eFirstName = (EditText) layout.findViewById(R.id.eFirstName);
                 eFirstName.setText(firstName.getText().toString());
@@ -139,7 +138,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             case R.id.phone:
                 Log.v("phone", "Phone");
                 builder.setTitle(R.string.change_phone_number);
-                layout = inflater.inflate(R.layout.alertbox_phone, null);
+                layout = inflater.inflate(R.layout.dialog_phone, null);
                 builder.setView(layout);
                 final EditText ePhoneNumber = (EditText) layout.findViewById(R.id.ePhoneNumber);
                 ePhoneNumber.setText(phoneNumber.getText().toString());
@@ -161,7 +160,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 Log.v("address", "Address");
 
                 builder.setTitle(R.string.change_address);
-                layout = inflater.inflate(R.layout.alertbox_address, null);
+                layout = inflater.inflate(R.layout.dialog_address, null);
                 builder.setView(layout);
                 final EditText eAddress = (EditText) layout.findViewById(R.id.eAddress);
                 eAddress.setText(homeAddress.getText().toString());

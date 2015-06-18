@@ -47,7 +47,7 @@ public class UserActivity extends ActionBarActivity {
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
-        userLocal.setText("Address " + getResources().getString(R.string.not_defined));
+        userLocal.setText("Adresse " + getResources().getString(R.string.not_defined));
         if (user.getId_address() != -1 && user.getId_address() != 0)
             new getAddress().execute(user.getId_address());
         if (user.getFirstname() == null && user.getLastname() == null)

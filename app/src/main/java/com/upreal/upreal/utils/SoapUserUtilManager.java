@@ -154,6 +154,32 @@ public class SoapUserUtilManager {
         return result;
     }
 
+    public void createUserComment(int id_user, int id_target, String commentary) {
+        String methodname = "createUserComment";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", id_user);
+        request.addProperty("id_target", id_target);
+        request.addProperty("commentary", commentary);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            results.toString();
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
+
     private SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
