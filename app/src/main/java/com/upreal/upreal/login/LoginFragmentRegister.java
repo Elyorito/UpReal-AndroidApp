@@ -8,11 +8,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -24,6 +26,7 @@ import com.upreal.upreal.R;
 import com.upreal.upreal.home.HomeActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
+import com.upreal.upreal.utils.User;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -79,8 +82,11 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                         Toast.makeText(v.getContext(), "Password too short (Length > 6 caracters)", Toast.LENGTH_SHORT).show();
                 } else if (edit_password.toString() == edit_confirmpassword.toString()/*!edit_password.toString().equals(edit_confirmpassword.toString())*/) {
                     Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
-                } else
+                } else {
+                    InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
                     new RetreiveRegisterAccount().execute();
+                }
                 break;
             case R.id.checktext_cgu:
                 if (!checkedTextView.isChecked())
@@ -145,6 +151,7 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                         }).create().show();
             } else {
                 sessionManagerUser.setRegisterLoginUser(edit_id.getText().toString(), edit_password.getText().toString());
+                new RetrieveUser().execute();
                 HomeActivity homeActivity = new HomeActivity();
                 Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
                 Intent intent = new Intent(getActivity().getApplicationContext(), homeActivity.getClass());
@@ -153,6 +160,27 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                 getActivity().finish();
                 //Toast.makeText(getActivity().getApplicationContext(), "Response:" + s, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private class RetrieveUser extends AsyncTask<Void, Void, User> {
+
+        User user = new User();
+        @Override
+        protected User doInBackground(Void... params) {
+
+            SoapUserManager um = new SoapUserManager();
+            user = um.getUserByUsername(sessionManagerUser.getRegisterLoginUser()[0]);
+            Log.v("User info", sessionManagerUser.getRegisterLoginUser()[0]);
+            Log.v("User FirstName", user.getFirstname());
+
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+            sessionManagerUser.setUser(user);
         }
     }
 }

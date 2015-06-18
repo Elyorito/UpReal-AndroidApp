@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -60,8 +61,11 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             case R.id.button_login_connect:
                 if (login.getText().length() == 0 || password.getText().length() == 0)
                     Toast.makeText(v.getContext(), "Login or password empty", Toast.LENGTH_SHORT).show();
-                else
+                else {
+                    InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(login.getWindowToken(), 0);
                     new RetrieveInfoFromServer().execute();
+                }
                 break;
             default:
                 break;
@@ -109,6 +113,7 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             } else {
                 sessionManagerUser.setRegisterLoginUser(login.getText().toString(), password.getText().toString());
                 new RetrieveUser().execute();
+                Toast.makeText(getActivity().getApplication(), "IDUSER=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_LONG).show();
                 HomeActivity homeActivity = new HomeActivity();
                 Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
                 Intent intent = new Intent(getActivity().getApplicationContext(), homeActivity.getClass());

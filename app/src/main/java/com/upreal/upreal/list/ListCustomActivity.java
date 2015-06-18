@@ -2,6 +2,7 @@ package com.upreal.upreal.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -18,6 +19,7 @@ import com.marshalchen.ultimaterecyclerview.SwipeableRecyclerViewTouchListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.upreal.upreal.R;
+import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
@@ -125,7 +127,9 @@ public class ListCustomActivity extends ActionBarActivity {
                 new ItemTouchListenerAdapter.RecyclerViewOnItemClickListener() {
                     @Override
                     public void onItemClick(RecyclerView recyclerView, View view, int i) {
-
+                        Intent intent = new Intent(view.getContext(), ProductActivity.class);
+                        intent.putExtra("listprod", products.get(i));
+                        view.getContext().startActivity(intent);
                     }
 
                     @Override

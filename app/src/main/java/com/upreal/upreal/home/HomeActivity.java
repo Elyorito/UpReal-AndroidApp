@@ -13,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -318,6 +319,7 @@ public class HomeActivity extends ActionBarActivity {
         DrawerR.setDrawerListener(mDrawerToggleR);
         mDrawerToggleR.syncState();
     }
+
 
     @Override
     protected void onDestroy() {
