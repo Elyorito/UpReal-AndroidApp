@@ -127,10 +127,7 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
 
             }
         });
-        /*
-        mDbQuery.MyRawQuery("DELETE FROM LISTS");
-        mDbQuery.MyRawQuery("DELETE FROM PRODUCT");
-        mDbQuery.MyRawQuery("DELETE FROM ITEMS");*/
+
         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
 //        Toast.makeText(getApplicationContext(), "TEST" + lists[0][0] + "length " + lists.length, Toast.LENGTH_SHORT).show();
         mDatabase.close();
@@ -174,11 +171,6 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
                      @Override
                      public void onClick(DialogInterface dialog, int which) {
 
-                         /*for (int i = 0; i < 100; i++) {
-                             mDbQuery.DeleteData("lists", "id=?", new String[]{Integer.toString(i)});
-                             mDbQuery.DeleteData("items", "id=?", new String[] {Integer.toString(i)});
-                             mDbQuery.DeleteData("product", "id=?", new String[] {Integer.toString(i)});
-                         }*/
                          dialog.cancel();
                      }
                  });

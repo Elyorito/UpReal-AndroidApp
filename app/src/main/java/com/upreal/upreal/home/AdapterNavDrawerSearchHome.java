@@ -63,7 +63,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (!hasFocus) {
-//                            ((Activity) v.getContext()).onBackPressed();
+//                             ((Activity) v.getContext()).onBackPressed();
                             mSearchName = search.getText().toString();
                         }
                     }

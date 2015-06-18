@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import com.upreal.upreal.home.HomeActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.User;
+import com.upreal.upreal.utils.database.DatabaseHelper;
+import com.upreal.upreal.utils.database.DatabaseQuery;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -34,6 +37,10 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
     private EditText password;
     private Button connect;
     public SessionManagerUser sessionManagerUser;
+
+    private SQLiteDatabase mDatabase;
+    private DatabaseHelper mDbHelper;
+    private DatabaseQuery mDbQuery;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,8 +118,17 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             if (!s) {
                 builder.create().show();
             } else {
+                mDbHelper = new DatabaseHelper(getActivity().getApplicationContext());
+                mDbQuery = new DatabaseQuery(mDbHelper);
+                mDatabase = mDbHelper.openDataBase();
                 sessionManagerUser.setRegisterLoginUser(login.getText().toString(), password.getText().toString());
                 new RetrieveUser().execute();
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.my_commentary), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDatabase.close();
                 Toast.makeText(getActivity().getApplication(), "IDUSER=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_LONG).show();
                 HomeActivity homeActivity = new HomeActivity();
                 Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());

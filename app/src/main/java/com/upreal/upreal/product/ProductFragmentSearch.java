@@ -39,7 +39,7 @@ public class ProductFragmentSearch extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 2));
         //Test
-        new RetreiveProduct().execute();
+        new RetrieveProduct().execute();
 /*//test
         mAdapter = new ProductSearchAdapter(sProduct);
 */
@@ -49,7 +49,7 @@ public class ProductFragmentSearch extends Fragment {
         return v;
     }
 
-    private class RetreiveProduct extends AsyncTask<Void, Void, List<Product>> {
+    private class RetrieveProduct extends AsyncTask<Void, Void, List<Product>> {
 
         private String list_product;
         private List<Product> listprod = new ArrayList<Product>();

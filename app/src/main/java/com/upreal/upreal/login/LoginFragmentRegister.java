@@ -3,6 +3,7 @@ package com.upreal.upreal.login;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import com.upreal.upreal.home.HomeActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.User;
+import com.upreal.upreal.utils.database.DatabaseHelper;
+import com.upreal.upreal.utils.database.DatabaseQuery;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -41,6 +44,10 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
     private Button but_register;
     private CheckedTextView checkedTextView;
     public SessionManagerUser sessionManagerUser;
+
+    private SQLiteDatabase mDatabase;
+    private DatabaseHelper mDbHelper;
+    private DatabaseQuery mDbQuery;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,6 +67,9 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
         builder = new AlertDialog.Builder(v.getContext());
         return v;
     }
+
+    //Like this product
+    //Sign to make your opinion count
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -143,15 +153,23 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                 Toast.makeText(getActivity().getApplicationContext(), Integer.toString(s), Toast.LENGTH_SHORT).show();
                 builder.setTitle("Erreur Creation Compte")
                         .setMessage("Probleme lors de la creation du compte. Veuillez ressayer ulterieurement")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
                         }).create().show();
             } else {
+                mDbQuery = new DatabaseQuery(mDbHelper);
+                mDatabase = mDbHelper.openDataBase();
                 sessionManagerUser.setRegisterLoginUser(edit_id.getText().toString(), edit_password.getText().toString());
                 new RetrieveUser().execute();
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.my_commentary), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDatabase.close();
                 HomeActivity homeActivity = new HomeActivity();
                 Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
                 Intent intent = new Intent(getActivity().getApplicationContext(), homeActivity.getClass());

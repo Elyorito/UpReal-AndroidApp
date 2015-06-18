@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +32,8 @@ import com.upreal.upreal.scan.Camera2Fragment;
 import com.upreal.upreal.scan.CameraActivity;
 import com.upreal.upreal.user.UserActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.database.DatabaseHelper;
+import com.upreal.upreal.utils.database.DatabaseQuery;
 
 import static android.view.GestureDetector.*;
 
@@ -81,6 +84,10 @@ public class HomeActivity extends ActionBarActivity {
     public HomeActivity(){};
     private SessionManagerUser sessionManagerUser;
 
+    private SQLiteDatabase mDatabase;
+    private DatabaseHelper mDbHelper;
+    private DatabaseQuery mDbQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +95,10 @@ public class HomeActivity extends ActionBarActivity {
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         Toast.makeText(getApplicationContext(), "IdUser=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_SHORT).show();
         //sessionManagerUser.deleteALL();
+
+        mDbHelper = new DatabaseHelper(this);
+        mDbQuery = new DatabaseQuery(mDbHelper);
+        mDatabase = mDbHelper.openDataBase();
 
         toggleAccount = sessionManagerUser.isLogged();
 
@@ -247,6 +258,7 @@ public class HomeActivity extends ActionBarActivity {
                                 homeReceiver = new HomeReceiver();
                                 registerReceiver(homeReceiver, intentFilter);
                                 mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
+                                mDbHelper.deleteDataBase();
                                 return true;
                             default:
                                 return false;
