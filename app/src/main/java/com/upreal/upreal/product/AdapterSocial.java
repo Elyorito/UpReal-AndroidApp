@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -315,15 +314,17 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
             protected void onPostExecute(Boolean b) {
                 super.onPostExecute(b);
                 if(sessionManagerUser.getUserId() > 0){
-       /*             mDatabase = mDbHelper.openDataBase();
+                    mDatabase = mDbHelper.openDataBase();
                     String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=?", new String[]{listLike}, null, null, null);
-
+                    String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
+                    if (getProductElement[0] == null) {
+                        if (mProduct.getPicture() == null)
+                            mProduct.setPicture("");
+                        mDbQuery.InsertData("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, new String[]{mProduct.getName(), mProduct.getEan(), mProduct.getPicture(), mProduct.getBrand(), Integer.toString(mProduct.getId())});
+                    }
                     String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(mProduct.getId()), getListId[0][0]}, null, null, null);
-                    if (getITEMS[0] != null)
-                        //Toast.makeText(dialogView.getContext(), "id_list=" + getITEMS[0] + "|id_product=" + getITEMS[1] + "|id_user=" + getITEMS[2], Toast.LENGTH_SHORT).show();
-                    else if (getITEMS[0] == null)
-                        mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(mSessionManagerUser.getUserId())});
-*/
+                    if (getITEMS[0] == null)
+                        mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(sessionManagerUser.getUserId())});
                 } else {
 
                 }
