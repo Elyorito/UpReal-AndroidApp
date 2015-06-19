@@ -2,6 +2,7 @@ package com.upreal.upreal.product;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -11,24 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.upreal.upreal.R;
 
 import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.Product;
-import com.upreal.upreal.utils.RateComment;
-import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 import com.upreal.upreal.view.SlidingTabLayout;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -47,6 +41,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private TextView prodName;
     private TextView prodCategorie;
     private TextView prodShortDesc;
+    private ImageView prodPicture;
 
     private Button geoloc;
 
@@ -57,8 +52,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
         prodName = (TextView) findViewById(R.id.product_name);/*
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
-        prodShortDesc = (TextView) findViewById(R.id.product_desc);
-*/
+        prodShortDesc = (TextView) findViewById(R.id.product_desc);*/
+        prodPicture = (ImageView) findViewById(R.id.product_picture);
+
         geoloc = (Button) findViewById(R.id.geoloc);
         geoloc.setOnClickListener(this);
 
@@ -88,6 +84,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        new RetrievePicture();
     }
 
     @Override
@@ -124,6 +122,18 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 break ;
             default:
                 break ;
+        }
+    }
+
+    class RetrievePicture extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SoapProductManager pm = new SoapProductManager();
+
+            String path = pm.getPicture(prod.getId(), 0);
+            prodPicture.setImageURI(Uri.parse(path));
+            return null;
         }
     }
 }
