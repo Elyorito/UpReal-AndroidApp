@@ -1,11 +1,11 @@
 package com.upreal.upreal.geolocalisation;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
@@ -25,18 +25,20 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
 
-        TextView store_id;
-        TextView store_name;
-        TextView store_distance;
+        TextView address_id;
+        TextView address_name;
+        TextView address_distance;
         TextView product_price;
+        Button go;
 
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
-            store_id = (TextView) itemView.findViewById(R.id.store_id);
-            store_name = (TextView) itemView.findViewById(R.id.store_name);
-            store_distance = (TextView) itemView.findViewById(R.id.store_distance);
+            address_id = (TextView) itemView.findViewById(R.id.address_id);
+            address_name = (TextView) itemView.findViewById(R.id.address_name);
+            address_distance = (TextView) itemView.findViewById(R.id.address_distance);
             product_price = (TextView) itemView.findViewById(R.id.product_price);
+            go = (Button) itemView.findViewById(R.id.go);
             HolderId = 0;
         }
     }
@@ -55,11 +57,20 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
     }
 
     @Override
-    public void onBindViewHolder(AdapterListStore.ViewHolder holder, int position) {
-        holder.store_id.setText(addresses.get(position).getId());
-        holder.store_name.setText(addresses.get(position).getAddress());
-        holder.store_distance.setText(distances.get(position) + " km");
+    public void onBindViewHolder(final AdapterListStore.ViewHolder holder, final int position) {
+        holder.address_id.setText("" + addresses.get(position).getId());
+        holder.address_name.setText(addresses.get(position).getAddress());
+        holder.address_distance.setText(distances.get(position) + " km");
         holder.product_price.setText(prices.get(position) + " €");
+        holder.go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("GeolocalisationActivity", "Item touched at " + addresses.get(position).getId() + ".");
+/*                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                intent.putExtra("id_adress", addresses.get(position).getId());
+                getApplicationContext().startActivity(intent);*/
+            }
+        });
     }
 
     @Override
