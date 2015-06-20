@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
@@ -25,20 +26,20 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
 
+        RelativeLayout layout;
         TextView address_id;
         TextView address_name;
         TextView address_distance;
         TextView product_price;
-        Button go;
 
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
+            layout = (RelativeLayout) itemView.findViewById(R.id.layout);
             address_id = (TextView) itemView.findViewById(R.id.address_id);
             address_name = (TextView) itemView.findViewById(R.id.address_name);
             address_distance = (TextView) itemView.findViewById(R.id.address_distance);
             product_price = (TextView) itemView.findViewById(R.id.product_price);
-            go = (Button) itemView.findViewById(R.id.go);
             HolderId = 0;
         }
     }
@@ -62,7 +63,7 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         holder.address_name.setText(addresses.get(position).getAddress());
         holder.address_distance.setText(distances.get(position) + " km");
         holder.product_price.setText(prices.get(position) + " €");
-        holder.go.setOnClickListener(new View.OnClickListener() {
+        holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("GeolocalisationActivity", "Item touched at " + addresses.get(position).getId() + ".");

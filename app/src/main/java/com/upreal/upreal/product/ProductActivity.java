@@ -85,7 +85,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         });
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        new RetrievePicture();
+        new RetrievePicture().execute();
     }
 
     @Override
@@ -125,15 +125,20 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         }
     }
 
-    class RetrievePicture extends AsyncTask<Void, Void, Void> {
+    class RetrievePicture extends AsyncTask<Void, Void, String> {
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             SoapProductManager pm = new SoapProductManager();
 
             String path = pm.getPicture(prod.getId(), 0);
+            return path;
+        }
+
+        @Override
+        protected void onPostExecute(String path) {
+            super.onPostExecute(path);
             prodPicture.setImageURI(Uri.parse(path));
-            return null;
         }
     }
 }
