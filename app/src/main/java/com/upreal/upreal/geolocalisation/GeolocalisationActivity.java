@@ -117,7 +117,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         mRecyclerViewList = (RecyclerView) findViewById(R.id.address_list);
         mRecyclerViewList.setHasFixedSize(true);
         mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapterList = new AdapterListStore(addresses, distances, prices);
+        mAdapterList = new AdapterListStore(getApplicationContext(), addresses, distances, prices);
         mRecyclerViewList.setAdapter(mAdapterList);
         mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override

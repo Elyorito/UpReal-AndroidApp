@@ -1,16 +1,22 @@
 package com.upreal.upreal.geolocalisation;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.store.StoreActivity;
 import com.upreal.upreal.utils.Address;
+import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.SoapStoreManager;
+import com.upreal.upreal.utils.Store;
 
 import java.util.List;
 
@@ -22,6 +28,10 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
     private List<Address> addresses;
     private List<String> distances;
     private List<String> prices;
+
+    private Context context;
+
+    private int id_address = -1;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
@@ -44,7 +54,8 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         }
     }
 
-    AdapterListStore(List<Address> addresses, List<String> distances, List<String> prices) {
+    AdapterListStore(Context context, List<Address> addresses, List<String> distances, List<String> prices) {
+        this.context = context;
         this.addresses = addresses;
         this.distances = distances;
         this.prices = prices;
@@ -67,9 +78,8 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
             @Override
             public void onClick(View v) {
                 Log.i("GeolocalisationActivity", "Item touched at " + addresses.get(position).getId() + ".");
-/*                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
-                intent.putExtra("id_adress", addresses.get(position).getId());
-                getApplicationContext().startActivity(intent);*/
+                id_address = addresses.get(position).getId();
+                new RetrieveStore().execute();
             }
         });
     }
@@ -77,5 +87,24 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
     @Override
     public int getItemCount() {
         return addresses.size();
+    }
+
+    class RetrieveStore extends AsyncTask<Void, Void, Store> {
+
+        @Override
+        protected Store doInBackground(Void... params) {
+            SoapStoreManager sm = new SoapStoreManager();
+
+            Store store = sm.getStoreByAddress(id_address);
+            return store;
+        }
+
+        @Override
+        protected void onPostExecute(Store store) {
+            super.onPostExecute(store);
+            Intent intent = new Intent(context, StoreActivity.class);
+            intent.putExtra("store", store);
+            context.startActivity(intent);
+        }
     }
 }

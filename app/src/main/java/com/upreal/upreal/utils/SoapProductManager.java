@@ -11,6 +11,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -304,11 +305,12 @@ public class SoapProductManager {
             ht.call(methodname, envelope);
             testHttpResponse(ht);
 
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            SoapObject results = (SoapObject) envelope.getResponse();
-
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(type + "-" + id + ".jpg"));
+            SoapPrimitive results = (SoapPrimitive)envelope.getResponse();
+            final File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
+            final File file = new File(dir, type + "-" + id + ".jpg");
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
             out.write(Base64.decode(results.toString(), Base64.DEFAULT));
+
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -317,7 +319,7 @@ public class SoapProductManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return type + "-" + id + ".jpg";
+        return android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + type + "-" + id + ".jpg";
     }
 
     private Product convertToQuery(SoapObject soapObject) {
