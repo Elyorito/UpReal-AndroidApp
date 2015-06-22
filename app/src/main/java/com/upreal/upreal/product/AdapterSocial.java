@@ -300,7 +300,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
             protected Boolean doInBackground(Void... params) {
                 if (this.type == 0) {
                     SoapProductUtilManager pum = new SoapProductUtilManager();
-                    isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 1);
+                    isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 2);
                 } else if (this.type == 1) {
                     SoapUserUtilManager pum = new SoapUserUtilManager();
 /*
@@ -315,7 +315,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                 super.onPostExecute(b);
                 if(sessionManagerUser.getUserId() > 0){
                     mDatabase = mDbHelper.openDataBase();
-                    String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=?", new String[]{listLike}, null, null, null);
+                    String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
                     String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
                     if (getProductElement[0] == null) {
                         if (mProduct.getPicture() == null)
