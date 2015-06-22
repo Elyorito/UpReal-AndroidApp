@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Address;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,14 +56,123 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
     private int idProduct = -1;
     private int idStore = -1;
 
-    private List<Address> stores = new ArrayList<>();
+
+    private List<Address> absAddresses = new ArrayList<>();
+    private List<String> absDistances = new ArrayList<>();
+    private List<String> absPrices = new ArrayList<>();
+
+    private List<Address> addresses = new ArrayList<>();
     private List<String> distances = new ArrayList<>();
     private List<String> prices = new ArrayList<>();
 
-    private List<Address> storeToList(Address store) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_geolocalisation);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
+        seeAll = (Button) findViewById(R.id.see_all);
+
+        createMapView();
+
+        gClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        mLocRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
+
+        idProduct = getIntent().getExtras().getInt("id_product");
+        idStore = getIntent().getExtras().getInt("id_store");
+
+        if (idProduct != -1) {
+
+        } else if (idStore != -1) {
+
+        }
+
+        absAddresses.add(new Address(1, "24 Rue Pasteur", "", "France", "Le Kremlin Bicêtre", 94270));
+        absDistances.add("20");
+        absPrices.add("20");
+        absAddresses.add(new Address(2, "85 Rue du Jardin public", "", "France", "Bordeaux", 33000));
+        absDistances.add("20");
+        absPrices.add("20");
+        absAddresses.add(new Address(3, "5-9 Rue du Palais Rihour", "", "France", "Lille", 59000));
+        absDistances.add("20");
+        absPrices.add("20");
+        absAddresses.add(new Address(4, "156 Rue Paul Bert", "", "France", "Lyon", 69003));
+        absDistances.add("20");
+        absPrices.add("20");
+
+        updateAddressList(absAddresses);
+        updateDistanceList(absDistances);
+        updatePriceList(absPrices);
+
+        mRecyclerViewList = (RecyclerView) findViewById(R.id.address_list);
+        mRecyclerViewList.setHasFixedSize(true);
+        mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
+        mAdapterList = new AdapterListStore(getApplicationContext(), addresses, distances, prices);
+        mRecyclerViewList.setAdapter(mAdapterList);
+        mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+                int pos = rv.getChildAdapterPosition(rv.findChildViewUnder(e.getX(), e.getY()));
+
+                Log.i(TAG, "Item touched at " + pos + ".");
+/*                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                intent.putExtra("id_adress", addresses.get(pos).getId());
+                getApplicationContext().startActivity(intent);*/
+            }
+        });
+
+        new RetrieveAddress().execute(addresses);
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.i(TAG, "Marker " + marker.getTitle() + " touched.");
+                map.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                marker.showInfoWindow();
+                for (int i = 0; i < absAddresses.size(); i++) {
+                    if (marker.getTitle().contains(absAddresses.get(i).getAddress())) {
+                        updateAddressList(adressToList(absAddresses.get(i)));
+                        updateDistanceList(stringToList(absDistances.get(i)));
+                        updatePriceList(stringToList(absPrices.get(i)));
+                        break;
+                    }
+                }
+                mAdapterList.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+        seeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateAddressList(absAddresses);
+                updateDistanceList(absDistances);
+                updatePriceList(absPrices);
+                mAdapterList.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private List<Address> adressToList(Address adr) {
         List<Address> tmp = new ArrayList<Address>();
 
-        tmp.add(store);
+        tmp.add(adr);
         return tmp;
     }
 
@@ -73,6 +183,27 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         return tmp;
     }
 
+    private void updateAddressList(List<Address> adr) {
+        addresses.clear();
+        for (Address a : adr) {
+            addresses.add(a);
+        }
+    }
+
+    private void updateDistanceList(List<String> str) {
+        distances.clear();
+        for (String s : str) {
+            distances.add(s);
+        }
+    }
+
+    private void updatePriceList(List<String> str) {
+        prices.clear();
+        for (String s : str) {
+            prices.add(s);
+        }
+    }
+
     private void createMapView() {
         try {
             if (map == null) {
@@ -81,8 +212,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                     Toast.makeText(getApplicationContext(), "Error creating map", Toast.LENGTH_SHORT).show();
                 }
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             Log.e("mapApp", e.toString());
         }
     }
@@ -91,8 +221,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         if (map != null) {
             Log.i(TAG, "Adding new marker " + label + ".");
             map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(label).draggable(false));
-        }
-        else {
+        } else {
             Log.i(TAG, "Map is null.");
         }
     }
@@ -103,6 +232,31 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
     }
 
+    private double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+        return Radius * c;
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Location services connected.");
@@ -111,8 +265,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
 
         if (location != null) {
             updateCurrentPosition(location);
-        }
-        else {
+        } else {
             Log.i(TAG, "Trying to locate user.");
             LocationServices.FusedLocationApi.requestLocationUpdates(gClient, mLocRequest, this);
         }
@@ -128,12 +281,10 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            }
-            catch (IntentSender.SendIntentException e) {
+            } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
         }
     }
@@ -165,9 +316,9 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
             if (addresses != null && !addresses.isEmpty()) {
                 for (android.location.Address a : addresses) {
                     addMarker(a.getAddressLine(0), a.getLatitude(), a.getLongitude());
+                    // Retrieve distance between the two points
                 }
-            }
-            else {
+            } else {
                 Log.i(TAG, "No location found.");
             }
         }

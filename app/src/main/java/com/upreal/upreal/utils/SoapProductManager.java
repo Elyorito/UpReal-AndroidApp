@@ -10,7 +10,11 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -269,6 +273,53 @@ public class SoapProductManager {
             q.printStackTrace();
         }
         return prod;
+    }
+
+    public String getPicture(int id, int type) {
+        String methodname;
+        switch (type) {
+            case 0:
+                methodname = "getProductPicture";
+                break ;
+            case 1:
+                methodname = "getUserPicture";
+                break ;
+            case 2:
+                methodname = "getStorePicture";
+                break ;
+            case 3:
+                methodname = "getCompanyPicture";
+                break ;
+            default:
+                methodname = "getProductPicture";
+                break ;
+        }
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+        HttpTransportSE ht = getHttpTransportSE();
+
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapPrimitive results = (SoapPrimitive)envelope.getResponse();
+            final File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
+            final File file = new File(dir, type + "-" + id + ".jpg");
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+            out.write(Base64.decode(results.toString(), Base64.DEFAULT));
+
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + type + "-" + id + ".jpg";
     }
 
     private Product convertToQuery(SoapObject soapObject) {
