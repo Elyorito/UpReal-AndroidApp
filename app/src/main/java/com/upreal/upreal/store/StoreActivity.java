@@ -46,7 +46,7 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_store);
 
         storeName = (TextView) findViewById(R.id.store_name);/*
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
@@ -57,6 +57,14 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
         geoloc.setOnClickListener(this);
 
         store = getIntent().getExtras().getParcelable("store");
+
+        if (store != null) {
+            System.out.println("totollll" + store.getName());
+        }
+        else {
+            System.out.println("C'EST NOUL");
+            store = new Store(1, "test", "test", 1 ,1);
+        }
 
         title = new String(store.getName());
         storeName.setText(store.getName());

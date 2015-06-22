@@ -29,8 +29,6 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
     private List<String> distances;
     private List<String> prices;
 
-    private Context context;
-
     private int id_address = -1;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,8 +52,7 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         }
     }
 
-    AdapterListStore(Context context, List<Address> addresses, List<String> distances, List<String> prices) {
-        this.context = context;
+    AdapterListStore(List<Address> addresses, List<String> distances, List<String> prices) {
         this.addresses = addresses;
         this.distances = distances;
         this.prices = prices;
@@ -79,7 +76,7 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
             public void onClick(View v) {
                 Log.i("GeolocalisationActivity", "Item touched at " + addresses.get(position).getId() + ".");
                 id_address = addresses.get(position).getId();
-                new RetrieveStore().execute();
+                new RetrieveStore().execute(v.getContext());
             }
         });
     }
@@ -89,12 +86,15 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         return addresses.size();
     }
 
-    class RetrieveStore extends AsyncTask<Void, Void, Store> {
+    class RetrieveStore extends AsyncTask<Context, Void, Store> {
+
+        Context context;
 
         @Override
-        protected Store doInBackground(Void... params) {
+        protected Store doInBackground(Context... params) {
             SoapStoreManager sm = new SoapStoreManager();
 
+            context = params[0];
             Store store = sm.getStoreByAddress(id_address);
             return store;
         }
