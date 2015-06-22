@@ -96,7 +96,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                         mDbQuery = new DatabaseQuery(mDbHelper);
                         mDatabase = mDbHelper.openDataBase();
 
-                        final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
+                        final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
                         mDatabase.close();
                         final String[] lists = new String[listsElements.length];
                         for (int i = 0; i < listsElements.length; i++) {
@@ -107,7 +107,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                             TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
-                            addCustom.setOnClickListener(new View.OnClickListener() {
+                            /*addCustom.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
                                 public void onClick(View v) {
@@ -123,17 +123,17 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             if (editList.getText().length() <= 0) {
                                                 dialog.cancel();
                                             }
-/*
+*//*
                                         mDbQuery.InsertData(new String("lists"), new String[]{"name", "public", "nb_items", "id_user"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
                                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
                                         // TODO Auto-generated method stub
-                         */
-                            /*Refresh list item [BUG]*//*
+                         *//*
+                            *//*Refresh list item [BUG]*//**//*
 
                                         mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);
                                         mAdapterListCust.notifyDataSetChanged();
                                         mRecyclerViewListCust.getAdapter().notifyDataSetChanged();
-*/
+*//*
                                             dialog.dismiss();
                                         }
                                     }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -144,7 +144,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                     });
                                     builderCustom.setView(view).create().show();
                                 }
-                            });
+                            });*/
                             builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list))
                                     .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
                                         @Override
@@ -154,21 +154,21 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             } else if (checkedList.contains(which)) {
                                                 checkedList.remove(Integer.valueOf(which));
                                             }
-                                            mDbHelper = new DatabaseHelper(dialogView.getContext());
+  /*                                          mDbHelper = new DatabaseHelper(dialogView.getContext());
                                             mDbQuery = new DatabaseQuery(mDbHelper);
                                             mDatabase = mDbHelper.openDataBase();
-                                            for (int i = 0; i < checkedList.size(); i++) {
+*//*                                            for (int i = 0; i < checkedList.size(); i++) {
                                                 Toast.makeText(dialogView.getContext(), "CheckedList[" + checkedList.get(i).toString() + "]", Toast.LENGTH_SHORT).show();
                                                 String[] testlist = mDbQuery.QueryGetElement("lists", new String[]{"name", "public", "nb_items", "id_user", "id"}, "id=?", new String[]{"1"}, null, null, null);
                                                 Toast.makeText(dialogView.getContext(), "NameList[" + testlist[0] + "]", Toast.LENGTH_SHORT).show();
                                                 Toast.makeText(dialogView.getContext(), "CheckedListSize[" + checkedList.size() + "]", Toast.LENGTH_SHORT).show();
-                                            }
+                                            }*//*
                                             mDatabase.close();
-                                        }
+  */                                      }
                                     }).setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mDbHelper = new DatabaseHelper(dialogView.getContext());
+                                    /*mDbHelper = new DatabaseHelper(dialogView.getContext());
                                     mDbQuery = new DatabaseQuery(mDbHelper);
                                     mDatabase = mDbHelper.openDataBase();
 
@@ -194,7 +194,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                     }
                                     Toast.makeText(dialogView.getContext(), "MULTIPLECHOICE=" + Integer.toString(checkedList.size()), Toast.LENGTH_SHORT).show();
                                     for (int i = 0; i < checkedList.size(); i++) {
-                                        String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=?", new String[]{lists[checkedList.get(i)]}, null, null, null);
+                                        String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{lists[checkedList.get(i)], "8"}, null, null, null);
                                         Toast.makeText(dialogView.getContext(), "|ListName=" + getListId[0][4] + "|Lengh=" + Integer.toString(getListId[0].length), Toast.LENGTH_SHORT).show();
 
                                         String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(mProduct.getId()), getListId[0][0]}, null, null, null);
@@ -212,7 +212,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                         public void onClick(View v) {
 
                                         }
-                                    }).show();
+                                    }).show();*/
                                 }
                             }).setNegativeButton(v.getContext().getString(R.string.cancel),
                                     new DialogInterface.OnClickListener() {

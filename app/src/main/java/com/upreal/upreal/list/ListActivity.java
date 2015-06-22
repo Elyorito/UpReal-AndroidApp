@@ -128,7 +128,7 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
             }
         });
 
-        lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
+        lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
 //        Toast.makeText(getApplicationContext(), "TEST" + lists[0][0] + "length " + lists.length, Toast.LENGTH_SHORT).show();
         mDatabase.close();
         mRecyclerViewListCust = (RecyclerView) findViewById(R.id.recyclerlistCust);
