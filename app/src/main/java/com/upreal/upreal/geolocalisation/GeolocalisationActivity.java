@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Address;
+import com.upreal.upreal.utils.SoapProductUtilManager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -92,32 +93,34 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         idStore = getIntent().getExtras().getInt("id_store");
 
         if (idProduct != -1) {
-
+            Log.i(TAG, "Id product is " + idProduct + ".");
+            new RetrieveAddress().execute();
         } else if (idStore != -1) {
 
+        } else {
+            absAddresses.add(new Address(1, "24 Rue Pasteur", "", "France", "Le Kremlin Bicêtre", 94270));
+            absAddresses.add(new Address(2, "85 Rue du Jardin public", "", "France", "Bordeaux", 33000));
+            absAddresses.add(new Address(3, "5-9 Rue du Palais Rihour", "", "France", "Lille", 59000));
+            absAddresses.add(new Address(4, "156 Rue Paul Bert", "", "France", "Lyon", 69003));
+            updateAddressList(absAddresses);
         }
 
-        absAddresses.add(new Address(1, "24 Rue Pasteur", "", "France", "Le Kremlin Bicêtre", 94270));
         absDistances.add("20");
         absPrices.add("20");
-        absAddresses.add(new Address(2, "85 Rue du Jardin public", "", "France", "Bordeaux", 33000));
         absDistances.add("20");
         absPrices.add("20");
-        absAddresses.add(new Address(3, "5-9 Rue du Palais Rihour", "", "France", "Lille", 59000));
         absDistances.add("20");
         absPrices.add("20");
-        absAddresses.add(new Address(4, "156 Rue Paul Bert", "", "France", "Lyon", 69003));
         absDistances.add("20");
         absPrices.add("20");
 
-        updateAddressList(absAddresses);
         updateDistanceList(absDistances);
         updatePriceList(absPrices);
 
         mRecyclerViewList = (RecyclerView) findViewById(R.id.address_list);
         mRecyclerViewList.setHasFixedSize(true);
         mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapterList = new AdapterListStore(getApplicationContext(), addresses, distances, prices);
+        mAdapterList = new AdapterListStore(addresses, distances, prices);
         mRecyclerViewList.setAdapter(mAdapterList);
         mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -136,8 +139,6 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
             }
         });
 
-        new RetrieveAddress().execute(addresses);
-
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
             @Override
@@ -146,7 +147,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                 map.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
                 marker.showInfoWindow();
                 for (int i = 0; i < absAddresses.size(); i++) {
-                    if (marker.getTitle().contains(absAddresses.get(i).getAddress())) {
+                    if (marker.getTitle().contains(absAddresses.get(i).getAddress2())) {
                         updateAddressList(adressToList(absAddresses.get(i)));
                         updateDistanceList(stringToList(absDistances.get(i)));
                         updatePriceList(stringToList(absPrices.get(i)));
@@ -294,31 +295,49 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         updateCurrentPosition(location);
     }
 
-    class RetrieveAddress extends AsyncTask<List<Address>, Void, List<android.location.Address>> {
+    class RetrieveAddress extends AsyncTask<Void, Void, List<android.location.Address>> {
 
         @Override
-        protected List<android.location.Address> doInBackground(List<Address>... params) {
+        protected List<android.location.Address> doInBackground(Void... params) {
 
-            List<android.location.Address> addresses = new ArrayList<android.location.Address>();
+            SoapProductUtilManager pum = new SoapProductUtilManager();
+            List<android.location.Address> addressesToGet = new ArrayList<android.location.Address>();
             android.location.Address address;
 
-            for (Address a : params[0]) {
+            absAddresses = pum.getAddressByProduct(idProduct);
+//            absPrices = pum.getSortPriceProduct(idProduct);
+
+            if (absAddresses.isEmpty()) {
+                return null;
+            }
+
+            for (Address a : absAddresses) {
                 address = WebLocationManager.getLocationInfo(a.getAddress() + ", " + a.getPostalCode() + " " + a.getCity() + ", " + a.getCountry()).get(0);
                 if (address != null) {
-                    addresses.add(address);
+                    addressesToGet.add(address);
                 }
             }
-            return addresses;
+            return addressesToGet;
         }
 
-        protected void onPostExecute(List<android.location.Address> addresses) {
-            map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude())));
-            if (addresses != null && !addresses.isEmpty()) {
-                for (android.location.Address a : addresses) {
-                    addMarker(a.getAddressLine(0), a.getLatitude(), a.getLongitude());
+        protected void onPostExecute(List<android.location.Address> addressesToGet) {
+            if (!absAddresses.isEmpty()) {
+                for (Address a : absAddresses) {
+                    Log.i(TAG, "Address:" + a.toString());
+                }
+            }
+            if (addressesToGet != null && !addressesToGet.isEmpty()) {
+                for (int i = 0; i < addressesToGet.size(); i++) {
+                    addMarker(absAddresses.get(i).getAddress2(), addressesToGet.get(i).getLatitude(), addressesToGet.get(i).getLongitude());
                     // Retrieve distance between the two points
                 }
+
+                updateAddressList(absAddresses);
+                updateDistanceList(absDistances);
+                updatePriceList(absPrices);
+                mAdapterList.notifyDataSetChanged();
             } else {
+                Toast.makeText(getApplicationContext(), "Store not found.", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "No location found.");
             }
         }
