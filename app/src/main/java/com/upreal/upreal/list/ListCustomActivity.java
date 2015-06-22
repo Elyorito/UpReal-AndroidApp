@@ -109,6 +109,7 @@ public class ListCustomActivity extends ActionBarActivity {
                     public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] ints) {
                         for (int position : ints) {
                             Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
+                            mAdapterList.remove(products, position);
                         }
                         mAdapterList.notifyDataSetChanged();
                     }

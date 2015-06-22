@@ -1,9 +1,7 @@
-package com.upreal.upreal.product;
+package com.upreal.upreal.store;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,32 +16,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
-
 import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
-import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SoapProductManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
+import com.upreal.upreal.utils.Store;
 import com.upreal.upreal.view.SlidingTabLayout;
 
-
 /**
- * Created by Elyo on 11/02/2015.
+ * Created by Kyosukke on 20/06/2015.
  */
-public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
+public class StoreActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
     private ViewPager mViewPager;
-    private ProductViewPagerAdapter adapter;
+    private StoreViewPagerAdapter adapter;
     private SlidingTabLayout mSlidingTabLayout;
-    private Product prod;
+    private Store store;
     private CharSequence title;
 
-    private TextView prodName;
+    private TextView storeName;
     private TextView prodCategorie;
     private TextView prodShortDesc;
-    private ImageView prodPicture;
+    private ImageView storePicture;
 
     private Button geoloc;
 
@@ -52,29 +48,29 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        prodName = (TextView) findViewById(R.id.product_name);/*
+        storeName = (TextView) findViewById(R.id.store_name);/*
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
         prodShortDesc = (TextView) findViewById(R.id.product_desc);*/
-        prodPicture = (ImageView) findViewById(R.id.product_picture);
+        storePicture = (ImageView) findViewById(R.id.store_picture);
 
         geoloc = (Button) findViewById(R.id.geoloc);
         geoloc.setOnClickListener(this);
 
-        prod = getIntent().getExtras().getParcelable("listprod");
+        store = getIntent().getExtras().getParcelable("store");
 
-        title = new String(prod.getName());
-        prodName.setText(prod.getName());
+        title = new String(store.getName());
+        storeName.setText(store.getName());
 /*
         prodCategorie.setText("Categorie");
         prodShortDesc.setText("Short Description empty");
 */
-        CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
+        CharSequence tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new ProductViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
+        adapter = new StoreViewPagerAdapter(getSupportFragmentManager(), tab, 3, store);
         mViewPager.setAdapter(adapter);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
@@ -119,7 +115,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.geoloc:
                 Intent intent = new Intent(v.getContext(), GeolocalisationActivity.class);
-                intent.putExtra("id_product", prod.getId());
+                intent.putExtra("id_store", store.getId());
                 v.getContext().startActivity(intent);
                 break ;
             default:
@@ -133,16 +129,14 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         protected String doInBackground(Void... params) {
             SoapProductManager pm = new SoapProductManager();
 
-            String path = pm.getPicture(prod.getId(), 0);
+            String path = pm.getPicture(store.getId(), 1);
             return path;
         }
 
         @Override
         protected void onPostExecute(String path) {
             super.onPostExecute(path);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            prodPicture.setImageBitmap(BitmapFactory.decodeFile(path, options));
+            storePicture.setImageURI(Uri.parse(path));
         }
     }
 }

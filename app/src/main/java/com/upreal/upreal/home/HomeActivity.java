@@ -1,10 +1,12 @@
 package com.upreal.upreal.home;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
@@ -57,6 +60,8 @@ public class HomeActivity extends ActionBarActivity {
     private RecyclerView.LayoutManager mLayoutManagerL;
     private DrawerLayout DrawerL;
     private ActionBarDrawerToggle mDrawerToggleL;
+
+    private AlertDialog.Builder builder;
 
     //RecyclerView NavDrawerR
     private RecyclerView mRecyclerViewR;
@@ -185,8 +190,28 @@ public class HomeActivity extends ActionBarActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 1: //Scan
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
+                                View scanview = getLayoutInflater().inflate(R.layout.dialog_scan_choice, null);
+                                ImageButton butQRcode = (ImageButton) scanview.findViewById(R.id.but_qrcode);
+                                ImageButton butScan = (ImageButton) scanview.findViewById(R.id.but_scanir);
+                                butQRcode.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        intent = new Intent(v.getContext(), CameraActivity.class);
+                                        v.getContext().startActivity(intent);
+                                    }
+                                });
+
+                                butScan.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        intent = new Intent(v.getContext(), Camera2Activity.class);
+                                        v.getContext().startActivity(intent);
+                                    }
+                                });
+                                builder = new AlertDialog.Builder(rv.getContext());
+                                builder.setTitle("Scan").setMessage("Veuillez choisir un mode de scan").setView(scanview).create().show();
+               /*                 intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);*/
                                 return true;
 
 /*
@@ -200,81 +225,74 @@ public class HomeActivity extends ActionBarActivity {
                                 return true;
                             default:
                                 return false;
-                            case 3://News
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
-                            case 4://Catalogue
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
-                            case 5://Shop
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
-                            case 6://Loyalty
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
-                            case 7://Filleuls
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
-                            case 8://Achievment
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
-                            case 9://Parameter
-                                intent = new Intent(rv.getContext(), ParameterActivity.class);
-                                rv.getContext().startActivity(intent);
-                                return true;
                         }
                     }
                     if (sessionManagerUser.isLogged()) {
                         switch (rv.getChildPosition(child)) {
                             case 0://Connect
                                 intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
-                                homeReceiver = new HomeReceiver();
+                                homeReceiver = new  HomeReceiver();
                                 registerReceiver(homeReceiver, intentFilter);
                                 intent = new Intent(rv.getContext(), UserActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 1://Scan
+                                View scanview = getLayoutInflater().inflate(R.layout.dialog_scan_choice, null);
+                                ImageButton butQRcode = (ImageButton) scanview.findViewById(R.id.but_qrcode);
+                                ImageButton butScan = (ImageButton) scanview.findViewById(R.id.but_scanir);
+                                butQRcode.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        intent = new Intent(v.getContext(), CameraActivity.class);
+                                        v.getContext().startActivity(intent);
+                                    }
+                                });
 
-//                                intent = new Intent(rv.getContext(), CameraActivity.class);
-//                                rv.getContext().startActivity(intent);
-//                                return true;
-
-                                intent = new Intent(rv.getContext(), Camera2Activity.class);
-                                rv.getContext().startActivity(intent);
+                                butScan.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        intent = new Intent(v.getContext(), Camera2Activity.class);
+                                        v.getContext().startActivity(intent);
+                                    }
+                                });
+                                builder = new AlertDialog.Builder(rv.getContext());
+                                builder.setTitle("Scan").setMessage("Veuillez choisir un mode de scan").setView(scanview).create().show();
                                 return true;
                             case 2://Lists
                                 intent = new Intent(rv.getContext(), ListActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 3://News
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
+                                /*intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);*/
                                 return true;
                             case 4://Catalogue
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
-                                rv.getContext().startActivity(intent);
+                                /*intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);*/
                                 return true;
                             case 5://Shop
+/*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
+*/
                                 return true;
                             case 6://Loyalty
+/*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
+*/
                                 return true;
                             case 7://Filleuls
+/*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
+*/
                                 return true;
                             case 8://Achievment
+/*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
+*/
                                 return true;
                             case 9://Parameter
                                 intent = new Intent(rv.getContext(), ParameterActivity.class);

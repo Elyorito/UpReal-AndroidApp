@@ -1,60 +1,110 @@
 package com.upreal.upreal.geolocalisation;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.store.StoreActivity;
+import com.upreal.upreal.utils.Address;
+import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.SoapStoreManager;
+import com.upreal.upreal.utils.Store;
+
+import java.util.List;
 
 /**
  * Created by Kyosukke on 13/06/2015.
  */
 public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.ViewHolder> {
 
-    private String base_list[];
-    private String delimiter[];
+    private List<Address> addresses;
+    private List<String> distances;
+    private List<String> prices;
+
+    private Context context;
+
+    private int id_address = -1;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
 
-        TextView store_name;
-        TextView store_distance;
+        RelativeLayout layout;
+        TextView address_id;
+        TextView address_name;
+        TextView address_distance;
         TextView product_price;
 
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
-            store_name = (TextView) itemView.findViewById(R.id.store_name);
-            store_distance = (TextView) itemView.findViewById(R.id.store_distance);
+            layout = (RelativeLayout) itemView.findViewById(R.id.layout);
+            address_id = (TextView) itemView.findViewById(R.id.address_id);
+            address_name = (TextView) itemView.findViewById(R.id.address_name);
+            address_distance = (TextView) itemView.findViewById(R.id.address_distance);
             product_price = (TextView) itemView.findViewById(R.id.product_price);
             HolderId = 0;
         }
     }
 
-    AdapterListStore(String base_list[], String delimiter[]) {
-        this.base_list = base_list;
-        this.delimiter = delimiter;
+    AdapterListStore(Context context, List<Address> addresses, List<String> distances, List<String> prices) {
+        this.context = context;
+        this.addresses = addresses;
+        this.distances = distances;
+        this.prices = prices;
     }
 
     @Override
     public AdapterListStore.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_store_compare, parent, false);
-        ViewHolder vHolder = new ViewHolder(v, viewType);
 
-        return vHolder;
+        return new ViewHolder(v, viewType);
     }
 
     @Override
-    public void onBindViewHolder(AdapterListStore.ViewHolder holder, int position) {
-        holder.store_name.setText(base_list[position]);
-        holder.store_distance.setText(base_list[position]);
-        holder.product_price.setText(base_list[position]);
+    public void onBindViewHolder(final AdapterListStore.ViewHolder holder, final int position) {
+        holder.address_id.setText("" + addresses.get(position).getId());
+        holder.address_name.setText(addresses.get(position).getAddress());
+        holder.address_distance.setText(distances.get(position) + " km");
+        holder.product_price.setText(prices.get(position) + " €");
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("GeolocalisationActivity", "Item touched at " + addresses.get(position).getId() + ".");
+                id_address = addresses.get(position).getId();
+                new RetrieveStore().execute();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return base_list.length;
+        return addresses.size();
+    }
+
+    class RetrieveStore extends AsyncTask<Void, Void, Store> {
+
+        @Override
+        protected Store doInBackground(Void... params) {
+            SoapStoreManager sm = new SoapStoreManager();
+
+            Store store = sm.getStoreByAddress(id_address);
+            return store;
+        }
+
+        @Override
+        protected void onPostExecute(Store store) {
+            super.onPostExecute(store);
+            Intent intent = new Intent(context, StoreActivity.class);
+            intent.putExtra("store", store);
+            context.startActivity(intent);
+        }
     }
 }

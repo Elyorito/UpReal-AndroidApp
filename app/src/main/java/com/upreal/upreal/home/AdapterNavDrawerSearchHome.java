@@ -26,7 +26,7 @@ import static android.widget.TextView.OnEditorActionListener;
 /**
  * Created by Elyo on 15/02/2015.
  */
-public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavDrawerSearchHome.ViewHolder> implements View.OnClickListener{
+public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavDrawerSearchHome.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_PRICE = 1;
@@ -87,7 +87,20 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.done_search_home, parent, false);
 
             ViewHolder vhDone = new ViewHolder(v, viewType);
-            vhDone.but_done.setOnClickListener(this);
+/*            vhDone.but_done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mSearchName == null || mSearchName.isEmpty()) {
+                        Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
+                        intent.putExtra("searchname", mSearchName);
+                        v.getContext().startActivity(intent);
+                    }
+                }
+            });*/
             return vhDone;
 
         } else if (viewType == TYPE_RATING) {
@@ -130,11 +143,30 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                 }
             }
         });*/
+
+        if (holder.HolderId == 3) {
+            holder.but_done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //holder.search.clearFocus();
+                    if (mSearchName == null || mSearchName.isEmpty()) {
+                        Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
+                        intent.putExtra("searchname", mSearchName);
+                        v.getContext().startActivity(intent);
+                    }
+                }
+            });
+        }
     }
 
-
+/*
     @Override
     public void onClick(View v) {
+*//*
         if (mSearchName == null || mSearchName.isEmpty()) {
             Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
             return;
@@ -144,7 +176,8 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             intent.putExtra("searchname", mSearchName);
             v.getContext().startActivity(intent);
         }
-    }
+*//*
+    }*/
 
     @Override
     public int getItemCount() {

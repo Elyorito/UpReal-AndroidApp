@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="20dp">
 
     <TextView
-        android:id="@+id/store_name"
+        android:id="@+id/address_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="coucou" />
+        android:layout_alignParentLeft="true"
+        android:text="0" />
 
     <TextView
-        android:id="@+id/store_distance"
+        android:id="@+id/address_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="coucou2" />
+        android:layout_marginLeft="20dp"
+        android:text="address_name" />
+
+    <TextView
+        android:id="@+id/address_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:text="address_distance" />
 
     <TextView
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="coucou3" />
+        android:layout_marginLeft="250dp"
+        android:text="product_price" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.upreal.upreal.scan;
 
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SoapProductManager;
 import com.upreal.upreal.utils.SoapUserManager;
@@ -14,6 +15,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -627,6 +629,10 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Product product) {
             super.onPostExecute(product);
+            Intent intent = new Intent(getActivity().getApplicationContext(), ProductActivity.class);
+            intent.putExtra("listprod", product);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getActivity().getApplicationContext().startActivity(intent);
         }
     }
 
