@@ -224,11 +224,11 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                         case 3: // Troc
                             Toast.makeText(v.getContext(), "Troc", Toast.LENGTH_SHORT).show();
                             break;
-                        case 4: // Send Message
+                        case 4: // Send Message by mail
                             Toast.makeText(v.getContext(),"Message", Toast.LENGTH_SHORT).show();
                             break;
-                        case 5: //Share
-                            Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
+                        case 5: // Signal compteur, CA PART TROP LOIN, il y a plus important
+                            Toast.makeText(v.getContext(), "Signal", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }

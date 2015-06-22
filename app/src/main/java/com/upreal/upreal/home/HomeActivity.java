@@ -200,6 +200,34 @@ public class HomeActivity extends ActionBarActivity {
                                 return true;
                             default:
                                 return false;
+                            case 3://News
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 4://Catalogue
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 5://Shop
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 6://Loyalty
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 7://Filleuls
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 8://Achievment
+                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
+                            case 9://Parameter
+                                intent = new Intent(rv.getContext(), ParameterActivity.class);
+                                rv.getContext().startActivity(intent);
+                                return true;
                         }
                     }
                     if (sessionManagerUser.isLogged()) {
@@ -249,7 +277,7 @@ public class HomeActivity extends ActionBarActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 9://Parameter
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                intent = new Intent(rv.getContext(), ParameterActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 10://Deconnexion
@@ -259,6 +287,7 @@ public class HomeActivity extends ActionBarActivity {
                                 registerReceiver(homeReceiver, intentFilter);
                                 mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
                                 mDbHelper.deleteDataBase();
+                                recreate();
                                 return true;
                             default:
                                 return false;

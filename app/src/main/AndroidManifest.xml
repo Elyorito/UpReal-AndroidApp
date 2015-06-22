@@ -33,6 +33,14 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".home.ParameterActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity
             android:name=".product.ProductActivity"
             android:label="@string/app_name"

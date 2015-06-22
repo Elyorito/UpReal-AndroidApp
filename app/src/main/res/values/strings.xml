@@ -267,6 +267,9 @@
     <string name="password_not_same">Les mots de passes ne sont pas identiques</string>
     <string name="wrong_password">Mauvais mot de passe</string>
     <string name="your_comment">Votre commentaire</string>
+    <string name="need_connected">Vous devez être connecté pour faire cette action</string>
+    <string name="subject">Sujet</string>
+    <string name="need_mail_app">Il vous faut une application d\'envoie de mail</string>
 
 
 </resources>

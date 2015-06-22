@@ -95,11 +95,12 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                         mDbHelper = new DatabaseHelper(v.getContext());
                         mDbQuery = new DatabaseQuery(mDbHelper);
                         mDatabase = mDbHelper.openDataBase();
-
                         final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
                         mDatabase.close();
                         final String[] lists = new String[listsElements.length];
-                        for (int i = 0; i < listsElements.length; i++) {
+
+
+                            for (int i = 0; i < listsElements.length; i++) {
                             lists[i] = listsElements[i][0];
                         }
                         /*Builder MultiChoice List*/
@@ -107,14 +108,21 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                             TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
+                            Log.v("AdapterOption", "beforesetOnclick");
                             addCustom.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
                                 public void onClick(View v) {
+                                    Log.v("AdapterOption", "onClick");
                                     builderCustom = new AlertDialog.Builder(v.getContext());
+                                    Log.v("AdapterOption", "builderCustom");
                                     LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    Log.v("AdapterOption", "layoutInflater");
                                     View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
+                                    Log.v("AdapterOption", "view");
                                     final EditText editList = (EditText) view.findViewById(R.id.namelist);
+                                    Log.v("AdapterOption", "editList");
+
                                     builderCustom.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 
                                         @Override
@@ -142,7 +150,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             dialog.cancel();
                                         }
                                     });
+                                    Log.v("AdapterOption", "Add button");
                                     builderCustom.setView(view).create().show();
+                                    Log.v("AdapterOption", "builder created + show");
                                 }
                             });
                             builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list))
