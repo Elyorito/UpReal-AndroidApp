@@ -99,7 +99,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                         final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
                         mDatabase.close();
                         final String[] lists = new String[listsElements.length];
-                        for (int i = 0; i < listsElements.length; i++) {
+
+
+                            for (int i = 0; i < listsElements.length; i++) {
                             lists[i] = listsElements[i][0];
                         }
                             Toast.makeText(v.getContext(),"List number= " + lists.length,Toast.LENGTH_LONG).show();

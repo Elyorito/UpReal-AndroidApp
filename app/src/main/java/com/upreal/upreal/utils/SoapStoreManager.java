@@ -42,7 +42,7 @@ public class SoapStoreManager {
         String methodname = "getStoreByAddress";
         Store store = null;
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("id_address", id_address);
+        request.addProperty("id", id_address);
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 

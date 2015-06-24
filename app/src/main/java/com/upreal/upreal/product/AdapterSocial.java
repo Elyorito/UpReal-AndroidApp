@@ -233,14 +233,62 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                                 builder.create().show();
                             }
                             break;
-                        case 3: // Troc
+                        case 2: // Troc
                             Toast.makeText(v.getContext(), "Troc", Toast.LENGTH_SHORT).show();
                             break;
-                        case 4: // Send Message
-                            Toast.makeText(v.getContext(),"Message", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 5: //Share
+                        case 3: // Partager
                             Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(Intent.ACTION_SEND);
+
+                            i.putExtra(Intent.EXTRA_TEXT, "Vient chercher ton bonheur chez " + mUser.getUsername() + " sur UpReal");
+                            i.setType("text/plain");
+                            try {
+                                v.getContext().startActivity(Intent.createChooser(i, "Partager cet utilisateur avec ..."));
+                            } catch (android.content.ActivityNotFoundException ex) {
+                                Toast.makeText(v.getContext(), v.getContext().getString(R.string.need_mail_app)
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        case 4: // Send Message by mail
+                            Toast.makeText(v.getContext(),"Message", Toast.LENGTH_SHORT).show();
+                            builder.setTitle("Contacter " + mUser.getUsername() + " ?");
+                            inflater = LayoutInflater.from(v.getContext());
+                            layout = inflater.inflate(R.layout.dialog_mail, null);
+                            builder.setView(layout);
+
+                            final EditText subject = (EditText) layout.findViewById(R.id.subjectEmail);
+                            final EditText messageEmail = (EditText) layout.findViewById(R.id.messageEmail);
+                            builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(Intent.ACTION_SEND);
+                                    i.setType("message/rfc822");
+
+                                    i.putExtra(Intent.EXTRA_EMAIL, new String[]{mUser.getEmail()});
+                                    if (subject.getText().toString().equals(""))
+                                        Toast.makeText(v.getContext(), "Le sujet ne peut etre vide", Toast.LENGTH_SHORT).show();
+                                    i.putExtra(Intent.EXTRA_SUBJECT, subject.getText().toString());
+                                    if (messageEmail.getText().toString().equals(""))
+                                        Toast.makeText(v.getContext(), "Le message ne peut etre vide", Toast.LENGTH_SHORT).show();
+                                    i.putExtra(Intent.EXTRA_TEXT, messageEmail.getText().toString());
+                                    try {
+                                        v.getContext().startActivity(Intent.createChooser(i, "Send mail..."));
+                                    } catch (android.content.ActivityNotFoundException ex) {
+                                        Toast.makeText(v.getContext(), v.getContext().getString(R.string.need_mail_app)
+                                                , Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            builder.show();
+                            break;
+                        case 5: // Signal compteur, CA PART TROP LOIN, il y a plus important
+                            Toast.makeText(v.getContext(), "Signal", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }

@@ -295,10 +295,8 @@ public class HomeActivity extends ActionBarActivity {
 */
                                 return true;
                             case 9://Parameter
-/*
-                                intent = new Intent(rv.getContext(), CameraActivity.class);
+                                intent = new Intent(rv.getContext(), ParameterActivity.class);
                                 rv.getContext().startActivity(intent);
-*/
                                 return true;
                             case 10://Deconnexion
                                 sessionManagerUser.deleteCurrentUser();
@@ -307,6 +305,7 @@ public class HomeActivity extends ActionBarActivity {
                                 registerReceiver(homeReceiver, intentFilter);
                                 mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
                                 mDbHelper.deleteDataBase();
+                                recreate();
                                 return true;
                             default:
                                 return false;
