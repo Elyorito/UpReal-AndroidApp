@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +51,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
     private SessionManagerUser sessionManagerUser;
 
     private String listLike;
+    private Boolean isLiked = false;
 
     public User getmUser() {
         return mUser;
@@ -76,6 +78,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         this.mSOCIALOPT = SOCIALOPT;
         this.mProduct = product;
         this.sessionManagerUser = sessionManagerUser;
+        new isProductLiked().execute();
     }
 
     public AdapterSocial(String SOCIALOPT[], User user, SessionManagerUser sessionManagerUser) {
@@ -95,6 +98,12 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
     @Override
     public void onBindViewHolder(AdapterSocial.ViewHolder viewHolder, final int i) {
         viewHolder.text_social.setText(mSOCIALOPT[i]);
+        if (i == 0) {
+            if (isLiked == false)
+                viewHolder.text_social.setTextColor(Color.RED);
+            else
+                viewHolder.text_social.setTextColor(Color.BLUE);
+        }
         viewHolder.mCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -125,6 +134,10 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                                 mDbHelper = new DatabaseHelper(v.getContext());
                                 mDbQuery = new DatabaseQuery(mDbHelper);
                                 new SendLike(0).execute();
+                                /*if (isLiked == true)
+                                    new SendLike(0).execute();
+                                else
+                                    new SendLike(1).execute();*/
                             }
                             break;
                         case 1: //Commenter
@@ -288,8 +301,26 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         }
     }
 
+    private class isProductLiked extends AsyncTask<Void, Void, Boolean> {
+        Boolean isLike = false;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            SoapUserUtilManager uum = new SoapUserUtilManager();
+            isLike = uum.isProductLiked(Integer.toString(sessionManagerUser.getUserId()), Integer.toString(mProduct.getId()));
+            return isLike;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            isLiked = aBoolean;
+        }
+    }
+
         private class SendLike extends AsyncTask<Void, Void, Boolean> {
             Boolean isSuccess = false;
+            Boolean isLike = false;
             private int type;
 
             public SendLike(int type) {
@@ -298,12 +329,18 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                if (this.type == 0) {
-                    SoapProductUtilManager pum = new SoapProductUtilManager();
-                    isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 2);
-                } else if (this.type == 1) {
-                    SoapUserUtilManager pum = new SoapUserUtilManager();
-/*
+                SoapUserUtilManager uum = new SoapUserUtilManager();
+                SoapProductUtilManager pum = new SoapProductUtilManager();
+                isLike = uum.isProductLiked(Integer.toString(sessionManagerUser.getUserId()), Integer.toString(mProduct.getId()));
+                if (!isLike) {
+                    isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), 1);
+                    return isSuccess;
+                } else if (isLike) {
+                    isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), mProduct.getId(), -1);
+                    if (isSuccess == true)
+                        return false;
+                    return isSuccess;
+                    /*
                     isSuccess = pum.rateUser(sessionManagerUser.getUserId(), )
 */
                 }
@@ -313,7 +350,8 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
             @Override
             protected void onPostExecute(Boolean b) {
                 super.onPostExecute(b);
-                if(sessionManagerUser.getUserId() > 0){
+                if(b == true && sessionManagerUser.getUserId() > 0){
+                    isLiked = true;
                     mDatabase = mDbHelper.openDataBase();
                     String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
                     String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
@@ -325,8 +363,13 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                     String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(mProduct.getId()), getListId[0][0]}, null, null, null);
                     if (getITEMS[0] == null)
                         mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(sessionManagerUser.getUserId())});
-                } else {
-
+                } else if (b == false) {
+                    isLiked = false;
+                    Log.v("HEOUAIS", "DISLIKE PRODUCT");
+                    mDatabase = mDbHelper.openDataBase();
+                    String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
+                    String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
+                    mDbQuery.DeleteData("items", "id_list=? AND id_product=? AND id_user=?", new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(sessionManagerUser.getUserId())});
                 }
             }
 

@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 /**
  * Created by Elyo on 27/05/2015.
  */
-public class ListCustomActivity extends ActionBarActivity {
+public class ListCustomActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private String[] listcustom;
@@ -61,7 +63,7 @@ public class ListCustomActivity extends ActionBarActivity {
         mDatabase = mDbHelper.openDataBase();
 
         //Todo Retrieve list item
-        String getListId[] = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user"}, "name=?", new String[]{listcustom[0]}, null, null, null);
+        String getListId[] = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "name=? AND type=?", new String[]{listcustom[0], "8"}, null, null, null);
         String getid[] = mDbQuery.MyRawQuery("SELECT id FROM LISTS WHERE NAME=" + "'" + listcustom[0] + "'");
 
         Toast.makeText(getApplicationContext(),"ListID=" + getListId[0],Toast.LENGTH_SHORT).show();
@@ -107,9 +109,15 @@ public class ListCustomActivity extends ActionBarActivity {
 
                     @Override
                     public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] ints) {
-                        for (int position : ints) {
+                        for (final int position : ints) {
                             Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
                             mAdapterList.remove(products, position);
+                            Snackbar.make(recyclerView.getRootView(), "Voulez vous vraiment supprimer?", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //mAdapterList.insert(products, products.get(0), position);
+                                }
+                            }).show();
                         }
                         mAdapterList.notifyDataSetChanged();
                     }

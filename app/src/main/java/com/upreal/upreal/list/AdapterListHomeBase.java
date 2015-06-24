@@ -1,12 +1,16 @@
 package com.upreal.upreal.list;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upreal.upreal.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by Elyo on 11/05/2015.
@@ -19,6 +23,8 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
     //private AlertDialog.Builder builder;
     private String mBase_list[];
     private String mDelimiter[];
+    private ArrayList<ArrayList<String[]>> mBaseLists;
+    private Intent intent;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
@@ -34,9 +40,10 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
         }
     }
 
-    AdapterListHomeBase(String base_list[], String delimiter[]) {
+    AdapterListHomeBase(ArrayList<ArrayList<String[]>> baseLists, String base_list[], String delimiter[]) {
         this.mBase_list = base_list;
         this.mDelimiter = delimiter;
+        this.mBaseLists = baseLists;
     }
 
     @Override
@@ -57,33 +64,51 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
     }
 
     @Override
-    public void onBindViewHolder(AdapterListHomeBase.ViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterListHomeBase.ViewHolder holder, final int position) {
 //        holder.list_name.setText(mBase_list[position]);
         /*if (holder.HolderId == 1) {
             holder.list_name.setText(mDelimiter[0]);
         } else */
         if (holder.HolderId == 0) {
             holder.list_name.setText(mBase_list[position]);
-        }
-        holder.list_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case 0://Product liked
-                        break;
-                    case 1://Follow User
-                        break;
-                    case 2:// History
-                        break;
-                    case 3:// Commentary
-                        break;
-                    case 4:// List troc product
-                        break;
-                    default:
-                        break;
+
+            holder.list_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.rowtextlist://Product liked
+                            Toast.makeText(v.getContext(), "NbLike=" + mBaseLists.get(0).get(0).length,Toast.LENGTH_LONG).show();
+                            intent = new Intent(v.getContext(), ListBaseActivity.class);
+                            intent.putExtra("listcustom", mBaseLists.get(0));
+                            intent.putExtra("namelist", v.getContext().getString(R.string.liked_product));
+                            v.getContext().startActivity(intent);
+                            break;
+                        case 1:// Follow User
+                            intent  = new Intent(v.getContext(), ListCustomActivity.class);
+                            intent.putExtra("listcustom", mBaseLists.get(1));
+                            v.getContext().startActivity(intent);
+                            break;
+                        case 2:// History
+                            intent = new Intent(v.getContext(), ListCustomActivity.class);
+                            intent.putExtra("listcustom", mBaseLists.get(2));
+                            v.getContext().startActivity(intent);
+                            break;
+                        case 3:// Commentary
+                            intent = new Intent(v.getContext(), ListCustomActivity.class);
+                            intent.putExtra("listcustom", mBaseLists.get(3));
+                            v.getContext().startActivity(intent);
+                            break;
+                        case 4:// List troc product
+                            intent = new Intent(v.getContext(), ListCustomActivity.class);
+                            intent.putExtra("listcustom", mBaseLists.get(4));
+                            v.getContext().startActivity(intent);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

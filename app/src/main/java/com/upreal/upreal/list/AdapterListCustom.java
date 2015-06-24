@@ -58,8 +58,8 @@ public class AdapterListCustom extends UltimateViewAdapter {
                 ((ViewHolder) holder).nameList.setText(products.get(position).getName());
         }
 
-        @Override
-        public int getAdapterItemCount() {
+    @Override
+    public int getAdapterItemCount() {
             return products.size();
         }
 

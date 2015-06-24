@@ -22,6 +22,7 @@ import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -57,6 +58,15 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
     private String delimiter[];
 
     private String[][] lists;
+    private String getITEMS[][];
+
+    private String[] listLike;
+    private String[] listUserFollowed;
+    private String[] listHistory;
+    private String[] listCommentary;
+    private String[] listBater;
+
+    private ArrayList<ArrayList<String[]>> listsBase = new ArrayList<>();
 
     private EditText editList;
 
@@ -108,13 +118,34 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
         setSupportActionBar(toolbar);/*
         toolbar.
 */
+        getITEMS = null;
+        listLike = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"3"}, null, null, null);
+        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listLike[0]}, null, null, null);
+        listsBase.add(getProduct(getITEMS, mDbQuery));
+        getITEMS = null;
+        /*listUserFollowed = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"2"}, null, null, null);
+        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listUserFollowed[0]}, null, null, null);
+        listsBase.add(getProduct(getITEMS, mDbQuery));
+        getITEMS = null;
+        listHistory = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"10"}, null, null, null);
+        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listHistory[0]}, null, null, null);
+        listsBase.add(getProduct(getITEMS, mDbQuery));
+        getITEMS = null;
+        listCommentary = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"11"}, null, null, null);
+        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listCommentary[0]}, null, null, null);
+        listsBase.add(getProduct(getITEMS, mDbQuery));
+        getITEMS = null;
+        listBater = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"6"}, null, null, null);
+        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listBater[0]}, null, null, null);
+        listsBase.add(getProduct(getITEMS, mDbQuery));
+*/
         floatingButtonAddList = (FloatingActionButton) findViewById(R.id.fabaddlist);
         floatingButtonAddList.setOnClickListener(this);
         mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlist);
         mRecyclerViewList.setHasFixedSize(true);
         //mRecyclerViewList.setLayoutManager();
         mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapterList = new AdapterListHomeBase(base_list, delimiter);
+        mAdapterList = new AdapterListHomeBase(listsBase, base_list, delimiter);
         mRecyclerViewList.setAdapter(mAdapterList);
         mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -129,13 +160,32 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
         });
 
         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-//        Toast.makeText(getApplicationContext(), "TEST" + lists[0][0] + "length " + lists.length, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "TEST" + " length= " + lists.length, Toast.LENGTH_SHORT).show();
         mDatabase.close();
         mRecyclerViewListCust = (RecyclerView) findViewById(R.id.recyclerlistCust);
         mRecyclerViewListCust.setHasFixedSize(true);
         mRecyclerViewListCust.setLayoutManager(new LinearLayoutManager(this));
         mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);
         mRecyclerViewListCust.setAdapter(mAdapterListCust);
+    }
+
+    private ArrayList<String[]> getProduct(String[][] items,DatabaseQuery mDbQuery) {
+
+        ArrayList<String[]> products = new ArrayList<>();
+        String[] prod = null;
+
+        if (items == null) {
+            products.add(null);
+            return products;
+        }
+        for (int i = 0; i < items.length; i++) {
+            prod = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, "product_id=?", new String[]{items[i][1]}, null, null, null);
+            products.add(prod);
+            if (prod != null)
+                Toast.makeText(getApplicationContext(),"Product recup= " + prod[0], Toast.LENGTH_LONG).show();
+            prod = null;
+        }
+        return products;
     }
 
     @Override
@@ -157,8 +207,8 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
                              dialog.cancel();
                          }
                          mDatabase = mDbHelper.openDataBase();
-                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
-                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
+                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
+                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
                          // TODO Auto-generated method stub
                          /*Refresh list item [BUG]*/
                          mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);

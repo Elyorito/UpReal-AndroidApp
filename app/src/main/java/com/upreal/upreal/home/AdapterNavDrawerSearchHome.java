@@ -143,6 +143,18 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                 }
             }
         });*/
+        if (holder.HolderId == 0) {
+            holder.search.setOnEditorActionListener(new OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        mSearchName =  holder.search.getText().toString();
+                        return false;
+                    }
+                    return false;
+                }
+            });
+        }
 
         if (holder.HolderId == 3) {
             holder.but_done.setOnClickListener(new View.OnClickListener() {

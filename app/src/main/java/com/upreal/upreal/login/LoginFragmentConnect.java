@@ -123,11 +123,11 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 mDatabase = mDbHelper.openDataBase();
                 sessionManagerUser.setRegisterLoginUser(login.getText().toString(), password.getText().toString());
                 new RetrieveUser().execute();
-                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
-                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
-                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
-                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.my_commentary), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
-                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "3"});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "2"});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "10"});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_commentary), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "11"});
+                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "6"});
                 mDatabase.close();
                 Toast.makeText(getActivity().getApplication(), "IDUSER=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_LONG).show();
                 HomeActivity homeActivity = new HomeActivity();

@@ -21,7 +21,9 @@ import com.upreal.upreal.R;
 
 import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.Product;
+import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.SoapUserUtilManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 import com.upreal.upreal.view.SlidingTabLayout;
@@ -51,8 +53,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-
-        prodName = (TextView) findViewById(R.id.product_name);/*
+      prodName = (TextView) findViewById(R.id.product_name);/*
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
         prodShortDesc = (TextView) findViewById(R.id.product_desc);*/
         prodPicture = (ImageView) findViewById(R.id.product_picture);
@@ -126,6 +127,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 break ;
         }
     }
+
 
     class RetrievePicture extends AsyncTask<Void, Void, String> {
 

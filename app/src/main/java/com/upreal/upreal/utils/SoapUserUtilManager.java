@@ -35,6 +35,32 @@ public class SoapUserUtilManager {
         }
     }
 
+    public Boolean isProductLiked(String id_user, String id_product) {
+        String methodname = "isProductLiked";
+        boolean result = false;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", id_user);
+        request.addProperty("id_product", id_product);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            result = Boolean.parseBoolean(results.toString());
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
+    }
+
     public Address getAddressInfo(int id) {
         String methodname = "getAddressInfo";
         Address address = new Address();

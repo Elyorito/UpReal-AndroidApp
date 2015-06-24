@@ -393,7 +393,7 @@ public class HomeActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_CLOSE_HOME)) {
-                HomeActivity.this.finish();
+                HomeActivity.this.recreate();
             }
         }
     }

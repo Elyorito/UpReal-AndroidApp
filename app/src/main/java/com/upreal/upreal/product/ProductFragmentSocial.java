@@ -1,6 +1,7 @@
 package com.upreal.upreal.product;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.SoapUserUtilManager;
 
 /**
  * Created by Elyo on 12/03/2015.
@@ -35,11 +38,10 @@ public class ProductFragmentSocial extends android.support.v4.app.Fragment {
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        String SOCIALOPT[] = new String[] {"Aimer","Commenter","Produit Similaire","Partager"};
-
+        String SOCIALOPT[] = new String[]{"Aimer", "Commenter", "Produit Similaire", "Partager"};
         mAdapter = new AdapterSocial(SOCIALOPT, prod, sessionManagerUser);
         recyclerView.setAdapter(mAdapter);
+
 
         return v;
     }

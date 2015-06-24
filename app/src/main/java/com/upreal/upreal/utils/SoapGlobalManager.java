@@ -36,7 +36,7 @@ public class SoapGlobalManager {
         }
     }
 
-    public Boolean getRateLike(int idUser, int idProduct, int idOvrRate, int type, int idArticle) {
+    public Boolean getLikeOnProduct(int idUser, int idProduct, int idOvrRate, int type, int idArticle) {
 
         Boolean isSuccess = false;
         String methodName = "getRate";
