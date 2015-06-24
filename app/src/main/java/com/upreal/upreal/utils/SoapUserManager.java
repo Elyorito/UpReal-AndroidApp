@@ -228,7 +228,7 @@ public class SoapUserManager {
 
     public User getUserByUsername(String username) {
         User user = null;
-        String methodName = "getUserByUsername";
+        String methodName = "getSingleUserByUsername";
 
         SoapObject request = new SoapObject(NAMESPACE, methodName);
         request.addProperty("username", username);
@@ -270,7 +270,7 @@ public class SoapUserManager {
 
     private User convertToQuery(SoapObject soapObject) {
         User user = new User();
-        user.setEmail(soapObject.getPropertyAsString("email"));
+        user.setEmail(soapObject.getProperty("email").toString());
         if (soapObject.hasProperty("firstname") && soapObject.getProperty("firstname") != null)
             user.setFirstname(soapObject.getProperty("firstname").toString());
         user.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));

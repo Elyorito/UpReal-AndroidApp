@@ -34,6 +34,7 @@
             android:screenOrientation="portrait">
         </activity>
 
+
         <activity
             android:name=".home.ParameterActivity"
             android:label="@string/app_name"
@@ -41,12 +42,36 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <!--Product-->
+
         <activity
-            android:name=".product.ProductActivity"
+        android:name=".product.ProductActivity"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".product.ProductUpdateActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".product.ProductSearchActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".scan.AddProductFromScan"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <!--User-->
 
         <activity
             android:name=".user.UserActivity"
@@ -54,22 +79,16 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
+
         <activity android:name=".user.UserUpdateActivity"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
+
         <activity android:name=".user.UserChangePwd"
             android:label="UpReal"
             android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
-        </activity>
-
-
-        <activity
-            android:name=".product.ProductSearchActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
 
@@ -83,12 +102,6 @@
             android:name=".scan.Camera2Activity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".scan.AddProductFromScan"
-            android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
 

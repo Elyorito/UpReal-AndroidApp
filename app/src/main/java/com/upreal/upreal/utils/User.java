@@ -50,6 +50,17 @@ public class User implements Parcelable {
         this.id = id;
     }
 
+    public void setUser(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.firstname = user.getFirstname();
+        this.lastname = user.getLastname();
+        this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.id_address = user.getId_address();
+        this.roles = user.getRoles();
+        this.short_desc = user.getShort_desc();
+    }
     public int getId() {
         return id;
     }

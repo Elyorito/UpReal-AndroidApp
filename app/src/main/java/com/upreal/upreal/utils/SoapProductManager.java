@@ -87,6 +87,37 @@ public class SoapProductManager {
         return id;
     }
 
+    public Boolean updateProduct(Product product) {
+        Boolean result = false;
+        String methodname = "updateProduct";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", product.getId());
+        request.addProperty("name", product.getName());
+        request.addProperty("ean", product.getEan());
+        request.addProperty("brand", product.getBrand());
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+            result = Boolean.valueOf(results.toString());
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
+    }
+
     public Product getProductInfo(int id) {
 
         String methodname = "getProductInfo";
