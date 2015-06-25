@@ -160,6 +160,7 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                             }
                         }).create().show();
             } else {
+                mDbHelper = new DatabaseHelper(getActivity().getApplicationContext());
                 mDbQuery = new DatabaseQuery(mDbHelper);
                 mDatabase = mDbHelper.openDataBase();
                 sessionManagerUser.setRegisterLoginUser(edit_id.getText().toString(), edit_password.getText().toString());

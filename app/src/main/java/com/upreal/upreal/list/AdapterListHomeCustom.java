@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upreal.upreal.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by Elyo on 18/05/2015.
@@ -19,7 +22,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
 
     //private AlertDialog.Builder builder;
     private String[] mDelimiter;
-    private String[][] mListCust;
+    private ArrayList<String[]> mListCust;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
@@ -39,7 +42,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
         }
     }
 
-    AdapterListHomeCustom(String[][] list_cust, String delimiter[]) {
+    AdapterListHomeCustom(ArrayList<String[]> list_cust, String delimiter[]) {
 
         this.mListCust = list_cust;
         this.mDelimiter = delimiter;
@@ -65,11 +68,28 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     @Override
     public void onBindViewHolder(AdapterListHomeCustom.ViewHolder holder, final int position) {
         if (holder.HolderId == 1) {
-            holder.list_name.setText(mListCust[position - 1][0]);
+            holder.list_name.setText(mListCust.get(position - 1)[0]);
         } else
         if (holder.HolderId == 0) {
             holder.list_name.setText(mDelimiter[0]);
         }
+        holder.list_name.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                switch (v.getId()) {
+                    case R.id.rowtextlist:
+                        if (position != 0) {
+                            //Toast.makeText(v.getContext(),mListCust.get(position -1)[0], Toast.LENGTH_SHORT).show();
+                            mListCust.remove(position - 1);
+                            notifyItemRemoved(position - 1);
+                        }
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
         holder.list_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +97,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
                     case R.id.rowtextlist:
                         if (position != 0) {
                             Intent intent = new Intent(v.getContext(), ListCustomActivity.class);
-                            intent.putExtra("listcustom", mListCust[position - 1]);
+                            intent.putExtra("listcustom", mListCust.get(position - 1));
                             v.getContext().startActivity(intent);
                         }
                         break;
@@ -103,6 +123,6 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     public int getItemCount() {/*
         if (mListCust.length == 0)
             return mListCust.length;*/
-        return mListCust.length + 1;
+        return mListCust.size() + 1;
     }
 }

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +30,7 @@ import java.util.zip.Inflater;
 /**
  * Created by Elyo on 11/05/2015.
  */
-public class ListActivity extends ActionBarActivity implements View.OnClickListener {
+public class ListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
@@ -71,6 +72,7 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
     private EditText editList;
 
     private View view;
+    private final ArrayList<String[]> arrayListCust = new ArrayList<String[]>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +122,12 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
 */
         getITEMS = null;
         listLike = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"3"}, null, null, null);
-        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listLike[0]}, null, null, null);
-        listsBase.add(getProduct(getITEMS, mDbQuery));
+        Toast.makeText(getApplicationContext(), "ListLike" + listLike[0],Toast.LENGTH_SHORT).show();
+        if (listLike[0] != null) {
+            getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listLike[0]}, null, null, null);
+            listsBase.add(getProduct(getITEMS, mDbQuery));
+        } else
+            listsBase.add(null);
         getITEMS = null;
         /*listUserFollowed = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"2"}, null, null, null);
         getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listUserFollowed[0]}, null, null, null);
@@ -140,7 +146,6 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
         listsBase.add(getProduct(getITEMS, mDbQuery));
 */
         floatingButtonAddList = (FloatingActionButton) findViewById(R.id.fabaddlist);
-        floatingButtonAddList.setOnClickListener(this);
         mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlist);
         mRecyclerViewList.setHasFixedSize(true);
         //mRecyclerViewList.setLayoutManager();
@@ -165,8 +170,59 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
         mRecyclerViewListCust = (RecyclerView) findViewById(R.id.recyclerlistCust);
         mRecyclerViewListCust.setHasFixedSize(true);
         mRecyclerViewListCust.setLayoutManager(new LinearLayoutManager(this));
-        mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);
+        arrayListCust.clear();
+        for(String[] list : lists){
+            arrayListCust.add(list);
+        }
+        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
         mRecyclerViewListCust.setAdapter(mAdapterListCust);
+        RecyclerView.ItemAnimator animator = mRecyclerViewListCust.getItemAnimator();
+        animator.setAddDuration(1500);
+        animator.setRemoveDuration(1000);
+
+        floatingButtonAddList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrayListCust.clear();
+                builder = new AlertDialog.Builder(v.getContext());
+                view = getLayoutInflater().inflate(R.layout.dialog_addlist, null);
+                editList = (EditText) view.findViewById(R.id.namelist);
+                builder.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+/*
+                Toast.makeText(getApplicationContext(),"Res:" + editList.getText().toString() + "ID:[" + Integer.toString(sessionManagerUser.getUserId()) + "]", Toast.LENGTH_SHORT).show();
+*/
+                        if (editList.getText().length() <= 0) {
+                            builderErrorShortList.create().show();
+                            dialog.cancel();
+                        }
+                        mDatabase = mDbHelper.openDataBase();
+                        mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
+                        lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
+                        for(String[] list : lists){
+                            arrayListCust.add(list);
+                        }
+                        // TODO Auto-generated method stub
+                         /*Refresh list item [BUG]*/
+                        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
+                        mRecyclerViewListCust.setAdapter(mAdapterListCust);
+                        mAdapterListCust.notifyDataSetChanged();
+                         /*dialog.dismiss();*/
+                        mDatabase.close();
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }
+                });
+                builder.setView(view).create().show();
+                mAdapterListCust.notifyDataSetChanged();
+            }
+        });
     }
 
     private ArrayList<String[]> getProduct(String[][] items,DatabaseQuery mDbQuery) {
@@ -186,50 +242,5 @@ public class ListActivity extends ActionBarActivity implements View.OnClickListe
             prod = null;
         }
         return products;
-    }
-
-    @Override
-    public void onClick(View v) {
-         switch (v.getId()) {
-             case R.id.fabaddlist:
-                 builder = new AlertDialog.Builder(ListActivity.this);
-                 view = getLayoutInflater().inflate(R.layout.dialog_addlist, null);
-                 editList = (EditText) view.findViewById(R.id.namelist);
-                 builder.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-
-                     @Override
-                     public void onClick(DialogInterface dialog, int which) {
-/*
-                Toast.makeText(getApplicationContext(),"Res:" + editList.getText().toString() + "ID:[" + Integer.toString(sessionManagerUser.getUserId()) + "]", Toast.LENGTH_SHORT).show();
-*/
-                         if (editList.getText().length() <= 0) {
-                             builderErrorShortList.create().show();
-                             dialog.cancel();
-                         }
-                         mDatabase = mDbHelper.openDataBase();
-                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
-                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-                         // TODO Auto-generated method stub
-                         /*Refresh list item [BUG]*/
-                         mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);
-                         mAdapterListCust.notifyDataSetChanged();
-                         mRecyclerViewListCust.getAdapter().notifyDataSetChanged();
-                         /*dialog.dismiss();*/
-                         mDatabase.close();
-                     }
-                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialog, int which) {
-
-                         dialog.cancel();
-                     }
-                 });
-                 builder.setView(view).create().show();
-                 mAdapterListCust.notifyDataSetChanged();
-                 //Toast.makeText(v.getContext(), mDbQuery.MyRawQuery("SELECT * FROM PRODUCT")[0], Toast.LENGTH_SHORT).show();
-                 return;
-             default:
-                 return;
-            }
     }
 }

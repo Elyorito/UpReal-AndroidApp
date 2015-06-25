@@ -77,7 +77,7 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.rowtextlist://Product liked
-                            Toast.makeText(v.getContext(), "NbLike=" + mBaseLists.get(0).get(0).length,Toast.LENGTH_LONG).show();
+                            //Toast.makeText(v.getContext(), "NbLike=" + mBaseLists.get(0).get(0).length,Toast.LENGTH_LONG).show();
                             intent = new Intent(v.getContext(), ListBaseActivity.class);
                             intent.putExtra("listcustom", mBaseLists.get(0));
                             intent.putExtra("namelist", v.getContext().getString(R.string.liked_product));
