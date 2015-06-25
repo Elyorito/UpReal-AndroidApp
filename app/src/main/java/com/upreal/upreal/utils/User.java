@@ -23,14 +23,14 @@ public class User implements Parcelable {
 
     public User() {
         this.id = -1;
-        this.username = null;
-        this.firstname = null;
-        this.lastname = null;
-        this.email = null;
+        this.username = "";
+        this.firstname = "";
+        this.lastname = "";
+        this.email = "";
         this.phone = -1;
         this.id_address = -1;
-        this.roles = null;
-        this.short_desc = null;
+        this.roles = "";
+        this.short_desc = "";
     }
 
     public User(int id, String username, String firstname, String lastname, String email, int phone, int id_address, String roles, String short_desc){

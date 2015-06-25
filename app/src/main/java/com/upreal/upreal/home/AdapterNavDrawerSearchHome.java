@@ -35,13 +35,14 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
 
     private Context context;
     private String mSearchName;
+    private EditText search;
 
     public class ViewHolder extends  RecyclerView.ViewHolder{
         int HolderId;
 
         Button but_done;
 
-        EditText search;
+//        EditText search;
         EditText price_min;
         EditText price_max;
 
@@ -119,8 +120,8 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_search_home, parent, false);
 
             ViewHolder vhHeader = new ViewHolder(v, viewType);
-            vhHeader.search.setHint("produit, marque, magasin, utilisateur");
-            vhHeader.search.setTag(vhHeader);
+            /*vhHeader.*/search.setHint("produit, marque, magasin, utilisateur");
+            /*vhHeader.*/search.setTag(vhHeader);
             return vhHeader;
         }
 
@@ -144,11 +145,11 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             }
         });*/
         if (holder.HolderId == 0) {
-            holder.search.setOnEditorActionListener(new OnEditorActionListener() {
+            /*holder.*/search.setOnEditorActionListener(new OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        mSearchName =  holder.search.getText().toString();
+                        mSearchName =  /*holder.*/search.getText().toString();
                         return false;
                     }
                     return false;
@@ -161,6 +162,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                 @Override
                 public void onClick(View v) {
                     //holder.search.clearFocus();
+                    mSearchName = search.getText().toString();
                     if (mSearchName == null || mSearchName.isEmpty()) {
                         Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
                         return;

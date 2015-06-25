@@ -88,11 +88,11 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
         viewHolder.mCardOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                builder = new AlertDialog.Builder(v.getContext());
                 if (getItemCount() != 2) {
                     switch (i) {
                         case 0://Edit
                             if (!mSessionManagerUser.isLogged()) {
+                                builder = new AlertDialog.Builder(v.getContext());
                                 builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
@@ -115,6 +115,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             break;
                         case 1://Add list
 
+                            builder = new AlertDialog.Builder(v.getContext());
                         mDbHelper = new DatabaseHelper(v.getContext());
                         mDbQuery = new DatabaseQuery(mDbHelper);
                         mDatabase = mDbHelper.openDataBase();
@@ -133,10 +134,12 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                             TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
+                            Log.v("AdapterOption", "addCustom.setOnClickListener");
                             addCustom.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
                                 public void onClick(View v) {
+                                    Log.v("AdapterOption", "addCustom.setOnClickListener => onClick");
                                     builderCustom = new AlertDialog.Builder(v.getContext());
                                     LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                     View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
@@ -173,6 +176,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                     builderCustom.setView(view).create().show();
                                 }
                             });
+                            Log.v("AdapterOption", "builder.setView");
                             builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list))
                                     .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
                                         @Override
@@ -245,6 +249,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                         }
                                     }
                             ).create().show();
+                            Log.v("AdapterOption", "end of addList");
                             break;
                         case 2://Troc
 
