@@ -332,7 +332,6 @@ public class SoapProductManager {
         HttpTransportSE ht = getHttpTransportSE();
 
         try {
-
             ht.call(methodname, envelope);
             testHttpResponse(ht);
 

@@ -122,7 +122,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                     switch (i) {
                         case 0: //Like
                             Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
-                            if (sessionManagerUser.getUserId() <= 0) {
+                            if (!sessionManagerUser.isLogged()) {
                                 builder.setTitle("Like this product?").setMessage("Sign in to make your opinion count")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
@@ -150,7 +150,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                             break;
                         case 1: //Commenter
                             Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
-                            if (sessionManagerUser.getUserId() <= 0) {
+                            if (!sessionManagerUser.isLogged()) {
                                 builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
@@ -226,7 +226,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                     switch (i) {
                         case 0: // Suivre
                             Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
-                            if (sessionManagerUser.getUserId() <= 0) {
+                            if (!sessionManagerUser.isLogged()) {
                                 builder.setTitle("Suivre cet utilisateur ?").setMessage("Connectez vous pour pouvoir le suivre.")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
@@ -250,7 +250,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                             break;
                         case 1: //Commenter
                             Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
-                            if (sessionManagerUser.getUserId() <= 0) {
+                            if (!sessionManagerUser.isLogged()) {
                                 builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
