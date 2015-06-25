@@ -259,8 +259,15 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         }
 
         protected void onPostExecute(Boolean success) {
-            if (success)
+            if (success) {
+                User user = sessionManagerUser.getUser();
+                user.setFirstname(firstName.getText().toString());
+                user.setLastname(lastName.getText().toString());
+                user.setPhone((phoneNumber.getText().toString().equals("")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()));
+                user.setShort_desc(short_desc.getText().toString());
+                sessionManagerUser.setUser(user);
                 finish();
+            }
             else
                 Toast.makeText(getApplicationContext(), "Nothing to update", Toast.LENGTH_SHORT).show();
         }

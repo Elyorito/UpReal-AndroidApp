@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Address;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.SoapUserUtilManager;
 import com.upreal.upreal.utils.User;
 import com.upreal.upreal.view.SlidingTabLayout;
@@ -23,23 +24,27 @@ import com.upreal.upreal.view.SlidingTabLayout;
 public class UserActivity extends ActionBarActivity {
 
     private TextView userLocal;
+    private TextView userUsername;
+    private TextView userDesc;
 
     private Address address;
     private CharSequence title;
+    private User user;
+
+    private SessionManagerUser sessionManagerUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        TextView userUsername = (TextView) findViewById(R.id.user_username);
-        TextView userDesc = (TextView) findViewById(R.id.user_desc);
+        userUsername = (TextView) findViewById(R.id.user_username);
+        userDesc = (TextView) findViewById(R.id.user_desc);
         userLocal = (TextView) findViewById(R.id.user_local);
 
-        SessionManagerUser sessionManagerUser = new SessionManagerUser(getApplicationContext());
+        sessionManagerUser = new SessionManagerUser(getApplicationContext());
         boolean toggleAccount = sessionManagerUser.isLogged();
 
-        User user;
         if (getIntent().getExtras() == null)
             user = sessionManagerUser.getUser();
         else
@@ -47,13 +52,14 @@ public class UserActivity extends ActionBarActivity {
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
+        /*
         userLocal.setText("Adresse " + getResources().getString(R.string.not_defined));
         if (user.getId_address() != -1 && user.getId_address() != 0)
             new getAddress().execute(user.getId_address());
         if (user.getFirstname() == null && user.getLastname() == null)
             userDesc.setText(R.string.no_info);
         else
-            userDesc.setText(user.getFirstname() + " " + user.getLastname());
+            userDesc.setText(user.getFirstname() + " " + user.getLastname());*/
 //        userLocal.setText(Need service get address from IdAddress);
 
 
@@ -119,6 +125,34 @@ public class UserActivity extends ActionBarActivity {
                     + result.getCountry() + " "
                     + result.getCity() + "\n"
                     + ((result.getPostalCode() == 0) ? "" : String.valueOf(result.getPostalCode())));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new getUser().execute(user.getUsername());
+    }
+
+    private class getUser extends AsyncTask<String, Void, User> {
+        SoapUserManager um = new SoapUserManager();
+
+        @Override
+        protected User doInBackground(String... params) {
+            return um.getUserByUsername(params[0]);
+        }
+
+        protected void onPostExecute(User gUser) {
+            user.setUser(gUser);
+            sessionManagerUser.setUser(user);
+            userLocal.setText("Adresse " + getResources().getString(R.string.not_defined));
+            if (user.getId_address() != -1 && user.getId_address() != 0)
+                new getAddress().execute(user.getId_address());
+            if (user.getFirstname() == null && user.getLastname() == null)
+                userDesc.setText(R.string.no_info);
+            else
+                userDesc.setText(((user.getFirstname() == null) ? "Nom" : user.getFirstname()) + " " + ((user.getLastname() == null) ? "Prénom" : user.getLastname()));
         }
     }
 }

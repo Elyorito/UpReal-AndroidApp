@@ -147,4 +147,10 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             prodPicture.setImageBitmap(BitmapFactory.decodeFile(path, options));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recreate();
+    }
 }

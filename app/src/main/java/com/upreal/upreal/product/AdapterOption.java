@@ -89,6 +89,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                 if (getItemCount() != 2) {
                     switch (i) {
                         case 0://Edit
+                            Intent intent = new Intent(v.getContext(), ProductUpdateActivity.class);
+                            intent.putExtra("prod", mProduct);
+                            v.getContext().startActivity(intent);
                             break;
                         case 1://Add list
 
