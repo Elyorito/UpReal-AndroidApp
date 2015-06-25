@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.list.AdapterListHomeCustom;
+import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.user.UserChangePwd;
 import com.upreal.upreal.user.UserUpdateActivity;
 import com.upreal.upreal.utils.Product;
@@ -83,15 +84,34 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
     @Override
     public void onBindViewHolder(AdapterOption.ViewHolder viewHolder, final int i) {
         viewHolder.text_option.setText(this.mOPTION[i]);
+
         viewHolder.mCardOption.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
+                builder = new AlertDialog.Builder(v.getContext());
                 if (getItemCount() != 2) {
                     switch (i) {
                         case 0://Edit
-                            Intent intent = new Intent(v.getContext(), ProductUpdateActivity.class);
-                            intent.putExtra("prod", mProduct);
-                            v.getContext().startActivity(intent);
+                            if (!mSessionManagerUser.isLogged()) {
+                                builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
+                                        .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                                                v.getContext().startActivity(intent);
+                                                dialog.dismiss();
+                                            }
+                                        }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                }).create().show();
+                            } else {
+                                Intent intent = new Intent(v.getContext(), ProductUpdateActivity.class);
+                                intent.putExtra("prod", mProduct);
+                                v.getContext().startActivity(intent);
+                            }
                             break;
                         case 1://Add list
 
@@ -109,7 +129,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                         }
                             Toast.makeText(v.getContext(),"List number= " + lists.length,Toast.LENGTH_LONG).show();
                         /*Builder MultiChoice List*/
-                            builder = new AlertDialog.Builder(v.getContext());
+
                             LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                             TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);

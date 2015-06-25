@@ -88,7 +88,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         });
         mSlidingTabLayout.setViewPager(mViewPager);
 
+/*
         new RetrievePicture().execute();
+*/
     }
 
     @Override
@@ -151,6 +153,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+/*
         recreate();
+*/
     }
 }
