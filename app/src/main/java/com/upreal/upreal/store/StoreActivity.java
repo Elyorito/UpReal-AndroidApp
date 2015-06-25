@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.upreal.upreal.view.SlidingTabLayout;
  */
 public class StoreActivity extends ActionBarActivity implements View.OnClickListener {
 
+    public static final String TAG = StoreActivity.class.getSimpleName();
     private Toolbar toolbar;
 
     private ViewPager mViewPager;
@@ -58,12 +60,9 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
 
         store = getIntent().getExtras().getParcelable("store");
 
-        if (store != null) {
-            System.out.println("totollll" + store.getName());
-        }
-        else {
-            System.out.println("C'EST NOUL");
-            store = new Store(1, "test", "test", 1 ,1);
+        if (store == null) {
+            Log.i(TAG, "Store in argument is null.");
+            return ;
         }
 
         title = new String(store.getName());
@@ -91,7 +90,7 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
         });
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        new RetrievePicture().execute();
+//        new RetrievePicture().execute();
     }
 
     @Override
@@ -99,7 +98,7 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -116,13 +115,14 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.geoloc:
                 Intent intent = new Intent(v.getContext(), GeolocalisationActivity.class);
+                Log.i(TAG, "Store id:" + store.getId() + ".");
                 intent.putExtra("id_store", store.getId());
                 v.getContext().startActivity(intent);
                 break ;

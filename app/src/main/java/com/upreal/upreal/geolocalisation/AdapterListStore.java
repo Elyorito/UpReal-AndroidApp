@@ -27,7 +27,7 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
 
     private List<Address> addresses;
     private List<String> distances;
-    private List<String> prices;
+    private List<Double> prices;
 
     private int id_address = -1;
 
@@ -52,7 +52,7 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         }
     }
 
-    AdapterListStore(List<Address> addresses, List<String> distances, List<String> prices) {
+    AdapterListStore(List<Address> addresses, List<String> distances, List<Double> prices) {
         this.addresses = addresses;
         this.distances = distances;
         this.prices = prices;
@@ -70,7 +70,8 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         holder.address_id.setText("" + addresses.get(position).getId());
         holder.address_name.setText(addresses.get(position).getAddress());
         holder.address_distance.setText(distances.get(position) + " km");
-        holder.product_price.setText(prices.get(position) + " €");
+        if (prices != null && !prices.isEmpty())
+            holder.product_price.setText(prices.get(position).toString() + " €");
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

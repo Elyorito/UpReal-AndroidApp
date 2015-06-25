@@ -29,8 +29,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.upreal.upreal.R;
+import com.upreal.upreal.store.StoreActivity;
 import com.upreal.upreal.utils.Address;
 import com.upreal.upreal.utils.SoapProductUtilManager;
+import com.upreal.upreal.utils.SoapStoreManager;
+import com.upreal.upreal.utils.SoapUserUtilManager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -54,17 +57,16 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
     private RecyclerView mRecyclerViewList;
     private RecyclerView.Adapter mAdapterList;
 
-    private int idProduct = -1;
-    private int idStore = -1;
-
+    private int idProduct;
+    private int idStore;
 
     private List<Address> absAddresses = new ArrayList<>();
     private List<String> absDistances = new ArrayList<>();
-    private List<String> absPrices = new ArrayList<>();
+    private List<Double> absPrices = new ArrayList<>();
 
     private List<Address> addresses = new ArrayList<>();
     private List<String> distances = new ArrayList<>();
-    private List<String> prices = new ArrayList<>();
+    private List<Double> prices = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,27 +94,26 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         idProduct = getIntent().getExtras().getInt("id_product");
         idStore = getIntent().getExtras().getInt("id_store");
 
-        if (idProduct != -1) {
-            Log.i(TAG, "Id product is " + idProduct + ".");
+        if (idProduct != 0 || idStore != 0) {
+            Log.i(TAG, "Id product is " + idStore + ".");
             new RetrieveAddress().execute();
-        } else if (idStore != -1) {
-
         } else {
             absAddresses.add(new Address(1, "24 Rue Pasteur", "", "France", "Le Kremlin Bicêtre", 94270));
             absAddresses.add(new Address(2, "85 Rue du Jardin public", "", "France", "Bordeaux", 33000));
             absAddresses.add(new Address(3, "5-9 Rue du Palais Rihour", "", "France", "Lille", 59000));
             absAddresses.add(new Address(4, "156 Rue Paul Bert", "", "France", "Lyon", 69003));
+            absPrices.add(new Double(10));
+            absPrices.add(new Double(10));
+            absPrices.add(new Double(10));
+            absPrices.add(new Double(10));
             updateAddressList(absAddresses);
+            updatePriceList(absPrices);
         }
 
         absDistances.add("20");
-        absPrices.add("20");
         absDistances.add("20");
-        absPrices.add("20");
         absDistances.add("20");
-        absPrices.add("20");
         absDistances.add("20");
-        absPrices.add("20");
 
         updateDistanceList(absDistances);
         updatePriceList(absPrices);
@@ -133,9 +134,9 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                 int pos = rv.getChildAdapterPosition(rv.findChildViewUnder(e.getX(), e.getY()));
 
                 Log.i(TAG, "Item touched at " + pos + ".");
-/*                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
                 intent.putExtra("id_adress", addresses.get(pos).getId());
-                getApplicationContext().startActivity(intent);*/
+                getApplicationContext().startActivity(intent);
             }
         });
 
@@ -150,7 +151,8 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                     if (marker.getTitle().contains(absAddresses.get(i).getAddress2())) {
                         updateAddressList(adressToList(absAddresses.get(i)));
                         updateDistanceList(stringToList(absDistances.get(i)));
-                        updatePriceList(stringToList(absPrices.get(i)));
+                        if (absPrices != null && !absPrices.isEmpty())
+                            updatePriceList(priceToList(absPrices.get(i)));
                         break;
                     }
                 }
@@ -177,6 +179,14 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         return tmp;
     }
 
+    private List<Double> priceToList(Double price) {
+        List<Double> tmp = new ArrayList<Double>();
+
+        if (price != null)
+            tmp.add(price);
+        return tmp;
+    }
+
     private List<String> stringToList(String s) {
         List<String> tmp = new ArrayList<String>();
 
@@ -198,10 +208,12 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         }
     }
 
-    private void updatePriceList(List<String> str) {
+    private void updatePriceList(List<Double> price) {
         prices.clear();
-        for (String s : str) {
-            prices.add(s);
+        if (price != null) {
+            for (Double s : price) {
+                prices.add(s);
+            }
         }
     }
 
@@ -301,14 +313,23 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         protected List<android.location.Address> doInBackground(Void... params) {
 
             SoapProductUtilManager pum = new SoapProductUtilManager();
+            SoapStoreManager sm = new SoapStoreManager();
             List<android.location.Address> addressesToGet = new ArrayList<android.location.Address>();
             android.location.Address address;
 
-            absAddresses = pum.getAddressByProduct(idProduct);
-//            absPrices = pum.getSortPriceProduct(idProduct);
+            if (idProduct != 0) {
+                absAddresses = pum.getAddressByProduct(idProduct);
+                absPrices = pum.getPriceByProduct(idProduct);
+            }
+            else if (idStore != 0) {
+                absAddresses.add(sm.getAddressByStore(idStore));
+            }
 
             if (absAddresses.isEmpty()) {
                 return null;
+            }
+            else {
+                Log.i(TAG, "Address:" + absAddresses.get(0).getAddress() + ", " + absAddresses.get(0).getPostalCode() + " " + absAddresses.get(0).getCity() + ", " + absAddresses.get(0).getCountry());
             }
 
             for (Address a : absAddresses) {
@@ -321,7 +342,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         }
 
         protected void onPostExecute(List<android.location.Address> addressesToGet) {
-            if (!absAddresses.isEmpty()) {
+            if (absAddresses != null && !absAddresses.isEmpty()) {
                 for (Address a : absAddresses) {
                     Log.i(TAG, "Address:" + a.toString());
                 }

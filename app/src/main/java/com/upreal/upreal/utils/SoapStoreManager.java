@@ -58,7 +58,7 @@ public class SoapStoreManager {
             if (results == null)
                 return null;
 
-            store = convertToQuery(results);
+            store = convertToStore(results);
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -70,7 +70,39 @@ public class SoapStoreManager {
         return store;
     }
 
-    private Store convertToQuery(SoapObject soapObject) {
+    public Address getAddressByStore(int id) {
+        String methodname = "getAddressByStore";
+        Address address = null;
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            SoapObject results= (SoapObject)envelope.getResponse();
+
+            if (results == null)
+                return null;
+
+            address = convertToAddress(results);
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return address;
+    }
+
+    private Store convertToStore(SoapObject soapObject) {
         Store store = new Store();
         if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
             store.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
@@ -84,6 +116,24 @@ public class SoapStoreManager {
             store.setId_company(Integer.parseInt(soapObject.getProperty("id_company").toString()));
 
         return store;
+    }
+
+    private Address convertToAddress(SoapObject soapObject) {
+        Address address = new Address();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            address.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("address") && soapObject.getProperty("address") != null)
+            address.setAddress(soapObject.getProperty("address").toString());
+        if (soapObject.hasProperty("address_2") && soapObject.getProperty("address_2") != null)
+            address.setAddress2(soapObject.getProperty("address_2").toString());
+        if (soapObject.hasProperty("city") && soapObject.getProperty("city") != null)
+            address.setCity(soapObject.getProperty("city").toString());
+        if (soapObject.hasProperty("country") && soapObject.getProperty("country") != null)
+            address.setCountry(soapObject.getProperty("country").toString());
+        if (soapObject.hasProperty("postal_code") && soapObject.getProperty("postal_code") != null)
+            address.setPostalCode(Integer.parseInt(soapObject.getProperty("postal_code").toString()));
+
+        return address;
     }
 
     private SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {

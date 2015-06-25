@@ -28,6 +28,7 @@ import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductUtilManager;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.SoapUserUtilManager;
+import com.upreal.upreal.utils.Store;
 import com.upreal.upreal.utils.User;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
@@ -48,6 +49,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
     private String mSOCIALOPT[];
     private Product mProduct;
     private User mUser;
+    private Store mStore;
     private SessionManagerUser sessionManagerUser;
 
     private String listLike;
@@ -84,6 +86,12 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
     public AdapterSocial(String SOCIALOPT[], User user, SessionManagerUser sessionManagerUser) {
         this.mSOCIALOPT = SOCIALOPT;
         this.mUser = user;
+        this.sessionManagerUser = sessionManagerUser;
+    }
+
+    public AdapterSocial(String SOCIALOPT[], Store store, SessionManagerUser sessionManagerUser) {
+        this.mSOCIALOPT = SOCIALOPT;
+        this.mStore = store;
         this.sessionManagerUser = sessionManagerUser;
     }
 

@@ -34,15 +34,15 @@ public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0: //Commentary
-                ProductFragmentCommentary com = new ProductFragmentCommentary();
+                StoreFragmentCommentary com = new StoreFragmentCommentary();
                 com.setArguments(bundle);
                 return com;
             case 1: //Social
-                ProductFragmentSocial social = new ProductFragmentSocial();
+                StoreFragmentSocial social = new StoreFragmentSocial();
                 social.setArguments(bundle);
                 return social;
             case 2: //Options
-                ProductFragmentOptions opt = new ProductFragmentOptions();
+                StoreFragmentOptions opt = new StoreFragmentOptions();
                 opt.setArguments(bundle);
                 return opt;
             default:

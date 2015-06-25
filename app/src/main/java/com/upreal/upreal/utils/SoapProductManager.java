@@ -337,6 +337,9 @@ public class SoapProductManager {
             testHttpResponse(ht);
 
             SoapPrimitive results = (SoapPrimitive)envelope.getResponse();
+            if (results == null)
+                return null;
+
             final File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
             final File file = new File(dir, type + "-" + id + ".jpg");
             OutputStream out = new BufferedOutputStream(new FileOutputStream(file));

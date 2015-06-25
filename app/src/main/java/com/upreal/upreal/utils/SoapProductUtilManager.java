@@ -129,6 +129,45 @@ public class SoapProductUtilManager {
         return listAddress;
     }
 
+    public List<Double> getPriceByProduct(int idProduct) {
+        List<Double> listPrices = new ArrayList<>();
+        String methodname = "getPriceByProduct";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", idProduct);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            Object response = envelope.getResponse();
+
+            if (response instanceof Vector) {
+                Vector<SoapPrimitive> results = (Vector<SoapPrimitive>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapPrimitive res = results.get(i);
+                    listPrices.add(Double.parseDouble(res.toString()));
+                }
+            } else if (response instanceof SoapPrimitive) {
+                SoapPrimitive result = (SoapPrimitive) response;
+                listPrices.add(Double.parseDouble(result.toString()));
+            }
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listPrices;
+    }
+
     private Address convertToQuery(SoapObject soapObject) {
         Address address = new Address();
         if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)

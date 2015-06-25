@@ -17,20 +17,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:text="address_name" />
+        android:text="" />
 
     <TextView
         android:id="@+id/address_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
-        android:text="address_distance" />
+        android:text="" />
 
     <TextView
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="250dp"
-        android:text="product_price" />
+        android:text="" />
 
 </RelativeLayout>

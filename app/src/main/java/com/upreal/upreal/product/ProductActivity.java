@@ -142,15 +142,17 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         @Override
         protected void onPostExecute(String path) {
             super.onPostExecute(path);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            prodPicture.setImageBitmap(BitmapFactory.decodeFile(path, options));
+            if (path != null) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                prodPicture.setImageBitmap(BitmapFactory.decodeFile(path, options));
+            }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        recreate();
+//        recreate();
     }
 }
