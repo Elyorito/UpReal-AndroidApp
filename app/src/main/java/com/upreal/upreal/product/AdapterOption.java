@@ -88,11 +88,11 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
         viewHolder.mCardOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                builder = new AlertDialog.Builder(v.getContext());
                 if (getItemCount() != 2) {
                     switch (i) {
                         case 0://Edit
                             if (!mSessionManagerUser.isLogged()) {
-                                builder = new AlertDialog.Builder(v.getContext());
                                 builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
@@ -115,7 +115,6 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             break;
                         case 1://Add list
 
-                            builder = new AlertDialog.Builder(v.getContext());
                         mDbHelper = new DatabaseHelper(v.getContext());
                         mDbQuery = new DatabaseQuery(mDbHelper);
                         mDatabase = mDbHelper.openDataBase();
@@ -129,17 +128,13 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                             lists[i] = listsElements[i][0];
                         }
                             Toast.makeText(v.getContext(),"List number= " + lists.length,Toast.LENGTH_LONG).show();
-                        /*Builder MultiChoice List*/
-
                             LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                             TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
-                            Log.v("AdapterOption", "addCustom.setOnClickListener");
                             addCustom.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
                                 public void onClick(View v) {
-                                    Log.v("AdapterOption", "addCustom.setOnClickListener => onClick");
                                     builderCustom = new AlertDialog.Builder(v.getContext());
                                     LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                     View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
@@ -155,9 +150,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
 
                                         /*mDbQuery.InsertData(new String("lists"), new String[]{"name", "public", "nb_items", "id_user"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(mSessionManagerUser.getUserId())});
                                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user"}, null, null, null, null, null);
-                                        */// TODO Auto-generated method stub
-                         /*
-                            *//*Refresh list item [BUG]*//**/
+                                        */
+                                            // TODO Auto-generated method stub
+                      /*Refresh list item [BUG]*/
 /*
 
                                         mAdapterListCust = new AdapterListHomeCustom(lists, delimiter);
@@ -176,8 +171,10 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                     builderCustom.setView(view).create().show();
                                 }
                             });
-                            Log.v("AdapterOption", "builder.setView");
-                            builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list))
+
+                            builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list)).create().show();
+
+                            /*builder.setTitle(v.getContext().getString(R.string.add_product_in_which_list))
                                     .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -189,14 +186,14 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             mDbHelper = new DatabaseHelper(dialogView.getContext());
                                             mDbQuery = new DatabaseQuery(mDbHelper);
                                             mDatabase = mDbHelper.openDataBase();
-/*                                            for (int i = 0; i < checkedList.size(); i++) {
+*//*                                            for (int i = 0; i < checkedList.size(); i++) {
                                                 Toast.makeText(dialogView.getContext(), "CheckedList[" + checkedList.get(i).toString() + "]", Toast.LENGTH_SHORT).show();
                                                 String[] testlist = mDbQuery.QueryGetElement("lists", new String[]{"name", "public", "nb_items", "id_user", "id"}, "id=?", new String[]{"1"}, null, null, null);
                                                 Toast.makeText(dialogView.getContext(), "NameList[" + testlist[0] + "]", Toast.LENGTH_SHORT).show();
                                                 Toast.makeText(dialogView.getContext(), "CheckedListSize[" + checkedList.size() + "]", Toast.LENGTH_SHORT).show();
-                                            }*//*
+                                            }
                                             mDatabase.close();
-  */                                      }
+  *//*                                      }
                                     }).setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -206,7 +203,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
 
                                     Toast.makeText(dialogView.getContext(), "NamemProduct=" + mProduct.getName(), Toast.LENGTH_SHORT).show();
                                     //String getprod[] = mDbQuery.MyRawQuery("SELECT name, ean, brand, product_id FROM product where product_id=" + "'" + Integer.toString(mProduct.getId()) + "'");
-//                                String getidprod[][] = mDbQuery.QueryGetElements("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
+                                    //String getidprod[][] = mDbQuery.QueryGetElements("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
                                     String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
                                     String getProduct[] = mDbQuery.QueryGetProduct("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
                                     //int nbElem = mDbQuery.QueryNbElements("product", new String[]{"name", "ean", "brand", "product_id"});
@@ -235,11 +232,8 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             Toast.makeText(dialogView.getContext(), "id_list=" + getITEMS[0] + "|id_product=" + getITEMS[1] + "|id_user=" + getITEMS[2], Toast.LENGTH_SHORT).show();
                                         else if (getITEMS[0] == null)
                                             mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(mSessionManagerUser.getUserId())});
-
-
                                     }
                                     mDatabase.close();
-
                                 }
                             }).setNegativeButton(v.getContext().getString(R.string.cancel),
                                     new DialogInterface.OnClickListener() {
@@ -248,8 +242,8 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             dialog.cancel();
                                         }
                                     }
-                            ).create().show();
-                            Log.v("AdapterOption", "end of addList");
+                            ).setView(dialogView);*/
+                            Toast.makeText(v.getContext(), "List User ID= " + mSessionManagerUser.getUserId(), Toast.LENGTH_SHORT).show();
                             break;
                         case 2://Troc
 

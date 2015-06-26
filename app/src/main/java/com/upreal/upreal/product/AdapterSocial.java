@@ -472,7 +472,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
             @Override
             protected void onPostExecute(Boolean b) {
                 super.onPostExecute(b);
-                if(b == true && sessionManagerUser.getUserId() > 0){
+                if(b == true && sessionManagerUser.isLogged()){
                     isLiked = true;
                     mDatabase = mDbHelper.openDataBase();
                     String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
