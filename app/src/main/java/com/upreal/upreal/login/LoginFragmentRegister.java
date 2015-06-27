@@ -46,6 +46,7 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
     private TextView e_confirm;
     private TextView e_email;
     private boolean complete;
+    private boolean uIsTaken;
 
     private Button but_register;
     private CheckedTextView checkedTextView;
@@ -79,6 +80,7 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
         but_register.setOnClickListener(this);
         builder = new AlertDialog.Builder(v.getContext());
         complete = true;
+        uIsTaken = false;
         return v;
     }
 
@@ -125,7 +127,7 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                     Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
                     complete = false;
                 }
-                if (complete) {
+                if (complete && !uIsTaken) {
                     InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
                     im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
                     new RetreiveRegisterAccount().execute();
@@ -162,11 +164,13 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
                 e_id.setText("Ce nom de compte existe déjà");
                 e_id.setVisibility(View.VISIBLE);
                 edit_id.setBackgroundColor(Color.RED);
+                uIsTaken = true;
                 complete = false;
             }
             else {
                 edit_id.setBackgroundColor(Color.GREEN);
                 e_id.setVisibility(View.GONE);
+                uIsTaken = false;
                 complete = true;
             }
         }

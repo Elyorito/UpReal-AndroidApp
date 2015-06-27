@@ -16,6 +16,8 @@ import com.upreal.upreal.utils.RateComment;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.upreal.upreal.R.drawable.empty;
+
 /**
  * Created by Elyo on 12/03/2015.
  */
@@ -60,6 +62,7 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
             return vhCom;
         }
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_commentary, viewGroup, false);
+
         ViewHolder vhCom = new ViewHolder(v, viewType);
 
         return vhCom;
