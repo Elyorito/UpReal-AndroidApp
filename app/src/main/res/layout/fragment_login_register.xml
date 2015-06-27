@@ -26,14 +26,32 @@
         android:inputType="textEmailAddress"
         android:hint="Nom utilisateur"/>
 
-    <EditText
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/red"
+            android:layout_below="@+id/edittext_register_id"
+            android:id="@+id/user_error" />
+
+        <EditText
         android:id="@+id/edittext_register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:inputType="textPassword"
-        android:layout_below="@+id/edittext_register_id"
+        android:layout_below="@+id/user_error"
         android:hint="@string/password"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:layout_below="@+id/edittext_register_password"
+            android:id="@+id/password_error" />
 
         <EditText
             android:id="@+id/edittext_register_password2"
@@ -41,8 +59,17 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="textPassword"
-            android:layout_below="@+id/edittext_register_password"
+            android:layout_below="@+id/password_error"
             android:hint="@string/confirm_password"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_below="@+id/edittext_register_password2"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:id="@+id/password_error2" />
 
         <EditText
             android:id="@+id/edittext_register_email"
@@ -50,24 +77,44 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="text"
-            android:layout_below="@+id/edittext_register_password2"
+            android:layout_below="@+id/password_error2"
             android:hint="@string/adresse_email"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_below="@+id/edittext_register_email"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:id="@+id/email_error" />
+
         <CheckedTextView
+            android:paddingTop="5dp"
             android:id="@+id/checktext_cgu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edittext_register_email"
+            android:layout_below="@+id/email_error"
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"
             android:checked="false"
             android:text="@string/cgu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_below="@+id/checktext_cgu"
+            android:textColor="@color/red"
+            android:text="Veuillez accepter les C.G.U"
+            android:visibility="gone"
+            android:id="@+id/cgu_error" />
 
         <Button
             android:id="@+id/button_login_connect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/register"
-            android:layout_below="@+id/checktext_cgu"/>
+            android:layout_below="@+id/cgu_error"/>
     </RelativeLayout>
 
     <RelativeLayout
