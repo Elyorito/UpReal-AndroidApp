@@ -81,10 +81,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
         mSlidingTabLayout.setDistributeEvenly(true);
-        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+      mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.ColorTabs);
+                return getResources().getColor(R.color.ColorPrimaryDark);
             }
         });
         mSlidingTabLayout.setViewPager(mViewPager);

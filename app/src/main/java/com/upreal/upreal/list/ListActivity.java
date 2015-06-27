@@ -191,12 +191,10 @@ public class ListActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-/*
-                Toast.makeText(getApplicationContext(),"Res:" + editList.getText().toString() + "ID:[" + Integer.toString(sessionManagerUser.getUserId()) + "]", Toast.LENGTH_SHORT).show();
-*/
                         if (editList.getText().length() <= 0) {
                             builderErrorShortList.create().show();
                             dialog.cancel();
+                            return;
                         }
                         mDatabase = mDbHelper.openDataBase();
                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
@@ -220,7 +218,6 @@ public class ListActivity extends AppCompatActivity {
                     }
                 });
                 builder.setView(view).create().show();
-                mAdapterListCust.notifyDataSetChanged();
             }
         });
     }
