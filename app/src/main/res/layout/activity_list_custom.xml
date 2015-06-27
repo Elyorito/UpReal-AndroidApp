@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:recyclerviewClipToPadding="true"
+        app:recyclerviewEmptyView="@layout/empty_layout"
         app:recyclerviewPadding="2dp">
     </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
 
