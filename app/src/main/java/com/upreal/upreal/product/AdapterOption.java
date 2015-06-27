@@ -172,9 +172,9 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                 }
                             });
 
-                            builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list)).create().show();
+                            //builder.setView(dialogView).setTitle(v.getContext().getString(R.string.add_product_in_which_list)).create().show();
 
-                            /*builder.setTitle(v.getContext().getString(R.string.add_product_in_which_list))
+                            builder.setTitle(v.getContext().getString(R.string.add_product_in_which_list))
                                     .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -186,14 +186,14 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             mDbHelper = new DatabaseHelper(dialogView.getContext());
                                             mDbQuery = new DatabaseQuery(mDbHelper);
                                             mDatabase = mDbHelper.openDataBase();
-*//*                                            for (int i = 0; i < checkedList.size(); i++) {
+/*                                            for (int i = 0; i < checkedList.size(); i++) {
                                                 Toast.makeText(dialogView.getContext(), "CheckedList[" + checkedList.get(i).toString() + "]", Toast.LENGTH_SHORT).show();
                                                 String[] testlist = mDbQuery.QueryGetElement("lists", new String[]{"name", "public", "nb_items", "id_user", "id"}, "id=?", new String[]{"1"}, null, null, null);
                                                 Toast.makeText(dialogView.getContext(), "NameList[" + testlist[0] + "]", Toast.LENGTH_SHORT).show();
                                                 Toast.makeText(dialogView.getContext(), "CheckedListSize[" + checkedList.size() + "]", Toast.LENGTH_SHORT).show();
                                             }
                                             mDatabase.close();
-  *//*                                      }
+  */                                      }
                                     }).setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -242,7 +242,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                             dialog.cancel();
                                         }
                                     }
-                            ).setView(dialogView);*/
+                            ).setView(dialogView).create().show();
                             Toast.makeText(v.getContext(), "List User ID= " + mSessionManagerUser.getUserId(), Toast.LENGTH_SHORT).show();
                             break;
                         case 2://Troc

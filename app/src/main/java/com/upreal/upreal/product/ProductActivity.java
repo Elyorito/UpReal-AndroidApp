@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import com.upreal.upreal.view.SlidingTabLayout;
 /**
  * Created by Elyo on 11/02/2015.
  */
-public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
+public class ProductActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
@@ -93,26 +94,19 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            SQLiteDatabase mDatabase;
-            DatabaseHelper mDbHelper;
-            DatabaseQuery mDbQuery;
-            mDbHelper = new DatabaseHelper(getApplicationContext());
-            mDbQuery = new DatabaseQuery(mDbHelper);
-            mDatabase = mDbHelper.openDataBase();
-            mDbHelper.deleteDataBase();
-            mDatabase.close();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                //Refresh Fiche produit
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

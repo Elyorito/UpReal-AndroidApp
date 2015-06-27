@@ -12,12 +12,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -43,7 +45,7 @@ import static android.view.GestureDetector.*;
 /**
  * Created by Elyo on 03/02/2015.
  */
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends AppCompatActivity {
 
 
     private Toolbar toolbar;
@@ -409,6 +411,10 @@ public class HomeActivity extends ActionBarActivity {
             case R.id.action_settings:
                 return true;
             case R.id.action_search:
+                if (!DrawerR.isDrawerVisible(Gravity.RIGHT))
+                    DrawerR.openDrawer(Gravity.RIGHT);
+                else
+                    DrawerR.closeDrawers();
                 Toast.makeText(HomeActivity.this, "Search !!", Toast.LENGTH_SHORT).show();
                 return true;
             default:

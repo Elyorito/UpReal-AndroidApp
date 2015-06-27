@@ -82,6 +82,8 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
 
             Toast.makeText(getActivity().getApplicationContext(), "Size Rate[" + Integer.toString(rateComments.size()) +"]", Toast.LENGTH_SHORT).show();*/
 /*            new RetrieveUsernameComment().execute();*/
+            if (rateComments == null)
+                 Toast.makeText(getActivity().getApplicationContext(), "RateCommentNB=", Toast.LENGTH_SHORT).show();
             mAdapter = new AdapterCommentary(rateComments);
             recyclerView.setAdapter(mAdapter);
         }

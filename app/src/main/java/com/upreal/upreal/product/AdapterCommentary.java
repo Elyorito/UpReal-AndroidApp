@@ -54,7 +54,11 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-
+        if (getItemCount() == 0) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.empty_layout, viewGroup, false);
+            ViewHolder vhCom = new ViewHolder(v, viewType);
+            return vhCom;
+        }
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_commentary, viewGroup, false);
         ViewHolder vhCom = new ViewHolder(v, viewType);
 
