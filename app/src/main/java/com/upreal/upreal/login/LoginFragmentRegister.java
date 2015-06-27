@@ -41,8 +41,15 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
     private EditText edit_password;
     private EditText edit_confirmpassword;
     private EditText edit_email;
+    private TextView e_id;
+    private TextView e_password;
+    private TextView e_confirm;
+    private TextView e_email;
+    private boolean complete;
+
     private Button but_register;
     private CheckedTextView checkedTextView;
+    private TextView e_cgu;
     public SessionManagerUser sessionManagerUser;
 
     private SQLiteDatabase mDatabase;
@@ -61,10 +68,17 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
         but_register = (Button) v.findViewById(R.id.button_login_connect);
         checkedTextView = (CheckedTextView) v.findViewById(R.id.checktext_cgu);
 
+        e_id = (TextView) v.findViewById(R.id.user_error);
+        e_password = (TextView) v.findViewById(R.id.password_error);
+        e_confirm = (TextView) v.findViewById(R.id.password_error2);
+        e_email = (TextView) v.findViewById(R.id.email_error);
+        e_cgu = (TextView) v.findViewById(R.id.cgu_error);
+
         checkedTextView.setOnClickListener(this);
         edit_id.setOnEditorActionListener(this);
         but_register.setOnClickListener(this);
         builder = new AlertDialog.Builder(v.getContext());
+        complete = true;
         return v;
     }
 
@@ -83,19 +97,39 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.button_login_connect:
+                e_confirm.setVisibility(View.GONE);
+                e_password.setVisibility(View.GONE);
+                e_email.setVisibility(View.GONE);
+                e_cgu.setVisibility(View.GONE);
                 if (!checkedTextView.isChecked()) {
-                    Toast.makeText(v.getContext(), "Please accept CGU", Toast.LENGTH_SHORT).show();
-                } else if (edit_password.length() < 6) {
-                    if (edit_password.length() == 0)
+                    e_cgu.setVisibility(View.VISIBLE);
+                    complete = false;
+                }
+                if (edit_password.length() < 6) {
+                    if (edit_password.length() == 0) {
+                        e_password.setText("Un mot de passe est requis");
+                        e_password.setVisibility(View.VISIBLE);
                         Toast.makeText(v.getContext(), "Password Empty", Toast.LENGTH_SHORT).show();
-                    else
+                        complete = false;
+                    }
+                    else {
+                        e_password.setText("Votre mot de passe doit contenir au moins 6 caractères");
+                        e_password.setVisibility(View.VISIBLE);
                         Toast.makeText(v.getContext(), "Password too short (Length > 6 caracters)", Toast.LENGTH_SHORT).show();
-                } else if (edit_password.toString() == edit_confirmpassword.toString()/*!edit_password.toString().equals(edit_confirmpassword.toString())*/) {
+                        complete = false;
+                    }
+                }
+                if (edit_password.toString() == edit_confirmpassword.toString()/*!edit_password.toString().equals(edit_confirmpassword.toString())*/) {
+                    e_confirm.setText("Vous n'avez pas entré le même mot de passe");
+                    e_confirm.setVisibility(View.VISIBLE);
                     Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
-                } else {
+                    complete = false;
+                }
+                if (complete) {
                     InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
                     im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
                     new RetreiveRegisterAccount().execute();
+                    complete = true;
                 }
                 break;
             case R.id.checktext_cgu:
@@ -125,10 +159,15 @@ public class LoginFragmentRegister extends Fragment implements View.OnClickListe
             super.onPostExecute(isTaken);
             if (isTaken) {
                 Toast.makeText(getActivity().getApplicationContext(), "Username Already Taken", Toast.LENGTH_SHORT).show();
+                e_id.setText("Ce nom de compte existe déjà");
+                e_id.setVisibility(View.VISIBLE);
                 edit_id.setBackgroundColor(Color.RED);
+                complete = false;
             }
             else {
                 edit_id.setBackgroundColor(Color.GREEN);
+                e_id.setVisibility(View.GONE);
+                complete = true;
             }
         }
     }
