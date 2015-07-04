@@ -14,11 +14,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.github.clans.fab.FloatingActionButton;
 import com.upreal.upreal.R;
+import com.upreal.upreal.utils.DividerItemDecoration;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
@@ -70,6 +72,7 @@ public class ListActivity extends AppCompatActivity {
     private ArrayList<ArrayList<String[]>> listsBase = new ArrayList<>();
 
     private EditText editList;
+    private TextView delimiterTextView;
 
     private View view;
     private final ArrayList<String[]> arrayListCust = new ArrayList<String[]>();
@@ -81,6 +84,7 @@ public class ListActivity extends AppCompatActivity {
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
 
+        delimiterTextView = (TextView) findViewById(R.id.custom_list);
         //Init Database
         mDbHelper = new DatabaseHelper(this);
         mDbQuery = new DatabaseQuery(mDbHelper);
@@ -110,7 +114,7 @@ public class ListActivity extends AppCompatActivity {
                 , getString(R.string.my_commentary)
                 , getString(R.string.my_barter_product_list)};
         delimiter = new String[] {getString(R.string.customized_list)};
-
+        delimiterTextView.setText(getString(R.string.customized_list));
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(R.string.list);
 /*
@@ -125,7 +129,12 @@ public class ListActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "ListLike" + listLike[0],Toast.LENGTH_SHORT).show();
         if (listLike[0] != null) {
             getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listLike[0]}, null, null, null);
-            listsBase.add(getProduct(getITEMS, mDbQuery));
+            if (getITEMS[0][0] == null)
+                listsBase.add(null);
+            else
+                listsBase.add(getProduct(getITEMS, mDbQuery));
+        /*    Toast.makeText(getApplicationContext(),"GetItem nb=" + getITEMS.length, Toast.LENGTH_SHORT).show();
+            */
         } else
             listsBase.add(null);
         getITEMS = null;
@@ -148,7 +157,8 @@ public class ListActivity extends AppCompatActivity {
         floatingButtonAddList = (FloatingActionButton) findViewById(R.id.fabaddlist);
         mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlist);
         mRecyclerViewList.setHasFixedSize(true);
-        //mRecyclerViewList.setLayoutManager();
+        mRecyclerViewList.addItemDecoration(
+                new DividerItemDecoration(this, null));
         mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
         mAdapterList = new AdapterListHomeBase(listsBase, base_list, delimiter);
         mRecyclerViewList.setAdapter(mAdapterList);
@@ -165,7 +175,7 @@ public class ListActivity extends AppCompatActivity {
         });
 
         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-        Toast.makeText(getApplicationContext(), "TEST" + " length= " + lists.length, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "TEST" + " length= " + lists.length, Toast.LENGTH_SHORT).show();
         mDatabase.close();
         mRecyclerViewListCust = (RecyclerView) findViewById(R.id.recyclerlistCust);
         mRecyclerViewListCust.setHasFixedSize(true);
@@ -227,7 +237,7 @@ public class ListActivity extends AppCompatActivity {
         ArrayList<String[]> products = new ArrayList<>();
         String[] prod = null;
 
-        if (items == null) {
+        if (items == null || items.length == 0) {
             products.add(null);
             return products;
         }

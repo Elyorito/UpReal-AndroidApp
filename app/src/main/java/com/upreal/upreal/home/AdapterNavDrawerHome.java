@@ -22,7 +22,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
     private static final int TYPE_ITEM = 1;
 
     private String mNavTitles[];
-    private String mNavAccount[];
+    private String mNavAccount;
     private CircleImageView mCircle;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +47,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         }
     }
 
-    AdapterNavDrawerHome(String Account[], String Titles[]) {
+    AdapterNavDrawerHome(String Account, String Titles[]) {
             this.mNavAccount = Account;
         this.mNavTitles = Titles;
 
@@ -82,7 +82,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         }
         else {
             if (position == 0) {
-                holder.connexion_name.setText("UserTest");
+                holder.connexion_name.setText(this.mNavAccount);
                 Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);
                 holder.mImageViewProfile.setImageBitmap(output);

@@ -36,6 +36,7 @@ import com.upreal.upreal.scan.Camera2Activity;
 import com.upreal.upreal.scan.Camera2Fragment;
 import com.upreal.upreal.scan.CameraActivity;
 import com.upreal.upreal.user.UserActivity;
+import com.upreal.upreal.utils.DividerItemDecoration;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
@@ -151,9 +152,11 @@ public class HomeActivity extends AppCompatActivity {
         /*RecyclerView NavigDrawL*/
 
         mRecyclerViewL = (RecyclerView) findViewById(R.id.RecyclerView_NavigationDrawer);
+        mRecyclerViewL.addItemDecoration(
+                new DividerItemDecoration(this, null));
         mRecyclerViewL.setHasFixedSize(true);
         if (toggleAccount)
-            mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
+            mAdapterL = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT);
         else
             mAdapterL = new AdapterNavDrawerConnectHome(ACCOUNT, ITEM_WACCOUNT);
         mRecyclerViewL.setAdapter(mAdapterL);
@@ -305,7 +308,7 @@ public class HomeActivity extends AppCompatActivity {
                                 intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
                                 homeReceiver = new HomeReceiver();
                                 registerReceiver(homeReceiver, intentFilter);
-                                mAdapterL = new AdapterNavDrawerHome(ACCOUNT, ITEM_WACCOUNT);
+                                mAdapterL = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT);
                                 mDbHelper.deleteDataBase();
                                 recreate();
                                 return true;
