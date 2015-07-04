@@ -24,7 +24,9 @@ public class Address implements Parcelable {
         this.postalCode = postalCode;
     }
 
-    public Address() {}
+    public Address() {
+
+    }
 
     public String getAddress() {
         return address;

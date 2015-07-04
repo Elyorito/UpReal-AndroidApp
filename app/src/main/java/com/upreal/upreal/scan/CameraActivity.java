@@ -20,18 +20,6 @@ import com.upreal.upreal.utils.SoapProductManager;
 
 public class CameraActivity extends Activity implements View.OnClickListener {
 
-    /*
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_camera);
-            if (null == savedInstanceState) {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, Camera2Fragment.newInstance())
-                        .commit();
-            }
-        }
-    */
     private Button scanner;
     private TextView formatTxt, contentTxt;
     private AlertDialog.Builder builder;
@@ -70,84 +58,16 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             }
         }
     }
-/*
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText(scanContent);
-            new RetrieveScannedProduct().execute();
-
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-*/
-/*        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                // Handle successful scan
-                Toast toast = Toast.makeText(this, "Content:" + contents + " Format:" + format , Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 25, 400);
-                toast.show();
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 25, 400);
-                toast.show();
-
-            }
-        }*/
-//    }
-
-    /*private class RetrieveComment extends AsyncTask<Void, Void, List<RateComment>> {
-
-        User user = new User();
-
-        @Override
-        protected List<RateComment> doInBackground(Void... params) {
-            SoapGlobalManager gm = new SoapGlobalManager();
-            listComment = gm.getRateComment(0, prod.getId(), 0, 1, 0);
-            SoapUserManager um = new SoapUserManager();
-            for (int i = 0; i < listComment.size(); i++) {
-                user = um.getAccountInfoUsername(Integer.parseInt(listComment.get(i).getmNameUser().toString()));
-                listComment.get(i).setmNameUser(user.getUsername());
-            }
-            return listComment;
-        }
-
-        @Override
-        protected void onPostExecute(List<RateComment> rateComments) {
-            super.onPostExecute(rateComments);
-            Toast.makeText(getActivity().getApplicationContext(), "userName[" + user.getUsername() +"]", Toast.LENGTH_SHORT).show();
-           *//* Toast.makeText(getActivity().getApplicationContext(), "ProdID[" + Integer.toString(prod.getId()) +"]", Toast.LENGTH_SHORT).show();
-
-            Toast.makeText(getActivity().getApplicationContext(), "Size Rate[" + Integer.toString(rateComments.size()) +"]", Toast.LENGTH_SHORT).show();*//*
-*//*            new RetrieveUsernameComment().execute();*//*
-            mAdapter = new AdapterCommentary(rateComments);
-            recyclerView.setAdapter(mAdapter);
-        }
-    }*/
 
     public void onClick(View v) {
         if (v.getId() == R.id.scanner) {
 
             intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
+/*
             intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+*/
             startActivityForResult(intent, 0);
-/*
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-*/
-            // Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-            //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-            //startActivityForResult(intent, 0);
-/*
-            scanIntegrator.initiateScan();
-*/
         }
     }
 

@@ -151,14 +151,14 @@ public class SoapUserUtilManager {
     }
 
     public int registerAddress(Address address) {
-        String methodname = "register";
+        String methodname = "registerAddress";
         int result = -1;
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("address", address.getAddress());
-        request.addProperty("address2", address.getAddress2());
-        request.addProperty("country", address.getCountry());
-        request.addProperty("city", address.getCity());
+        request.addProperty("address", (address.getAddress() == null) ? "" : address.getAddress());
+        request.addProperty("address_2", (address.getAddress2() == null) ? "" : address.getAddress2());
+        request.addProperty("city", (address.getCity() == null) ? "" : address.getCity());
+        request.addProperty("country", (address.getCountry() == null) ? "" : address.getCountry());
         request.addProperty("postal_code", address.getPostalCode());
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
@@ -169,7 +169,7 @@ public class SoapUserUtilManager {
             testHttpResponse(ht);
             SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
 
-            result = Integer.getInteger(results.toString());
+            result = Integer.parseInt(results.toString());
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
