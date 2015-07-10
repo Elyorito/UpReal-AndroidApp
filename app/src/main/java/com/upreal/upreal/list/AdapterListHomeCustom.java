@@ -17,11 +17,8 @@ import java.util.ArrayList;
  */
 public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHomeCustom.ViewHolder>{
 
-    private static final int TYPE_HEADER = 0;
     private static final int TYPE_CUSTOM = 1;
 
-    //private AlertDialog.Builder builder;
-    private String[] mDelimiter;
     private ArrayList<String[]> mListCust;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,10 +31,6 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
             if (viewType == TYPE_CUSTOM) {
                 list_name = (TextView) itemView.findViewById(R.id.rowtextlist);
                 HolderId = 1;
-            } else
-            if (viewType == TYPE_HEADER){
-                list_name = (TextView) itemView.findViewById(R.id.rowtextlist);
-                HolderId = 0;
             }
         }
     }
@@ -45,7 +38,6 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     AdapterListHomeCustom(ArrayList<String[]> list_cust, String delimiter[]) {
 
         this.mListCust = list_cust;
-        this.mDelimiter = delimiter;
     }
 
     @Override
@@ -55,12 +47,6 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
             ViewHolder vhcust = new ViewHolder(v, viewType);
 
             return vhcust;
-        } else
-        if (viewType == TYPE_HEADER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_home, parent, false);
-            ViewHolder vhitem = new ViewHolder(v, viewType);
-
-            return vhitem;
         }
         return null;
     }
@@ -68,10 +54,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     @Override
     public void onBindViewHolder(AdapterListHomeCustom.ViewHolder holder, final int position) {
         if (holder.HolderId == 1) {
-            holder.list_name.setText(mListCust.get(position - 1)[0]);
-        } else
-        if (holder.HolderId == 0) {
-            holder.list_name.setText(mDelimiter[0]);
+            holder.list_name.setText(mListCust.get(position)[0]);
         }
         holder.list_name.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -80,8 +63,8 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
                     case R.id.rowtextlist:
                         if (position != 0) {
                             //Toast.makeText(v.getContext(),mListCust.get(position -1)[0], Toast.LENGTH_SHORT).show();
-                            mListCust.remove(position - 1);
-                            notifyItemRemoved(position - 1);
+                            mListCust.remove(position);
+                            notifyItemRemoved(position);
                         }
                         return true;
                     default:
@@ -97,7 +80,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
                     case R.id.rowtextlist:
                         if (position != 0) {
                             Intent intent = new Intent(v.getContext(), ListCustomActivity.class);
-                            intent.putExtra("listcustom", mListCust.get(position - 1));
+                            intent.putExtra("listcustom", mListCust.get(position));
                             v.getContext().startActivity(intent);
                         }
                         break;
@@ -110,19 +93,13 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
 
     @Override
     public int getItemViewType(int position) {
-        if (isPositionHeader(position))
-            return TYPE_HEADER;
         return TYPE_CUSTOM;
-    }
-
-    private boolean isPositionHeader(int position) {
-        return position == 0;
     }
 
     @Override
     public int getItemCount() {/*
         if (mListCust.length == 0)
             return mListCust.length;*/
-        return mListCust.size() + 1;
+        return mListCust.size();
     }
 }
