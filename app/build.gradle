@@ -34,4 +34,6 @@ dependencies {
     compile "com.google.android.gms:play-services:7.5.0"
     compile 'com.marshalchen.ultimaterecyclerview:library:0.3.5'
     compile 'com.android.support:design:22.2.0'
+    compile 'com.google.android.gms:play-services:5.0.+@aar'
+    wearApp project(':uprealwear')
 }

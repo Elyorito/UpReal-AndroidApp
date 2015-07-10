@@ -24,6 +24,7 @@ import com.upreal.upreal.home.HomeActivity;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.User;
+import com.upreal.upreal.utils.WearManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 
@@ -118,6 +119,8 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             if (!s) {
                 builder.create().show();
             } else {
+                WearManager.notifyWear(getActivity().getApplicationContext(), "Connected successfully !");
+
                 mDbHelper = new DatabaseHelper(getActivity().getApplicationContext());
                 mDbQuery = new DatabaseQuery(mDbHelper);
                 mDatabase = mDbHelper.openDataBase();
