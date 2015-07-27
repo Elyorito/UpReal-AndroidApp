@@ -23,11 +23,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".utils.NotificationActivity"
-            android:exported="true"
-            android:allowEmbedded="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.DeviceDefault.Light" />
     </application>
 
 </manifest>
