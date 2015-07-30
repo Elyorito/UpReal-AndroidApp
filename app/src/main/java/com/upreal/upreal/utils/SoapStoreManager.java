@@ -158,4 +158,45 @@ public class SoapStoreManager {
         header.add(headerPropertyObj);
         return header;
     }
+
+    public List<Store> getListStore(String searchName) {
+
+        List<Store> listStore = new ArrayList<>();
+        String methodname = "getStoreByName";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("keyword", searchName);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            /*SoapObject results= (SoapObject)envelope.getResponse();*/
+            Object response = envelope.getResponse();
+
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listStore.add(this.convertToStore(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listStore.add(this.convertToStore(result));
+            }
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listStore;
+    }
 }

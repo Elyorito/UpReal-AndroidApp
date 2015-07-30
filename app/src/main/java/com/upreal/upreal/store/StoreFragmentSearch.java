@@ -1,4 +1,4 @@
-package com.upreal.upreal.user;
+package com.upreal.upreal.store;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,26 +9,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.upreal.upreal.R;
-import com.upreal.upreal.utils.SoapUserManager;
-import com.upreal.upreal.utils.User;
+import com.upreal.upreal.utils.SoapStoreManager;
+import com.upreal.upreal.utils.Store;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Elyo on 16/02/2015.
+ * Created by Eric on 30/07/2015.
  */
-public class UserFragmentSearch extends Fragment {
-
-    //test
-/*    private String sProduct[];*/
+public class StoreFragmentSearch extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private String mSearchName;
-    private List<User> listUser = new ArrayList<User>();
+    private List<Store> listStore = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,36 +35,32 @@ public class UserFragmentSearch extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 2));
         //Test
-        new RetrieveUser().execute();
-/*//test
-        mAdapter = new ProductSearchAdapter(sProduct);
-*/
- //       mAdapter = new ProductSearchAdapter(listProd);
+        new RetrieveStore().execute();
+
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
     }
 
-    private class RetrieveUser extends AsyncTask<Void, Void, List<User>> {
+    private class RetrieveStore extends AsyncTask<Void, Void, List<Store>> {
 
-        private String list_user;
-        private List<User> listuser = new ArrayList<User>();
+        private List<Store> liststore = new ArrayList<Store>();
         @Override
-        protected List<User> doInBackground(Void... params) {
+        protected List<Store> doInBackground(Void... params) {
 
-            SoapUserManager pm =  new SoapUserManager();
+            SoapStoreManager pm =  new SoapStoreManager();
             /*list_product = ex.getProduct(mSearchName);*/
-            listuser = pm.getListUser(mSearchName);
-            return listuser;
+            liststore = pm.getListStore(mSearchName);
+            return liststore;
         }
 
         @Override
-        protected void onPostExecute(List<User> list) {
+        protected void onPostExecute(List<Store> list) {
             super.onPostExecute(list);
             int nb = list.size();
 
-            listUser = list;
-            mAdapter = new UserSearchAdapter(listUser);
+            listStore = list;
+            mAdapter = new StoreSearchAdapter(listStore);
             mRecyclerView.setAdapter(mAdapter);
         }
     }

@@ -39,8 +39,8 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
     private CharSequence title;
 
     private TextView storeName;
-    private TextView prodCategorie;
-    private TextView prodShortDesc;
+    private TextView storeWeb;
+    private TextView storeCompany;
     private ImageView storePicture;
 
     private Button geoloc;
@@ -50,9 +50,9 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
 
-        storeName = (TextView) findViewById(R.id.store_name);/*
-        prodCategorie = (TextView) findViewById(R.id.product_categorie);
-        prodShortDesc = (TextView) findViewById(R.id.product_desc);*/
+        storeName = (TextView) findViewById(R.id.store_name);
+        storeWeb = (TextView) findViewById(R.id.store_website);
+        storeCompany = (TextView) findViewById(R.id.store_company);
         storePicture = (ImageView) findViewById(R.id.store_picture);
 
         geoloc = (Button) findViewById(R.id.geoloc);
@@ -67,10 +67,9 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
 
         title = new String(store.getName());
         storeName.setText(store.getName());
-/*
-        prodCategorie.setText("Categorie");
-        prodShortDesc.setText("Short Description empty");
-*/
+        storeWeb.setText(store.getWebsite());
+        storeCompany.setText(store.getCompanyName());
+
         CharSequence tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(title);

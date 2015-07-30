@@ -1,1 +1,1 @@
-include ':app', ':uprealwear', ':uprealwear'
+include ':uprealwear', ':uprealwear', ':app'

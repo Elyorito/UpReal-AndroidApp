@@ -31,7 +31,7 @@ public class StoreFragmentOptions extends android.support.v4.app.Fragment {
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        OPTION = new String[] {"Suivre ce magasin"};
+        OPTION = new String[] {"Modifier les informations", "Proposer un produit existant", "Voir les produits"};
         mAdapter = new AdapterOption(OPTION);
         recyclerView.setAdapter(mAdapter);
 

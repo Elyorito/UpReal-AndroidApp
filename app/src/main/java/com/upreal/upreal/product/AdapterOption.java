@@ -93,7 +93,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                     switch (i) {
                         case 0://Edit
                             if (!mSessionManagerUser.isLogged()) {
-                                builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
+                                builder.setTitle("Vous voulez changer ce produit ?").setMessage("Connectez-vous pour continuer.")
                                         .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

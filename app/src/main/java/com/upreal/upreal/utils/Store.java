@@ -64,6 +64,8 @@ public class Store implements Parcelable {
         this.id_company = id_company;
     }
 
+    public String getCompanyName() {return "Non accessible";}
+
     @Override
     public int describeContents() {
         return 0;

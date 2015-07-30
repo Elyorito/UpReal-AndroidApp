@@ -241,23 +241,6 @@ public class SoapUserManager {
             SoapObject res2 = (SoapObject) envelope.getResponse();
 
             user = convertToQuery(res2);
-/*
-            user.setId(Integer.parseInt(res2.getPropertyAsString("id")));
-            user.setUsername(res2.getPropertyAsString("username"));
-            if (!res2.hasProperty("firstname"))
-                user.setFirstname(res2.getPropertyAsString("firstname"));
-            if (!res2.hasProperty("lastname"))
-                user.setLastname(res2.getPropertyAsString("lastname"));
-            user.setEmail(res2.getPropertyAsString("email"));
-            user.setPassword(res2.getPropertyAsString("password"));
-            if (!res2.hasProperty("phone"))
-                user.setPhone(Integer.parseInt(res2.getPropertyAsString("phone")));
-            if (!res2.hasProperty("id_address"))
-                user.setId_address(Integer.parseInt(res2.getPropertyAsString("id_address")));
-            if (!res2.hasProperty("short_desc"))
-                user.setShort_desc(res2.getPropertyAsString("short_desc"));
-*/
-
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
