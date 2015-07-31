@@ -49,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private boolean checkDataBase(){
         boolean checkdb = false;
         try{
-            String myPath = mContext.getFilesDir().getAbsolutePath().replace("files", "databases")+File.separator + DB_NAME;
+            String myPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath().replace("files", "databases") + File.separator + DB_NAME;
             File dbfile = new File(myPath);
             checkdb = dbfile.exists();
         }

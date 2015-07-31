@@ -138,6 +138,11 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                 intent.putExtra("id_adress", addresses.get(pos).getId());
                 getApplicationContext().startActivity(intent);
             }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean b) {
+
+            }
         });
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {

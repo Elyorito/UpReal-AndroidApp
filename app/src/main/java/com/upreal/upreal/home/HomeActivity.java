@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_home_news);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         Toast.makeText(getApplicationContext(), "IdUser=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_SHORT).show();
         //sessionManagerUser.deleteALL();
@@ -123,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
                 this.getString(R.string.parrainage),
                 this.getString(R.string.acheivement),
                 this.getString(R.string.settings),
-                "Deconnexion",
+                getString(R.string.deconnexion),
         "lol"};
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
@@ -137,7 +137,8 @@ public class HomeActivity extends AppCompatActivity {
             String tab[] = sessionManagerUser.getRegisterLoginUser();
            Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
         }
-        /*RecyclerView MainView Home*/
+        /*RecyclerView MainView Home OLD*/
+/*
         mRecyclerViewHome = (RecyclerView) findViewById(R.id.RecyclerView_Home);
         mRecyclerViewHome.setHasFixedSize(true);
         mRecyclerViewHome.setLayoutManager(new GridLayoutManager(this, 1));
@@ -148,8 +149,19 @@ public class HomeActivity extends AppCompatActivity {
         mViewpager_slideshow = (ViewPager) findViewById(R.id.viewpager_home);
         mAdapterSlide = new SlideViewPagerAdapter(this);
         mViewpager_slideshow.setAdapter(mAdapterSlide);
+*/
+        /*RecyclerView MainView News*/
 
-        /*RecyclerView NavigDrawL*/
+        mRecyclerViewHome = (RecyclerView) findViewById(R.id.RecyclerView_Home);
+        mRecyclerViewHome.setHasFixedSize(true);
+        mRecyclerViewHome.setLayoutManager(new GridLayoutManager(this, 1));
+        String Title[] = {"Welcome to upreal !","Les dernieres promotion du mois de juillet disponible !", "Fusion entre UpReal et Dealabs !"};
+        int type[] = {1, 2, 1};
+        String imagepath[] = {"path1", "path2", "path3"};
+        mAdapterHome = new AdapterHomeNews(Title, imagepath,type);
+        mRecyclerViewHome.setAdapter(mAdapterHome);
+
+      /*RecyclerView NavigDrawL*/
 
         mRecyclerViewL = (RecyclerView) findViewById(R.id.RecyclerView_NavigationDrawer);
         mRecyclerViewL.addItemDecoration(
@@ -323,6 +335,11 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean b) {
 
             }
         });

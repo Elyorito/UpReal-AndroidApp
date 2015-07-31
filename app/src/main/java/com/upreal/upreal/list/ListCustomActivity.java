@@ -153,6 +153,11 @@ public class ListCustomActivity extends AppCompatActivity {
 
         dragDropTouchListener = new DragDropTouchListener(mUltimateRecyclerView.mRecyclerView, this) {
             @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean b) {
+
+            }
+
+            @Override
             protected void onItemSwitch(RecyclerView recyclerView, int i, int i1) {
                 if (i >= 0 && i1 >= 0) {
                     mAdapterList.swapPositions(products, i, i1);
