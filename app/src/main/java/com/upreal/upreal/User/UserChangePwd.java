@@ -1,4 +1,4 @@
-package com.upreal.upreal.user;
+package com.upreal.upreal.User;
 
 import android.app.Activity;
 import android.app.AlertDialog;

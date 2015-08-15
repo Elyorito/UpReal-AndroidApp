@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Product;
+import com.upreal.upreal.utils.Rate;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapUserManager;
@@ -33,7 +34,8 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Button but;
     private Product prod;
-    private List<RateComment> listComment = new ArrayList<RateComment>();
+    private List<Rate> listRate = new ArrayList<Rate>();
+    private List<RateComment> listComment = new ArrayList<>();
 
     @Nullable
     @Override
@@ -61,15 +63,19 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
     private class RetrieveComment extends AsyncTask<Void, Void, List<RateComment>> {
 
         User user = new User();
+        RateComment rateComment;
 
         @Override
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            listComment = gm.getRateComment(0, prod.getId(), 0, 1, 0);
+            listRate = gm.getRate(prod.getId(), 2, 1);
             SoapUserManager um = new SoapUserManager();
-            for (int i = 0; i < listComment.size(); i++) {
-                user = um.getAccountInfoUsername(Integer.parseInt(listComment.get(i).getmNameUser().toString()));
-                listComment.get(i).setmNameUser(user.getUsername());
+            for (int i = 0; i < listRate.size(); i++) {
+                user = um.getAccountInfoUsername(listRate.get(i).getmId_user());
+                rateComment = new RateComment();
+                rateComment.setmNameUser(user.getUsername());
+                rateComment.setmTextComment(listRate.get(i).getmCommentary());
+                listComment.add(rateComment);
             }
             return listComment;
         }
@@ -82,8 +88,8 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
 
             Toast.makeText(getActivity().getApplicationContext(), "Size Rate[" + Integer.toString(rateComments.size()) +"]", Toast.LENGTH_SHORT).show();*/
 /*            new RetrieveUsernameComment().execute();*/
-            if (rateComments == null)
-                 Toast.makeText(getActivity().getApplicationContext(), "RateCommentNB=", Toast.LENGTH_SHORT).show();
+            if (rateComments != null)
+                 Toast.makeText(getActivity().getApplicationContext(), "RateCommentname=" + rateComments.size(), Toast.LENGTH_SHORT).show();
             mAdapter = new AdapterCommentary(rateComments);
             recyclerView.setAdapter(mAdapter);
         }

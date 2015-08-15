@@ -3,21 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_margin="10dp">
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/home_app_bar"/>
 
     <LinearLayout
         android:id="@+id/newsarticle"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <LinearLayout
             android:id="@+id/viewA"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.4"
+            android:layout_weight="0.5"
             android:background="@color/red"
             android:orientation="horizontal">
             <ImageView
@@ -30,18 +34,18 @@
             android:id="@+id/viewB"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:background="@color/orange"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/titlenews"
+                android:id="@+id/bodynews"
                 android:textStyle="bold"
                 android:layout_marginTop="25dp"
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TitleSample"/>
+                android:text="BodySample"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -55,4 +59,4 @@
         app:layout_anchor="@id/viewA"
         app:layout_anchorGravity="bottom|left|end"/>
 
- </android.support.design.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout>

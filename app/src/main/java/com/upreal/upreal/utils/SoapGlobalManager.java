@@ -36,6 +36,46 @@ public class SoapGlobalManager {
         }
     }
 
+    public List<Article> getNews(){
+        List<Article> listNews = new ArrayList<Article>();
+
+        int nbProduct;
+        String data = null;
+        String methodname = "getNews";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            Object response = envelope.getResponse();
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listNews.add(this.convertToQueryNews(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listNews.add(this.convertToQueryNews(result));
+            }
+
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listNews;
+    }
+
     public Boolean getLikeOnProduct(int idUser, int idProduct, int idOvrRate, int type, int idArticle) {
 
         Boolean isSuccess = false;
@@ -63,7 +103,57 @@ public class SoapGlobalManager {
         return isSuccess;
     }
 
-    public List<RateComment> getRateComment(int idUser, int idProduct, int idOvrRate, int type, int idArticle) {
+    public List<Rate> getRate(int id_target, int id_target_type, int type) {
+        List<Rate> listRate = new ArrayList<Rate>();
+
+        String methodname = "getRate";
+        Rate rate = new Rate();
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        if (id_target_type == 1) {
+            request.addProperty("id_target", id_target);
+            request.addProperty("id_target_type", id_target_type);
+            request.addProperty("type", type);
+        }
+        if (id_target_type == 2){
+            request.addProperty("id_target", id_target);
+            request.addProperty("id_target_type", id_target_type);
+            request.addProperty("type", type);
+        }
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            /*SoapObject results= (SoapObject)envelope.getResponse();*/
+            Object response = envelope.getResponse();
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listRate.add(this.convertToQueryRate(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listRate.add(this.convertToQueryRate(result));
+            }
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listRate;
+    }
+
+    public List<RateComment> getRateCommentOLD(int idUser, int idProduct, int idOvrRate, int type, int idArticle) {
         List<RateComment> listRate = new ArrayList<RateComment>();
 
         int nbProduct;
@@ -93,29 +183,12 @@ public class SoapGlobalManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listRate.add(this.convertToQuery(res));
+                    //listRate.add(this.convertToQueryRate(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listRate.add(this.convertToQuery(result));
+                //listRate.add(this.convertToQueryRate(result));
             }
-
-/*
-            nbProduct = results.getAttributeCount();
-*/
-/*
-            data = results.getProperty("Product").toString();
-*/
-/*
-            for (SoapObject res : results)
-                listRate.add(this.convertToQuery(res, data));
-*/
-
-/*
-            if (results instanceof SoapObject) {
-                data = results.getProperty("ean").toString();
-            }
-*/
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -127,13 +200,26 @@ public class SoapGlobalManager {
         return listRate;
     }
 
-    private RateComment convertToQuery(SoapObject soapObject) {
-        RateComment rate = new RateComment();
-        rate.setmTextComment(soapObject.getPropertyAsString("commentary").toString());
-        rate.setmNameUser(soapObject.getPropertyAsString("id_user").toString());
+    private Article convertToQueryNews(SoapObject soapObject) {
+        Article news = new Article();
+        news.setTitle(soapObject.getPropertyAsString("title").toString());
+        news.setBody(soapObject.getPropertyAsString("body").toString());
+        news.setCreation(soapObject.getPropertyAsString("creation").toString());
+        news.setType(Integer.parseInt(soapObject.getPropertyAsString("type").toString()));
+        news.setPicture(soapObject.getPropertyAsString("picture").toString());
 
-/*        rate.setmDateTime(soapObject.getPropertyAsString("date"));*/
+        return news;
+    }
 
+    private Rate convertToQueryRate(SoapObject soapObject) {
+        Rate rate = new Rate();
+        rate.setmId_user(Integer.parseInt(soapObject.getPropertyAsString("id_user").toString()));
+        rate.setmMark(Integer.parseInt(soapObject.getPropertyAsString("mark").toString()));
+        rate.setmCommentary(soapObject.getPropertyAsString("commentary").toString());
+        rate.setmDate(soapObject.getPropertyAsString("date").toString());
+        rate.setmActive(Integer.parseInt(soapObject.getPropertyAsString("active").toString()));
+        rate.setmUp(Integer.parseInt(soapObject.getPropertyAsString("up").toString()));
+        rate.setmDown(Integer.parseInt(soapObject.getPropertyAsString("down").toString()));
         return rate;
     }
 

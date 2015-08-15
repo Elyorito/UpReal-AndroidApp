@@ -49,7 +49,6 @@
             android:screenOrientation="portrait">
         </activity>
 
-
         <activity
             android:name=".home.ParameterActivity"
             android:label="@string/app_name"
@@ -80,6 +79,15 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <!--News-->
+
+        <activity
+            android:name=".news.NewsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity
             android:name=".scan.AddProductFromScan"
             android:label="@string/app_name"
@@ -89,19 +97,19 @@
         <!--User-->
 
         <activity
-            android:name=".user.UserActivity"
+            android:name=".User.UserActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".user.UserUpdateActivity"
+        <activity android:name=".User.UserUpdateActivity"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".user.UserChangePwd"
+        <activity android:name=".User.UserChangePwd"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">

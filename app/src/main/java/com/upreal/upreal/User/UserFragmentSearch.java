@@ -1,4 +1,4 @@
-package com.upreal.upreal.user;
+package com.upreal.upreal.User;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.SoapUserManager;

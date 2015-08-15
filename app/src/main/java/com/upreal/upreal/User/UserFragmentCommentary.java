@@ -1,11 +1,10 @@
-package com.upreal.upreal.user;
+package com.upreal.upreal.User;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class UserFragmentCommentary extends android.support.v4.app.Fragment {
         @Override
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            listComment = gm.getRateComment(user.getId(), 0, 0, 1, 0);
+            //listComment = gm.getRateComment(user.getId(), 0, 0, 1, 0);
             SoapUserManager um = new SoapUserManager();
             for (int i = 0; i < listComment.size(); i++) {
                 user = um.getAccountInfoUsername(Integer.parseInt(listComment.get(i).getmNameUser().toString()));

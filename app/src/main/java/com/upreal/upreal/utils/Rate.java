@@ -5,61 +5,80 @@ package com.upreal.upreal.utils;
  */
 public class Rate {
 
-    private int mIdUser;
-    private int mIdProduct;
-    private int mIdOvrRate;
-    private int mType;
-    private int mIdArticle;
+    private int mId_user;
+    private int mMark;
+    private String mCommentary;
+    private String mDate;
+    private int mActive;
+    private int mUp;
+    private int mDown;
 
     public Rate(){}
 
-    public Rate(int idUser, int idProduct, int idOvrRate, int type, int idArticle) {
+    public Rate(int mId_user, int mMark, String mCommentary, String mDate, int mActive, int mUp, int mDown) {
 
-        this.mIdUser = idUser;
-        this.mIdProduct = idProduct;
-        this.mIdOvrRate = idOvrRate;
-        this.mType = type;
-        this.mIdArticle = idArticle;
+        this.mId_user = mId_user;
+        this.mMark= mMark;
+        this.mCommentary = mCommentary;
+        this.mDate= mDate;
+        this.mActive = mActive;
+        this.mUp = mUp;
+        this.mDown = mDown;
     }
 
-
-    public int getmIdUser() {
-        return mIdUser;
+    public int getmId_user() {
+        return mId_user;
     }
 
-    public void setmIdUser(int mIdUser) {
-        this.mIdUser = mIdUser;
+    public void setmId_user(int mId_user) {
+        this.mId_user = mId_user;
     }
 
-    public int getmIdProduct() {
-        return mIdProduct;
+    public int getmMark() {
+        return mMark;
     }
 
-    public void setmIdProduct(int mIdProduct) {
-        this.mIdProduct = mIdProduct;
+    public void setmMark(int mMark) {
+        this.mMark = mMark;
     }
 
-    public int getmIdOvrRate() {
-        return mIdOvrRate;
+    public String getmCommentary() {
+        return mCommentary;
     }
 
-    public void setmIdOvrRate(int mIdOvrRate) {
-        this.mIdOvrRate = mIdOvrRate;
+    public void setmCommentary(String mCommentary) {
+        this.mCommentary = mCommentary;
     }
 
-    public int getmType() {
-        return mType;
+    public String getmDate() {
+        return mDate;
     }
 
-    public void setmType(int mType) {
-        this.mType = mType;
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
     }
 
-    public int getmIdArticle() {
-        return mIdArticle;
+    public int getmActive() {
+        return mActive;
     }
 
-    public void setmIdArticle(int mIdArticle) {
-        this.mIdArticle = mIdArticle;
+    public void setmActive(int mActive) {
+        this.mActive = mActive;
+    }
+
+    public int getmUp() {
+        return mUp;
+    }
+
+    public void setmUp(int mUp) {
+        this.mUp = mUp;
+    }
+
+    public int getmDown() {
+        return mDown;
+    }
+
+    public void setmDown(int mDown) {
+        this.mDown = mDown;
     }
 }

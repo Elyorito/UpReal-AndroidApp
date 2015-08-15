@@ -1,4 +1,4 @@
-package com.upreal.upreal.user;
+package com.upreal.upreal.User;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -6,10 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
-import com.upreal.upreal.list.AdapterListHomeCustom;
 import com.upreal.upreal.login.LoginActivity;
-import com.upreal.upreal.user.UserChangePwd;
-import com.upreal.upreal.user.UserUpdateActivity;
+import com.upreal.upreal.User.UserChangePwd;
+import com.upreal.upreal.User.UserUpdateActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.database.DatabaseHelper;

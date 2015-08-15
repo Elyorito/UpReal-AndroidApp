@@ -6,18 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
@@ -31,15 +29,18 @@ import com.upreal.upreal.R;
 
 import com.upreal.upreal.list.ListActivity;
 import com.upreal.upreal.login.LoginActivity;
-import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.scan.Camera2Activity;
-import com.upreal.upreal.scan.Camera2Fragment;
 import com.upreal.upreal.scan.CameraActivity;
-import com.upreal.upreal.user.UserActivity;
+import com.upreal.upreal.User.UserActivity;
+import com.upreal.upreal.utils.Article;
 import com.upreal.upreal.utils.DividerItemDecoration;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.view.GestureDetector.*;
 
@@ -158,8 +159,8 @@ public class HomeActivity extends AppCompatActivity {
         String Title[] = {"Welcome to upreal !","Les dernieres promotion du mois de juillet disponible !", "Fusion entre UpReal et Dealabs !"};
         int type[] = {1, 2, 1};
         String imagepath[] = {"path1", "path2", "path3"};
-        mAdapterHome = new AdapterHomeNews(Title, imagepath,type);
-        mRecyclerViewHome.setAdapter(mAdapterHome);
+        new RetreiveNews().execute();
+
 
       /*RecyclerView NavigDrawL*/
 
@@ -442,4 +443,28 @@ public class HomeActivity extends AppCompatActivity {
         }
 
     }
+
+    private class RetreiveNews extends AsyncTask<Void, Void, List<Article>> {
+
+        List<Article> listnews = new ArrayList<>();
+
+        @Override
+        protected List<Article> doInBackground(Void... params) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+            listnews = gm.getNews();
+            return listnews;
+        }
+
+        @Override
+        protected void onPostExecute(List<Article> articles) {
+            super.onPostExecute(articles);
+            Toast.makeText(getApplicationContext(), "Title= " + articles.get(0).getTitle() ,Toast.LENGTH_LONG).show();
+            for (Article article : articles) {
+                Toast.makeText(getApplicationContext(), "Title= " + article.getTitle() ,Toast.LENGTH_LONG).show();
+            }
+            mAdapterHome = new AdapterHomeNews(articles);
+            mRecyclerViewHome.setAdapter(mAdapterHome);
+        }
+    }
+
 }

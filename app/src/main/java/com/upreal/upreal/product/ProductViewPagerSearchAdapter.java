@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.widget.Toast;
 
 import com.upreal.upreal.store.StoreFragmentSearch;
-import com.upreal.upreal.user.UserFragmentSearch;
+import com.upreal.upreal.User.UserFragmentSearch;
 
 /**
  * Created by Elyo on 16/02/2015.
