@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/name"
-            android:text="@string/search"
+            android:text="Evian"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,35 +23,34 @@
             android:textColor="@color/black"
             android:textSize="30dp" />
 
-        <include
+        <ImageView
+            android:id="@+id/image"
             android:layout_gravity="center"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            layout="@layout/item_search_bar" />
+            android:layout_height="wrap_content"
+            android:alpha=".5"
+            android:src="@drawable/picture_unavailable"/>
 
         <ImageButton
-            android:id="@+id/user"
-            android:background="@drawable/user"
+            android:id="@+id/comment"
+            android:background="@drawable/comment"
             android:layout_gravity="bottom|left"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:alpha=".5"/>
+            android:layout_height="40dp"
+            android:layout_width="50dp" />
 
         <ImageButton
-            android:id="@+id/product"
-            android:background="@drawable/product"
+            android:id="@+id/options"
+            android:background="@drawable/options"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:alpha=".5" />
+            android:layout_width="50dp" />
 
         <ImageButton
-            android:id="@+id/store"
-            android:background="@drawable/store"
+            android:id="@+id/social"
+            android:background="@drawable/social"
             android:layout_gravity="bottom|right"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:alpha=".5" />
+            android:layout_height="40dp"
+            android:layout_width="50dp" />
 
     </FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>

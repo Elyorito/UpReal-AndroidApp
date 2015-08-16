@@ -22,11 +22,13 @@ public abstract class SoapManager {
     static boolean DEBUG_SOAP_REQUEST_RESPONSE = true;
     static String MAIN_REQUEST_URL = "http://163.5.84.202/UpReal/services/";
     static String NAMESPACE = "http://manager.entity.upreal";
-    static String SOAP_ACTION = "http://163.5.84.202/UpReal/services";
     static String SESSION_ID;
 
     public SoapManager(String service) {
+        //Outside
         MAIN_REQUEST_URL = "http://163.5.84.202/UpReal/services/" + service + "/";
+        //Inside
+        //MAIN_REQUEST_URL = "http://10.224.9.202/UpReal/services/" + service + "/";
     }
 
     protected final void testHttpResponse(HttpTransportSE ht) {

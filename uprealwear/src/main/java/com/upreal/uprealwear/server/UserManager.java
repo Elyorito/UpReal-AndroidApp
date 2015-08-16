@@ -40,7 +40,7 @@ public class UserManager extends SoapManager {
     }
 
     public List<User> getUserByUsername(String search) {
-        List<User> listProduct = new ArrayList<>();
+        List<User> listUser = new ArrayList<>();
         String methodname = "getUserByUsername";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", search);
@@ -53,13 +53,13 @@ public class UserManager extends SoapManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject o = results.get(i);
-                    listProduct.add(ConverterManager.convertToUser(o));
+                    listUser.add(ConverterManager.convertToUser(o));
                 }
             } else if (res instanceof SoapObject) {
                 SoapObject o = (SoapObject) res;
-                listProduct.add(ConverterManager.convertToUser(o));
+                listUser.add(ConverterManager.convertToUser(o));
             }
-            return listProduct;
+            return listUser;
         } catch (Exception q) {
             q.printStackTrace();
         }

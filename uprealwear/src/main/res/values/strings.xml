@@ -2,5 +2,8 @@
     <string name="app_name">UpRealWear</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
-    <string name="username">Username</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="search">Recherche</string>
+    <string name="search_hint">...</string>
+    <string name="search_empty">Aucun élément trouvé !</string>
 </resources>

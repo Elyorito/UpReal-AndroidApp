@@ -55,7 +55,7 @@ public class ProductManager extends SoapManager {
 
     public String getProductPicture(int id) {
         final File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
-        final File file = new File(dir, "0-" + id + ".jpg"); // 0 = ID Product
+        final File file = new File(dir, "2-" + id + ".jpg"); // 2 = ID Product
 
         String methodname = "getProductPicture";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
@@ -69,10 +69,12 @@ public class ProductManager extends SoapManager {
                     OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
                     out.write(Base64.decode(res.toString(), Base64.DEFAULT));
                 }
+                else
+                    return null;
             } catch (Exception q) {
                 q.printStackTrace();
             }
         }
-        return android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "0-" + id + ".jpg";
+        return android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "2-" + id + ".jpg";
     }
 }

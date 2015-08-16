@@ -29,6 +29,30 @@
             android:label="@string/app_name" >
         </activity>
 
+        <activity
+            android:name=".search.SearchResultActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".product.ProductActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".user.UserActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".store.StoreActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name="android.support.wearable.activity.ConfirmationActivity">
+        </activity>
+
     </application>
 
 </manifest>
