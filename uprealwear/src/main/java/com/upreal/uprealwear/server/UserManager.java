@@ -1,5 +1,6 @@
 package com.upreal.uprealwear.server;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.upreal.uprealwear.utils.ConverterManager;
@@ -8,6 +9,10 @@ import com.upreal.uprealwear.utils.User;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -39,6 +44,25 @@ public class UserManager extends SoapManager {
         return false;
     }
 
+    public User getAccountInfo(int id) {
+        String methodname = "getAccountInfo";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+
+        try {
+            Object res = callService(methodname, request);
+            SoapObject o = (SoapObject) res;
+            User u = ConverterManager.convertToUser(o);
+
+            return u;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return null;
+    }
+
     public List<User> getUserByUsername(String search) {
         List<User> listUser = new ArrayList<>();
         String methodname = "getUserByUsername";
@@ -65,5 +89,30 @@ public class UserManager extends SoapManager {
         }
 
         return null;
+    }
+
+    public String getUserPicture(int id) {
+        final File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath());
+        final File file = new File(dir, "1-" + id + ".jpg"); // 1 = ID User
+
+        String methodname = "getUserPicture";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+
+        // If the file don't exist, we retrieve it
+        if (!file.exists()) {
+            try {
+                SoapPrimitive res = (SoapPrimitive) callService(methodname, request);
+                if (res != null) {
+                    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+                    out.write(Base64.decode(res.toString(), Base64.DEFAULT));
+                }
+                else
+                    return null;
+            } catch (Exception q) {
+                q.printStackTrace();
+            }
+        }
+        return android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "1-" + id + ".jpg";
     }
 }

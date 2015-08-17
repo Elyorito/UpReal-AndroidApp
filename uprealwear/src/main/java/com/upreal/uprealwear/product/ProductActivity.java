@@ -1,8 +1,10 @@
 package com.upreal.uprealwear.product;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.global.RateActivity;
+import com.upreal.uprealwear.server.GlobalManager;
+import com.upreal.uprealwear.user.ListActivity;
+import com.upreal.uprealwear.user.SessionManagerUser;
 import com.upreal.uprealwear.utils.Item;
 
 /**
@@ -22,8 +28,10 @@ public class ProductActivity extends Activity implements View.OnClickListener {
     private TextView name;
     private ImageView image;
     private ImageButton comment;
-    private ImageButton options;
-    private ImageButton social;
+    private ImageButton add;
+    private ImageButton like;
+
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savecInstanceState) {
@@ -33,10 +41,10 @@ public class ProductActivity extends Activity implements View.OnClickListener {
         name = (TextView) findViewById(R.id.name);
         image = (ImageView) findViewById(R.id.image);
         comment = (ImageButton) findViewById(R.id.comment);
-        options = (ImageButton) findViewById(R.id.options);
-        social = (ImageButton) findViewById(R.id.social);
+        add = (ImageButton) findViewById(R.id.add);
+        like = (ImageButton) findViewById(R.id.like);
 
-        Item item = getIntent().getExtras().getParcelable("item");
+        item = getIntent().getExtras().getParcelable("item");
 
         id = item.getId();
         name.setText(item.getName());
@@ -49,27 +57,100 @@ public class ProductActivity extends Activity implements View.OnClickListener {
             image.setImageDrawable(getResources().getDrawable(R.drawable.picture_unavailable));
 
         comment.setOnClickListener(this);
-        options.setOnClickListener(this);
-        social.setOnClickListener(this);
+        add.setOnClickListener(this);
+        like.setOnClickListener(this);
+
+        new RetrieveRateStatus().execute();
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
+
         switch (v.getId()) {
             case R.id.comment:
                 Log.e("ProductActivity", "Comment clicked.");
+                intent = new Intent(this, RateActivity.class);
+                intent.putExtra("item", item);
+                startActivity(intent);
                 break ;
-            case R.id.options:
-                Log.e("ProductActivity", "Options clicked.");
+            case R.id.add:
+                Log.e("ProductActivity", "Add clicked.");
+                intent = new Intent(this, ListActivity.class);
+                intent.putExtra("item", item);
+                startActivity(intent);
                 break ;
-            case R.id.social:
-                Log.e("ProductActivity", "Social clicked.");
-/*                Intent intent = new Intent(this, SearchResultActivity.class);
-                startActivity(intent);*/
+            case R.id.like:
+                Log.e("ProductActivity", "Like clicked.");
+                new SendRateStatus().execute((like.getAlpha() >= 1f) ? (1) : (2));
+                new RetrieveRateStatus().execute();
                 break ;
             default:
                 Log.e("ProductActivity", "DEFAULT");
                 break ;
+        }
+    }
+
+    private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+
+            GlobalManager gm = new GlobalManager();
+            return gm.getRateStatus(item.getId(), item.getTargetType(), 2);
+        }
+
+        @Override
+        protected void onPostExecute(Integer res) {
+            super.onPostExecute(res);
+            switch (res) {
+                case 0:
+                    like.setAlpha(.5f);
+                    like.setColorFilter(R.color.black);
+                    break ;
+                case 1:
+                    like.setAlpha(.5f);
+                    like.setColorFilter(R.color.black);
+                    break ;
+                case 2:
+                    like.setAlpha(1f);
+                    like.setColorFilter(R.color.red);
+                    break ;
+                case 3:
+                    like.setAlpha(1f);
+                    like.setColorFilter(R.color.black);
+                    break ;
+                default:
+                    break ;
+            }
+        }
+    }
+
+    private class SendRateStatus extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+
+            GlobalManager gm = new GlobalManager();
+
+            Log.e("ProductActivity", "SendRateStatus called :" + params[0]);
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged()) {
+                switch (params[0]) {
+                    case 1:
+                        gm.unLikeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
+                        break ;
+                    case 2:
+                        gm.likeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
+                        break ;
+                    default:
+                        break ;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.upreal.uprealwear.store;
+package com.upreal.uprealwear.global;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.wearable.activity.ConfirmationActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,76 +15,93 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
-import com.upreal.uprealwear.global.RateActivity;
 import com.upreal.uprealwear.server.GlobalManager;
-import com.upreal.uprealwear.user.SessionManagerUser;
+import com.upreal.uprealwear.utils.Article;
 import com.upreal.uprealwear.utils.Item;
 
 /**
- * Created by Kyosukke on 08/08/2015.
+ * Created by Kyosukke on 17/08/2015.
  */
-public class StoreActivity extends Activity implements View.OnClickListener {
+public class NewsActivity extends Activity implements View.OnClickListener {
 
-    private int id;
-    private TextView name;
-    private ImageView image;
+    private TextView title;
+    private TextView body;
+    private ImageView picture;
     private ImageButton comment;
-    private ImageButton add;
     private ImageButton like;
 
     private Item item;
 
     @Override
-    protected void onCreate(Bundle savecInstanceState) {
-        super.onCreate(savecInstanceState);
-        setContentView(R.layout.util_details);
-
-        name = (TextView) findViewById(R.id.name);
-        image = (ImageView) findViewById(R.id.image);
-        comment = (ImageButton) findViewById(R.id.comment);
-        add = (ImageButton) findViewById(R.id.add);
-        like = (ImageButton) findViewById(R.id.like);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_news);
 
         item = getIntent().getExtras().getParcelable("item");
 
-        id = item.getId();
-        name.setText(item.getName());
+        title = (TextView) findViewById(R.id.title);
+        body = (TextView) findViewById(R.id.body);
+        picture = (ImageView) findViewById(R.id.picture);
+        comment = (ImageButton) findViewById(R.id.comment);
+        like = (ImageButton) findViewById(R.id.like);
+
+        body.setMovementMethod(new ScrollingMovementMethod());
+        comment.setOnClickListener(this);
+        like.setOnClickListener(this);
+
+        title.setText(item.getName());
         if (item.getImagePath() != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            image.setImageBitmap(BitmapFactory.decodeFile(item.getImagePath(), options));
+            picture.setImageBitmap(BitmapFactory.decodeFile(item.getImagePath(), options));
         }
         else
-            image.setImageDrawable(getResources().getDrawable(R.drawable.picture_unavailable));
-
-        comment.setOnClickListener(this);
-        add.setOnClickListener(this);
-        like.setOnClickListener(this);
-
+            picture.setImageDrawable(getResources().getDrawable(R.drawable.picture_unavailable));
+        new RetrieveArticle().execute();
         new RetrieveRateStatus().execute();
-        add.setAlpha(.5f);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.comment:
-                Log.e("StoreActivity", "Comment clicked.");
+                Log.e("NewsActivity", "Comment clicked.");
                 Intent intent = new Intent(this, RateActivity.class);
                 intent.putExtra("item", item);
                 startActivity(intent);
                 break ;
-            case R.id.add:
-                Log.e("StoreActivity", "Add clicked.");
-                break ;
             case R.id.like:
-                Log.e("StoreActivity", "Like clicked.");
+                Log.e("NewsActivity", "Like clicked.");
                 new SendRateStatus().execute((like.getAlpha() >= 1f) ? (1) : (2));
                 new RetrieveRateStatus().execute();
                 break ;
             default:
-                Log.e("StoreActivity", "DEFAULT");
+                Log.e("NewsActivity", "DEFAULT");
                 break ;
+        }
+    }
+
+    private class RetrieveArticle extends AsyncTask<Void, Void, Article> {
+
+        @Override
+        protected Article doInBackground(Void... params) {
+
+            GlobalManager gm = new GlobalManager();
+            return gm.getNewsInfo(item.getId());
+        }
+
+        @Override
+        protected void onPostExecute(Article res) {
+            super.onPostExecute(res);
+            if (res != null) {
+                body.setText(res.getBody());
+            } else {
+                Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
+                intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.FAILURE_ANIMATION);
+                intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, getString(R.string.search_empty));
+                startActivity(intent);
+                finish();
+            }
         }
     }
 
@@ -128,21 +147,17 @@ public class StoreActivity extends Activity implements View.OnClickListener {
 
             GlobalManager gm = new GlobalManager();
 
-            Log.e("ProductActivity", "SendRateStatus called :" + params[0]);
+            Log.e("NewsActivity", "SendRateStatus called :" + params[0]);
 
-            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
-
-            if (userSession.isLogged()) {
-                switch (params[0]) {
-                    case 1:
-                        gm.unLikeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
-                        break ;
-                    case 2:
-                        gm.likeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
-                        break ;
-                    default:
-                        break ;
-                }
+            switch (params[0]) {
+                case 1:
+                    gm.unLikeSomething(item.getId(), item.getTargetType(), 2);
+                    break ;
+                case 2:
+                    gm.likeSomething(item.getId(), item.getTargetType(), 2);
+                    break ;
+                default:
+                    break ;
             }
 
             return null;

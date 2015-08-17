@@ -2,8 +2,12 @@
     <string name="app_name">UpRealWear</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+    <string name="name">Nom</string>
     <string name="username">Nom d\'utilisateur</string>
+    <string name="loading">En attente du mobile...</string>
     <string name="search">Recherche</string>
     <string name="search_hint">...</string>
     <string name="search_empty">Aucun élément trouvé !</string>
+    <string name="choice_add">Ajouter cet élement ?</string>
+    <string name="choice_delete">Supprimer cet élement ?</string>
 </resources>
