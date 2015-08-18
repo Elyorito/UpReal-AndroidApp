@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.upreal.upreal.store.StoreFragmentSearch;
-import com.upreal.upreal.User.UserFragmentSearch;
+import com.upreal.upreal.user.UserFragmentSearch;
 
 /**
  * Created by Elyo on 16/02/2015.

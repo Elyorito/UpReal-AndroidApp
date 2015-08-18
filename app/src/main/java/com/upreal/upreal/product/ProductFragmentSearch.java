@@ -78,7 +78,7 @@ public class ProductFragmentSearch extends Fragment {
             }
 */
             listProd = list;
-            mAdapter = new ProductSearchAdapter(listProd);
+            mAdapter = new ProductSearchAdapter(listProd, getActivity().getApplicationContext());
             mRecyclerView.setAdapter(mAdapter);
         }
     }

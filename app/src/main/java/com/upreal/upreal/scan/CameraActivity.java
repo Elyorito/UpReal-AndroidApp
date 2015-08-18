@@ -29,14 +29,18 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        //setContentView(R.layout.activity_camera);
 
-        scanner = (Button) findViewById(R.id.scanner);
+
+        /*scanner = (Button) findViewById(R.id.scanner);
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
-        scanner.setOnClickListener(this);
+        //scanner.setOnClickListener(this);*/
         builder = new AlertDialog.Builder(CameraActivity.this);
 
+        intent = new Intent("com.google.zxing.client.android.SCAN");
+        intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
+        startActivityForResult(intent, 0);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -45,9 +49,9 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 Log.d("xZing", "contents: "+contents+" format: "+format); // Handle successful scan
-                formatTxt.setText("FORMAT: " + format);
-                contentTxt.setText(contents);
-                new RetrieveScannedProduct().execute();
+                //formatTxt.setText("FORMAT: " + format);
+                //contentTxt.setText(contents);
+                new RetrieveScannedProduct(contents).execute();
 
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
@@ -74,12 +78,17 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     public class RetrieveScannedProduct extends AsyncTask<String, Void, Product> {
 
         private Product prod = new Product();
+        private String productEAN;
+
+        public RetrieveScannedProduct(String productEAN) {
+            this.productEAN = productEAN;
+        }
 
         @Override
         protected Product doInBackground(String... params) {
 
             SoapProductManager pm = new SoapProductManager();
-            prod = pm.getProductbyEAN(contentTxt.getText().toString());
+            prod = pm.getProductbyEAN(productEAN);
             return prod;
         }
 
@@ -93,7 +102,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(getApplicationContext(), AddProductFromScan.class);
-                                intent.putExtra("ean", contentTxt.getText().toString());
+                                intent.putExtra("ean", productEAN);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 getApplicationContext().startActivity(intent);
                             }
@@ -110,6 +119,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             intent.putExtra("listprod", prod);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(intent);
+            finish();
         }
     }
 }

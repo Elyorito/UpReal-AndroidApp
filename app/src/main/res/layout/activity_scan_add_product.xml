@@ -52,25 +52,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/description"
-                android:padding="10dp"/>
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/barcode"
-                android:padding="10dp"/>
+                android:paddingLeft="10dp"
+                android:paddingTop="20dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/noticed_price"
-                android:padding="10dp"/>
+                android:paddingLeft="10dp"
+                android:paddingTop="25dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/at_the_shop"
-                android:padding="10dp"/>
+                android:paddingLeft="10dp"
+                android:paddingTop="25dp"/>
 
 
         </LinearLayout>
@@ -86,32 +90,44 @@
             <EditText
                 android:id="@+id/product_name"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/brand"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/description"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/barcode"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/noticedprice"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/attheshop"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"/>
 
         </LinearLayout>
     </LinearLayout>

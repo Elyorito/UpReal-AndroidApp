@@ -31,7 +31,7 @@ import com.upreal.upreal.list.ListActivity;
 import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.scan.Camera2Activity;
 import com.upreal.upreal.scan.CameraActivity;
-import com.upreal.upreal.User.UserActivity;
+import com.upreal.upreal.user.UserActivity;
 import com.upreal.upreal.utils.Article;
 import com.upreal.upreal.utils.DividerItemDecoration;
 import com.upreal.upreal.utils.SessionManagerUser;
@@ -124,13 +124,15 @@ public class HomeActivity extends AppCompatActivity {
                 this.getString(R.string.parrainage),
                 this.getString(R.string.acheivement),
                 this.getString(R.string.settings),
-                getString(R.string.deconnexion),
-        "lol"};
+                this.getString(R.string.deconnexion)};
+
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
+/*
         PRODUCTREDUC = new String[] {"P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis"};
 
         PRODUCTREDUCPRICE = new String[] {"1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé"};
+*/
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);

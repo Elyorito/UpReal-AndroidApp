@@ -1,6 +1,7 @@
 package com.upreal.upreal.product;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.preference.DialogPreference;
@@ -11,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Product;
 
@@ -30,6 +33,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 */
     private List<Product> list = new ArrayList<Product>();
     private AlertDialog.Builder builder;
+    private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         int holderId;
@@ -38,21 +42,23 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         CardView mCardview;
         Button descProduct;
         Button shareProduct;
+        ImageView imageProduct;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
 
             mCardview = (CardView) itemView.findViewById(R.id.cardview_search);
-/*            mNameProduct = (TextView) itemView.findViewById(R.id.but_cardview_go_product);*/
+            imageProduct = (ImageView) itemView.findViewById(R.id.image_cardview_product);
             descProduct = (Button) itemView.findViewById(R.id.but_cardview_go_product);
             shareProduct = (Button) itemView.findViewById(R.id.but_cardview_share);
         }
     }
 
-    ProductSearchAdapter(/*String product[]*/List<Product> listprod) {
+    ProductSearchAdapter(/*String product[]*/List<Product> listprod, Context context) {
         /*this.mProduct = product;*/
 
         this.list = listprod;
+        this.context = context;
     }
 
     @Override
@@ -69,6 +75,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         holder.mNameProduct.setText(mProduct[position]);
 */
 /*        holder.mNameProduct.setText(list.get(position).getName());*/
+        //Picasso.with(this.context).load(list.get(position).getPicture()).into(holder.imageProduct);
         holder.descProduct.setText(list.get(position).getName());
         holder.descProduct.setOnClickListener(new View.OnClickListener() {
             @Override

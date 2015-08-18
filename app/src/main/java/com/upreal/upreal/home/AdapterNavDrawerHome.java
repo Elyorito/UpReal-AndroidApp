@@ -92,7 +92,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
 
     @Override
     public int getItemCount() {
-        return mNavTitles.length;
+        return mNavTitles.length + 1;
     }
 
     @Override

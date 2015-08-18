@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/email_error"
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-            android:checked="false"
+            android:checked="true"
             android:text="@string/cgu"/>
 
         <TextView

@@ -358,24 +358,16 @@ public class SoapProductManager {
     private Product convertToQuery(SoapObject soapObject) {
         Product prod = new Product();
         if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
-        prod.setName(soapObject.getProperty("name").toString());
+            prod.setName(soapObject.getProperty("name").toString());
         if (soapObject.hasProperty("ean") && soapObject.getProperty("ean") != null)
-        prod.setEan(soapObject.getProperty("ean").toString());
+            prod.setEan(soapObject.getProperty("ean").toString());
         if (soapObject.hasProperty("brand") && soapObject.getProperty("brand") != null)
-        prod.setBrand(soapObject.getProperty("brand").toString());
+            prod.setBrand(soapObject.getProperty("brand").toString());
         if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-        prod.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-/*
-        prod.setPicture(soapObject.getPropertyAsString("picture").toString());
-*/
+            prod.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("picture") && soapObject.getProperty("picture") != null)
+            prod.setPicture(soapObject.getPropertyAsString("picture").toString());
 
-/*
-        prod.setName("Fanta");
-        prod.setEan(50235823);
-        prod.setBrand("The coca cola COMPANY");
-        prod.setId(4);
-        prod.setPicture("link to picture");
-*/
         return prod;
     }
 

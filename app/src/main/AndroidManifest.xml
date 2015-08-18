@@ -97,19 +97,19 @@
         <!--User-->
 
         <activity
-            android:name=".User.UserActivity"
+            android:name=".user.UserActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".User.UserUpdateActivity"
+        <activity android:name=".user.UserUpdateActivity"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".User.UserChangePwd"
+        <activity android:name=".user.UserChangePwd"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">

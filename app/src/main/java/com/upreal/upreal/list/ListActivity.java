@@ -129,7 +129,7 @@ public class ListActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "ListLike" + listLike[0],Toast.LENGTH_SHORT).show();
         if (listLike[0] != null) {
             getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listLike[0]}, null, null, null);
-            if (getITEMS[0][0] == null)
+            if (getITEMS == null)
                 listsBase.add(null);
             else
                 listsBase.add(getProduct(getITEMS, mDbQuery));
