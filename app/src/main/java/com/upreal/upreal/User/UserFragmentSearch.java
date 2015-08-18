@@ -1,4 +1,4 @@
-package com.upreal.upreal.User;
+package com.upreal.upreal.user;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,7 +67,7 @@ public class UserFragmentSearch extends Fragment {
             int nb = list.size();
 
             listUser = list;
-            mAdapter = new UserSearchAdapter(listUser);
+            mAdapter = new com.upreal.upreal.user.UserSearchAdapter(listUser);
             mRecyclerView.setAdapter(mAdapter);
         }
     }

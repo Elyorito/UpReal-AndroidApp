@@ -31,7 +31,7 @@ import com.upreal.upreal.list.ListActivity;
 import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.scan.Camera2Activity;
 import com.upreal.upreal.scan.CameraActivity;
-import com.upreal.upreal.User.UserActivity;
+import com.upreal.upreal.user.UserActivity;
 import com.upreal.upreal.utils.Article;
 import com.upreal.upreal.utils.DividerItemDecoration;
 import com.upreal.upreal.utils.SessionManagerUser;

@@ -1,4 +1,4 @@
-package com.upreal.upreal.User;
+package com.upreal.upreal.user;
 
 import android.content.Context;
 import android.os.Bundle;
