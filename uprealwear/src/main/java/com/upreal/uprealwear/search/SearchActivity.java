@@ -1,77 +1,71 @@
 package com.upreal.uprealwear.search;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.wearable.view.WearableListView;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.upreal.uprealwear.R;
-import com.upreal.uprealwear.server.ProductManager;
-import com.upreal.uprealwear.utils.ListItemAdapter;
-import com.upreal.uprealwear.utils.Product;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by Kyosukke on 28/07/2015.
+ * Created by Kyosukke on 16/08/2015.
  */
-public class SearchActivity extends Activity implements WearableListView.ClickListener {
+public class SearchActivity extends Activity implements View.OnClickListener {
 
-    private List<Product> absProduct;
+    private ImageButton user;
+    private ImageButton product;
+    private ImageButton store;
 
-    private WearableListView listView;
-    private ListItemAdapter adapter;
+    private EditText searchText;
+    private ImageButton searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.util_list);
+        setContentView(R.layout.activity_search);
 
-        absProduct = new ArrayList<Product>();
-        listView = (WearableListView) findViewById(R.id.wearable_list);
-        adapter = new ListItemAdapter(this, absProduct);
+        user = (ImageButton) findViewById(R.id.user);
+        product = (ImageButton) findViewById(R.id.product);
+        store = (ImageButton) findViewById(R.id.store);
+        searchText = (EditText) findViewById(R.id.search_text);
+        searchButton = (ImageButton) findViewById(R.id.search_button);
 
-        new RetrieveList().execute();
-        listView.setAdapter(adapter);
-        listView.setClickListener(this);
+        user.setOnClickListener(this);
+        product.setOnClickListener(this);
+        store.setOnClickListener(this);
+        searchButton.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(WearableListView.ViewHolder v) {
-        Integer tag = (Integer) v.itemView.getTag();
-    }
-
-    @Override
-    public void onTopEmptyRegionClick() {
-    }
-
-    private class RetrieveList extends AsyncTask<Void, Void, List<Product>> {
-
-        @Override
-        protected List<Product> doInBackground(Void... params) {
-
-            ProductManager pm = new ProductManager();
-            List<Product> pList = pm.getProduct("");
-
-            for (Product p : pList) {
-                p.setPicture(pm.getProductPicture(p.getId()));
-            }
-
-            return pList;
-        }
-
-        @Override
-        protected void onPostExecute(List<Product> res) {
-            super.onPostExecute(res);
-            Log.e("SearchActivity", "WebService called. Result:");
-            absProduct.clear();
-            for (Product p : res) {
-                absProduct.add(p);
-                Log.e("SearchActivity", p.getId() + ":" + p.getName() + " // " + p.getPicture());
-            }
-            adapter.notifyDataSetChanged();
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.user:
+                Log.e("SearchActivity", "User clicked.");
+                user.setAlpha((user.getAlpha() >= 1f) ? (.5f) : (1f));
+                break ;
+            case R.id.product:
+                Log.e("SearchActivity", "Product clicked.");
+                product.setAlpha((product.getAlpha() >= 1f) ? (.5f) : (1f));
+                break ;
+            case R.id.store:
+                Log.e("SearchActivity", "Store clicked.");
+                store.setAlpha((store.getAlpha() >= 1f) ? (.5f) : (1f));
+                break ;
+            case R.id.search_button:
+                Log.e("SearchActivity", "Search button clicked.");
+                Intent intent = new Intent(this, SearchResultActivity.class);
+                intent.putExtra("search_text", searchText.getText().toString());
+                intent.putExtra("user", (user.getAlpha() >= 1f) ? (true) : (false));
+                intent.putExtra("product", (product.getAlpha() >= 1f) ? (true) : (false));
+                intent.putExtra("store", (store.getAlpha() >= 1f) ? (true) : (false));
+                startActivity(intent);
+                break ;
+            default:
+                Log.e("SearchActivity", "DEFAULT");
+                break ;
         }
     }
 }
