@@ -460,7 +460,7 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Article> articles) {
             super.onPostExecute(articles);
-            Toast.makeText(getApplicationContext(), "Title= " + articles.get(0).getTitle() ,Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Title= " + articles.get(0).getTitle() ,Toast.LENGTH_LONG).show();
             for (Article article : articles) {
                 Toast.makeText(getApplicationContext(), "Title= " + article.getTitle() ,Toast.LENGTH_LONG).show();
             }

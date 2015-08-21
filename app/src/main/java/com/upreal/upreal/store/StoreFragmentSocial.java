@@ -39,7 +39,7 @@ public class StoreFragmentSocial extends android.support.v4.app.Fragment {
 
         String SOCIALOPT[] = new String[] {"Suivre ce magasin"};
 
-        mAdapter = new AdapterSocial(SOCIALOPT, store, sessionManagerUser);
+        mAdapter = new StoreAdapterSocial(SOCIALOPT, store, sessionManagerUser);
         recyclerView.setAdapter(mAdapter);
 
         return v;

@@ -38,7 +38,7 @@ public class UserFragmentSocial extends android.support.v4.app.Fragment {
 
         String SOCIALOPT[] = new String[] {"Suivre","Commenter","Produit à troquer","Partager","Envoyer un message","Signaler"};
 
-        mAdapter = new AdapterSocial(SOCIALOPT, user, sessionManagerUser);
+        mAdapter = new UserAdapterSocial(SOCIALOPT, user, sessionManagerUser);
         recyclerView.setAdapter(mAdapter);
 
         return v;

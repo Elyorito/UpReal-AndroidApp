@@ -83,18 +83,6 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         new isProductLiked().execute();
     }
 
-    public AdapterSocial(String SOCIALOPT[], User user, SessionManagerUser sessionManagerUser) {
-        this.mSOCIALOPT = SOCIALOPT;
-        this.mUser = user;
-        this.sessionManagerUser = sessionManagerUser;
-    }
-
-    public AdapterSocial(String SOCIALOPT[], Store store, SessionManagerUser sessionManagerUser) {
-        this.mSOCIALOPT = SOCIALOPT;
-        this.mStore = store;
-        this.sessionManagerUser = sessionManagerUser;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_product_social, viewGroup, false);
@@ -118,7 +106,6 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                 builder = new AlertDialog.Builder(v.getContext());
                 LayoutInflater inflater;
                 final View layout;
-                if (getItemCount() == 4) {
                     switch (i) {
                         case 0: //Like
                             Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
@@ -221,148 +208,6 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                                         , Toast.LENGTH_SHORT).show();
                             }                            break;
                     }
-                } else {
-                    // User
-                    switch (i) {
-                        case 0: // Suivre
-                            Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
-                            if (!sessionManagerUser.isLogged()) {
-                                builder.setTitle("Suivre cet utilisateur ?").setMessage("Connectez vous pour pouvoir le suivre.")
-                                        .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                                                v.getContext().startActivity(intent);
-                                                dialog.dismiss();
-                                            }
-                                        }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                }).create().show();
-                            } else {
-                                listLike = v.getContext().getString(R.string.liked_product);
-                                mDbHelper = new DatabaseHelper(v.getContext());
-                                mDbQuery = new DatabaseQuery(mDbHelper);
-                                new SendLike(1).execute();
-                            }
-                            break;
-                        case 1: //Commenter
-                            Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
-                            if (!sessionManagerUser.isLogged()) {
-                                builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
-                                        .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                                                v.getContext().startActivity(intent);
-                                                dialog.dismiss();
-                                            }
-                                        }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                }).create().show();
-                            } else {
-                                builder.setTitle(mUser.getUsername());
-                                inflater = LayoutInflater.from(v.getContext());
-                                layout = inflater.inflate(R.layout.dialog_comment, null);
-                                builder.setView(layout);
-                                final EditText comment = (EditText) layout.findViewById(R.id.comment);
-                                final TextView limit = (TextView) layout.findViewById(R.id.limit);
-                                comment.addTextChangedListener(new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                    }
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                    }
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-                                        limit.setText(s.length() + " / " + String.valueOf(250));
-                                        if (s.length() > 250)
-                                            comment.setText(s.subSequence(0, 250));
-                                    }
-                                });
-                                builder.setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (comment.getText().toString().equals(""))
-                                            Toast.makeText(v.getContext(), "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
-                                        else
-                                            new sendComment(1, comment.getText().toString(), v.getContext()).execute();
-                                    }
-                                });
-                                builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                                builder.create().show();
-                            }
-                            break;
-                        case 2: // Troc
-                            Toast.makeText(v.getContext(), "Troc", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 3: // Partager
-                            Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(Intent.ACTION_SEND);
-
-                            i.putExtra(Intent.EXTRA_TEXT, "Vient chercher ton bonheur chez " + mUser.getUsername() + " sur UpReal");
-                            i.setType("text/plain");
-                            try {
-                                v.getContext().startActivity(Intent.createChooser(i, "Partager cet utilisateur avec ..."));
-                            } catch (android.content.ActivityNotFoundException ex) {
-                                Toast.makeText(v.getContext(), v.getContext().getString(R.string.need_mail_app)
-                                        , Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        case 4: // Send Message by mail
-                            Toast.makeText(v.getContext(),"Message", Toast.LENGTH_SHORT).show();
-                            builder.setTitle("Contacter " + mUser.getUsername() + " ?");
-                            inflater = LayoutInflater.from(v.getContext());
-                            layout = inflater.inflate(R.layout.dialog_mail, null);
-                            builder.setView(layout);
-
-                            final EditText subject = (EditText) layout.findViewById(R.id.subjectEmail);
-                            final EditText messageEmail = (EditText) layout.findViewById(R.id.messageEmail);
-                            builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(Intent.ACTION_SEND);
-                                    i.setType("message/rfc822");
-
-                                    i.putExtra(Intent.EXTRA_EMAIL, new String[]{mUser.getEmail()});
-                                    if (subject.getText().toString().equals(""))
-                                        Toast.makeText(v.getContext(), "Le sujet ne peut etre vide", Toast.LENGTH_SHORT).show();
-                                    i.putExtra(Intent.EXTRA_SUBJECT, subject.getText().toString());
-                                    if (messageEmail.getText().toString().equals(""))
-                                        Toast.makeText(v.getContext(), "Le message ne peut etre vide", Toast.LENGTH_SHORT).show();
-                                    i.putExtra(Intent.EXTRA_TEXT, messageEmail.getText().toString());
-                                    try {
-                                        v.getContext().startActivity(Intent.createChooser(i, "Send mail..."));
-                                    } catch (android.content.ActivityNotFoundException ex) {
-                                        Toast.makeText(v.getContext(), v.getContext().getString(R.string.need_mail_app)
-                                                , Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            builder.show();
-                            break;
-                        case 5: // Signal compteur, CA PART TROP LOIN, il y a plus important
-                            Toast.makeText(v.getContext(), "Signal", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                }
             }
 
         });
