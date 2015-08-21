@@ -67,9 +67,13 @@ public class ProfileActivity extends Activity implements View.OnClickListener {
                 break ;
             case R.id.history:
                 Log.e("ProfileActivity", "History clicked.");
+                intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
                 break ;
             case R.id.achievement:
                 Log.e("ProfileActivity", "Achievement clicked.");
+                intent = new Intent(this, AchievementListActivity.class);
+                startActivity(intent);
                 break ;
             default:
                 Log.e("ProfileActivity", "DEFAULT");

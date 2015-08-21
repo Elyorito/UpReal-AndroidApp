@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
 import com.upreal.uprealwear.server.GlobalManager;
+import com.upreal.uprealwear.user.SessionManagerUser;
 import com.upreal.uprealwear.utils.Article;
 import com.upreal.uprealwear.utils.Item;
 
@@ -149,15 +150,19 @@ public class NewsActivity extends Activity implements View.OnClickListener {
 
             Log.e("NewsActivity", "SendRateStatus called :" + params[0]);
 
-            switch (params[0]) {
-                case 1:
-                    gm.unLikeSomething(item.getId(), item.getTargetType(), 2);
-                    break ;
-                case 2:
-                    gm.likeSomething(item.getId(), item.getTargetType(), 2);
-                    break ;
-                default:
-                    break ;
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged()) {
+                switch (params[0]) {
+                    case 1:
+                        gm.unLikeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
+                        break ;
+                    case 2:
+                        gm.likeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
+                        break ;
+                    default:
+                        break ;
+                }
             }
 
             return null;

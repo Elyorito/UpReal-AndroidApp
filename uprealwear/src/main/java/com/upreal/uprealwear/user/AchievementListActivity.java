@@ -9,40 +9,36 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.server.UserUtilManager;
+import com.upreal.uprealwear.utils.Achievement;
 import com.upreal.uprealwear.utils.Item;
 import com.upreal.uprealwear.utils.ListItemAdapter;
-import com.upreal.uprealwear.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kyosukke on 17/08/2015.
+ * Created by Kyosukke on 18/08/2015.
  */
-public class ListActivity extends Activity implements WearableListView.ClickListener {
+public class AchievementListActivity extends Activity implements WearableListView.ClickListener {
 
-    private List<Item> absLists;
+
+    private List<Item> absAchievement;
 
     private WearableListView listView;
     private ListItemAdapter adapter;
-
-    Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.util_list);
 
-        absLists = new ArrayList<Item>();
+        absAchievement = new ArrayList<Item>();
         listView = (WearableListView) findViewById(R.id.wearable_list);
-        adapter = new ListItemAdapter(this, absLists);
-
-        if (getIntent().getExtras() != null)
-            item = getIntent().getExtras().getParcelable("item");
+        adapter = new ListItemAdapter(this, absAchievement);
 
         new RetrieveList().execute();
         listView.setAdapter(adapter);
-        listView.setClickListener(this);
     }
 
     @Override
@@ -59,36 +55,28 @@ public class ListActivity extends Activity implements WearableListView.ClickList
         @Override
         protected List<Item> doInBackground(Void... params) {
 
-            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
-            int targetType = (item == null) ? (6) : (8);
+            List<Item> list = new ArrayList<Item>();
+            UserUtilManager uum = new UserUtilManager();
 
-            if (userSession.isLogged()) {
-                List<Item> list = new ArrayList<Item>();
-                List<Lists> lList = new ArrayList<Lists>();
+            List<Achievement> aList = uum.getAchievement();
 
-                for (Lists l : lList) {
-                    // if there is no item in Extras, then it's delete
-                    // if there is an item in Extras, then it's add
-                    list.add(new Item(l.getId(), targetType, l.getName(), (item == null) ? (null) : ("" + item.getId())));
-                }
-
-                return list;
+            for (Achievement a : aList) {
+                list.add(new Item(a.getId(), 9, "" + a.getName(), null));
             }
-            return null;
+
+            return list;
         }
 
         @Override
         protected void onPostExecute(List<Item> res) {
             super.onPostExecute(res);
-            Log.e("ListActivity", "WebService called. Result:");
-            if (res != null) {
-                absLists.clear();
-                for (Item i : res) {
-                    absLists.add(i);
-                    Log.e("ListActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
-                }
+            Log.e("AchievementListActivity", "WebService called. Result:");
+            absAchievement.clear();
+            for (Item i : res) {
+                absAchievement.add(i);
+                Log.e("AchievementListActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
             }
-            if (absLists.isEmpty()) {
+            if (absAchievement.isEmpty()) {
                 Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
                 intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.FAILURE_ANIMATION);
                 intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, getString(R.string.search_empty));
@@ -98,4 +86,5 @@ public class ListActivity extends Activity implements WearableListView.ClickList
             adapter.notifyDataSetChanged();
         }
     }
+
 }

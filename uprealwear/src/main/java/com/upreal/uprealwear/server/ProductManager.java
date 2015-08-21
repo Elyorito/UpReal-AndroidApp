@@ -31,8 +31,6 @@ public class ProductManager extends SoapManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("keyword", search);
         try {
-//            SoapObject res0 = (SoapObject) envelope.bodyIn;
-
             Object res = callService(methodname, request);
             if (res instanceof Vector) {
                 Vector<SoapObject> results = (Vector<SoapObject>) res;

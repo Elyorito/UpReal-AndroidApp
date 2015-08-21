@@ -9,49 +9,35 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.server.UserManager;
+import com.upreal.uprealwear.utils.History;
 import com.upreal.uprealwear.utils.Item;
 import com.upreal.uprealwear.utils.ListItemAdapter;
-import com.upreal.uprealwear.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kyosukke on 17/08/2015.
+ * Created by Kyosukke on 18/08/2015.
  */
-public class ListActivity extends Activity implements WearableListView.ClickListener {
+public class HistoryActivity extends Activity {
 
-    private List<Item> absLists;
+    private List<Item> absHistory;
 
     private WearableListView listView;
     private ListItemAdapter adapter;
-
-    Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.util_list);
 
-        absLists = new ArrayList<Item>();
+        absHistory = new ArrayList<Item>();
         listView = (WearableListView) findViewById(R.id.wearable_list);
-        adapter = new ListItemAdapter(this, absLists);
-
-        if (getIntent().getExtras() != null)
-            item = getIntent().getExtras().getParcelable("item");
+        adapter = new ListItemAdapter(this, absHistory);
 
         new RetrieveList().execute();
         listView.setAdapter(adapter);
-        listView.setClickListener(this);
-    }
-
-    @Override
-    public void onClick(WearableListView.ViewHolder v) {
-        Integer tag = (Integer) v.itemView.getTag();
-    }
-
-    @Override
-    public void onTopEmptyRegionClick() {
     }
 
     private class RetrieveList extends AsyncTask<Void, Void, List<Item>> {
@@ -59,36 +45,36 @@ public class ListActivity extends Activity implements WearableListView.ClickList
         @Override
         protected List<Item> doInBackground(Void... params) {
 
+            UserManager um = new UserManager();
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
-            int targetType = (item == null) ? (6) : (8);
 
             if (userSession.isLogged()) {
                 List<Item> list = new ArrayList<Item>();
-                List<Lists> lList = new ArrayList<Lists>();
+                List<History> hList = new ArrayList<History>();
 
-                for (Lists l : lList) {
-                    // if there is no item in Extras, then it's delete
-                    // if there is an item in Extras, then it's add
-                    list.add(new Item(l.getId(), targetType, l.getName(), (item == null) ? (null) : ("" + item.getId())));
+                for (History h : hList) {
+                    list.add(new Item(h.getId(), 0, "" + h.getId(), null));
                 }
 
                 return list;
+
             }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(List<Item> res) {
             super.onPostExecute(res);
-            Log.e("ListActivity", "WebService called. Result:");
+            Log.e("HistoryActivity", "WebService called. Result:");
             if (res != null) {
-                absLists.clear();
+                absHistory.clear();
                 for (Item i : res) {
-                    absLists.add(i);
-                    Log.e("ListActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
+                    absHistory.add(i);
+                    Log.e("HistoryActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
                 }
             }
-            if (absLists.isEmpty()) {
+            if (absHistory.isEmpty()) {
                 Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
                 intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.FAILURE_ANIMATION);
                 intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, getString(R.string.search_empty));
