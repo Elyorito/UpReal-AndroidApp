@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.bridge.BridgeDeviceActivity;
 import com.upreal.uprealwear.global.NewsResultActivity;
 import com.upreal.uprealwear.search.SearchActivity;
 import com.upreal.uprealwear.user.ListActivity;
@@ -38,14 +39,14 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         search.setOnClickListener(this);
 
         SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
-/*
+
         if (!userSession.isLogged()) {
             Intent intent = new Intent(this, BridgeDeviceActivity.class);
             startActivity(intent);
             finish();
         } else {
             username.setText(userSession.getUser().getFirstname() + " " + userSession.getUser().getLastname());
-        }*/
+        }
     }
 
     @Override

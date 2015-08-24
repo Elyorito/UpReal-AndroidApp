@@ -97,7 +97,12 @@ public class ProductActivity extends Activity implements View.OnClickListener {
         protected Integer doInBackground(Void... params) {
 
             GlobalManager gm = new GlobalManager();
-            return gm.getRateStatus(item.getId(), item.getTargetType(), 2);
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged()) {
+                return gm.getRateStatus(item.getId(), item.getTargetType(), userSession.getUserId());
+            }
+            return 0;
         }
 
         @Override

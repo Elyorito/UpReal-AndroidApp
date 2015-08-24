@@ -24,7 +24,7 @@ public class AchievementActivity extends Activity {
     @Override
     protected void onCreate(Bundle savecInstanceState) {
         super.onCreate(savecInstanceState);
-        setContentView(R.layout.util_details);
+        setContentView(R.layout.activity_achievement);
 
         name = (TextView) findViewById(R.id.name);
         desc = (TextView) findViewById(R.id.desc);
