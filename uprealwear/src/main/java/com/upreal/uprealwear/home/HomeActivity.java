@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
@@ -18,6 +19,7 @@ import com.upreal.uprealwear.user.SessionManagerUser;
 
 public class HomeActivity extends Activity implements View.OnClickListener {
 
+    private ImageView logo;
     private TextView username;
     private ImageButton news;
     private ImageButton list;
@@ -28,11 +30,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        logo = (ImageView) findViewById(R.id.logo);
         username = (TextView) findViewById(R.id.username);
         news = (ImageButton) findViewById(R.id.news);
         list = (ImageButton) findViewById(R.id.list);
         search = (ImageButton) findViewById(R.id.search);
 
+        logo.setOnClickListener(this);
         username.setOnClickListener(this);
         news.setOnClickListener(this);
         list.setOnClickListener(this);
@@ -54,6 +58,13 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         Intent intent;
 
         switch (v.getId()) {
+            case R.id.logo:
+                SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+                userSession.deleteCurrentUser();
+                intent = new Intent(this, BridgeDeviceActivity.class);
+                startActivity(intent);
+                finish();
+                break ;
             case R.id.username:
                 Log.e("HomeActivity", "Username clicked.");
                 intent = new Intent(this, ProfileActivity.class);

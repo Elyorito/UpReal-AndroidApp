@@ -32,6 +32,7 @@ public class AchievementActivity extends Activity {
 
         item = getIntent().getExtras().getParcelable("item");
 
+        name.setText(item.getName());
         new RetrieveAchievement().execute();
     }
 
@@ -45,6 +46,8 @@ public class AchievementActivity extends Activity {
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
             if (userSession.isLogged()) {
+                if (uum.hasAchievement(userSession.getUserId(), item.getId()))
+                    return 1;
             }
             return 0;
         }

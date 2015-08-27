@@ -4,6 +4,7 @@ import com.upreal.uprealwear.utils.Achievement;
 import com.upreal.uprealwear.utils.ConverterManager;
 
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,5 +71,22 @@ public class UserUtilManager extends SoapManager {
             q.printStackTrace();
         }
         return null;
+    }
+
+    public boolean hasAchievement(int idUser, int idAchievement) {
+        Boolean res;
+        String methodname = "hasAchievement";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_achievement", idAchievement);
+
+        try {
+            res = Boolean.valueOf(((SoapPrimitive) callService(methodname, request)).toString());
+            return res;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return false;
     }
 }
