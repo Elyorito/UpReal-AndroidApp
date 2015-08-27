@@ -1,12 +1,10 @@
 package com.upreal.upreal.geolocalisation;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +31,6 @@ import com.upreal.upreal.store.StoreActivity;
 import com.upreal.upreal.utils.Address;
 import com.upreal.upreal.utils.SoapProductUtilManager;
 import com.upreal.upreal.utils.SoapStoreManager;
-import com.upreal.upreal.utils.SoapUserUtilManager;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -85,6 +82,8 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        gClient.connect();
 
         mLocRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
