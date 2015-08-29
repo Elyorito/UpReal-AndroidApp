@@ -32,7 +32,7 @@ public class UserFragmentOptions extends android.support.v4.app.Fragment {
         mLayoutManager = new GridLayoutManager(v.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         OPTION = new String[] {"Editer mon compte", "Changer le mot de passe"};
-        mAdapter = new AdapterOption(OPTION);
+        mAdapter = new UserAdapterOption(OPTION);
         recyclerView.setAdapter(mAdapter);
 
         return v;

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.upreal.upreal.R;
 import com.upreal.upreal.product.AdapterCommentary;
+import com.upreal.upreal.utils.Rate;
 import com.upreal.upreal.utils.RateComment;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapUserManager;
@@ -32,6 +33,7 @@ public class StoreFragmentCommentary extends android.support.v4.app.Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Button but;
     private Store store;
+    private List<Rate> listRate = new ArrayList<>();
     private List<RateComment> listComment = new ArrayList<RateComment>();
 
     @Nullable
@@ -53,16 +55,20 @@ public class StoreFragmentCommentary extends android.support.v4.app.Fragment {
 
     private class RetrieveComment extends AsyncTask<Void, Void, List<RateComment>> {
 
+        RateComment rateComment;
         User user = new User();
 
         @Override
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            //listComment = gm.getRateComment(0, store.getId(), 0, 1, 0);
+            listRate = gm.getRate(user.getId(), gm.getTarget_user());
             SoapUserManager um = new SoapUserManager();
-            for (int i = 0; i < listComment.size(); i++) {
-                user = um.getAccountInfoUsername(Integer.parseInt(listComment.get(i).getmNameUser().toString()));
-                listComment.get(i).setmNameUser(user.getUsername());
+            for (int i = 0; i < listRate.size(); i++) {
+                user = um.getAccountInfoUsername(listRate.get(i).getmId_user());
+                rateComment = new RateComment();
+                rateComment.setmNameUser(user.getUsername());
+                rateComment.setmTextComment(listRate.get(i).getmCommentary());
+                listComment.add(rateComment);
             }
             return listComment;
         }

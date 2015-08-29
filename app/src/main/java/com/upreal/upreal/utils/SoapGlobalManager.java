@@ -28,12 +28,55 @@ public class SoapGlobalManager {
     private static final String SOAP_ACTION = "http://163.5.84.202/UpReal/services";
     private static String SESSION_ID;
 
+    private int target_user;
+    private int target_product;
+    private int target_store;
+    private int target_article;
+    private int target_ovr_rate;
+
+    public SoapGlobalManager() {
+        target_user = 1;
+        target_product = 2;
+        target_store = 3;
+        target_article = 4;
+        target_ovr_rate = 5;
+    }
+
     private final void testHttpResponse(HttpTransportSE ht) {
         ht.debug = DEBUG_SOAP_REQUEST_RESPONSE;
         if (DEBUG_SOAP_REQUEST_RESPONSE) {
             Log.v("SOAP RETURN", "Request XML:\n" + ht.requestDump);
             Log.v("SOAP RETURN", "\n\n\nResponse XML:\n" + ht.responseDump);
         }
+    }
+
+    public int createComment(int id_user, int id_target, int id_target_type, String commentary) {
+        int responseComment = 0;
+        String methodname = "createComment";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", id_user);
+        request.addProperty("id_target", id_target);
+        request.addProperty("id_target_type", id_target_type);
+        request.addProperty("commentary", commentary);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive result = (SoapPrimitive) envelope.getResponse();
+            responseComment = Integer.parseInt(result.toString());
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return responseComment;
     }
 
     public List<Article> getNews(){
@@ -103,7 +146,7 @@ public class SoapGlobalManager {
         return isSuccess;
     }
 
-    public List<Rate> getRate(int id_target, int id_target_type, int type) {
+    public List<Rate> getRate(int id_target, int id_target_type) {
         List<Rate> listRate = new ArrayList<Rate>();
 
         String methodname = "getRate";
@@ -112,12 +155,10 @@ public class SoapGlobalManager {
         if (id_target_type == 1) {
             request.addProperty("id_target", id_target);
             request.addProperty("id_target_type", id_target_type);
-            request.addProperty("type", type);
         }
         if (id_target_type == 2){
             request.addProperty("id_target", id_target);
             request.addProperty("id_target_type", id_target_type);
-            request.addProperty("type", type);
         }
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
@@ -218,8 +259,6 @@ public class SoapGlobalManager {
         rate.setmCommentary(soapObject.getPropertyAsString("commentary").toString());
         rate.setmDate(soapObject.getPropertyAsString("date").toString());
         rate.setmActive(Integer.parseInt(soapObject.getPropertyAsString("active").toString()));
-        rate.setmUp(Integer.parseInt(soapObject.getPropertyAsString("up").toString()));
-        rate.setmDown(Integer.parseInt(soapObject.getPropertyAsString("down").toString()));
         return rate;
     }
 
@@ -245,5 +284,45 @@ public class SoapGlobalManager {
         HeaderProperty headerPropertyObj = new HeaderProperty("cookie", SoapGlobalManager.SESSION_ID);
         header.add(headerPropertyObj);
         return header;
+    }
+
+    public int getTarget_user() {
+        return target_user;
+    }
+
+    public int getTarget_product() {
+        return target_product;
+    }
+
+    public int getTarget_store() {
+        return target_store;
+    }
+
+    public int getTarget_article() {
+        return target_article;
+    }
+
+    public int getTarget_ovr_rate() {
+        return target_ovr_rate;
+    }
+
+    public void setTarget_user(int target_user) {
+        this.target_user = target_user;
+    }
+
+    public void setTarget_product(int target_product) {
+        this.target_product = target_product;
+    }
+
+    public void setTarget_store(int target_store) {
+        this.target_store = target_store;
+    }
+
+    public void setTarget_article(int target_article) {
+        this.target_article = target_article;
+    }
+
+    public void setTarget_ovr_rate(int target_ovr_rate) {
+        this.target_ovr_rate = target_ovr_rate;
     }
 }

@@ -60,7 +60,7 @@ public class SoapProductUtilManager {
         return isSuccess;
     }
 
-    public int createProductComment(int idUser, int idProduct, String commentary) {
+/*    public int createProductComment(int idUser, int idProduct, String commentary) {
 
         int responseComment = 0;
         String methodname = "createProductComment";
@@ -88,7 +88,7 @@ public class SoapProductUtilManager {
             q.printStackTrace();
         }
         return responseComment;
-    }
+    }*/
 
     public List<Address> getAddressByProduct(int idProduct) {
         List<Address> listAddress = new ArrayList<>();

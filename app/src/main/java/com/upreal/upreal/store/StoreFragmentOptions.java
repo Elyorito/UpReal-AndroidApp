@@ -32,7 +32,7 @@ public class StoreFragmentOptions extends android.support.v4.app.Fragment {
         mLayoutManager = new GridLayoutManager(v.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         OPTION = new String[] {"Modifier les informations", "Proposer un produit existant", "Voir les produits"};
-        mAdapter = new AdapterOption(OPTION);
+        mAdapter = new StoreAdapterOption(OPTION);
         recyclerView.setAdapter(mAdapter);
 
         return v;

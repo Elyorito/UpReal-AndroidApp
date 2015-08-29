@@ -36,34 +36,25 @@ public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-        if (toggleAccount && sessionManagerUser.getUserId() == mUser.getId()) {
-
-            switch (position) {
-                case 0: //Commentary
-                    UserFragmentCommentary com = new UserFragmentCommentary();
-                    com.setArguments(bundle);
-                    return com;
-                case 1: //Options
+        switch (position) {
+            case 0: //Commentary
+                UserFragmentCommentary com = new UserFragmentCommentary();
+                com.setArguments(bundle);
+                return com;
+            case 1:
+                if (toggleAccount && sessionManagerUser.getUserId() == mUser.getId()) {
+                    //Options
                     UserFragmentOptions opt = new UserFragmentOptions();
                     opt.setArguments(bundle);
                     return opt;
-                default:
-                    return null;
-            }
-        } else {
-            switch (position) {
-                case 0: //Commentary
-                    UserFragmentCommentary com = new UserFragmentCommentary();
-                    com.setArguments(bundle);
-                    return com;
-                case 1: //Social
+                } else {
+                    //Social
                     UserFragmentSocial social = new UserFragmentSocial();
                     social.setArguments(bundle);
                     return social;
-                default:
-                    return null;
-            }
+                }
+            default:
+                return null;
         }
     }
 

@@ -50,9 +50,11 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
 
         new RetrieveComment().execute();
+/*
         String USER[] = new String[] {Integer.toString(prod.getId()), "Elyo", "Kyo", "Nunkh", "JerEm", "AngelRoic", "SeanCor", "Sam"};
         String COMMENT[] = new String[]{"This is SHIT", "Quite Good", "I love that things, I mean I Like it, I mean...", "Good SHIT", "<3", "GS", "Corruption!", "Do you Know this product?"};
         String RATING[] = new String[]{"1", "3", "4", "5", "5", "3", "4", "2", "2"};
+*/
 
       //  mAdapter = new AdapterCommentary(USER, COMMENT, RATING);
         /*recyclerView.setAdapter(mAdapter);*/
@@ -68,7 +70,7 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
         @Override
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            listRate = gm.getRate(prod.getId(), 2, 1);
+            listRate = gm.getRate(prod.getId(), gm.getTarget_product());
             SoapUserManager um = new SoapUserManager();
             for (int i = 0; i < listRate.size(); i++) {
                 user = um.getAccountInfoUsername(listRate.get(i).getmId_user());

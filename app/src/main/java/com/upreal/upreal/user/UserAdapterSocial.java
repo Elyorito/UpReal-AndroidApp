@@ -22,6 +22,7 @@ import com.upreal.upreal.R;
 import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.SoapProductUtilManager;
 import com.upreal.upreal.utils.SoapUserUtilManager;
 import com.upreal.upreal.utils.User;
@@ -33,6 +34,7 @@ import com.upreal.upreal.utils.database.DatabaseQuery;
  */
 public class UserAdapterSocial extends RecyclerView.Adapter<UserAdapterSocial.ViewHolder> implements View.OnClickListener{
 
+    private static final int TARGET_USER = 1;
     private String mSOCIALOPT[];
     private User mUser;
     private SessionManagerUser sessionManagerUser;
@@ -149,7 +151,7 @@ public class UserAdapterSocial extends RecyclerView.Adapter<UserAdapterSocial.Vi
                                     if (comment.getText().toString().equals(""))
                                         Toast.makeText(v.getContext(), "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
                                     else
-                                        new sendComment(1, comment.getText().toString(), v.getContext()).execute();
+                                        new sendComment(comment.getText().toString(), v.getContext()).execute();
                                 }
                             });
                             builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -224,22 +226,12 @@ public class UserAdapterSocial extends RecyclerView.Adapter<UserAdapterSocial.Vi
     }
 
     private class sendComment extends AsyncTask<Void, Void, Boolean> {
-        private int type;
         private String comment;
         private Context mContext;
 
-        public sendComment(int type, String comment, Context context) {
-            this.type = type;
+        public sendComment(String comment, Context context) {
             this.comment = comment;
             this.mContext = context;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
         }
 
         public String getComment() {
@@ -252,13 +244,8 @@ public class UserAdapterSocial extends RecyclerView.Adapter<UserAdapterSocial.Vi
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            if (this.type == 1) {
-                SoapUserUtilManager pum = new SoapUserUtilManager();
-                pum.createUserComment(sessionManagerUser.getUserId(), mUser.getId(), comment);
-            } else if (this.type == 0) {
-                SoapProductUtilManager pum = new SoapProductUtilManager();
-                pum.createProductComment(sessionManagerUser.getUserId(), mProduct.getId(), comment);
-            }
+            SoapGlobalManager pum = new SoapGlobalManager();
+            pum.createComment(sessionManagerUser.getUserId(), mUser.getId(), pum.getTarget_user(), comment);
             return true;
         }
 

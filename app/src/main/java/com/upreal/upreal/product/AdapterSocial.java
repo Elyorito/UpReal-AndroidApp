@@ -40,6 +40,8 @@ import java.util.List;
  */
 public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder> implements View.OnClickListener {
 
+    private static final int TARGET_PRODUCT = 2;
+
     private AlertDialog.Builder builder;
 
     private SQLiteDatabase mDatabase;
@@ -179,7 +181,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                                         if (comment.getText().toString().equals(""))
                                             Toast.makeText(v.getContext(), "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
                                         else
-                                            new sendComment(0, comment.getText().toString(), v.getContext()).execute();
+                                            new sendComment(comment.getText().toString(), v.getContext()).execute();
                                     }
                                 });
                                 builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -223,22 +225,12 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
     }
 
     private class sendComment extends AsyncTask<Void, Void, Boolean> {
-        private int type;
         private String comment;
         private Context mContext;
 
-        public sendComment(int type, String comment, Context context) {
-            this.type = type;
+        public sendComment(String comment, Context context) {
             this.comment = comment;
             this.mContext = context;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
         }
 
         public String getComment() {
@@ -251,13 +243,8 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            if (this.type == 1) {
-                SoapUserUtilManager pum = new SoapUserUtilManager();
-                pum.createUserComment(sessionManagerUser.getUserId(), mUser.getId(), comment);
-            } else if (this.type == 0) {
-                SoapProductUtilManager pum = new SoapProductUtilManager();
-                pum.createProductComment(sessionManagerUser.getUserId(), mProduct.getId(), comment);
-            }
+            SoapGlobalManager pum = new SoapGlobalManager();
+             pum.createComment(sessionManagerUser.getUserId(), mProduct.getId(), TARGET_PRODUCT, comment);
             return true;
         }
 

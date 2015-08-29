@@ -67,7 +67,7 @@ public class UserFragmentSearch extends Fragment {
             int nb = list.size();
 
             listUser = list;
-            mAdapter = new com.upreal.upreal.user.UserSearchAdapter(listUser);
+            mAdapter = new UserSearchAdapter(listUser);
             mRecyclerView.setAdapter(mAdapter);
         }
     }
