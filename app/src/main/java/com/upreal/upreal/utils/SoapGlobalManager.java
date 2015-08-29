@@ -36,11 +36,46 @@ public class SoapGlobalManager {
         }
     }
 
+    public List<Lists> getUserList(int userId) {
+        List<Lists> listUserLists = new ArrayList<Lists>();
+
+        String methodname = "getUserList";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            Object response = envelope.getResponse();
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listUserLists.add(this.convertToQueryLists(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listUserLists.add(this.convertToQueryLists(result));
+            }
+
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listUserLists;
+    }
+
     public List<Article> getNews(){
         List<Article> listNews = new ArrayList<Article>();
 
-        int nbProduct;
-        String data = null;
         String methodname = "getNews";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
@@ -198,6 +233,19 @@ public class SoapGlobalManager {
             q.printStackTrace();
         }
         return listRate;
+    }
+
+    private Lists convertToQueryLists(SoapObject soapObject) {
+        Lists lists = new Lists();
+        lists.setId(Integer.parseInt(soapObject.getPropertyAsString("id").toString()));
+        lists.setName(soapObject.getPropertyAsString("name").toString());
+        lists.setL_public(Integer.parseInt(soapObject.getPropertyAsString("public").toString()));
+        lists.setNb_items(Integer.parseInt(soapObject.getPropertyAsString("nb_items").toString()));
+        lists.setId_user(Integer.parseInt(soapObject.getPropertyAsString("id_user").toString()));
+        lists.setType(Integer.parseInt(soapObject.getPropertyAsString("type").toString()));
+        lists.setDate(Integer.parseInt(soapObject.getPropertyAsString("date").toString()));
+
+        return lists;
     }
 
     private Article convertToQueryNews(SoapObject soapObject) {

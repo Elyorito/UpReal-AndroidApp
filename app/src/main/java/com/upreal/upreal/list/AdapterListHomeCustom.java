@@ -61,11 +61,9 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
             public boolean onLongClick(View v) {
                 switch (v.getId()) {
                     case R.id.rowtextlist:
-                        if (position != 0) {
-                            //Toast.makeText(v.getContext(),mListCust.get(position -1)[0], Toast.LENGTH_SHORT).show();
-                            mListCust.remove(position);
-                            notifyItemRemoved(position);
-                        }
+                        //Toast.makeText(v.getContext(),mListCust.get(position -1)[0], Toast.LENGTH_SHORT).show();
+                        mListCust.remove(position);
+                        notifyItemRemoved(position);
                         return true;
                     default:
                         break;
@@ -78,11 +76,9 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.rowtextlist:
-                        if (position != 0) {
-                            Intent intent = new Intent(v.getContext(), ListCustomActivity.class);
-                            intent.putExtra("listcustom", mListCust.get(position));
-                            v.getContext().startActivity(intent);
-                        }
+                        Intent intent = new Intent(v.getContext(), ListCustomActivity.class);
+                        intent.putExtra("listcustom", mListCust.get(position));
+                        v.getContext().startActivity(intent);
                         break;
                     default:
                         break;
