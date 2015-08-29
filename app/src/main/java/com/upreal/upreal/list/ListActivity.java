@@ -128,11 +128,13 @@ public class ListActivity extends AppCompatActivity {
         listLike = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"3"}, null, null, null);
         Toast.makeText(getApplicationContext(), "ListLike" + listLike[0],Toast.LENGTH_SHORT).show();
         if (listLike[0] != null) {
-            getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listLike[0]}, null, null, null);
+            getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=? AND id_user=?", new String[]{listLike[0], Integer.toString(sessionManagerUser.getUserId())}, null, null, null);
             if (getITEMS == null)
                 listsBase.add(null);
-            else
+            else {
                 listsBase.add(getProduct(getITEMS, mDbQuery));
+                //Toast.makeText(getApplicationContext(), "GetItems" + getITEMS.length + "/" + getITEMS[0][0], Toast.LENGTH_SHORT).show();
+            }
         /*    Toast.makeText(getApplicationContext(),"GetItem nb=" + getITEMS.length, Toast.LENGTH_SHORT).show();
             */
         } else

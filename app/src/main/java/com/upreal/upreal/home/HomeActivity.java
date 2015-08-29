@@ -283,33 +283,39 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 3://News
+                                Toast.makeText(rv.getContext(), "News Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 4://Catalogue
+                                Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 5://Shop
-/*
+                                Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
+                                /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 6://Loyalty
-/*
+                                Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
+                                /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 7://Filleuls
-/*
+                                Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
+                                /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 8://Achievment
-/*
+                                Toast.makeText(rv.getContext(), "Achievment Not Implemented",Toast.LENGTH_SHORT).show();
+                                /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */

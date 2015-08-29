@@ -271,5 +271,8 @@
     <string name="subject">Sujet</string>
     <string name="need_mail_app">Il vous faut une application d\'envoie de mail</string>
 
+    <!--BridgeActivity-->
+    <string name="loading">Connexion vers la montre connectée...</string>
+    <string name="connected">Connecté !</string>
 
 </resources>

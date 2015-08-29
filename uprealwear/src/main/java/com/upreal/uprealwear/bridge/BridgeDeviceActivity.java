@@ -6,14 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.upreal.uprealwear.R;
 import com.upreal.uprealwear.home.HomeActivity;
@@ -24,77 +19,90 @@ import com.upreal.uprealwear.utils.User;
 /**
  * Created by Kyosukke on 17/08/2015.
  */
-public class BridgeDeviceActivity extends Activity implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String USER_KEY = "com.upreal.uprealwear.key.user";
+public class BridgeDeviceActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks {
 
-    private GoogleApiClient client;
+    private static final String CONNECT_ACCOUNT = "/connect_account";
 
     private int idUser = 0;
+
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
+        initGoogleApiClient();
+        start(2);
+    }
 
+    private void initGoogleApiClient() {
         client = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
                 .build();
 
-        start(2);
+        if( client != null && !(client.isConnected() || client.isConnecting()))
+            client.connect();
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
+        if(client != null && !(client.isConnected() || client.isConnecting()))
+            client.connect();
+    }
+
+    @Override
+    protected void onStart() {
         super.onStart();
-        client.connect();
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-        Wearable.DataApi.addListener(client, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Wearable.DataApi.removeListener(client, this);
-        client.disconnect();
-    }
-
-    @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-        for (DataEvent event : dataEvents) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-                Log.e("BridgeDeviceActivity", "Item Changed.");
-                DataItem item = event.getDataItem();
-                if (item.getUri().getPath().compareTo("/user") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    start(dataMap.getInt(USER_KEY));
-                }
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                Log.e("BridgeDeviceActivity", "Item Deleted.");
+    protected void onStop() {
+        if (client != null) {
+            Wearable.MessageApi.removeListener(client, this);
+            if (client.isConnected()) {
+                client.disconnect();
             }
         }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(client != null)
+            client.unregisterConnectionCallbacks(this);
+        super.onDestroy();
     }
 
     // Our method to update the count
     private void start(int idUser) {
         Log.e("BridgeDeviceActivity", "ID USER:" + idUser);
         this.idUser = idUser;
-        if (idUser != 0)
+        if (idUser > 0)
             new RetrieveUser().execute();
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnected(Bundle bundle) {
+        Wearable.MessageApi.addListener(client, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onMessageReceived(final MessageEvent messageEvent) {
+        runOnUiThread( new Runnable() {
+            @Override
+            public void run() {
+                if( messageEvent.getPath().equalsIgnoreCase(CONNECT_ACCOUNT)) {
+                    start(Integer.parseInt(new String(messageEvent.getData())));
+                }
+            }
+        });
     }
 
     private class RetrieveUser extends AsyncTask<Void, Void, User> {

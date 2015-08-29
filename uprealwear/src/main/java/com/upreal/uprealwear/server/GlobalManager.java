@@ -102,9 +102,9 @@ public class GlobalManager extends SoapManager {
         String methodname = "getRateStatus";
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
         request.addProperty("id_target", idTarget);
         request.addProperty("id_target_type", targetType);
-        request.addProperty("id_user", idUser);
 
         try {
             int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());

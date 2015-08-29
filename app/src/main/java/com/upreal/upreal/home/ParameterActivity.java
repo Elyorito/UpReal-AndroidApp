@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
+import com.upreal.upreal.bridge.BridgeDeviceActivity;
 import com.upreal.upreal.login.LoginActivity;
 import com.upreal.upreal.login.LoginViewPagerAdapter;
 import com.upreal.upreal.user.UserChangePwd;
@@ -39,6 +40,7 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
     private Button clearCache;
     private Button likeFacebook;
     private Button followTwitter;
+    private Button bridge;
     private Button contactUs;
     private Button about;
     private Button deconnexion;
@@ -57,6 +59,7 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
         clearCache = (Button) findViewById(R.id.clear_cache);
         likeFacebook = (Button) findViewById(R.id.like_facebook);
         followTwitter = (Button) findViewById(R.id.follow_twitter);
+        bridge = (Button) findViewById(R.id.bridge);
         contactUs = (Button) findViewById(R.id.contact_us);
         about = (Button) findViewById(R.id.about);
         deconnexion = (Button) findViewById(R.id.deconnexion);
@@ -66,6 +69,7 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
         clearCache.setOnClickListener(this);
         likeFacebook.setOnClickListener(this);
         followTwitter.setOnClickListener(this);
+        bridge.setOnClickListener(this);
         contactUs.setOnClickListener(this);
         about.setOnClickListener(this);
         deconnexion.setOnClickListener(this);
@@ -103,6 +107,12 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
             case R.id.like_facebook:
                 break;
             case R.id.follow_twitter:
+                break;
+            case R.id.bridge:
+                if (sessionManagerUser.isLogged()) {
+                    Intent i = new Intent(this.getApplicationContext(), BridgeDeviceActivity.class);
+                    startActivity(i);
+                }
                 break;
             case R.id.contact_us:
                 builder.setTitle("Nous envoyer un mail ?");
