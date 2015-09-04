@@ -183,7 +183,7 @@ public class SoapGlobalManager {
         return isSuccess;
     }
 
-    public List<Rate> getRate(int id_target, int id_target_type, int type) {
+    public List<Rate> getRate(int id_target, int id_target_type) {
         List<Rate> listRate = new ArrayList<Rate>();
 
         String methodname = "getRate";
@@ -192,12 +192,10 @@ public class SoapGlobalManager {
         if (id_target_type == 1) {
             request.addProperty("id_target", id_target);
             request.addProperty("id_target_type", id_target_type);
-            request.addProperty("type", type);
         }
         if (id_target_type == 2){
             request.addProperty("id_target", id_target);
             request.addProperty("id_target_type", id_target_type);
-            request.addProperty("type", type);
         }
 
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
