@@ -8,8 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Address;
 import com.upreal.upreal.utils.SessionManagerUser;
@@ -23,9 +27,12 @@ import com.upreal.upreal.view.SlidingTabLayout;
  */
 public class UserActivity extends ActionBarActivity {
 
+    private View userInfo;
+
     private TextView userLocal;
     private TextView userUsername;
     private TextView userDesc;
+    private ImageView userPicture;
 
     private Address address;
     private CharSequence title;
@@ -37,10 +44,12 @@ public class UserActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        userInfo = findViewById(R.id.user_info);
 
         userUsername = (TextView) findViewById(R.id.user_username);
         userDesc = (TextView) findViewById(R.id.user_desc);
         userLocal = (TextView) findViewById(R.id.user_local);
+        userPicture = (ImageView) userInfo.findViewById(R.id.user_picture);
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         boolean toggleAccount = sessionManagerUser.isLogged();
@@ -52,6 +61,8 @@ public class UserActivity extends ActionBarActivity {
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/" + user.getPicture()).into(userPicture);
+
         /*
         userLocal.setText("Adresse " + getResources().getString(R.string.not_defined));
         if (user.getId_address() != -1 && user.getId_address() != 0)

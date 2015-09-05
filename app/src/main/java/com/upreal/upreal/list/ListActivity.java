@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.DividerItemDecoration;
 import com.upreal.upreal.utils.SessionManagerUser;
+import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 
@@ -214,11 +216,13 @@ public class ListActivity extends AppCompatActivity {
                             return;
                         }
                         mDatabase = mDbHelper.openDataBase();
+                        String[] listsend = {editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"};
                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
                         for(String[] list : lists){
                             arrayListCust.add(list);
                         }
+                        new SendCreatedLists().execute(listsend);
                         // TODO Auto-generated method stub
                          /*Refresh list item [BUG]*/
                         mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
@@ -237,6 +241,22 @@ public class ListActivity extends AppCompatActivity {
                 builder.setView(view).create().show();
             }
         });
+    }
+
+    private class  SendCreatedLists extends AsyncTask<String[], Void, Integer> {
+
+
+        @Override
+        protected Integer doInBackground(String[]... params) {
+            /*SoapGlobalManager gm = new SoapGlobalManager();
+            gm.createComment(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]), Integer.parseInt(params[3]), Integer.parseInt(params[4]));
+            */return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+        }
     }
 
     private ArrayList<String[]> getProduct(String[][] items,DatabaseQuery mDbQuery) {

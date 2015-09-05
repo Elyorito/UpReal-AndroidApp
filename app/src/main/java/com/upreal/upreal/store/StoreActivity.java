@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.SoapProductManager;
@@ -32,6 +33,7 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
     public static final String TAG = StoreActivity.class.getSimpleName();
     private Toolbar toolbar;
 
+    private View storeInfo;
     private ViewPager mViewPager;
     private StoreViewPagerAdapter adapter;
     private SlidingTabLayout mSlidingTabLayout;
@@ -49,11 +51,12 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
+        storeInfo = findViewById(R.id.store_info);
 
         storeName = (TextView) findViewById(R.id.store_name);
         storeWeb = (TextView) findViewById(R.id.store_website);
         storeCompany = (TextView) findViewById(R.id.store_company);
-        storePicture = (ImageView) findViewById(R.id.store_picture);
+        storePicture = (ImageView) storeInfo.findViewById(R.id.store_picture);
 
         geoloc = (Button) findViewById(R.id.geoloc);
         geoloc.setOnClickListener(this);
@@ -69,6 +72,7 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
         storeName.setText(store.getName());
         storeWeb.setText(store.getWebsite());
         storeCompany.setText(store.getCompanyName());
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Store/" + store.getPicture()).into(storePicture);
 
         CharSequence tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);

@@ -8,6 +8,7 @@ import android.preference.DialogPreference;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +76,9 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         holder.mNameProduct.setText(mProduct[position]);
 */
 /*        holder.mNameProduct.setText(list.get(position).getName());*/
-        //Picasso.with(this.context).load(list.get(position).getPicture()).into(holder.imageProduct);
-        holder.descProduct.setText(list.get(position).getName());
+        Log.v("Picture", list.get(position).getPicture());
+        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + list.get(position).getPicture()).resize(800, 600).into(holder.imageProduct);
+                holder.descProduct.setText(list.get(position).getName());
         holder.descProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

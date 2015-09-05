@@ -19,6 +19,8 @@ public class User implements Parcelable {
     private int id_address;
     private String roles;
     private String short_desc;
+    private String picture;
+
     /*private int active;*/
 
     public User() {
@@ -31,9 +33,10 @@ public class User implements Parcelable {
         this.id_address = -1;
         this.roles = "";
         this.short_desc = "";
+        this.picture = "";
     }
 
-    public User(int id, String username, String firstname, String lastname, String email, int phone, int id_address, String roles, String short_desc){
+    public User(int id, String username, String firstname, String lastname, String email, int phone, int id_address, String roles, String short_desc, String picture){
         this.id = id;
         this.username = username;
         this.firstname = firstname;
@@ -43,6 +46,7 @@ public class User implements Parcelable {
         this.id_address = id_address;
         this.roles = roles;
         this.short_desc = short_desc;
+        this.picture = picture;
     }
 
     public User(int id, String username) {
@@ -60,6 +64,7 @@ public class User implements Parcelable {
         this.id_address = user.getId_address();
         this.roles = user.getRoles();
         this.short_desc = user.getShort_desc();
+        this.picture = user.getPicture();
     }
     public int getId() {
         return id;
@@ -141,6 +146,14 @@ public class User implements Parcelable {
         this.short_desc = short_desc;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -157,6 +170,7 @@ public class User implements Parcelable {
         dest.writeInt(this.phone);
         dest.writeInt(this.id_address);
         dest.writeString(this.short_desc);
+        dest.writeString(this.picture);
     }
     public static final Creator<User> CREATOR = new Parcelable.Creator<User>() {
 
@@ -181,5 +195,6 @@ public class User implements Parcelable {
         this.phone = in.readInt();
         this.id_address = in.readInt();
         this.short_desc = in.readString();
+        this.picture = in.readString();
     }
 }

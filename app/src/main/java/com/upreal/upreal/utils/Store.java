@@ -13,15 +13,18 @@ public class Store implements Parcelable {
     private String website;
     private int id_address;
     private int id_company;
+    private String picture;
+
 
     public Store() {}
 
-    public Store(int id, String name, String website, int id_address, int id_company) {
+    public Store(int id, String name, String website, int id_address, int id_company, String picture) {
         this.id = id;
         this.name = name;
         this.website = website;
         this.id_address = id_address;
         this.id_company = id_company;
+        this.picture = picture;
     }
 
     public int getId() {
@@ -66,6 +69,15 @@ public class Store implements Parcelable {
 
     public String getCompanyName() {return "Non accessible";}
 
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -78,6 +90,7 @@ public class Store implements Parcelable {
         dest.writeString(this.website);
         dest.writeInt(this.id_address);
         dest.writeInt(this.id_company);
+        dest.writeString(this.picture);
     }
     public static final Creator<Store> CREATOR = new Parcelable.Creator<Store>() {
 
@@ -98,5 +111,6 @@ public class Store implements Parcelable {
         this.website = in.readString();
         this.id_address = in.readInt();
         this.id_company = in.readInt();
+        this.picture = in.readString();
     }
 }

@@ -1,6 +1,7 @@
 package com.upreal.upreal.store;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.Store;
 
@@ -23,6 +26,7 @@ import java.util.List;
 public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.ViewHolder> {
     private List<Store> list = new ArrayList<>();
     private AlertDialog.Builder builder;
+    private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         int holderId;
@@ -31,6 +35,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         CardView mCardview;
         Button userUsername;
         Button shareUser;
+        ImageView imageStore;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -38,14 +43,16 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
             mCardview = (CardView) itemView.findViewById(R.id.cardview_search);
 /*            mNameProduct = (TextView) itemView.findViewById(R.id.but_cardview_go_product);*/
             userUsername = (Button) itemView.findViewById(R.id.but_cardview_go_product);
+            imageStore = (ImageView) itemView.findViewById(R.id.image_cardview_product);
             shareUser = (Button) itemView.findViewById(R.id.but_cardview_share);
         }
     }
 
-    StoreSearchAdapter(/*String product[]*/List<Store> liststore) {
+    StoreSearchAdapter(/*String product[]*/List<Store> liststore, Context context) {
         /*this.mProduct = product;*/
 
         this.list = liststore;
+        this.context = context;
     }
 
     @Override
@@ -59,6 +66,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     @Override
     public void onBindViewHolder(StoreSearchAdapter.ViewHolder holder, final int position) {
 
+        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Store/" + list.get(position).getPicture()).into(holder.imageStore);
         holder.userUsername.setText(list.get(position).getName());
         holder.userUsername.setOnClickListener(new View.OnClickListener() {
             @Override

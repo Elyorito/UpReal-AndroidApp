@@ -1,16 +1,20 @@
 package com.upreal.upreal.user;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.User;
 
@@ -27,6 +31,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
 */
     private List<User> list = new ArrayList<User>();
     private AlertDialog.Builder builder;
+    private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         int holderId;
@@ -35,6 +40,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
         CardView mCardview;
         Button userUsername;
         Button shareUser;
+        ImageView imageUser;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -43,13 +49,15 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
 /*            mNameProduct = (TextView) itemView.findViewById(R.id.but_cardview_go_product);*/
             userUsername = (Button) itemView.findViewById(R.id.but_cardview_go_product);
             shareUser = (Button) itemView.findViewById(R.id.but_cardview_share);
+            imageUser = (ImageView) itemView.findViewById(R.id.image_cardview_product);
         }
     }
 
-    UserSearchAdapter(/*String product[]*/List<User> listuser) {
+    UserSearchAdapter(/*String product[]*/List<User> listuser, Context context) {
         /*this.mProduct = product;*/
 
         this.list = listuser;
+        this.context = context;
     }
 
     @Override
@@ -62,10 +70,8 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
 
     @Override
     public void onBindViewHolder(UserSearchAdapter.ViewHolder holder, final int position) {
-/*
-        holder.mNameProduct.setText(mProduct[position]);
-*/
-/*        holder.mNameProduct.setText(list.get(position).getName());*/
+        
+        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/" + list.get(position).getPicture()).into(holder.imageUser);
         holder.userUsername.setText(list.get(position).getUsername());
         holder.userUsername.setOnClickListener(new View.OnClickListener() {
             @Override

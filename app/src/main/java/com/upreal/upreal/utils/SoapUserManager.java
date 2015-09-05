@@ -268,17 +268,9 @@ public class SoapUserManager {
          user.setShort_desc(soapObject.getPropertyAsString("short_desc"));
         if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
             user.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-/*
-        prod.setPicture(soapObject.getPropertyAsString("picture").toString());
-*/
+        if (soapObject.hasProperty("picture") && soapObject.getProperty("picture") != null)
+            user.setPicture(soapObject.getProperty("picture").toString());
 
-/*
-        prod.setName("Fanta");
-        prod.setEan(50235823);
-        prod.setBrand("The coca cola COMPANY");
-        prod.setId(4);
-        prod.setPicture("link to picture");
-*/
         return user;
     }
 

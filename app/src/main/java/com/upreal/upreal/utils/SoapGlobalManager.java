@@ -50,6 +50,37 @@ public class SoapGlobalManager {
         }
     }
 
+    public int createLists(String name, int publics, int type, int nb_items, int id_user) {
+        int responseComment = 0;
+
+        String methodname = "createLists";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("name", name);
+        request.addProperty("publics", publics);
+        request.addProperty("type", type);
+        request.addProperty("nb_items", nb_items);
+        request.addProperty("id_user", id_user);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive result = (SoapPrimitive) envelope.getResponse();
+            responseComment = Integer.parseInt(result.toString());
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return responseComment;
+    }
+
     public int createComment(int id_user, int id_target, int id_target_type, String commentary) {
         int responseComment = 0;
         String methodname = "createComment";

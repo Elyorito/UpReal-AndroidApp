@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.Product;
@@ -46,7 +47,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-      prodName = (TextView) findViewById(R.id.product_name);/*
+        prodName = (TextView) findViewById(R.id.product_name);/*
         prodCategorie = (TextView) findViewById(R.id.product_categorie);
         prodShortDesc = (TextView) findViewById(R.id.product_desc);*/
         prodPicture = (ImageView) findViewById(R.id.product_picture);
@@ -58,10 +59,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         title = new String(prod.getName());
         prodName.setText(prod.getName());
-/*
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
+        /*
         prodCategorie.setText("Categorie");
         prodShortDesc.setText("Short Description empty");
-*/
+        */
         CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(title);
@@ -74,14 +76,14 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
         mSlidingTabLayout.setDistributeEvenly(true);
       mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.ColorPrimaryDark);
-            }
+          @Override
+          public int getIndicatorColor(int position) {
+              return getResources().getColor(R.color.ColorPrimaryDark);
+          }
         });
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        new RetrievePicture().execute();
+        //new RetrievePicture().execute();
     }
 
     @Override

@@ -114,6 +114,8 @@ public class SoapStoreManager {
             store.setId_address(Integer.parseInt(soapObject.getProperty("id_address").toString()));
         if (soapObject.hasProperty("id_company") && soapObject.getProperty("id_company") != null)
             store.setId_company(Integer.parseInt(soapObject.getProperty("id_company").toString()));
+        if (soapObject.hasProperty("picture") && soapObject.getProperty("picture") != null)
+            store.setPicture(soapObject.getProperty("picture").toString());
 
         return store;
     }
