@@ -60,7 +60,8 @@ public class StoreFragmentSearch extends Fragment {
             int nb = list.size();
 
             listStore = list;
-            mAdapter = new StoreSearchAdapter(listStore, getActivity().getApplicationContext());
+            if (listStore != null)
+                mAdapter = new StoreSearchAdapter(listStore, getActivity().getApplicationContext());
             mRecyclerView.setAdapter(mAdapter);
         }
     }

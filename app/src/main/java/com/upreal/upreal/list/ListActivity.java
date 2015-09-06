@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.upreal.upreal.R;
 import com.upreal.upreal.utils.DividerItemDecoration;
+import com.upreal.upreal.utils.Lists;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
@@ -185,6 +186,20 @@ public class ListActivity extends AppCompatActivity {
 
         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
         //Toast.makeText(getApplicationContext(), "TEST" + " length= " + lists.length, Toast.LENGTH_SHORT).show();
+        // Boucle de toutes les lists
+        ArrayList<Lists> bundleLists = new ArrayList<>();
+        Lists singleLists = new Lists();
+        String[][] tabLists;
+        for (int i = 1; i < 8; i++) {
+            tabLists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{Integer.toString(i)}, null, null, null);
+            Toast.makeText(getApplicationContext(),"LISTYPE=" + tabLists.length + "| Type=" + i, Toast.LENGTH_SHORT).show();
+            /*if (tabLists.length > 1) {
+                for (int j = 0; j < tabLists.length; j++) {
+                    bundleLists.add(transformStringToLists(tabLists[j]));
+                }
+            }*/
+        }
+        new SendGetDiffListsServer().execute(bundleLists);
         mDatabase.close();
         mRecyclerViewListCust = (RecyclerView) findViewById(R.id.recyclerlistCust);
         mRecyclerViewListCust.setHasFixedSize(true);
@@ -216,7 +231,7 @@ public class ListActivity extends AppCompatActivity {
                             return;
                         }
                         mDatabase = mDbHelper.openDataBase();
-                        String[] listsend = {editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"};
+                        String[] listsend = {editList.getText().toString(), Integer.toString(1), "8", Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())};
                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
                         for(String[] list : lists){
@@ -243,19 +258,52 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
+    private Lists transformStringToLists(String[] tabLists) {
+        Lists lists = new Lists();
+
+        lists.setName(tabLists[0]);
+        if (tabLists[1] != null)
+            lists.setL_public(Integer.parseInt(tabLists[1]));
+        else
+            lists.setL_public(1);
+        lists.setNb_items(Integer.parseInt(tabLists[2]));
+        lists.setId_user(Integer.parseInt(tabLists[3]));
+        lists.setType(Integer.parseInt(tabLists[4]));
+        //lists.setDate();
+        return lists;
+    }
+
+    private class SendGetDiffListsServer extends AsyncTask<ArrayList<Lists>, Void, ArrayList<Lists>> {
+
+        ArrayList<Lists> lists = new ArrayList<>();
+        @Override
+        protected ArrayList<Lists> doInBackground(ArrayList<Lists>... params) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+            lists = gm.getDiffListServer(params[0]);
+            return lists;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Lists> lists) {
+            super.onPostExecute(lists);
+            Toast.makeText(getApplicationContext(), "Nombre de listes=" + lists.size(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private class  SendCreatedLists extends AsyncTask<String[], Void, Integer> {
 
 
         @Override
         protected Integer doInBackground(String[]... params) {
-            /*SoapGlobalManager gm = new SoapGlobalManager();
-            gm.createComment(params[0], Integer.parseInt(params[1]), Integer.parseInt(params[2]), Integer.parseInt(params[3]), Integer.parseInt(params[4]));
-            */return 0;
+            SoapGlobalManager gm = new SoapGlobalManager();
+            int response = gm.createLists(params[0][0], Integer.parseInt(params[0][1]), Integer.parseInt(params[0][2]), Integer.parseInt(params[0][3]), Integer.parseInt(params[0][4]));
+            return response;
         }
 
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
+            Toast.makeText(getApplicationContext(), "CreateListsResponse=" + Integer.toString(integer), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -71,7 +71,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
     @Override
     public void onBindViewHolder(UserSearchAdapter.ViewHolder holder, final int position) {
         
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/" + list.get(position).getPicture()).into(holder.imageUser);
+        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/" + list.get(position).getPicture()).placeholder(R.drawable.logo_small).resize(400, 600).into(holder.imageUser);
         holder.userUsername.setText(list.get(position).getUsername());
         holder.userUsername.setOnClickListener(new View.OnClickListener() {
             @Override

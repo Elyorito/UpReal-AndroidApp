@@ -11,6 +11,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -50,8 +51,46 @@ public class SoapGlobalManager {
         }
     }
 
+    public ArrayList<Lists> getDiffListServer(ArrayList<Lists> lists) {
+
+        ArrayList<Lists> serverList = new ArrayList<>();
+
+        String methodname = "getDiffListServer";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("mobile", lists);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+
+            Object response = envelope.getResponse();
+        if (response instanceof Vector) {
+            Vector<SoapObject> results = (Vector<SoapObject>) response;
+            int length = results.size();
+            for (int i = 0; i < length; ++i) {
+                SoapObject res = results.get(i);
+                serverList.add(this.convertToQueryLists(res));
+            }
+        } else if (response instanceof SoapObject) {
+            SoapObject result = (SoapObject) response;
+            serverList.add(this.convertToQueryLists(result));
+        }
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return serverList;
+    }
+
     public int createLists(String name, int publics, int type, int nb_items, int id_user) {
-        int responseComment = 0;
+        int responseLists = 0;
 
         String methodname = "createLists";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
@@ -69,7 +108,7 @@ public class SoapGlobalManager {
             ht.call(methodname, envelope);
             testHttpResponse(ht);
             SoapPrimitive result = (SoapPrimitive) envelope.getResponse();
-            responseComment = Integer.parseInt(result.toString());
+            responseLists = Integer.parseInt(result.toString());
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -78,7 +117,7 @@ public class SoapGlobalManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return responseComment;
+        return responseLists;
     }
 
     public int createComment(int id_user, int id_target, int id_target_type, String commentary) {

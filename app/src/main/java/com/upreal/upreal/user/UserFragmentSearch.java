@@ -67,7 +67,8 @@ public class UserFragmentSearch extends Fragment {
             int nb = list.size();
 
             listUser = list;
-            mAdapter = new UserSearchAdapter(listUser, getActivity().getApplicationContext());
+            if (listUser != null)
+                mAdapter = new UserSearchAdapter(listUser, getActivity().getApplicationContext());
             mRecyclerView.setAdapter(mAdapter);
         }
     }
