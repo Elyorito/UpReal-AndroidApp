@@ -21,6 +21,9 @@ public class Item implements Parcelable {
             UNOFFICIAL
             6 = id_lists
             7 = id_items
+            8 = id_items
+            9 = id_achievement
+            10 = id_history
          */
     private int targetType;
 

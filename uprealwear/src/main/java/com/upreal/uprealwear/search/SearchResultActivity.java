@@ -9,6 +9,7 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.server.GlobalManager;
 import com.upreal.uprealwear.server.ProductManager;
 import com.upreal.uprealwear.server.StoreManager;
 import com.upreal.uprealwear.server.UserManager;
@@ -80,27 +81,30 @@ public class SearchResultActivity extends Activity implements WearableListView.C
             if (user == true) {
                 UserManager um = new UserManager();
                 List<User> uList = um.getUserByUsername(searchText);
+                GlobalManager gm = new GlobalManager();
 
                 for (User u : uList) {
-                    list.add(new Item(u.getId(), 1, u.getFirstname() + " " + u.getLastname(), null));
+                    list.add(new Item(u.getId(), 1, u.getUsername(), gm.getPicture(u.getId(), 1)));
                 }
             }
 
             if (product == true) {
                 ProductManager pm = new ProductManager();
                 List<Product> pList = pm.getProduct(searchText);
+                GlobalManager gm = new GlobalManager();
 
                 for (Product p : pList) {
-                    list.add(new Item(p.getId(), 2, p.getName(), pm.getProductPicture(p.getId())));
+                    list.add(new Item(p.getId(), 2, p.getName(), gm.getPicture(p.getId(), 2)));
                 }
             }
 
             if (store == true) {
                 StoreManager sm = new StoreManager();
                 List<Store> sList = sm.getStoreByName(searchText);
+                GlobalManager gm = new GlobalManager();
 
                 for (Store s : sList) {
-                    list.add(new Item(s.getId(), 3, s.getName(), null));
+                    list.add(new Item(s.getId(), 3, s.getName(), gm.getPicture(s.getId(), 3)));
                 }
             }
 

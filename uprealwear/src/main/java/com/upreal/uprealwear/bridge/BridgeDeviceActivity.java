@@ -33,7 +33,7 @@ public class BridgeDeviceActivity extends Activity implements MessageApi.Message
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
         initGoogleApiClient();
-        start(2);
+        start(1);
     }
 
     private void initGoogleApiClient() {

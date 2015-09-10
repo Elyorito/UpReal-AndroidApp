@@ -2,6 +2,7 @@ package com.upreal.uprealwear.server;
 
 import com.upreal.uprealwear.utils.Achievement;
 import com.upreal.uprealwear.utils.ConverterManager;
+import com.upreal.uprealwear.utils.History;
 
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -88,5 +89,62 @@ public class UserUtilManager extends SoapManager {
             q.printStackTrace();
         }
         return false;
+    }
+
+    /*
+    actionType:
+1 = Page Visited
+2 = Like
+3 = Dislike
+4 = Unlike
+5 = Share
+6 = Comment
+7 = Last Modification Profile
+8 = Add Product Store
+     */
+
+    public int createHistory(int idUser, int actionType, int idType, int idTarget) {
+        String methodname = "createHistory";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("action_type", actionType);
+        request.addProperty("id_type", idType);
+        request.addProperty("id_target", idTarget);
+
+        try {
+            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<History> getUserHistory(int idUser) {
+        List<History> listHistory = new ArrayList<History>();
+        String methodname = "getUserHistory";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+
+        try {
+            Object res = callService(methodname, request);
+            if (res instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) res;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject o = results.get(i);
+                    listHistory.add(ConverterManager.convertToHistory(o));
+                }
+            } else if (res instanceof SoapObject) {
+                SoapObject o = (SoapObject) res;
+                listHistory.add(ConverterManager.convertToHistory(o));
+            }
+            return listHistory;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return null;
     }
 }

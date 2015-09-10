@@ -2,8 +2,6 @@ package com.upreal.uprealwear.global;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.wearable.activity.ConfirmationActivity;
@@ -14,8 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.uprealwear.R;
 import com.upreal.uprealwear.server.GlobalManager;
+import com.upreal.uprealwear.server.UserUtilManager;
 import com.upreal.uprealwear.user.SessionManagerUser;
 import com.upreal.uprealwear.utils.Article;
 import com.upreal.uprealwear.utils.Item;
@@ -51,13 +51,7 @@ public class NewsActivity extends Activity implements View.OnClickListener {
         like.setOnClickListener(this);
 
         title.setText(item.getName());
-        if (item.getImagePath() != null) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            picture.setImageBitmap(BitmapFactory.decodeFile(item.getImagePath(), options));
-        }
-        else
-            picture.setImageDrawable(getResources().getDrawable(R.drawable.picture_unavailable));
+        Picasso.with(getApplicationContext()).load(item.getImagePath()).placeholder(R.drawable.picture_unavailable).into(picture);
         new RetrieveArticle().execute();
         new RetrieveRateStatus().execute();
     }
@@ -86,8 +80,8 @@ public class NewsActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected Article doInBackground(Void... params) {
-
             GlobalManager gm = new GlobalManager();
+
             return gm.getNewsInfo(item.getId());
         }
 
@@ -123,26 +117,10 @@ public class NewsActivity extends Activity implements View.OnClickListener {
         @Override
         protected void onPostExecute(Integer res) {
             super.onPostExecute(res);
-            switch (res) {
-                case 0:
-                    like.setAlpha(.5f);
-                    like.setColorFilter(R.color.black);
-                    break ;
-                case 1:
-                    like.setAlpha(.5f);
-                    like.setColorFilter(R.color.black);
-                    break ;
-                case 2:
-                    like.setAlpha(1f);
-                    like.setColorFilter(R.color.red);
-                    break ;
-                case 3:
-                    like.setAlpha(1f);
-                    like.setColorFilter(R.color.black);
-                    break ;
-                default:
-                    break ;
-            }
+            if (res == 2)
+                like.setAlpha(1f);
+            else
+                like.setAlpha(.5f);
         }
     }
 
@@ -150,20 +128,32 @@ public class NewsActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(Integer... params) {
-
-            GlobalManager gm = new GlobalManager();
-
             Log.e("NewsActivity", "SendRateStatus called :" + params[0]);
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
             if (userSession.isLogged()) {
+                GlobalManager gm = new GlobalManager();
+
                 switch (params[0]) {
                     case 1:
                         gm.unLikeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
                         break ;
                     case 2:
                         gm.likeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
+                        break ;
+                    default:
+                        break ;
+                }
+
+                UserUtilManager uum = new UserUtilManager();
+
+                switch (params[0]) {
+                    case 1:
+                        uum.createHistory(userSession.getUserId(), 2, item.getTargetType(), item.getId());
+                        break ;
+                    case 2:
+                        uum.createHistory(userSession.getUserId(), 4, item.getTargetType(), item.getId());
                         break ;
                     default:
                         break ;

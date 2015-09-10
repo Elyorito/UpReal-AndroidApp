@@ -2,8 +2,7 @@ package com.upreal.uprealwear.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,15 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.uprealwear.R;
 import com.upreal.uprealwear.global.AddListActivity;
 import com.upreal.uprealwear.global.DeleteListActivity;
 import com.upreal.uprealwear.global.NewsActivity;
 import com.upreal.uprealwear.global.RateActivity;
 import com.upreal.uprealwear.product.ProductActivity;
+import com.upreal.uprealwear.server.UserUtilManager;
 import com.upreal.uprealwear.store.StoreActivity;
 import com.upreal.uprealwear.user.AchievementActivity;
 import com.upreal.uprealwear.user.ItemActivity;
+import com.upreal.uprealwear.user.SessionManagerUser;
 import com.upreal.uprealwear.user.UserActivity;
 
 import java.util.List;
@@ -72,13 +74,8 @@ public final class ListItemAdapter extends WearableListView.Adapter {
         ImageView image = itemHolder.imageView;
 
         text.setText(dataset.get(position).getName());
-        if (dataset.get(position).getImagePath() != null) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            image.setImageBitmap(BitmapFactory.decodeFile(dataset.get(position).getImagePath(), options));
-        }
-        else
-            image.setImageDrawable(context.getResources().getDrawable(R.drawable.picture_unavailable));
+        Picasso.with(context).load(dataset.get(position).getImagePath()).placeholder(R.drawable.picture_unavailable).into(image);
+
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -92,15 +89,19 @@ public final class ListItemAdapter extends WearableListView.Adapter {
 
                 switch (dataset.get(position).getTargetType()) {
                     case 1:
+                        new RecordAction().execute(position);
                         intent = new Intent(context, UserActivity.class);
                         break ;
                     case 2:
+                        new RecordAction().execute(position);
                         intent = new Intent(context, ProductActivity.class);
                         break ;
                     case 3:
+                        new RecordAction().execute(position);
                         intent = new Intent(context, StoreActivity.class);
                         break ;
                     case 4:
+                        new RecordAction().execute(position);
                         intent = new Intent(context, NewsActivity.class);
                         break ;
                     case 5:
@@ -119,7 +120,7 @@ public final class ListItemAdapter extends WearableListView.Adapter {
                         intent = new Intent(context, AchievementActivity.class);
                         break ;
                     default:
-                        break ;
+                        return ;
                 }
 
                 intent.putExtra("item", dataset.get(position));
@@ -133,5 +134,23 @@ public final class ListItemAdapter extends WearableListView.Adapter {
     @Override
     public int getItemCount() {
         return dataset.size();
+    }
+
+    private class RecordAction extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+
+            SessionManagerUser userSession = new SessionManagerUser(context);
+            UserUtilManager uum = new UserUtilManager();
+
+            if (userSession.isLogged()) {
+                Item item = dataset.get(params[0]);
+
+                uum.createHistory(userSession.getUserId(), 1, item.getTargetType(), item.getId());
+            }
+
+            return null;
+        }
     }
 }

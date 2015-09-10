@@ -1,5 +1,6 @@
 package com.upreal.upreal.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +26,8 @@ import java.util.List;
  */
 public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHolder> {
 
-    List<Article> articles;
-
+    private List<Article> articles;
+    private Context context;
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         Button type;
@@ -42,8 +43,9 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
         }
     }
 
-    AdapterHomeNews(List<Article> articles) {
+    AdapterHomeNews(List<Article> articles, Context context) {
         this.articles = articles;
+        this.context = context;
     }
 
     @Override
@@ -55,6 +57,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
 
     @Override
     public void onBindViewHolder(AdapterHomeNews.ViewHolder viewHolder, final int i) {
+        Picasso.with(context).load("http://millbafs.com/wp-content/uploads/2014/01/community.png").placeholder(R.drawable.logo_small).into(viewHolder.image);
         viewHolder.title.setText(this.articles.get(i).getTitle());
         viewHolder.type.setText(Integer.toString(this.articles.get(i).getType()));
         viewHolder.news.setOnClickListener(new View.OnClickListener() {

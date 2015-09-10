@@ -10,4 +10,22 @@
     <string name="search_empty">Aucun élément trouvé !</string>
     <string name="choice_add">Ajouter cet élement ?</string>
     <string name="choice_delete">Supprimer cet élement ?</string>
+    <string name="error">String not found</string>
+
+    <!-- Target Type -->
+    <string name="user">l\'utilisateur</string>
+    <string name="product">le produit</string>
+    <string name="store">le magasin</string>
+    <string name="article">l\'article</string>
+    <string name="ovr_rate">le commentaire de</string>
+
+    <!-- Action Type for History -->
+    <string name="has_consulted">a consulté</string>
+    <string name="liked">a aimé</string>
+    <string name="disliked">n\'aime pas</string>
+    <string name="unliked">n\'aime plus</string>
+    <string name="shared">a partagé</string>
+    <string name="commented">a commenté</string>
+    <string name="modified_profile">a modifié son profil</string>
+    <string name="added_product">a ajouté un produit</string>
 </resources>

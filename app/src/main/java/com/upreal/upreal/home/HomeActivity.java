@@ -128,12 +128,6 @@ public class HomeActivity extends AppCompatActivity {
 
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
-/*
-        PRODUCTREDUC = new String[] {"P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis", "P'tit Louis"};
-
-        PRODUCTREDUCPRICE = new String[] {"1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé", "1.20€ Remboursé"};
-*/
-
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         if (!sessionManagerUser.isLogged()) {
@@ -513,7 +507,7 @@ public class HomeActivity extends AppCompatActivity {
             for (Article article : articles) {
                 Toast.makeText(getApplicationContext(), "Title= " + article.getTitle() ,Toast.LENGTH_LONG).show();
             }
-            mAdapterHome = new AdapterHomeNews(articles);
+            mAdapterHome = new AdapterHomeNews(articles, getApplicationContext());
             mRecyclerViewHome.setAdapter(mAdapterHome);
         }
     }

@@ -117,13 +117,13 @@ public class GlobalManager extends SoapManager {
         return 0;
     }
 
-    public void likeSomething(int idUser, int idTarget, int idTargetType) {
+    public void likeSomething(int idTarget, int targetType, int idUser) {
         String methodname = "likeSomething";
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_user", idUser);
         request.addProperty("id_target", idTarget);
-        request.addProperty("id_target_type", idTargetType);
+        request.addProperty("id_target_type", targetType);
 
         try {
             callService(methodname, request);
@@ -132,13 +132,13 @@ public class GlobalManager extends SoapManager {
         }
     }
 
-    public void dislikeSomething(int idUser, int idTarget, int idTargetType) {
+    public void dislikeSomething(int idTarget, int targetType, int idUser) {
         String methodname = "dislikeSomething";
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_user", idUser);
         request.addProperty("id_target", idTarget);
-        request.addProperty("id_target_type", idTargetType);
+        request.addProperty("id_target_type", targetType);
 
         try {
             callService(methodname, request);
@@ -147,18 +147,49 @@ public class GlobalManager extends SoapManager {
         }
     }
 
-    public void unLikeSomething(int idUser, int idTarget, int idTargetType) {
+    public void unLikeSomething(int idTarget, int targetType, int idUser) {
         String methodname = "unLikeSomething";
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_user", idUser);
         request.addProperty("id_target", idTarget);
-        request.addProperty("id_target_type", idTargetType);
+        request.addProperty("id_target_type", targetType);
 
         try {
             callService(methodname, request);
         } catch (Exception q) {
             q.printStackTrace();
         }
+    }
+
+    public int countRate(int idTarget, int targetType, int type) {
+        String methodname = "countRate";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+        request.addProperty("type", type);
+
+        try {
+            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public String getPicture(int idTarget, int targetType) {
+        String methodname = "getPicture";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+
+        try {
+            return ((SoapPrimitive) callService(methodname, request)).toString();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return null;
     }
 }

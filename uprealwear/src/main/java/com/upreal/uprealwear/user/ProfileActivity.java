@@ -10,8 +10,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.uprealwear.R;
 import com.upreal.uprealwear.global.RateActivity;
+import com.upreal.uprealwear.server.GlobalManager;
 import com.upreal.uprealwear.server.UserManager;
 import com.upreal.uprealwear.utils.Item;
 import com.upreal.uprealwear.utils.User;
@@ -23,8 +25,8 @@ public class ProfileActivity extends Activity implements View.OnClickListener {
 
     private TextView username;
     private ImageView image;
-    private TextView like;
-    private TextView dislike;
+    private TextView likeValue;
+    private TextView dislikeValue;
     private ImageButton comment;
     private ImageButton history;
     private ImageButton achievement;
@@ -36,8 +38,8 @@ public class ProfileActivity extends Activity implements View.OnClickListener {
 
         username = (TextView) findViewById(R.id.username);
         image = (ImageView) findViewById(R.id.image);
-        like = (TextView) findViewById(R.id.like_value);
-        dislike = (TextView) findViewById(R.id.dislike_value);
+        likeValue = (TextView) findViewById(R.id.like_value);
+        dislikeValue = (TextView) findViewById(R.id.dislike_value);
         comment = (ImageButton) findViewById(R.id.comment);
         history = (ImageButton) findViewById(R.id.history);
         achievement = (ImageButton) findViewById(R.id.achievement);
@@ -46,12 +48,7 @@ public class ProfileActivity extends Activity implements View.OnClickListener {
         history.setOnClickListener(this);
         achievement.setOnClickListener(this);
 
-        SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
-
-        if (userSession.isLogged()) {
-            username.setText(userSession.getUser().getFirstname() + " " + userSession.getUser().getLastname());
-            new RetrieveUser().execute(userSession.getUserId());
-        }
+        new RetrieveUser().execute();
     }
 
     @Override
@@ -81,16 +78,32 @@ public class ProfileActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private class RetrieveUser extends AsyncTask<Integer, Void, User> {
-        UserManager um = new UserManager();
+    private class RetrieveUser extends AsyncTask<Void, Void, User> {
+
+        int likeV = 0;
+        int dislikeV = 0;
+        String imageV;
 
         @Override
-        protected User doInBackground(Integer... params) {
+        protected User doInBackground(Void... params) {
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged()) {
+                GlobalManager gm = new GlobalManager();
+                likeV = gm.countRate(userSession.getUserId(), 1, 2);
+                dislikeV = gm.countRate(userSession.getUserId(), 1, 3);
+                imageV = gm.getPicture(userSession.getUserId(), 1);
+                UserManager um = new UserManager();
+                return um.getAccountInfo(userSession.getUserId());
+            }
             return null;
         }
 
         protected void onPostExecute(User res) {
-
+            username.setText(res.getUsername());
+            likeValue.setText(likeV + "");
+            dislikeValue.setText(dislikeV + "");
+            Picasso.with(getApplicationContext()).load(imageV).placeholder(R.drawable.picture_unavailable).into(image);
         }
     }
 }
