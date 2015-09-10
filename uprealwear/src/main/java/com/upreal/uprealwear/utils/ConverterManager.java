@@ -97,14 +97,32 @@ public class ConverterManager {
     }
 
     public static Achievement convertToAchievement(SoapObject soapObject) {
-        Achievement rate = new Achievement();
+        Achievement achievement = new Achievement();
         if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-            rate.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+            achievement.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
         if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
-            rate.setName(soapObject.getPropertyAsString("name").toString());
+            achievement.setName(soapObject.getPropertyAsString("name").toString());
         if (soapObject.hasProperty("desc") && soapObject.getProperty("desc") != null)
-            rate.setName(soapObject.getPropertyAsString("desc").toString());
+            achievement.setName(soapObject.getPropertyAsString("desc").toString());
 
-        return rate;
+        return achievement;
+    }
+
+    public static History convertToHistory(SoapObject soapObject) {
+        History history = new History();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            history.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("id_user") && soapObject.getProperty("id_user") != null)
+            history.setIdUser(Integer.parseInt(soapObject.getProperty("id_user").toString()));
+        if (soapObject.hasProperty("action_type") && soapObject.getProperty("action_type") != null)
+            history.setActionType(Integer.parseInt(soapObject.getProperty("action_type").toString()));
+        if (soapObject.hasProperty("id_type") && soapObject.getProperty("id_type") != null)
+            history.setIdType(Integer.parseInt(soapObject.getProperty("id_type").toString()));
+        if (soapObject.hasProperty("id_target") && soapObject.getProperty("id_target") != null)
+            history.setIdTarget(Integer.parseInt(soapObject.getProperty("id_target").toString()));
+        if (soapObject.hasProperty("date") && soapObject.getProperty("date") != null)
+            history.setDate(soapObject.getProperty("date").toString());
+
+        return history;
     }
 }

@@ -45,4 +45,23 @@ public class StoreManager extends SoapManager {
 
         return null;
     }
+
+    public Store getStoreInfo(int id) {
+        String methodname = "getStoreInfo";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+
+        try {
+            Object res = callService(methodname, request);
+            SoapObject o = (SoapObject) res;
+            Store s = ConverterManager.convertToStore(o);
+
+            return s;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return null;
+    }
 }

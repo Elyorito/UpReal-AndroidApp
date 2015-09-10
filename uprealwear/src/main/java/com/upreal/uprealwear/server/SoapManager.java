@@ -26,9 +26,9 @@ public abstract class SoapManager {
 
     public SoapManager(String service) {
         //Outside
-        MAIN_REQUEST_URL = "http://163.5.84.202/UpReal/services/" + service + "/";
+        //MAIN_REQUEST_URL = "http://163.5.84.202/UpReal/services/" + service + "/";
         //Inside
-        //MAIN_REQUEST_URL = "http://10.224.9.202/UpReal/services/" + service + "/";
+        MAIN_REQUEST_URL = "http://10.224.9.202/UpReal/services/" + service + "/";
     }
 
     protected final void testHttpResponse(HttpTransportSE ht) {

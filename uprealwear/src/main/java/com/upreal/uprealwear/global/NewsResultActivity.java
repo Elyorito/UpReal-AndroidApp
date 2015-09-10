@@ -60,7 +60,7 @@ public class NewsResultActivity extends Activity implements WearableListView.Cli
                 List<Article> aList = gm.searchNews("");
 
                 for (Article a : aList) {
-                    list.add(new Item(a.getId(), 4, a.getTitle(), a.getPicture()));
+                    list.add(new Item(a.getId(), 4, a.getTitle(), gm.getPicture(a.getId(), 4)));
                 }
 
             return list;

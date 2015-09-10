@@ -2,8 +2,6 @@ package com.upreal.uprealwear.user;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +10,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.uprealwear.R;
 import com.upreal.uprealwear.global.RateActivity;
 import com.upreal.uprealwear.server.GlobalManager;
+import com.upreal.uprealwear.server.UserUtilManager;
 import com.upreal.uprealwear.utils.Item;
 
 /**
@@ -28,6 +28,8 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private ImageButton comment;
     private ImageButton add;
     private ImageButton like;
+    private TextView likeValue;
+    private TextView dislikeValue;
 
     private Item item;
 
@@ -41,18 +43,14 @@ public class UserActivity extends Activity implements View.OnClickListener {
         comment = (ImageButton) findViewById(R.id.comment);
         add = (ImageButton) findViewById(R.id.add);
         like = (ImageButton) findViewById(R.id.like);
+        likeValue = (TextView) findViewById(R.id.like_value);
+        dislikeValue = (TextView) findViewById(R.id.dislike_value);
 
         item = getIntent().getExtras().getParcelable("item");
 
         id = item.getId();
         name.setText(item.getName());
-        if (item.getImagePath() != null) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            image.setImageBitmap(BitmapFactory.decodeFile(item.getImagePath(), options));
-        }
-        else
-            image.setImageDrawable(getResources().getDrawable(R.drawable.picture_unavailable));
+        Picasso.with(getApplicationContext()).load(item.getImagePath()).placeholder(R.drawable.picture_unavailable).into(image);
 
         comment.setOnClickListener(this);
         add.setOnClickListener(this);
@@ -87,12 +85,17 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
     private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {
 
+        int likeV = 0;
+        int dislikeV = 0;
+
         @Override
         protected Integer doInBackground(Void... params) {
 
             GlobalManager gm = new GlobalManager();
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
+            likeV = gm.countRate(item.getId(), item.getTargetType(), 2);
+            dislikeV = gm.countRate(item.getId(), item.getTargetType(), 3);
             if (userSession.isLogged()) {
                 return gm.getRateStatus(item.getId(), item.getTargetType(), userSession.getUserId());
             }
@@ -102,26 +105,13 @@ public class UserActivity extends Activity implements View.OnClickListener {
         @Override
         protected void onPostExecute(Integer res) {
             super.onPostExecute(res);
-            switch (res) {
-                case 0:
-                    like.setAlpha(.5f);
-                    like.setColorFilter(R.color.black);
-                    break ;
-                case 1:
-                    like.setAlpha(.5f);
-                    like.setColorFilter(R.color.black);
-                    break ;
-                case 2:
-                    like.setAlpha(1f);
-                    like.setColorFilter(R.color.red);
-                    break ;
-                case 3:
-                    like.setAlpha(1f);
-                    like.setColorFilter(R.color.black);
-                    break ;
-                default:
-                    break ;
-            }
+            if (res == 2)
+                like.setAlpha(1f);
+            else
+                like.setAlpha(.5f);
+
+            likeValue.setText(likeV + "");
+            dislikeValue.setText(dislikeV + "");
         }
     }
 
@@ -129,20 +119,32 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(Integer... params) {
-
-            GlobalManager gm = new GlobalManager();
-
             Log.e("ProductActivity", "SendRateStatus called :" + params[0]);
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
             if (userSession.isLogged()) {
+                GlobalManager gm = new GlobalManager();
+
                 switch (params[0]) {
                     case 1:
                         gm.unLikeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
                         break ;
                     case 2:
                         gm.likeSomething(item.getId(), item.getTargetType(), userSession.getUserId());
+                        break ;
+                    default:
+                        break ;
+                }
+
+                UserUtilManager uum = new UserUtilManager();
+
+                switch (params[0]) {
+                    case 1:
+                        uum.createHistory(userSession.getUserId(), 2, item.getTargetType(), item.getId());
+                        break ;
+                    case 2:
+                        uum.createHistory(userSession.getUserId(), 4, item.getTargetType(), item.getId());
                         break ;
                     default:
                         break ;
