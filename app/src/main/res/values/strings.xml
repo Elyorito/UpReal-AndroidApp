@@ -50,6 +50,8 @@
     <string name="register">S\'inscrire</string>
     <string name="select_connexion">Connexion</string>
     <string name="select_register">Inscription</string>
+    <string name="btn_logout_from_google">Deconnexion de Google</string>
+    <string name="btn_revoke_access">Revoquer l\'access</string>
 
     <!--ProductPage-->
     <string name="commentary">Commentaire</string>

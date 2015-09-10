@@ -18,12 +18,14 @@ android {
         }
         repositories {
             maven { url 'http://ksoap2-android.googlecode.com/svn/m2-repo' }
+            mavenCentral()
         }
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/res/assets'] } }
 }
 
 dependencies {
+    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'

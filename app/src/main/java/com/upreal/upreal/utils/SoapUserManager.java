@@ -123,6 +123,37 @@ public class SoapUserManager {
         return result;
     }
 
+    public int registerAccount(String username, String firstname, String lastname, String password, String email) {
+        String data;
+        String methodname = "registerAccount";
+        int result = 0;
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("username", username);
+        request.addProperty("firstname", firstname);
+        request.addProperty("lastname", lastname);
+        request.addProperty("email", email);
+        request.addProperty("password", password);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+            ht.call(methodname, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+
+            data = results.toString();
+            result = Integer.parseInt(data);
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return result;
+    }
+
     public Boolean connectAccount(String username, String password) {
         Boolean result = false;
         String data;

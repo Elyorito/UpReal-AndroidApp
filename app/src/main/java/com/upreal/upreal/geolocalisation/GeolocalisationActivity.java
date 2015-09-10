@@ -3,6 +3,7 @@ package com.upreal.upreal.geolocalisation;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,9 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
+
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.upreal.upreal.R;
 import com.upreal.upreal.store.StoreActivity;
 import com.upreal.upreal.utils.Address;
+import com.upreal.upreal.utils.GoogleConnection;
 import com.upreal.upreal.utils.SoapProductUtilManager;
 import com.upreal.upreal.utils.SoapStoreManager;
 
@@ -39,12 +39,12 @@ import java.util.List;
 /**
  * Created by Kyosukke on 13/06/2015.
  */
-public class GeolocalisationActivity extends ActionBarActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class GeolocalisationActivity extends ActionBarActivity implements com.google.android.gms.location.LocationListener {
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = GeolocalisationActivity.class.getSimpleName();
 
-    private GoogleApiClient gClient;
+    private GoogleConnection googleConnection;
     private LocationRequest mLocRequest;
     private GoogleMap map;
 
@@ -77,6 +77,9 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
 
         createMapView();
 
+        googleConnection = GoogleConnection.getInstance(this);
+        googleConnection.connect();
+/*
         gClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -84,6 +87,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                 .build();
 
         gClient.connect();
+*/
 
         mLocRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -176,6 +180,46 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart()");
+        googleConnection.connect();
+        Location location = LocationServices.FusedLocationApi.getLastLocation(googleConnection.getGoogleApiClient());
+
+        if (location != null) {
+            updateCurrentPosition(location);
+        } else {
+            Log.i(TAG, "Trying to locate user.");
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleConnection.getGoogleApiClient(), mLocRequest, this);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        updateCurrentPosition(location);
+    }
+
+    private void updateCurrentPosition(Location location) {
+        Log.i(TAG, "Position updated.");
+        addMarker("Me", location.getLatitude(), location.getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+        googleConnection.disconnect();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (GoogleConnection.REQUEST_CODE == requestCode) {
+            googleConnection.onActivityResult(resultCode);
+        }
+    }
+
     private List<Address> adressToList(Address adr) {
         List<Address> tmp = new ArrayList<Address>();
 
@@ -243,11 +287,13 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         }
     }
 
+/*
     private void updateCurrentPosition(Location location) {
         Log.i(TAG, "Position updated.");
         addMarker("Me", location.getLatitude(), location.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
     }
+*/
 
     private double CalculationByDistance(LatLng StartP, LatLng EndP) {
         int Radius = 6371;// radius of earth in Km
@@ -274,6 +320,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         return Radius * c;
     }
 
+/*
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Location services connected.");
@@ -288,6 +335,8 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
         }
     }
 
+*/
+/*
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "Location services suspended.");
@@ -310,6 +359,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
     public void onLocationChanged(Location location) {
         updateCurrentPosition(location);
     }
+*/
 
     class RetrieveAddress extends AsyncTask<Void, Void, List<android.location.Address>> {
 

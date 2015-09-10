@@ -131,12 +131,11 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"/>
 
-        <Button
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/button_google"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textview_rs"
-            android:text="@string/google"
             android:background="@android:color/holo_red_light"
             android:layout_margin="10dp"/>
 

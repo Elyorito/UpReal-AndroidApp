@@ -1,14 +1,16 @@
 package com.upreal.upreal.login;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +18,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.google.android.gms.common.SignInButton;
 import com.upreal.upreal.R;
 import com.upreal.upreal.home.HomeActivity;
+import com.upreal.upreal.utils.GoogleConnection;
 import com.upreal.upreal.utils.SessionManagerUser;
 import com.upreal.upreal.utils.SoapUserManager;
 import com.upreal.upreal.utils.User;
@@ -28,16 +32,38 @@ import com.upreal.upreal.utils.WearManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
+
+import com.google.android.gms.plus.model.people.Person;
+
+import java.security.SecureRandom;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.SecretKeySpec;
+
 /**
  * Created by Elyo on 01/03/2015.
  */
-public class LoginFragmentConnect extends Fragment implements View.OnClickListener{
+public class LoginFragmentConnect extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = "LoginFragmentConnect";
+
+    // Profile pic image size in pixels
+    private static final int PROFILE_PIC_SIZE = 400;
 
     private AlertDialog.Builder builder;
     private EditText login;
     private EditText password;
     private Button connect;
     public SessionManagerUser sessionManagerUser;
+
+
+    private SignInButton gConnect;
+    private Context mContext;
+    private GoogleConnection googleConnection;
 
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
@@ -50,6 +76,7 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
         login = (EditText) v.findViewById(R.id.edittext_login_mail);
         password = (EditText) v.findViewById(R.id.edittext_login_password);
         connect = (Button) v.findViewById(R.id.button_login_connect);
+        gConnect = (SignInButton) v.findViewById(R.id.button_google);
         builder = new AlertDialog.Builder(v.getContext());
         builder.setTitle("Erreur Compte")
                 .setMessage("Email/Identifiant ou Mot de passe incorrect")
@@ -60,6 +87,14 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                     }
                 });
         connect.setOnClickListener(this);
+
+
+        // Google+
+        mContext = getActivity().getApplicationContext();
+        googleConnection = GoogleConnection.getInstance(getActivity());
+
+        // Facebook
+        FacebookSdk.sdkInitialize(mContext);
         return v;
     }
 
@@ -75,8 +110,54 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                     new RetrieveInfoFromServer().execute();
                 }
                 break;
+            case R.id.button_google:
+                googleConnection.connect();
+                getProfileInformation();
             default:
                 break;
+        }
+    }
+
+    /**
+     * Fetching user's information name, email, profile pic
+     * */
+    private void getProfileInformation() {
+        GoogleApiClient mGoogleApiClient = googleConnection.getGoogleApiClient();
+        try {
+            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi
+                        .getCurrentPerson(mGoogleApiClient);
+                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+
+                SecretKeySpec sks = null;
+                try {
+                    SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+                    sr.setSeed("any data used as random seed".getBytes());
+                    KeyGenerator kg = KeyGenerator.getInstance("AES");
+                    kg.init(128, sr);
+                    sks = new SecretKeySpec((kg.generateKey()).getEncoded(), "AES");
+                } catch (Exception e) {
+                    Log.e(TAG, "AES secret key spec error");
+                }
+
+                // Encode the original data with AES
+                byte[] encodedBytes = null;
+                try {
+                    Cipher c = Cipher.getInstance("AES");
+                    c.init(Cipher.ENCRYPT_MODE, sks);
+                    encodedBytes = c.doFinal(email.getBytes());
+                } catch (Exception e) {
+                    Log.e(TAG, "AES encryption error");
+                }
+/*
+                new RetrieveInfoFromServer(email, Base64.encodeToString(encodedBytes, Base64.DEFAULT)).execute();
+*/
+            } else {
+                Toast.makeText(mContext,
+                        "Person information is null", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -104,12 +185,24 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
     private class RetrieveInfoFromServer extends AsyncTask<Void, Void, Boolean> {
 
         private Boolean info_serv;
+        private String mUsername;
+        private String mPassword;
+
+        RetrieveInfoFromServer() {
+            mUsername = login.getText().toString();
+            mPassword = password.getText().toString();
+        }
+
+        RetrieveInfoFromServer(String username, String rPassword) {
+            mUsername = username;
+            mPassword = rPassword;
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
             SoapUserManager ex = new SoapUserManager();
-            info_serv = ex.connectAccount(login.getText().toString(), password.getText().toString());
+            info_serv = ex.connectAccount(mUsername, mPassword);
             return info_serv;
         }
 
@@ -143,4 +236,5 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             }
         }
     }
+
 }
