@@ -165,7 +165,7 @@ public class HomeActivity extends AppCompatActivity {
                 new DividerItemDecoration(this, null));
         mRecyclerViewL.setHasFixedSize(true);
         if (toggleAccount)
-            mAdapterL = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT);
+            mAdapterL = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT, getApplicationContext(), sessionManagerUser.getUser());
         else
             mAdapterL = new AdapterNavDrawerConnectHome(ACCOUNT, ITEM_WACCOUNT);
         mRecyclerViewL.setAdapter(mAdapterL);
@@ -323,7 +323,7 @@ public class HomeActivity extends AppCompatActivity {
                                 intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
                                 homeReceiver = new HomeReceiver();
                                 registerReceiver(homeReceiver, intentFilter);
-                                mAdapterL = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT);
+                                mAdapterL = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT, getApplicationContext(), sessionManagerUser.getUser());
                                 mDbHelper.deleteDataBase();
                                 recreate();
                                 return true;

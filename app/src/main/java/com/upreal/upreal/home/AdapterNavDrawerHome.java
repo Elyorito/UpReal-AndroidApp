@@ -1,5 +1,6 @@
 package com.upreal.upreal.home;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.upreal.R;
 
 import com.upreal.upreal.utils.CircleImageView;
+import com.upreal.upreal.utils.CircleTransform;
+import com.upreal.upreal.utils.User;
 
 /**
  * Created by Elyo on 06/02/2015.
@@ -20,6 +24,8 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    private Context context;
+    private User user;
 
     private String mNavTitles[];
     private String mNavAccount;
@@ -47,10 +53,11 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         }
     }
 
-    AdapterNavDrawerHome(String Account, String Titles[]) {
-            this.mNavAccount = Account;
+    AdapterNavDrawerHome(String Account, String Titles[], Context context, User user) {
+        this.mNavAccount = Account;
         this.mNavTitles = Titles;
-
+        this.context = context;
+        this.user = user;
     }
 
     @Override
@@ -83,9 +90,11 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         else {
             if (position == 0) {
                 holder.connexion_name.setText(this.mNavAccount);
-                Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
+                /*Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);
                 holder.mImageViewProfile.setImageBitmap(output);
+                */
+                Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
             }
         }
     }
