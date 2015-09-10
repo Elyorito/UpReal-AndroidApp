@@ -45,6 +45,7 @@ public class SessionManagerUser {
         editor.putInt("phone", user.getPhone());
         editor.putInt("id_address", user.getId_address());
         editor.putString("short_desc", user.getShort_desc());
+        editor.putString("picture", user.getPicture());
         editor.commit();
     }
 
@@ -73,6 +74,7 @@ public class SessionManagerUser {
         user.setPhone(sharedPreferences.getInt("phone", -1));
         user.setId_address(sharedPreferences.getInt("id_address", -1));
         user.setShort_desc(sharedPreferences.getString("short_desc", null));
+        user.setPicture(sharedPreferences.getString("picture", null));
         return user;
     }
 

@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
-import com.upreal.uprealwear.utils.Item;
+//import com.upreal.uprealwear.utils.Item;
 
 /**
  * Created by Kyosukke on 18/08/2015.
@@ -21,7 +21,7 @@ public class AddListActivity extends Activity implements View.OnClickListener {
     private ImageButton ok;
     private ImageButton cancel;
 
-    Item item;
+    //Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +32,9 @@ public class AddListActivity extends Activity implements View.OnClickListener {
         ok = (ImageButton) findViewById(R.id.ok);
         cancel = (ImageButton) findViewById(R.id.cancel);
 
-        item = getIntent().getExtras().getParcelable("item");
+        /*item = getIntent().getExtras().getParcelable("item");
         name.setText(item.getName());
-
+*/
         ok.setOnClickListener(this);
         cancel.setOnClickListener(this);
     }
