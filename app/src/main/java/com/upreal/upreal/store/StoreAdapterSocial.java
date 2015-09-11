@@ -63,11 +63,10 @@ public class StoreAdapterSocial extends RecyclerView.Adapter<StoreAdapterSocial.
 
     @Override
     public StoreAdapterSocial.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       // View v = LayoutInflater.from(parent.getContext()).inflate(/*Rajouter Layout ex: R.layout.item_product_social*/, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product_social, parent, false);
 
-        //ViewHolder vhStoreSocial = new ViewHolder(v);
-        //return vhStoreSocial;
-        return null;
+        ViewHolder vhStoreSocial = new ViewHolder(v);
+        return vhStoreSocial;
     }
 
     @Override

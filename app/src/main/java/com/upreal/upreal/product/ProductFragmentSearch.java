@@ -1,5 +1,6 @@
 package com.upreal.upreal.product;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -78,7 +79,12 @@ public class ProductFragmentSearch extends Fragment {
             }
 */
             listProd = list;
-            mAdapter = new ProductSearchAdapter(listProd, getActivity().getApplicationContext());
+            Context context;
+
+            context = getActivity().getApplicationContext();
+            if (context != null) {
+                mAdapter = new ProductSearchAdapter(listProd, context);
+            }
             mRecyclerView.setAdapter(mAdapter);
         }
     }
