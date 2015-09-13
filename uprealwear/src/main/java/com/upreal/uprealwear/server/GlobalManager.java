@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.upreal.uprealwear.utils.Article;
 import com.upreal.uprealwear.utils.ConverterManager;
+import com.upreal.uprealwear.utils.Items;
+import com.upreal.uprealwear.utils.Lists;
 import com.upreal.uprealwear.utils.Rate;
 
 import org.ksoap2.serialization.SoapObject;
@@ -190,6 +192,86 @@ public class GlobalManager extends SoapManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
+        return null;
+    }
+
+    public List<Lists> getUserList(int idUser) {
+        List<Lists> listLists = new ArrayList<Lists>();
+        String methodname = "getUserList";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+
+        try {
+            Object res = callService(methodname, request);
+            if (res instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) res;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject o = results.get(i);
+                    listLists.add(ConverterManager.convertToLists(o));
+                }
+            } else if (res instanceof SoapObject) {
+                SoapObject o = (SoapObject) res;
+                listLists.add(ConverterManager.convertToLists(o));
+            }
+            return listLists;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void createItem(int idList, int idProduct, int idUser) {
+        String methodname = "createItem";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_list", idList);
+        request.addProperty("id_product", idProduct);
+        request.addProperty("id_user", idUser);
+
+        try {
+            int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
+
+    public void deleteItem(int id) {
+        String methodname = "deleteItem";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+
+        try {
+            boolean res = Boolean.parseBoolean(((SoapPrimitive) callService(methodname, request)).toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
+
+    public List<Items> getItemsLists(int idList) {
+        List<Items> listItems = new ArrayList<Items>();
+        String methodname = "getItemsLists";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_list", idList);
+
+        try {
+            Object res = callService(methodname, request);
+            if (res instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) res;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject o = results.get(i);
+                    listItems.add(ConverterManager.convertToItems(o));
+                }
+            } else if (res instanceof SoapObject) {
+                SoapObject o = (SoapObject) res;
+                listItems.add(ConverterManager.convertToItems(o));
+            }
+            return listItems;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
         return null;
     }
 }
