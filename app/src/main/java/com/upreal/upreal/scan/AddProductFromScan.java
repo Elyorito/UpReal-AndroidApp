@@ -97,6 +97,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getApplicationContext().startActivity(intent);
                             finish();
+                            dialog.dismiss();
                         }
                     }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
                 @Override

@@ -12,6 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <ImageView
+            android:id="@+id/imageblurred"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:background="@color/blue"/>
 
         <ImageView
             android:id="@+id/image_profile"
@@ -24,13 +33,13 @@
             android:id="@+id/name_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
+            android:layout_marginRight="20dp"
             android:textColor="@android:color/white"
             android:text="Name Profile/Pseudo"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical|end"/>
 
-
+</FrameLayout>
     </LinearLayout>
 
 </RelativeLayout>

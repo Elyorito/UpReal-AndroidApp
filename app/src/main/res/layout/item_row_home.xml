@@ -4,7 +4,10 @@
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
     android:paddingTop="8dp"
-    android:background="#FFFFFF"
+    android:background="@drawable/selector_row"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="horizontal">
 
     <ImageView
@@ -20,6 +23,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
         android:paddingTop="4dp"
+        android:textStyle="bold"
         android:textColor="@android:color/black"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"/>

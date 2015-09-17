@@ -176,11 +176,18 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name=".home.TestNews"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyChPHKdhfJmM6TBhVzhocIX3hd4ItCOfIs" />
-        <meta-data android:name="com.google.android.gms.games.APP_ID"
-            android:value="927679151177-sg3pjame3vs8eq2l38evmegtqp3gca8s.apps.googleusercontent.com" />
+        <!--<meta-data android:name="com.google.android.gms.games.APP_ID"-->
+            <!--android:value="927679151177-sg3pjame3vs8eq2l38evmegtqp3gca8s.apps.googleusercontent.com" />-->
 
     </application>
 

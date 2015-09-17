@@ -2,6 +2,15 @@ package com.upreal.upreal.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
+
 import com.squareup.picasso.Transformation;
 
 
@@ -11,56 +20,66 @@ import com.squareup.picasso.Transformation;
 public class BlurImages implements Transformation {
 
 
-        protected static final int UP_LIMIT = 25;
-        protected static final int LOW_LIMIT = 1;
-        protected final Context context;
-        protected final int blurRadius;
+    private static int MAX_RADIUS = 25;
+    private static int DEFAULT_DOWN_SAMPLING = 1;
 
+    private Context mContext;
 
-        public BlurImages(Context context, int radius) {
-            this.context = context;
+    private int mRadius;
+    private int mSampling;
 
-            if(radius<LOW_LIMIT){
-                this.blurRadius = LOW_LIMIT;
-            }else if(radius>UP_LIMIT){
-                this.blurRadius = UP_LIMIT;
-            }else
-                this.blurRadius = radius;
-        }
+    public BlurImages(Context context) {
+        this(context, MAX_RADIUS, DEFAULT_DOWN_SAMPLING);
+    }
 
-        @Override
-        public Bitmap transform(Bitmap source) {
-            Bitmap sourceBitmap = source;
+    public BlurImages(Context context, int radius) {
+        this(context, radius, DEFAULT_DOWN_SAMPLING);
+    }
 
-            Bitmap blurredBitmap;
-            blurredBitmap = Bitmap.createBitmap(sourceBitmap);
+    public BlurImages(Context context, int radius, int sampling) {
+        mContext = context;
+        mRadius = radius;
+        mSampling = sampling;
+    }
 
-            /*RenderScript renderScript = RenderScript.create(context);
+    @Override public Bitmap transform(Bitmap source) {
 
-            Allocation input = Allocation.createFromBitmap(renderScript,
-                    sourceBitmap,
-                    Allocation.MipmapControl.MIPMAP_FULL,
-                    Allocation.USAGE_SCRIPT);
+        int scaledWidth = source.getWidth() / mSampling;
+        int scaledHeight = source.getHeight() / mSampling;
 
+        Bitmap bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
 
+        Canvas canvas = new Canvas(bitmap);
+        //GrayScale//
+        ColorMatrix saturation = new ColorMatrix();
+        saturation.setSaturation(0f);
+        ////
+        canvas.scale(1 / (float) mSampling, 1 / (float) mSampling);
+        Paint paint = new Paint();
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+        ////GrayScale
+        paint.setColorFilter(new ColorMatrixColorFilter(saturation));
+        ////////
+        canvas.drawBitmap(source, 0, 0, paint);
 
-            Allocation output = Allocation.createTyped(renderScript, input.getType());
+        RenderScript rs = RenderScript.create(mContext);
+        Allocation input = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT);
+        Allocation output = Allocation.createTyped(rs, input.getType());
+        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
 
-            ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(renderScript,
-                    Element.U8_4(renderScript));
+        blur.setInput(input);
+        blur.setRadius(mRadius);
+        blur.forEach(output);
+        output.copyTo(bitmap);
 
-            script.setInput(input);
-            script.setRadius(blurRadius);
+        source.recycle();
+        rs.destroy();
 
-            script.forEach(output);
-            output.copyTo(blurredBitmap);*/
+        return bitmap;
+    }
 
-            //source.recycle();
-            return blurredBitmap;
-        }
-
-        @Override
-        public String key() {
-            return "blurred";
-        }
+    @Override public String key() {
+        return "BlurTransformation(radius=" + mRadius + ", sampling=" + mSampling + ")";
+    }
 }

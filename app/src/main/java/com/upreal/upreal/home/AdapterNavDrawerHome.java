@@ -44,6 +44,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         TextView textView;
         TextView connexion_name;
         ImageView mImageViewProfile;
+        ImageView mImageBlurred;
         //LinearLayout layoutBackground;
         private SparseBooleanArray selectedItems;
 
@@ -56,7 +57,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                 Holderid = 1;
             }
             else {
-                //layoutBackground = (LinearLayout) itemView.findViewById(R.id.header_image);
+                mImageBlurred = (ImageView) itemView.findViewById(R.id.imageblurred);
                 connexion_name = (TextView) itemView.findViewById(R.id.name_profile);
                 mImageViewProfile = (ImageView) itemView.findViewById(R.id.image_profile);
                 Holderid = 0;
@@ -104,6 +105,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                 Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).into(imageBackground);
                 holder.layoutBackground.addView(imageBackground);
                 */
+                Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
                 holder.connexion_name.setText(this.mNavAccount);
                 /*Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);

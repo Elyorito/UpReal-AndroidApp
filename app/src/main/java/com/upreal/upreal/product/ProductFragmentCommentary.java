@@ -1,5 +1,6 @@
 package com.upreal.upreal.product;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,6 +37,7 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
     private Product prod;
     private List<Rate> listRate = new ArrayList<Rate>();
     private List<RateComment> listComment = new ArrayList<>();
+    private Context context;
 
     @Nullable
     @Override
@@ -85,13 +87,15 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(List<RateComment> rateComments) {
             super.onPostExecute(rateComments);
+
             //Toast.makeText(getActivity().getApplicationContext(), "userName[" + user.getUsername() +"]", Toast.LENGTH_SHORT).show();
            /* Toast.makeText(getActivity().getApplicationContext(), "ProdID[" + Integer.toString(prod.getId()) +"]", Toast.LENGTH_SHORT).show();
 
             Toast.makeText(getActivity().getApplicationContext(), "Size Rate[" + Integer.toString(rateComments.size()) +"]", Toast.LENGTH_SHORT).show();*/
 /*            new RetrieveUsernameComment().execute();*/
-            if (rateComments != null)
-                 Toast.makeText(getActivity().getApplicationContext(), "RateCommentname=" + rateComments.size(), Toast.LENGTH_SHORT).show();
+            context = getActivity().getApplicationContext();
+            if (rateComments != null && context != null)
+                 Toast.makeText(context, "RateCommentname=" + rateComments.size(), Toast.LENGTH_SHORT).show();
             mAdapter = new AdapterCommentary(rateComments);
             recyclerView.setAdapter(mAdapter);
         }

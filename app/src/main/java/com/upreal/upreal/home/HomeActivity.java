@@ -90,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
     private IntentFilter intentFilter;
     private HomeReceiver homeReceiver;
 
-    public HomeActivity(){};
+    public HomeActivity(){}
     private SessionManagerUser sessionManagerUser;
 
     private SQLiteDatabase mDatabase;
@@ -322,11 +322,13 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 3://News
-                                Toast.makeText(rv.getContext(), "News Not Implemented",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(rv.getContext(), "News Not Implemented", Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 4://Catalogue
+                                intent = new Intent(rv.getContext(), TestNews.class);
+                                rv.getContext().startActivity(intent);
                                 Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/

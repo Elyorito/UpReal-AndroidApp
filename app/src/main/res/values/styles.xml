@@ -7,6 +7,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- App Bar Style-->
+
     <!--Barcode Scanner-->
     <style name="ResultButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
         <item name="android:layout_width">0dip</item>

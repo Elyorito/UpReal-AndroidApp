@@ -18,9 +18,16 @@ public class Product implements Parcelable{
     public Product() {
     }
 
-<<<<<<< HEAD
+
     public Product(int id, String name, String ean, String picture, String brand, String shortDesc) {
-=======
+        this.id = id;
+        this.name = name;
+        this.ean = ean;
+        this.picture = picture;
+        this.brand = brand;
+        this.shortDesc = shortDesc;
+    }
+
     public Product(String name) {
         this.id = 0;
         this.name = "";
@@ -30,13 +37,12 @@ public class Product implements Parcelable{
     }
 
     public Product(int id, String name, String ean, String picture, String brand) {
->>>>>>> origin/master
+
         this.id = id;
         this.name = name;
         this.ean = ean;
         this.picture = picture;
         this.brand = brand;
-        this.shortDesc = shortDesc;
     }
 
     public int getId() {
@@ -91,7 +97,7 @@ public class Product implements Parcelable{
         dest.writeString(this.ean);
         dest.writeString(this.picture);
         dest.writeString(this.brand);
-        dest.writeString(this.shortDesc);
+        //dest.writeString(this.shortDesc);
     }
 
     public static final Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
@@ -113,8 +119,7 @@ public class Product implements Parcelable{
         this.ean = in.readString();
         this.picture = in.readString();
         this.brand = in.readString();
-        this.shortDesc = in.readString();
-
+        //this.shortDesc = in.readString();
     }
 
     public String getShortDesc() {
