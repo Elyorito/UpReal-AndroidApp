@@ -53,7 +53,8 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
 
         cancel.setOnClickListener(this);
         sendProduct.setOnClickListener(this);
-        barcode.setText(barcodeEAN.toString());
+        if (barcodeEAN != null)
+            barcode.setText(barcodeEAN.toString());
     }
 
     @Override
@@ -95,6 +96,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                             intent.putExtra("listprod", product);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getApplicationContext().startActivity(intent);
+                            finish();
                         }
                     }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
                 @Override

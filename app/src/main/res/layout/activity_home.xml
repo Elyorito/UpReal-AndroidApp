@@ -52,12 +52,11 @@
 
         </LinearLayout>
 
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/RecyclerView_NavigationDrawer"
             android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="@drawable/selector_row"
             android:layout_gravity="left"
             android:scrollbars="vertical">
 

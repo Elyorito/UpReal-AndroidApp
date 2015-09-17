@@ -67,6 +67,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Camera2Fragment  extends Fragment implements View.OnClickListener {
 
+    private Context context;
+
     public static Camera2Fragment newInstance() {
         Camera2Fragment fragment = new Camera2Fragment();
         fragment.setRetainInstance(true);
@@ -629,10 +631,24 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Product product) {
             super.onPostExecute(product);
-            Intent intent = new Intent(getActivity().getApplicationContext(), ProductActivity.class);
-            intent.putExtra("listprod", product);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getActivity().getApplicationContext().startActivity(intent);
+            String not = "notfound";
+            context = getActivity().getApplicationContext();
+            if (product.getName() == null || not.equals(product.getName())) {
+                if (context != null) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), AddProductFromScan.class);
+                    intent.putExtra("listprod", new Product(""));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().getApplicationContext().startActivity(intent);
+                }
+            }
+            else {
+                if (context != null) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ProductActivity.class);
+                    intent.putExtra("listprod", product);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().getApplicationContext().startActivity(intent);
+                }
+            }
         }
     }
 

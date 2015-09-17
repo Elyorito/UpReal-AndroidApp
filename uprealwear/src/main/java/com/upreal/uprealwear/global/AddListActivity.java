@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.server.GlobalManager;
+import com.upreal.uprealwear.utils.Item;
 //import com.upreal.uprealwear.utils.Item;
 
 /**
@@ -16,12 +18,11 @@ import com.upreal.uprealwear.R;
  */
 public class AddListActivity extends Activity implements View.OnClickListener {
 
-
     private TextView name;
     private ImageButton ok;
     private ImageButton cancel;
 
-    //Item item;
+    Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,9 @@ public class AddListActivity extends Activity implements View.OnClickListener {
         ok = (ImageButton) findViewById(R.id.ok);
         cancel = (ImageButton) findViewById(R.id.cancel);
 
-        /*item = getIntent().getExtras().getParcelable("item");
+        item = getIntent().getExtras().getParcelable("item");
         name.setText(item.getName());
-*/
+
         ok.setOnClickListener(this);
         cancel.setOnClickListener(this);
     }
@@ -62,8 +63,9 @@ public class AddListActivity extends Activity implements View.OnClickListener {
         @Override
         protected Void doInBackground(Void... params) {
 
-            // add product from List
+            GlobalManager gm = new GlobalManager();
 
+            gm.createItem(item.getId(), Integer.parseInt(item.getImagePath()), 0);
             return null;
         }
     }

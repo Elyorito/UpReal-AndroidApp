@@ -9,10 +9,14 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.server.GlobalManager;
 import com.upreal.uprealwear.server.ProductManager;
+import com.upreal.uprealwear.server.UserManager;
 import com.upreal.uprealwear.utils.Item;
 import com.upreal.uprealwear.utils.Items;
 import com.upreal.uprealwear.utils.ListItemAdapter;
+import com.upreal.uprealwear.utils.Product;
+import com.upreal.uprealwear.utils.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +63,23 @@ public class ItemActivity extends Activity implements WearableListView.ClickList
         @Override
         protected List<Item> doInBackground(Void... params) {
             List<Item> list = new ArrayList<Item>();
-            List<Items> iList = new ArrayList<Items>();
+            GlobalManager gm = new GlobalManager();
 
-            ProductManager pm = new ProductManager();
+            List<Items> iList = gm.getItemsLists(item.getId());
 
             for (Items i : iList) {
-
-//                Product p = pm.getProductInfo(i.getIdProduct());
-
-//                list.add(new Item(i.getId(), 7, p.getName(), pm.getProductPicture(p.getId())));
+                if (i.getIdProduct() > 0) {
+                    ProductManager pm = new ProductManager();
+                    Product p = pm.getProductInfo(i.getIdProduct());
+                    gm = new GlobalManager();
+                    list.add(new Item(i.getId(), 7, p.getName(), gm.getPicture(2, p.getId())));
+                }
+                else if (i.getIdUser() > 0) {
+                    UserManager um = new UserManager();
+                    User u = um.getAccountInfo(i.getIdUser());
+                    gm = new GlobalManager();
+                    list.add(new Item(i.getId(), 7, u.getUsername(), gm.getPicture(1, u.getId())));
+                }
             }
 
             return list;

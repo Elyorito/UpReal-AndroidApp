@@ -49,7 +49,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
             startActivity(intent);
             finish();
         } else {
-            username.setText(userSession.getUser().getFirstname() + " " + userSession.getUser().getLastname());
+            username.setText(userSession.getUser().getUsername());
         }
     }
 

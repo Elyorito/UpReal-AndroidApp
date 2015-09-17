@@ -125,4 +125,38 @@ public class ConverterManager {
 
         return history;
     }
+
+    public static Lists convertToLists(SoapObject soapObject) {
+        Lists lists = new Lists();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            lists.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
+            lists.setName(soapObject.getProperty("name").toString());
+        if (soapObject.hasProperty("public") && soapObject.getProperty("public") != null)
+            lists.setIsPublic(Integer.parseInt(soapObject.getProperty("public").toString()));
+        if (soapObject.hasProperty("type") && soapObject.getProperty("type") != null)
+            lists.setType(Integer.parseInt(soapObject.getProperty("type").toString()));
+        if (soapObject.hasProperty("nb_items") && soapObject.getProperty("nb_items") != null)
+            lists.setNbItems(Integer.parseInt(soapObject.getProperty("nb_items").toString()));
+        if (soapObject.hasProperty("id_user") && soapObject.getProperty("id_user") != null)
+            lists.setIdUser(Integer.parseInt(soapObject.getProperty("id_user").toString()));
+        if (soapObject.hasProperty("date") && soapObject.getProperty("date") != null)
+            lists.setDate(soapObject.getProperty("date").toString());
+
+        return lists;
+    }
+
+    public static Items convertToItems(SoapObject soapObject) {
+        Items items = new Items();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            items.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("id_list") && soapObject.getProperty("id_list") != null)
+            items.setIdList(Integer.parseInt(soapObject.getProperty("id_list").toString()));
+        if (soapObject.hasProperty("id_product") && soapObject.getProperty("id_product") != null)
+            items.setIdProduct(Integer.parseInt(soapObject.getProperty("id_product").toString()));
+        if (soapObject.hasProperty("id_user") && soapObject.getProperty("id_user") != null)
+            items.setIdUser(Integer.parseInt(soapObject.getProperty("id_user").toString()));
+
+        return items;
+    }
 }

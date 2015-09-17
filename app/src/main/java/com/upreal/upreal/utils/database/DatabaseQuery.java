@@ -3,7 +3,7 @@ package com.upreal.upreal.utils.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
  * Created by Nunkh on 21/05/15.
@@ -34,14 +34,16 @@ public class DatabaseQuery {
             if (c.moveToFirst()) {
                 while (!c.isAfterLast()) {
                     for (int k = 0; k < nbColumns; k++) {
+                        Log.i("DatabaseQuery", c.getString(k));
                         if (c.getString(k) == null)
                             resQuery[i][k] = "";
                         else
                             resQuery[i][k] = c.getString(k);
                     }
+                    Log.i("DatabaseQuery", "moveNext " + i);
                     c.moveToNext();
                     i++;
-                    if (i == nbColumns) {
+                    if (i == nbList) {
                         c.close();
                         return resQuery;
                     }

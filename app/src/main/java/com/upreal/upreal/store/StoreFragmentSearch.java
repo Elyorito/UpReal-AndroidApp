@@ -1,5 +1,6 @@
 package com.upreal.upreal.store;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ public class StoreFragmentSearch extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private String mSearchName;
     private List<Store> listStore = new ArrayList<>();
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,8 +62,9 @@ public class StoreFragmentSearch extends Fragment {
             int nb = list.size();
 
             listStore = list;
-            if (listStore != null)
-                mAdapter = new StoreSearchAdapter(listStore, getActivity().getApplicationContext());
+            context = getActivity().getApplicationContext();
+            if (context != null && listStore != null)
+                mAdapter = new StoreSearchAdapter(listStore, context);
             mRecyclerView.setAdapter(mAdapter);
         }
     }
