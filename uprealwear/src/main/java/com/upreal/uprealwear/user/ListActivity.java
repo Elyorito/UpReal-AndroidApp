@@ -9,6 +9,7 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
 import com.upreal.uprealwear.R;
+import com.upreal.uprealwear.server.GlobalManager;
 import com.upreal.uprealwear.utils.Item;
 import com.upreal.uprealwear.utils.ListItemAdapter;
 import com.upreal.uprealwear.utils.Lists;
@@ -63,8 +64,9 @@ public class ListActivity extends Activity implements WearableListView.ClickList
             int targetType = (item == null) ? (6) : (8);
 
             if (userSession.isLogged()) {
+                GlobalManager gm = new GlobalManager();
                 List<Item> list = new ArrayList<Item>();
-                List<Lists> lList = new ArrayList<Lists>();
+                List<Lists> lList = gm.getUserList(userSession.getUserId());
 
                 for (Lists l : lList) {
                     // if there is no item in Extras, then it's delete
