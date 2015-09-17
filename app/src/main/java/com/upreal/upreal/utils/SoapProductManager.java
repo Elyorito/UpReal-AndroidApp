@@ -367,6 +367,8 @@ public class SoapProductManager {
             prod.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
         if (soapObject.hasProperty("picture") && soapObject.getProperty("picture") != null)
             prod.setPicture(soapObject.getPropertyAsString("picture").toString());
+/*        if (soapObject.hasProperty("shortDesc") && soapObject.getProperty("shortDesc") != null)
+            prod.setPicture(soapObject.getPropertyAsString("picture").toString());*/
 
         return prod;
     }

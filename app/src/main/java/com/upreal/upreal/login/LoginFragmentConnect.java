@@ -61,9 +61,7 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
     public SessionManagerUser sessionManagerUser;
 
 
-    private SignInButton gConnect;
     private Context mContext;
-    private GoogleConnection googleConnection;
 
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
@@ -76,7 +74,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
         login = (EditText) v.findViewById(R.id.edittext_login_mail);
         password = (EditText) v.findViewById(R.id.edittext_login_password);
         connect = (Button) v.findViewById(R.id.button_login_connect);
-        gConnect = (SignInButton) v.findViewById(R.id.button_google);
         builder = new AlertDialog.Builder(v.getContext());
         builder.setTitle("Erreur Compte")
                 .setMessage("Email/Identifiant ou Mot de passe incorrect")
@@ -91,7 +88,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
 
         // Google+
         mContext = getActivity().getApplicationContext();
-        googleConnection = GoogleConnection.getInstance(getActivity());
 
         // Facebook
         FacebookSdk.sdkInitialize(mContext);
@@ -110,17 +106,17 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                     new RetrieveInfoFromServer().execute();
                 }
                 break;
-            case R.id.button_google:
-                googleConnection.connect();
-                getProfileInformation();
             default:
                 break;
         }
     }
 
-    /**
+/*
+    */
+/**
      * Fetching user's information name, email, profile pic
-     * */
+     * *//*
+
     private void getProfileInformation() {
         GoogleApiClient mGoogleApiClient = googleConnection.getGoogleApiClient();
         try {
@@ -149,9 +145,11 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 } catch (Exception e) {
                     Log.e(TAG, "AES encryption error");
                 }
+*/
 /*
                 new RetrieveInfoFromServer(email, Base64.encodeToString(encodedBytes, Base64.DEFAULT)).execute();
-*/
+*//*
+
             } else {
                 Toast.makeText(mContext,
                         "Person information is null", Toast.LENGTH_LONG).show();
@@ -160,6 +158,7 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
             e.printStackTrace();
         }
     }
+*/
 
     private class RetrieveUser extends AsyncTask<Void, Void, User> {
 

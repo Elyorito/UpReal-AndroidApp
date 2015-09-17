@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <RelativeLayout
@@ -117,47 +111,5 @@
             android:layout_below="@+id/cgu_error"/>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp">
-
-    <TextView
-            android:id="@+id/textview_rs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ou Via Reseau Social"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"/>
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/button_google"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_rs"
-            android:background="@android:color/holo_red_light"
-            android:layout_margin="10dp"/>
-
-        <Button
-            android:id="@+id/button_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button_google"
-            android:text="@string/facebook"
-            android:background="@android:color/holo_blue_dark"
-            android:layout_margin="10dp"/>
-
-        <Button
-            android:id="@+id/button_twitter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button_facebook"
-            android:text="@string/twitter"
-            android:background="@android:color/holo_blue_bright"
-            android:layout_margin="10dp"/>
-
-    </RelativeLayout>
 
 </LinearLayout>
-</ScrollView>

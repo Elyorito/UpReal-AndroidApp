@@ -224,7 +224,7 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
                 Activity activity = getActivity();
                 if (null != activity) {
                     new AlertDialog.Builder(activity)
-                            .setMessage("UpReal Camera Sample")
+                            .setMessage("Ne prenez qu'une photo à la fois")
                             .setPositiveButton(android.R.string.ok, null)
                             .show();
                 }

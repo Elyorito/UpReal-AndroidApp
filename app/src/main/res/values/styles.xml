@@ -21,4 +21,5 @@
     <style name="EditText_error" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:colorControlNormal">@color/red</item>
     </style>
+
 </resources>

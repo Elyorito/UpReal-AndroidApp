@@ -37,6 +37,7 @@ public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
                 StoreFragmentCommentary com = new StoreFragmentCommentary();
                 com.setArguments(bundle);
                 return com;
+/*
             case 1: //Social
                 StoreFragmentSocial social = new StoreFragmentSocial();
                 social.setArguments(bundle);
@@ -45,6 +46,7 @@ public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
                 StoreFragmentOptions opt = new StoreFragmentOptions();
                 opt.setArguments(bundle);
                 return opt;
+*/
             default:
                 return null;
         }

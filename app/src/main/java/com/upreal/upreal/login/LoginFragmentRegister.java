@@ -58,7 +58,7 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by Elyo on 01/03/2015.
  */
 public class LoginFragmentRegister extends Fragment
-        implements View.OnClickListener, TextView.OnEditorActionListener, Observer, ResultCallback<People.LoadPeopleResult> {
+        implements View.OnClickListener, TextView.OnEditorActionListener {
 
     private static final String TAG = "LoginFragmentRegister";
 
@@ -83,13 +83,9 @@ public class LoginFragmentRegister extends Fragment
     private DatabaseHelper mDbHelper;
     private DatabaseQuery mDbQuery;
 
-    private SignInButton gConnect;
     private Context mContext;
-    private GoogleConnection googleConnection;
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
-
-    private Button tConnect;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,14 +112,7 @@ public class LoginFragmentRegister extends Fragment
         complete = true;
         uIsTaken = false;
 
-        gConnect = (SignInButton) v.findViewById(R.id.button_google);
-        gConnect.setOnClickListener(this);
         mContext = getActivity().getApplicationContext();
-        googleConnection = GoogleConnection.getInstance(getActivity());
-        googleConnection.addObserver(this);
-
-        tConnect = (Button) v.findViewById(R.id.button_twitter);
-        tConnect.setOnClickListener(this);
 
         return v;
     }
@@ -184,13 +173,6 @@ public class LoginFragmentRegister extends Fragment
                 else
                     checkedTextView.setChecked(false);
                 break;
-            case R.id.button_google:
-                googleConnection.connect();
-                break;
-            case R.id.button_twitter:
-                googleConnection.disconnect();
-                googleConnection.revokeAccessAndDisconnect();
-                break;
             default:
                 break;
         }
@@ -199,118 +181,6 @@ public class LoginFragmentRegister extends Fragment
     /**
      * Fetching user's information name, email, profile pic
      * */
-    private void getProfileInformation() {
-        GoogleApiClient mGoogleApiClient = googleConnection.getGoogleApiClient();
-        try {
-
-            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi
-                        .getCurrentPerson(mGoogleApiClient);
-                String personName = currentPerson.getDisplayName();
-                String username = null;
-                if (currentPerson.hasNickname())
-                    username = currentPerson.getNickname();
-                String personPhotoUrl = currentPerson.getImage().getUrl();
-                String personGooglePlusProfile = currentPerson.getUrl();
-                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-                Log.e(TAG, "Name: " + personName + ", plusProfile: "
-                        + personGooglePlusProfile + ", email: " + email
-                        + ", Image: " + personPhotoUrl);
-
-                // Check email available
-
-                // Check Username available
-                //new RetrieveIsUsernameTaken().execute(v.getText().toString());
-
-                new RetrieveRegisterAccount(username != null ? username : personName, currentPerson, email).execute();
-/*
-                txtName.setText(personName);
-                txtEmail.setText(email);
-*/
-
-                // by default the profile url gives 50x50 px image only
-                // we can replace the value with whatever dimension we want by
-                // replacing sz=X
-/*
-                personPhotoUrl = personPhotoUrl.substring(0,
-                        personPhotoUrl.length() - 2)
-                        + PROFILE_PIC_SIZE;
-
-                new LoadProfileImage().execute(personPhotoUrl);
-*/
-
-            } else {
-                Toast.makeText(mContext,
-                        "Person information is null", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void update(Observable observable, Object data) {
-        if (observable != googleConnection)
-            return;
-        switch ((State) data) {
-            case OPENED:
-                try {
-                    Plus.PeopleApi.loadVisible(googleConnection.getGoogleApiClient(), null).setResultCallback(this);
-                    String emailAddress = googleConnection.getAccountName();
-                    getProfileInformation();
-                    Log.d(TAG, "Opened");
-                } catch (Exception ex) {
-                    String exception = ex.getLocalizedMessage();
-                    String exceptionString = ex.toString();
-                }
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onResult(People.LoadPeopleResult peopleData) {
-        Log.d(TAG, "result.getStatus():" + peopleData.getStatus());
-        if (peopleData.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-            PersonBuffer personBuffer = peopleData.getPersonBuffer();
-            try {
-                int count = personBuffer.getCount();
-                for (int i = 0; i < count; i++) {
-                    Log.d(TAG, "Display name: " + personBuffer.get(i).getDisplayName());
-                }
-            } finally {
-                personBuffer.release();
-            }
-        } else {
-            Log.e(TAG, "Error requesting visible circles: " + peopleData.getStatus());
-        }
-    }
-
-    /**
-     * Background Async task to load user profile picture from url
-     * */
-    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            // TO DO : Save in db
-        }
-    }
 
 
     private class RetrieveIsUsernameTaken extends AsyncTask<String, Void, Boolean> {

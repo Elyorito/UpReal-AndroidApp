@@ -27,6 +27,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.upreal.upreal.R;
 
 import java.lang.ref.WeakReference;
@@ -40,12 +41,14 @@ public class GoogleConnection extends Observable
     public static final int REQUEST_CODE = 1234;
 
     private static GoogleConnection sGoogleConnection;
+    private static Activity sActivity;
 
     private WeakReference<Activity> activityWeakReference;
     private GoogleApiClient.Builder googleApiClientBuilder;
     private GoogleApiClient googleApiClient;
     private ConnectionResult connectionResult;
     private State currentState;
+    private Activity mctivity;
     private LocationRequest mLocRequest;
     private GoogleMap map;
 
@@ -62,6 +65,7 @@ public class GoogleConnection extends Observable
     }
 
     public static GoogleConnection getInstance(Activity activity) {
+        sActivity = activity;
         if (null == sGoogleConnection) {
             sGoogleConnection = new GoogleConnection(activity);
         }
@@ -71,6 +75,31 @@ public class GoogleConnection extends Observable
     @Override
     public void onConnected(Bundle bundle) {
         changeState(State.OPENED);
+        try {
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) == null)
+                Log.e(TAG, "dead");
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi
+                        .getCurrentPerson(googleApiClient);
+                String personName = currentPerson.getDisplayName();
+                String username = null;
+                if (currentPerson.hasNickname())
+                    username = currentPerson.getNickname();
+                String personPhotoUrl = currentPerson.getImage().getUrl();
+                String personGooglePlusProfile = currentPerson.getUrl();
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
+
+                Log.e(TAG, "Name: " + personName + ", plusProfile: "
+                        + personGooglePlusProfile + ", email: " + email
+                        + ", Image: " + personPhotoUrl);
+
+            } else {
+        Toast.makeText(sActivity.getApplicationContext(),
+                "Person information is null", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -175,6 +204,7 @@ public class GoogleConnection extends Observable
                         .addConnectionCallbacks(this)
                         .addOnConnectionFailedListener(this)
                         .addApi(LocationServices.API)
+                        .addScope(new Scope(Scopes.PROFILE))
                         .addScope(Plus.SCOPE_PLUS_LOGIN)
                         .addScope(Plus.SCOPE_PLUS_PROFILE)
                         .addApi(ActivityRecognition.API)
@@ -189,6 +219,7 @@ public class GoogleConnection extends Observable
         currentState = state;
         setChanged();
         notifyObservers(state);
+        Log.i(TAG, "State Changed: " + state.toString());
     }
 
     public GoogleApiClient getGoogleApiClient() {

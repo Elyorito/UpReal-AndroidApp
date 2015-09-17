@@ -37,7 +37,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private CharSequence title;
 
     private TextView prodName;
-    private TextView prodCategorie;
+    private TextView prodBrand;
     private TextView prodShortDesc;
     private ImageView prodPicture;
 
@@ -47,9 +47,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-        prodName = (TextView) findViewById(R.id.product_name);/*
-        prodCategorie = (TextView) findViewById(R.id.product_categorie);
-        prodShortDesc = (TextView) findViewById(R.id.product_desc);*/
+        prodName = (TextView) findViewById(R.id.product_name);
+        prodBrand = (TextView) findViewById(R.id.product_brand);
+        prodShortDesc = (TextView) findViewById(R.id.product_desc);
         prodPicture = (ImageView) findViewById(R.id.product_picture);
 
         geoloc = (Button) findViewById(R.id.geoloc);
@@ -60,10 +60,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         title = new String(prod.getName());
         prodName.setText(prod.getName());
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
-        /*
-        prodCategorie.setText("Categorie");
-        prodShortDesc.setText("Short Description empty");
-        */
+
+        prodBrand.setText(prod.getBrand());
+        prodShortDesc.setText(prod.getShortDesc());
+
         CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(title);
