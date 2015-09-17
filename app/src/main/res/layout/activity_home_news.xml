@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#eaedf1">
 
     <include
         android:id="@+id/app_bar"
@@ -27,7 +28,7 @@
             android:id="@+id/RecyclerView_NavigationDrawer"
             android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="?android:attr/activatedBackgroundIndicator"
             android:layout_gravity="left"
             android:scrollbars="vertical">
 

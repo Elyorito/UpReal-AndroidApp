@@ -129,6 +129,8 @@ public class HomeActivity extends AppCompatActivity {
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.ColorTabs));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.ColorTitle));
         setSupportActionBar(toolbar);
         if (!sessionManagerUser.isLogged()) {
             String tab[] = sessionManagerUser.getRegisterLoginUser();
