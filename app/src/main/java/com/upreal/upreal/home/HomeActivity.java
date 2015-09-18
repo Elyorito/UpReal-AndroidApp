@@ -327,9 +327,11 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 4://Catalogue
+/*
                                 intent = new Intent(rv.getContext(), TestNews.class);
                                 rv.getContext().startActivity(intent);
                                 Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
+*/
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;

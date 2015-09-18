@@ -90,6 +90,100 @@ public class SoapProductUtilManager {
         return responseComment;
     }*/
 
+    public void createSpecification(int idProduct, String fieldName, String fieldDesc) {
+        String methodName = "createSpecification";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id_product", idProduct);
+        request.addProperty("field_name", fieldName);
+        request.addProperty("field_desc", fieldDesc);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+        HttpTransportSE ht = getHttpTransportSE();
+
+        try {
+            ht.call(methodName, envelope);
+            testHttpResponse(ht);
+            SoapPrimitive res = (SoapPrimitive) envelope.getResponse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Specification getSpecification(int idProduct, String fieldName) {
+        Specification spec = null;
+        String methodName = "getSpecification";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id_product", idProduct);
+        request.addProperty("field_name", fieldName);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodName, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            SoapObject results= (SoapObject)envelope.getResponse();
+
+            if (results == null)
+                return null;
+
+            spec = convertToQuerySpec(results);
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return spec;
+    }
+
+    public List<Specification> getAllSpecification(int idProduct) {
+        List<Specification> listSpec = null;
+        String methodName = "getAllSpecification";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id_product", idProduct);
+
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodName, envelope);
+            testHttpResponse(ht);
+
+            SoapObject res0 = (SoapObject) envelope.bodyIn;
+            Object response = envelope.getResponse();
+
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listSpec.add(this.convertToQuerySpec(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listSpec.add(this.convertToQuerySpec(result));
+            }
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listSpec;
+    }
+
+
     public List<Address> getAddressByProduct(int idProduct) {
         List<Address> listAddress = new ArrayList<>();
         String methodname = "getStoreAddressByProduct";
@@ -185,6 +279,19 @@ public class SoapProductUtilManager {
 
         return address;
     }
+
+    private Specification convertToQuerySpec(SoapObject soapObject) {
+        Specification spec = new Specification();
+        if (soapObject.hasProperty("id_product") && soapObject.getProperty("id_product") != null)
+            spec.setIdProduct(Integer.parseInt(soapObject.getProperty("id_product").toString()));
+        if (soapObject.hasProperty("field_name") && soapObject.getProperty("field_name") != null)
+            spec.setFieldName(soapObject.getProperty("field_name").toString());
+        if (soapObject.hasProperty("field_desc") && soapObject.getProperty("field_desc") != null)
+            spec.setFielDesc(soapObject.getProperty("field_desc").toString());
+
+        return spec;
+    }
+
 
     private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);

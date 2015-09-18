@@ -52,7 +52,6 @@ public class ProductFragmentSearch extends Fragment {
 
     private class RetrieveProduct extends AsyncTask<Void, Void, List<Product>> {
 
-        private String list_product;
         private List<Product> listprod = new ArrayList<Product>();
         @Override
         protected List<Product> doInBackground(Void... params) {

@@ -20,6 +20,8 @@ import com.upreal.upreal.R;
 import com.upreal.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.SoapProductUtilManager;
+import com.upreal.upreal.utils.Specification;
 import com.upreal.upreal.view.SlidingTabLayout;
 
 
@@ -62,7 +64,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
 
         prodBrand.setText(prod.getBrand());
-        prodShortDesc.setText(prod.getShortDesc());
 
         CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -84,6 +85,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mSlidingTabLayout.setViewPager(mViewPager);
 
         //new RetrievePicture().execute();
+        new RetrieveSpec().execute();
     }
 
     @Override
@@ -113,6 +115,25 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 break ;
             default:
                 break ;
+        }
+    }
+
+    class RetrieveSpec extends AsyncTask<Void, Void, Specification> {
+
+        @Override
+        protected Specification doInBackground(Void... params) {
+            SoapProductUtilManager pm = new SoapProductUtilManager();
+
+            Specification spec = pm.getSpecification(prod.getId(), "Description");
+            return spec;
+        }
+
+        @Override
+        protected void onPostExecute(Specification spec) {
+            super.onPostExecute(spec);
+            if (spec != null) {
+                prodShortDesc.setText(spec.getFielDesc());
+            }
         }
     }
 

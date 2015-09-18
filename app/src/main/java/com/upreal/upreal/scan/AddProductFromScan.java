@@ -15,6 +15,7 @@ import com.upreal.upreal.R;
 import com.upreal.upreal.product.ProductActivity;
 import com.upreal.upreal.utils.Product;
 import com.upreal.upreal.utils.SoapProductManager;
+import com.upreal.upreal.utils.SoapProductUtilManager;
 
 /**
  * Created by Elyo on 24/04/2015.
@@ -72,13 +73,11 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
     public class CreateProductFromScan extends AsyncTask<Void, Void, Integer> {
 
         int id;
-        Product product;
 
         @Override
         protected Integer doInBackground(Void... params) {
             SoapProductManager pm = new SoapProductManager();
             id = pm.registerProduct(productName.getText().toString(), brand.getText().toString(), desc.getText().toString(), barcodeEAN, noticedPrice.getText().toString(), shopNearby.getText().toString());
-            product = pm.getProductInfo(id);
             return id;
         }
 
@@ -86,6 +85,24 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
 
+            new CreateSpec().execute(i);
+        }
+    }
+
+    public class CreateSpec extends AsyncTask<Integer, Void, Void> {
+        Product product;
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            SoapProductUtilManager pm = new SoapProductUtilManager();
+            SoapProductManager pm2 = new SoapProductManager();
+            pm.createSpecification(params[0], "Description", desc.getText().toString());
+            product = pm2.getProductInfo(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void a) {
             builder.setTitle("Produit Ajouté")
                     .setMessage("Votre produit a été ajouté avec succès !" +
                             "Voulez-vous y accéder?")
@@ -105,6 +122,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                     dialog.cancel();
                 }
             }).create().show();
+
         }
     }
 }
