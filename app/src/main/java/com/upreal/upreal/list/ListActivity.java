@@ -192,7 +192,7 @@ public class ListActivity extends AppCompatActivity {
         String[][] tabLists;
         for (int i = 1; i < 8; i++) {
             tabLists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{Integer.toString(i)}, null, null, null);
-            Toast.makeText(getApplicationContext(),"LISTYPE=" + tabLists.length + "| Type=" + i, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(),"LISTYPE=" + tabLists.length + "| Type=" + i, Toast.LENGTH_SHORT).show();
             /*if (tabLists.length > 1) {
                 for (int j = 0; j < tabLists.length; j++) {
                     bundleLists.add(transformStringToLists(tabLists[j]));
@@ -286,7 +286,7 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Lists> lists) {
             super.onPostExecute(lists);
-            Toast.makeText(getApplicationContext(), "Nombre de listes=" + lists.size(),Toast.LENGTH_SHORT).show();
+  //          Toast.makeText(getApplicationContext(), "Nombre de listes=" + lists.size(),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -303,7 +303,7 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
-            Toast.makeText(getApplicationContext(), "CreateListsResponse=" + Integer.toString(integer), Toast.LENGTH_SHORT).show();
+    //        Toast.makeText(getApplicationContext(), "CreateListsResponse=" + Integer.toString(integer), Toast.LENGTH_SHORT).show();
         }
     }
 

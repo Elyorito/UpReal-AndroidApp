@@ -167,7 +167,9 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                         Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
                         return;
                     } else {
+/*
                         Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
+*/
                         Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
                         intent.putExtra("searchname", mSearchName);
                         v.getContext().startActivity(intent);

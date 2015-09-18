@@ -359,8 +359,10 @@ public class LoginFragmentRegister extends Fragment
 
             SoapUserManager um = new SoapUserManager();
             user = um.getUserByUsername(sessionManagerUser.getRegisterLoginUser()[0]);
+/*
             Log.v("User info", sessionManagerUser.getRegisterLoginUser()[0]);
             Log.v("User FirstName", user.getFirstname());
+*/
 
             return user;
         }

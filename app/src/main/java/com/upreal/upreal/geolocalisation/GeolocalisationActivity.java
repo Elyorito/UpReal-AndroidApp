@@ -97,22 +97,8 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
             Log.i(TAG, "Id product is " + idStore + ".");
             new RetrieveAddress().execute();
         } else {
-            absAddresses.add(new Address(1, "24 Rue Pasteur", "", "France", "Le Kremlin Bicêtre", 94270));
-            absAddresses.add(new Address(2, "85 Rue du Jardin public", "", "France", "Bordeaux", 33000));
-            absAddresses.add(new Address(3, "5-9 Rue du Palais Rihour", "", "France", "Lille", 59000));
-            absAddresses.add(new Address(4, "156 Rue Paul Bert", "", "France", "Lyon", 69003));
-            absPrices.add(new Double(10));
-            absPrices.add(new Double(10));
-            absPrices.add(new Double(10));
-            absPrices.add(new Double(10));
-            updateAddressList(absAddresses);
-            updatePriceList(absPrices);
+            finish();
         }
-
-        absDistances.add("20");
-        absDistances.add("20");
-        absDistances.add("20");
-        absDistances.add("20");
 
         updateDistanceList(absDistances);
         updatePriceList(absPrices);
@@ -362,7 +348,7 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
                 updatePriceList(absPrices);
                 mAdapterList.notifyDataSetChanged();
             } else {
-                Toast.makeText(getApplicationContext(), "Store not found.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Magasin non trouvé.", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "No location found.");
             }
         }

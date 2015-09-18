@@ -42,6 +42,6 @@ public class NewsActivity extends AppCompatActivity {
 //        toolbar.setTitle(article.getTitle());
         bodyArticle.setText(article.getBody());
         Picasso.with(NewsActivity.this).load("http://163.5.84.202/Symfony/web/images/News/" + article.getPicture()).into(imageArticle);
-        Toast.makeText(NewsActivity.this, article.getTitle(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(NewsActivity.this, article.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }
