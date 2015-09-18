@@ -3,7 +3,7 @@
 <resources>
     <color name="ColorPrimary">#F4F4F4</color>
     <color name="ColorPrimaryDark">#363C43</color>
-    <color name="ColorTabs">#F4F4F4</color>
+    <color name="ColorTabs">#363C43</color>
 
     <!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
         <!--<item android:state_selected="true" android:color="@android:color/white" />-->
@@ -11,7 +11,8 @@
         <!--<item android:state_pressed="true" android:color="@android:color/white" />-->
         <!--<item android:color="#8a140e" />-->
     <!--</selector>-->
-    <color name="ColorTitle">#323232</color>
+    <color name="ColorTitle">#ffffff</color>
+    <color name="ColorSpeRed">#dd4343</color>
     <!--Barcode Scanner-->
     <color name="contents_text">#ff000000</color>
     <color name="encode_view">#ffffffff</color>
