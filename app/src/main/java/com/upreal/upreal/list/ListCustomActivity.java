@@ -66,11 +66,11 @@ public class ListCustomActivity extends AppCompatActivity {
         String getListId[] = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "name=? AND type=?", new String[]{listcustom[0], "8"}, null, null, null);
         String getid[] = mDbQuery.MyRawQuery("SELECT id FROM LISTS WHERE NAME=" + "'" + listcustom[0] + "'");
 
-        Toast.makeText(getApplicationContext(),"ListID=" + getListId[0],Toast.LENGTH_SHORT).show();
-        Toast.makeText(getApplicationContext(),"getID=" + getid[0],Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"ListID=" + getListId[0],Toast.LENGTH_SHORT).show();
+  //      Toast.makeText(getApplicationContext(),"getID=" + getid[0],Toast.LENGTH_SHORT).show();
         String listItem[][] = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{getListId[0]}, null, null, null);
 
-        Toast.makeText(getApplicationContext(), "Nb_Item=" + Integer.toString(listItem.length), Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(getApplicationContext(), "Nb_Item=" + Integer.toString(listItem.length), Toast.LENGTH_SHORT).show();
         final ArrayList<Product> products = new ArrayList<>();
         Product objProd = new Product();
         String[] prod = null;
@@ -88,7 +88,7 @@ public class ListCustomActivity extends AppCompatActivity {
                 objProd = new Product();
             }
         }
-        Toast.makeText(getApplicationContext(), "products.Size()= " +  Integer.toString(products.size()), Toast.LENGTH_LONG).show();
+      //  Toast.makeText(getApplicationContext(), "products.Size()= " +  Integer.toString(products.size()), Toast.LENGTH_LONG).show();
 
         mAdapterList = new AdapterListCustom(products);
         mUltimateRecyclerView = (UltimateRecyclerView) findViewById(R.id.ultimate_recyclerlistCust);
@@ -110,7 +110,7 @@ public class ListCustomActivity extends AppCompatActivity {
                     @Override
                     public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] ints) {
                         for (final int position : ints) {
-                            Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
                             mAdapterList.remove(products, position);
                             Snackbar.make(recyclerView.getRootView(), "Voulez vous vraiment supprimer?", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                                 @Override
@@ -125,7 +125,7 @@ public class ListCustomActivity extends AppCompatActivity {
                     @Override
                     public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] ints) {
                         for (int position : ints) {
-                            Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
+  //                          Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
                         }
                         mAdapterList.notifyDataSetChanged();
                     }

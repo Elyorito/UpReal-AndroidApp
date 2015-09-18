@@ -115,7 +115,7 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
                 }
                 break;
             case R.id.contact_us:
-                builder.setTitle("Nous envoyer un mail ?");
+                builder.setTitle(R.string.send_us_mail);
                 LayoutInflater inflater = this.getLayoutInflater();
                 View layout = inflater.inflate(R.layout.dialog_mail, null);
                 builder.setView(layout);
@@ -192,13 +192,13 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
 
         switch (type) {
             case 0:
-                builder.setMessage("Connectez vous pour changer votre profil");
+                builder.setMessage(R.string.connect_to_change_profil);
                 break;
             case 1:
-                builder.setMessage("Connectez vous pour changer votre mot de passe");
+                builder.setMessage(R.string.connect_to_change_pwd);
                 break;
             case 2:
-                builder.setMessage("Voulez-vous vous connecter ?");
+                builder.setMessage(R.string.connect_question);
                 break;
         }
     }

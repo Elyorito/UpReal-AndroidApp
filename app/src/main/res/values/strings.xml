@@ -276,5 +276,11 @@
     <!--BridgeActivity-->
     <string name="loading">Connexion vers la montre connectée...</string>
     <string name="connected">Connecté !</string>
+    <string name="not_logged">Vous n\'êtes pas connecté</string>
+    <string name="choose_scan_mode">Veuillez choisir un mode de scan</string>
+    <string name="send_us_mail">Nous envoyer un mail ?</string>
+    <string name="connect_to_change_profil">Connectez vous pour changer votre profil</string>
+    <string name="connect_to_change_pwd">Connectez vous pour changer votre mot de passe</string>
+    <string name="connect_question">Voulez-vous vous connecter ?</string>
 
 </resources>

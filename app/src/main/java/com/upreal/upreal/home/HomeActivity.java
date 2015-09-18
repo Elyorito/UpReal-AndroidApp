@@ -102,7 +102,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_news);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "IdUser=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "IdUser=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_SHORT).show();
         //sessionManagerUser.deleteALL();
 
         mDbHelper = new DatabaseHelper(this);
@@ -134,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (!sessionManagerUser.isLogged()) {
             String tab[] = sessionManagerUser.getRegisterLoginUser();
-           Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
+  //         Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
         }
         /*RecyclerView MainView Home OLD*/
 /*
@@ -194,9 +194,9 @@ public class HomeActivity extends AppCompatActivity {
 
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
-                    Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
+    //                Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
                     if (!sessionManagerUser.isLogged()) {
-                        Toast.makeText(HomeActivity.this, "Is NOT LOG", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, R.string.not_logged, Toast.LENGTH_SHORT).show();
                         switch (rv.getChildPosition(child)) {
                             case 0://Connect
                                 intentFilter = new IntentFilter(ACTION_CLOSE_HOME);
@@ -225,7 +225,7 @@ public class HomeActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder = new AlertDialog.Builder(rv.getContext());
-                                builder.setTitle("Scan").setMessage("Veuillez choisir un mode de scan").setView(scanview).create().show();
+                                builder.setTitle(R.string.scan).setMessage(R.string.choose_scan_mode).setView(scanview).create().show();
                /*                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
@@ -240,38 +240,38 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 3://News
-                                Toast.makeText(rv.getContext(), "News Not Implemented",Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(rv.getContext(), "News Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 4://Catalogue
-                                Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
+  //                              Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 5://Shop
-                                Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
+    //                            Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 6://Loyalty
-                                Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
+      //                          Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 7://Filleuls
-                                Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
+        //                        Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 8://Achievement
-                                Toast.makeText(rv.getContext(), "Achievment Not Implemented",Toast.LENGTH_SHORT).show();
+                       //         Toast.makeText(rv.getContext(), "Achievement Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
@@ -315,14 +315,14 @@ public class HomeActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder = new AlertDialog.Builder(rv.getContext());
-                                builder.setTitle("Scan").setMessage("Veuillez choisir un mode de scan").setView(scanview).create().show();
+                                builder.setTitle(R.string.scan).setMessage(R.string.choose_scan_mode).setView(scanview).create().show();
                                 return true;
                             case 2://Lists
                                 intent = new Intent(rv.getContext(), ListActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
                             case 3://News
-                                Toast.makeText(rv.getContext(), "News Not Implemented", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(rv.getContext(), "News Not Implemented", Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
@@ -336,28 +336,28 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 5://Shop
-                                Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
+  //                              Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 6://Loyalty
-                                Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
+    //                            Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 7://Filleuls
-                                Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
+      //                          Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 8://Achievement
-                                Toast.makeText(rv.getContext(), "Achievment Not Implemented",Toast.LENGTH_SHORT).show();
+        //                        Toast.makeText(rv.getContext(), "Achievment Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
@@ -487,7 +487,6 @@ public class HomeActivity extends AppCompatActivity {
                     DrawerR.openDrawer(Gravity.RIGHT);
                 else
                     DrawerR.closeDrawers();
-                Toast.makeText(HomeActivity.this, "Search !!", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -510,9 +509,11 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(List<Article> articles) {
             super.onPostExecute(articles);
             //Toast.makeText(getApplicationContext(), "Title= " + articles.get(0).getTitle() ,Toast.LENGTH_LONG).show();
+/*
             for (Article article : articles) {
                 Toast.makeText(getApplicationContext(), "Title= " + article.getTitle() ,Toast.LENGTH_LONG).show();
             }
+*/
             mAdapterHome = new AdapterHomeNews(articles, getApplicationContext());
             mRecyclerViewHome.setAdapter(mAdapterHome);
         }
