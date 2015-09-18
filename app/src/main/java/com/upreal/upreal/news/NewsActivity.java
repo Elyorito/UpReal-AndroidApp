@@ -2,6 +2,8 @@ package com.upreal.upreal.news;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -26,13 +28,18 @@ public class NewsActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news);
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        //setContentView(R.layout.activity_news);
+        setContentView(R.layout.test_layout_news);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         imageArticle = (ImageView) findViewById(R.id.imagenews);
         bodyArticle = (TextView) findViewById(R.id.bodynews);
         article = getIntent().getExtras().getParcelable("listnews");
 
-        toolbar.setTitle(article.getTitle());
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(article.getTitle());
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.black));
+
+//        toolbar.setTitle(article.getTitle());
         bodyArticle.setText(article.getBody());
         Picasso.with(NewsActivity.this).load("http://163.5.84.202/Symfony/web/images/News/" + article.getPicture()).into(imageArticle);
         Toast.makeText(NewsActivity.this, article.getTitle(), Toast.LENGTH_SHORT).show();

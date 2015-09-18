@@ -51,15 +51,15 @@ public class BlurImages implements Transformation {
 
         Canvas canvas = new Canvas(bitmap);
         //GrayScale//
-        ColorMatrix saturation = new ColorMatrix();
-        saturation.setSaturation(0f);
-        ////
+//        ColorMatrix saturation = new ColorMatrix();
+//        saturation.setSaturation(0f);
+//        ////
         canvas.scale(1 / (float) mSampling, 1 / (float) mSampling);
         Paint paint = new Paint();
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
         ////GrayScale
-        paint.setColorFilter(new ColorMatrixColorFilter(saturation));
-        ////////
+//        paint.setColorFilter(new ColorMatrixColorFilter(saturation));
+//        ////////
         canvas.drawBitmap(source, 0, 0, paint);
 
         RenderScript rs = RenderScript.create(mContext);
