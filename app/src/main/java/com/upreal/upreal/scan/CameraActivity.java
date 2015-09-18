@@ -59,6 +59,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 toast.setGravity(Gravity.TOP, 25, 400);
                 toast.show();
                 Log.i("xZing", "Cancelled");
+                this.finish();
             }
         }
     }
