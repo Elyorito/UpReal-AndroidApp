@@ -30,7 +30,7 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_news);
         setContentView(R.layout.test_layout_news);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
         imageArticle = (ImageView) findViewById(R.id.imagenews);
         bodyArticle = (TextView) findViewById(R.id.bodynews);
         article = getIntent().getExtras().getParcelable("listnews");
