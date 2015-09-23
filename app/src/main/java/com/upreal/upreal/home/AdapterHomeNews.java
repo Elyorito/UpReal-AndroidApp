@@ -63,7 +63,6 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
         viewHolder.news.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Id=" + Integer.toString(i), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(v.getContext(), NewsActivity.class);
                 intent.putExtra("listnews", articles.get(i));
                 v.getContext().startActivity(intent);

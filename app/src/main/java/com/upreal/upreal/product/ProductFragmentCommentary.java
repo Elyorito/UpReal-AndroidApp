@@ -42,6 +42,8 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        context = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_product_commentary, container, false);
         Bundle b = getArguments();
         prod = b.getParcelable("product");
@@ -60,7 +62,7 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
 
       //  mAdapter = new AdapterCommentary(USER, COMMENT, RATING);
         /*recyclerView.setAdapter(mAdapter);*/
-        Toast.makeText(v.getContext(), "OK", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(v.getContext(), "OK", Toast.LENGTH_SHORT).show();
         return v;
     }
 
@@ -93,9 +95,8 @@ public class ProductFragmentCommentary extends android.support.v4.app.Fragment {
 
             Toast.makeText(getActivity().getApplicationContext(), "Size Rate[" + Integer.toString(rateComments.size()) +"]", Toast.LENGTH_SHORT).show();*/
 /*            new RetrieveUsernameComment().execute();*/
-            context = getActivity().getApplicationContext();
-            if (rateComments != null && context != null)
-                 Toast.makeText(context, "RateCommentname=" + rateComments.size(), Toast.LENGTH_SHORT).show();
+//            if (rateComments != null && context != null)
+//                 Toast.makeText(context, "RateCommentname=" + rateComments.size(), Toast.LENGTH_SHORT).show();
             mAdapter = new AdapterCommentary(rateComments);
             recyclerView.setAdapter(mAdapter);
         }

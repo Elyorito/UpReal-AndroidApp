@@ -80,7 +80,7 @@ public class StoreActivity extends ActionBarActivity implements View.OnClickList
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new StoreViewPagerAdapter(getSupportFragmentManager(), tab, 3, store);
+        adapter = new StoreViewPagerAdapter(getSupportFragmentManager(), tab, 1, store);
         mViewPager.setAdapter(adapter);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);

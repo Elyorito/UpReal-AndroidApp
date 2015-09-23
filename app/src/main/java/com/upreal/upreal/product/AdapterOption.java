@@ -124,7 +124,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                         for (int i = 0; i < listsElements.length; i++) {
                             lists[i] = listsElements[i][0];
                         }
-                        Toast.makeText(v.getContext(), "List number= " + lists.length, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(v.getContext(), "List number= " + lists.length, Toast.LENGTH_LONG).show();
                         LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                         TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
@@ -199,7 +199,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                 mDbQuery = new DatabaseQuery(mDbHelper);
                                 mDatabase = mDbHelper.openDataBase();
 
-                                Toast.makeText(dialogView.getContext(), "NamemProduct=" + mProduct.getName(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(dialogView.getContext(), "NamemProduct=" + mProduct.getName(), Toast.LENGTH_SHORT).show();
                                 //String getprod[] = mDbQuery.MyRawQuery("SELECT name, ean, brand, product_id FROM product where product_id=" + "'" + Integer.toString(mProduct.getId()) + "'");
                                 //String getidprod[][] = mDbQuery.QueryGetElements("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
                                 String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
@@ -219,16 +219,17 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                         mProduct.setPicture("");
                                     mDbQuery.InsertData("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, new String[]{mProduct.getName(), mProduct.getEan(), mProduct.getPicture(), mProduct.getBrand(), Integer.toString(mProduct.getId())});
                                 }
-                                Toast.makeText(dialogView.getContext(), "MULTIPLECHOICE=" + Integer.toString(checkedList.size()), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(dialogView.getContext(), "MULTIPLECHOICE=" + Integer.toString(checkedList.size()), Toast.LENGTH_SHORT).show();
                                 for (int i = 0; i < checkedList.size(); i++) {
                                     String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{lists[checkedList.get(i)], "8"}, null, null, null);
-                                    Toast.makeText(dialogView.getContext(), "|ListName=" + getListId[0][4] + "|Lengh=" + Integer.toString(getListId[0].length), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(dialogView.getContext(), "|ListName=" + getListId[0][4] + "|Lengh=" + Integer.toString(getListId[0].length), Toast.LENGTH_SHORT).show();
 
                                     String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(mProduct.getId()), getListId[0][0]}, null, null, null);
-                                    Toast.makeText(dialogView.getContext(), "|ItemLengh=" + getITEMS.length, Toast.LENGTH_SHORT).show();
-                                    if (getITEMS[0] != null)
-                                        Toast.makeText(dialogView.getContext(), "id_list=" + getITEMS[0] + "|id_product=" + getITEMS[1] + "|id_user=" + getITEMS[2], Toast.LENGTH_SHORT).show();
-                                    else if (getITEMS[0] == null)
+                                    //Toast.makeText(dialogView.getContext(), "|ItemLengh=" + getITEMS.length, Toast.LENGTH_SHORT).show();
+                                    /*if (getITEMS[0] != null) {
+                                        //Toast.makeText(dialogView.getContext(), "id_list=" + getITEMS[0] + "|id_product=" + getITEMS[1] + "|id_user=" + getITEMS[2], Toast.LENGTH_SHORT).show();
+                                    }
+                                    else*/ if (getITEMS[0] == null)
                                         mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(mSessionManagerUser.getUserId())});
                                 }
                                 mDatabase.close();
@@ -241,7 +242,7 @@ public class AdapterOption extends RecyclerView.Adapter<AdapterOption.ViewHolder
                                     }
                                 }
                         ).setView(dialogView).create().show();
-                        Toast.makeText(v.getContext(), "List User ID= " + mSessionManagerUser.getUserId(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(v.getContext(), "List User ID= " + mSessionManagerUser.getUserId(), Toast.LENGTH_SHORT).show();
                         break;
                     case 2://Troc
 

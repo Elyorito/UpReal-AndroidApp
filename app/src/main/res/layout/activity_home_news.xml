@@ -16,8 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/app_bar"
-        android:elevation="7sp"
-        android:layout_weight="0.12">
+        android:elevation="7sp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/RecyclerView_Home"
@@ -40,12 +39,11 @@
             android:id="@+id/RecyclerView_NavigationDrawerR"
             android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="#F4F4F4"
             android:layout_gravity="right"
             android:scrollbars="vertical">
 
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.DrawerLayout>
-
 
 </LinearLayout>
