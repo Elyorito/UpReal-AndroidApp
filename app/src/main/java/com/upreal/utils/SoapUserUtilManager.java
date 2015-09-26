@@ -2,7 +2,7 @@ package com.upreal.utils;
 
 import android.util.Log;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;

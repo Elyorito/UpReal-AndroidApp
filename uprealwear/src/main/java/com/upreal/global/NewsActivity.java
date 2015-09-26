@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.upreal.server.GlobalManager;
 import com.upreal.server.UserUtilManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.user.SessionManagerUser;
 import com.upreal.utils.Article;
 import com.upreal.utils.Item;

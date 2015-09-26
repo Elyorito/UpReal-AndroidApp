@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.home.HomeActivity;
 
 /**

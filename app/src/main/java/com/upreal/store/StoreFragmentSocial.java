@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.Store;
 

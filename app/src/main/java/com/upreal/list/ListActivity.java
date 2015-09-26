@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 
 import com.github.clans.fab.FloatingActionButton;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.DividerItemDecoration;
 import com.upreal.utils.Lists;
 import com.upreal.utils.SessionManagerUser;

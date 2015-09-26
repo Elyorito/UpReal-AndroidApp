@@ -25,7 +25,7 @@ import com.google.zxing.client.android.book.SearchBookContentsActivity;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

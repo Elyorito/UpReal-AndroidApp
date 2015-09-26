@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 /**
  * Created by Kyosukke on 10/07/2015.

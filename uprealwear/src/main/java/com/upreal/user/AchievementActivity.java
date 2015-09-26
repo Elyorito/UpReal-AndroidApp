@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.server.UserUtilManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.utils.Item;
 
 /**

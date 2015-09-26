@@ -34,7 +34,7 @@ import com.upreal.list.ListActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.scan.CameraActivity;
 import com.upreal.scan.GetProductActivity;
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import com.upreal.user.UserActivity;
 import com.upreal.utils.DividerItemDecoration;

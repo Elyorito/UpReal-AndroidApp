@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 /**
  * Created by Elyo on 06/02/2015.

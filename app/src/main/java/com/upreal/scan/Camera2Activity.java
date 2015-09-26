@@ -3,7 +3,7 @@ package com.upreal.scan;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 /**
  * Created by Elyo on 17/05/2015.

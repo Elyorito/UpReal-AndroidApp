@@ -26,7 +26,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import java.io.Closeable;
 import java.io.IOException;

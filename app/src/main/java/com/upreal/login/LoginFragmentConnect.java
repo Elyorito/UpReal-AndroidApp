@@ -23,7 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.home.HomeActivity;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;

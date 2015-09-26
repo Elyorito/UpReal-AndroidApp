@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.upreal.server.GlobalManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.utils.Item;
 //import Item;
 

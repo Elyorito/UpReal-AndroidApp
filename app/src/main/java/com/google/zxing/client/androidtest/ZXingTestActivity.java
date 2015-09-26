@@ -34,7 +34,7 @@ import android.view.View;
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

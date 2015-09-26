@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 

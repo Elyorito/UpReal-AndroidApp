@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.upreal.store.StoreActivity;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Address;
 import com.upreal.utils.SoapProductUtilManager;
 import com.upreal.utils.SoapStoreManager;

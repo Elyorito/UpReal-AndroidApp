@@ -24,7 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.google.zxing.client.android.wifi.WifiConfigManager;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;

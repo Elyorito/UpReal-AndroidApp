@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Address;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;

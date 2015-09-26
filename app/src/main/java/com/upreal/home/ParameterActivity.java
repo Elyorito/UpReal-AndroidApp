@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.bridge.BridgeDeviceActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.login.LoginViewPagerAdapter;

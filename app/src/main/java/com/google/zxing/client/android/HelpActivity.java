@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 /**
  * An HTML-based help screen.

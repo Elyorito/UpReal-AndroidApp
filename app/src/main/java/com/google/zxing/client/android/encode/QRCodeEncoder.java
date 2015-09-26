@@ -16,20 +16,6 @@
 
 package com.google.zxing.client.android.encode;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.Result;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.android.Contents;
-import com.google.zxing.client.android.Intents;
-
-import com.google.zxing.client.result.AddressBookParsedResult;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ResultParser;
-import com.google.zxing.common.BitMatrix;
-import com.upreal.upreal.R;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,6 +24,19 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.result.AddressBookParsedResult;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.common.BitMatrix;
+import com.upreal.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Product;
 import com.upreal.utils.Rate;
 import com.upreal.utils.RateComment;

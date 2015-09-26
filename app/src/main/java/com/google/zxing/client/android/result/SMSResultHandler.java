@@ -15,13 +15,12 @@
  */
 
 package com.google.zxing.client.android.result;
-
-import com.upreal.upreal.R;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.SMSParsedResult;
-
 import android.app.Activity;
 import android.telephony.PhoneNumberUtils;
+
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.SMSParsedResult;
+import com.upreal.R;
 
 /**
  * Handles SMS addresses, offering a choice of composing a new SMS or MMS message.

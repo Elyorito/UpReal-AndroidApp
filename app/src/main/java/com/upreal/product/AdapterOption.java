@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.login.LoginActivity;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Product;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.database.DatabaseHelper;

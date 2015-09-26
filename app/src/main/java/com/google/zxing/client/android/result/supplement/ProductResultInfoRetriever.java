@@ -20,7 +20,7 @@ import android.content.Context;
 import android.text.Html;
 import android.widget.TextView;
 import com.google.zxing.client.android.HttpHelper;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.LocaleManager;
 

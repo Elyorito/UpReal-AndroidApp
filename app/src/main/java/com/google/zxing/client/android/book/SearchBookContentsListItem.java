@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import java.util.Locale;
 

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.upreal.bridge.BridgeDeviceActivity;
 import com.upreal.search.SearchActivity;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.global.NewsResultActivity;
 import com.upreal.user.ListActivity;
 import com.upreal.user.ProfileActivity;

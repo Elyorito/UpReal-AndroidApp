@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 /**
  * Created by Elyo on 12/02/2015.

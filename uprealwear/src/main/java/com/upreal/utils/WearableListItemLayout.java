@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 
 /**
  * Created by Kyosukke on 31/07/2015.

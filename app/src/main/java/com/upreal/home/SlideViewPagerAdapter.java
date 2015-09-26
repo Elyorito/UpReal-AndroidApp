@@ -2,14 +2,13 @@ package com.upreal.home;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.transition.Slide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 /**
  * Created by Elyo on 21/02/2015.

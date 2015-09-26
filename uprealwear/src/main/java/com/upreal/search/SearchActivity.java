@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 
 /**
  * Created by Kyosukke on 16/08/2015.

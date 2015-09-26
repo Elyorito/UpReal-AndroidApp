@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.User;
 
 import java.util.ArrayList;

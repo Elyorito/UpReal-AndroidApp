@@ -23,7 +23,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 public final class BenchmarkActivity extends Activity {
 

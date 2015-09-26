@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.server.UserManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.global.RateActivity;
 import com.upreal.server.GlobalManager;
 import com.upreal.utils.Item;

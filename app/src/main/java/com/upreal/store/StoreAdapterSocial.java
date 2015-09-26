@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;

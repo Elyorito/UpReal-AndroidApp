@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.upreal.home.AdapterHomeNews;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Article;
 import com.upreal.utils.SoapGlobalManager;
 

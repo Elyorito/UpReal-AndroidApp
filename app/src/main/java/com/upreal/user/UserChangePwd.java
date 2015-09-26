@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;
 import com.upreal.utils.User;

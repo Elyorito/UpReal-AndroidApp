@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.product.ProductActivity;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;

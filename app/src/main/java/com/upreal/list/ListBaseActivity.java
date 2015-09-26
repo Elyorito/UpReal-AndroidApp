@@ -15,7 +15,7 @@ import com.marshalchen.ultimaterecyclerview.ItemTouchListenerAdapter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.upreal.product.ProductActivity;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Product;
 
 import java.util.ArrayList;

@@ -19,7 +19,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.GoogleConnection;
 import com.upreal.utils.State;
 import com.upreal.view.SlidingTabLayout;

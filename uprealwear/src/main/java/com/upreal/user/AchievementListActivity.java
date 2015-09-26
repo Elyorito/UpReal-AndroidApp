@@ -9,7 +9,7 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
 import com.upreal.server.UserUtilManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.utils.Achievement;
 import com.upreal.utils.Item;
 import com.upreal.utils.ListItemAdapter;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import java.util.ArrayList;
 

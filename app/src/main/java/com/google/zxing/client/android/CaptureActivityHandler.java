@@ -16,25 +16,25 @@
 
 package com.google.zxing.client.android;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.BitmapFactory;
-import android.provider.Browser;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.Result;
-import com.google.zxing.client.android.camera.CameraManager;
-import com.upreal.upreal.R;
-
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Browser;
 import android.util.Log;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.Result;
+import com.google.zxing.client.android.camera.CameraManager;
+import com.upreal.R;
 
 import java.util.Collection;
 import java.util.Map;

@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.RateComment;
 
 import java.util.ArrayList;

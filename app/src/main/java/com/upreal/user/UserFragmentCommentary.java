@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.product.AdapterCommentary;
 import com.upreal.utils.Rate;
 import com.upreal.utils.RateComment;

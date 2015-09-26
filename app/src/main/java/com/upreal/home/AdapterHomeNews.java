@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.news.NewsActivity;
 import com.upreal.utils.Article;
 

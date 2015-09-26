@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.upreal.upreal.R;
+import com.upreal.R;
 
 import java.util.List;
 

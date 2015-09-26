@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.upreal.server.GlobalManager;
 import com.upreal.server.UserManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.utils.Item;
 import com.upreal.utils.ListItemAdapter;
 import com.upreal.utils.Rate;

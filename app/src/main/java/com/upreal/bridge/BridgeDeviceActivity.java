@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.SessionManagerUser;
 
 /**

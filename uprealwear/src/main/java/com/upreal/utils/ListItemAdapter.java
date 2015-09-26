@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 import com.upreal.global.AddListActivity;
 import com.upreal.product.ProductActivity;
 import com.upreal.server.UserUtilManager;
-import com.upreal.uprealwear.R;
+import com.upreal.R;
 import com.upreal.global.DeleteListActivity;
 import com.upreal.global.NewsActivity;
 import com.upreal.global.RateActivity;

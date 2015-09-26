@@ -28,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.plus.model.people.Person;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.home.HomeActivity;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;

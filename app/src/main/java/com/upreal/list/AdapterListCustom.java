@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.upreal.upreal.R;
+import com.upreal.R;
 import com.upreal.utils.Product;
 
 import java.util.ArrayList;

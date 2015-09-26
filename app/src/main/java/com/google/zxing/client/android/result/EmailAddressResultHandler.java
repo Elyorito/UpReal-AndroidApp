@@ -16,11 +16,11 @@
 
 package com.google.zxing.client.android.result;
 
-import com.upreal.upreal.R;
+import android.app.Activity;
+
 import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.ParsedResult;
-
-import android.app.Activity;
+import com.upreal.R;
 
 /**
  * Handles email addresses.
