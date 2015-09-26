@@ -9,7 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,13 +56,14 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
 
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
+    private TextInputLayout textInputUserName;
+    private TextInputLayout textInputPassword;
 
     private AlertDialog.Builder builder;
     private EditText login;
     private EditText password;
     private Button connect;
     public SessionManagerUser sessionManagerUser;
-
 
     private Context mContext;
 
@@ -71,9 +75,14 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login_connect, container, false);
         sessionManagerUser = new SessionManagerUser(getActivity());
+        textInputUserName = (TextInputLayout) v.findViewById(R.id.input_edit_login);
+        textInputPassword = (TextInputLayout) v.findViewById(R.id.input_edit_password);
         login = (EditText) v.findViewById(R.id.edittext_login_mail);
         password = (EditText) v.findViewById(R.id.edittext_login_password);
         connect = (Button) v.findViewById(R.id.button_login_connect);
+
+        login.addTextChangedListener(new myTextWatcher(login));
+
         builder = new AlertDialog.Builder(v.getContext());
         builder.setTitle("Erreur Compte")
                 .setMessage("Email/Identifiant ou Mot de passe incorrect")
@@ -94,12 +103,35 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
         return v;
     }
 
+    public boolean validateLogin() {
+
+        if (login.getText().toString().trim().isEmpty()) {
+            textInputUserName.setError("L'identifiant ou email n'est pas renseigné");
+            return false;
+        } else
+            textInputUserName.setErrorEnabled(false);
+        return true;
+    }
+
+    public boolean validatePassword() {
+
+        String password = this.password.getText().toString().trim();
+
+        if (password.isEmpty() || password.length() < 4) {
+            textInputPassword.setError("Le mot de passe doit faire plus de 4 caractère");
+            return false;
+        }
+        else
+            textInputPassword.setErrorEnabled(false);
+        return true;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login_connect:
-                if (login.getText().length() == 0 || password.getText().length() == 0)
-                    Toast.makeText(v.getContext(), "Login or password empty", Toast.LENGTH_SHORT).show();
+                if (!validateLogin() || !validatePassword())
+                    break;
                 else {
                     InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
                     im.hideSoftInputFromWindow(login.getWindowToken(), 0);
@@ -108,6 +140,37 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 break;
             default:
                 break;
+        }
+    }
+
+    public class myTextWatcher implements TextWatcher {
+
+        private View mView;
+
+        myTextWatcher(View view) {
+            this.mView = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            switch (this.mView.getId()) {
+                case R.id.edittext_login_mail:
+                    validateLogin();
+                    break;
+                case R.id.edittext_login_password:
+                    validatePassword();
+                    break;
+            }
         }
     }
 

@@ -29,7 +29,7 @@
 
         <com.upreal.upreal.view.SlidingTabLayout
             android:id="@+id/sliding_tab"
-            android:background="@color/wallet_hint_foreground_holo_light"
+            android:background="@color/ColorPrimaryDark"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:elevation="2dp"

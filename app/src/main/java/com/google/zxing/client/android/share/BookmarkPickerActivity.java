@@ -35,23 +35,23 @@ public final class BookmarkPickerActivity extends ListActivity {
   private static final String TAG = BookmarkPickerActivity.class.getSimpleName();
 
   private static final String[] BOOKMARK_PROJECTION = {
-      Browser.BookmarkColumns.TITLE,
-      Browser.BookmarkColumns.URL
+     // Browser.BookmarkColumns.TITLE,
+      //Browser.BookmarkColumns.URL
   };
 
   static final int TITLE_COLUMN = 0;
   static final int URL_COLUMN = 1;
 
-  private static final String BOOKMARK_SELECTION = 
-      Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " IS NOT NULL";
+  //private static final String BOOKMARK_SELECTION =
+     // Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " IS NOT NULL";
 
   private Cursor cursor;
 
   @Override
   protected void onResume() {
     super.onResume();
-    cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
-        BOOKMARK_SELECTION, null, null);
+    //cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
+     //   BOOKMARK_SELECTION, null, null);
     if (cursor == null) {
       Log.w(TAG, "No cursor returned for bookmark query");
       finish();
@@ -74,8 +74,8 @@ public final class BookmarkPickerActivity extends ListActivity {
     if (!cursor.isClosed() && cursor.moveToPosition(position)) {
       Intent intent = new Intent();
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Browser.BookmarkColumns.TITLE, cursor.getString(TITLE_COLUMN));
-      intent.putExtra(Browser.BookmarkColumns.URL, cursor.getString(URL_COLUMN));
+//      intent.putExtra(Browser.BookmarkColumns.TITLE, cursor.getString(TITLE_COLUMN));
+//      intent.putExtra(Browser.BookmarkColumns.URL, cursor.getString(URL_COLUMN));
       setResult(RESULT_OK, intent);
     } else {
       setResult(RESULT_CANCELED);

@@ -4,7 +4,10 @@
     <color name="ColorPrimary">#F4F4F4</color>
     <color name="ColorPrimaryDark">#363C43</color>
     <color name="ColorTabs">#F4F4F4</color>
-
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#c8e8ff</color>
     <!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
         <!--<item android:state_selected="true" android:color="@android:color/white" />-->
         <!--<item android:state_focused="true" android:color="@android:color/white" />-->
