@@ -2,52 +2,54 @@
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp">
+        android:padding="15dp">
 
-        <TextView
-            android:id="@+id/textview_login_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/mailorid"/>
-        <EditText
-            android:id="@+id/edittext_login_mail"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_edit_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edittext_login_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="textEmailAddress"
+                android:layout_below="@+id/textview_login_id"
+                android:hint="@string/mailorid"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:inputType="textEmailAddress"
-            android:layout_below="@+id/textview_login_id"
-            android:hint="jean.bonduel@upreal.fr"/>
-        <TextView
-            android:id="@+id/textview_login_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edittext_login_mail"
-            android:layout_centerHorizontal="true"
-            android:text="@string/password"/>
+            android:layout_below="@+id/input_edit_login">
 
-        <EditText
-            android:id="@+id/edittext_login_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_login_password"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:hint="*******"/>
+            <EditText
+                android:id="@+id/edittext_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_login_password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:hint="@string/password"/>
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <Button
             android:id="@+id/button_login_connect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/connect"
-            android:layout_below="@+id/edittext_login_password"/>
+            android:layout_below="@+id/input_edit_password"/>
     </RelativeLayout>
 
     RelativeLayout

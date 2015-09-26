@@ -11,7 +11,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -45,6 +49,8 @@ import com.upreal.upreal.utils.User;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 
+import org.w3c.dom.Text;
+
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.Observable;
@@ -61,6 +67,11 @@ public class LoginFragmentRegister extends Fragment
         implements View.OnClickListener, TextView.OnEditorActionListener {
 
     private static final String TAG = "LoginFragmentRegister";
+
+    private TextInputLayout textInputId;
+    private TextInputLayout textInputPassword;
+    private TextInputLayout textInputPassword2;
+    private TextInputLayout textInputEmail;
 
     private AlertDialog.Builder builder;
     private EditText edit_id;
@@ -92,18 +103,16 @@ public class LoginFragmentRegister extends Fragment
         View v = inflater.inflate(R.layout.fragment_login_register, container, false);
         sessionManagerUser = new SessionManagerUser(getActivity());
 
+        textInputId = (TextInputLayout) v.findViewById(R.id.input_register_id);
+        textInputPassword = (TextInputLayout) v.findViewById(R.id.input_register_password);
+        textInputPassword2 = (TextInputLayout) v.findViewById(R.id.input_register_password2);
+        textInputEmail = (TextInputLayout) v.findViewById(R.id.input_register_email);
         edit_id = (EditText) v.findViewById(R.id.edittext_register_id);
         edit_password = (EditText) v.findViewById(R.id.edittext_register_password);
         edit_confirmpassword = (EditText) v.findViewById(R.id.edittext_register_password2);
         edit_email = (EditText) v.findViewById(R.id.edittext_register_email);
         but_register = (Button) v.findViewById(R.id.button_login_connect);
         checkedTextView = (CheckedTextView) v.findViewById(R.id.checktext_cgu);
-
-        e_id = (TextView) v.findViewById(R.id.user_error);
-        e_password = (TextView) v.findViewById(R.id.password_error);
-        e_confirm = (TextView) v.findViewById(R.id.password_error2);
-        e_email = (TextView) v.findViewById(R.id.email_error);
-        e_cgu = (TextView) v.findViewById(R.id.cgu_error);
 
         checkedTextView.setOnClickListener(this);
         edit_id.setOnEditorActionListener(this);
@@ -128,44 +137,118 @@ public class LoginFragmentRegister extends Fragment
         return false;
     }
 
+    public boolean validateId() {
+
+        String id = edit_id.getText().toString().trim();
+        if (id.isEmpty() || id.length() < 4) {
+            textInputId.setError("Username must be four caracter long");
+            return false;
+        } else
+            textInputId.setErrorEnabled(false);
+        return true;
+    }
+    public boolean validatePassword() {
+
+        String password = edit_password.getText().toString().trim();
+        String password2 = edit_confirmpassword.getText().toString().trim();
+
+        if (password.isEmpty() || (password.length() < 6 && password2.length() < 6)|| password.equals(password2)) {
+            textInputPassword.setError("Assurer vous d'avoir entre au moins 6 caractere(contre " + password.length());
+            textInputPassword2.setError("Assurer vous d'avoir entre au moins 6 caractere(contre " + password2.length());
+            return false;
+        } else {
+            textInputPassword.setErrorEnabled(false);
+            textInputPassword2.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public boolean validateEmail() {
+
+        String email = edit_email.getText().toString().trim();
+        if (email.isEmpty() || isValidEmail(email)) {
+            textInputEmail.setError("Please include '@'");
+            return false;
+        }
+        return true;
+    }
+
+    public class myTextWatcher implements TextWatcher {
+
+        private View view;
+
+        myTextWatcher(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.edittext_register_id:
+                    validateId();
+                    break;
+                case R.id.edittext_register_password:
+                    validatePassword();
+                    break;
+                case R.id.edittext_register_password2:
+                    validatePassword();
+                    break;
+                case R.id.edittext_register_email:
+                    validateEmail();
+                    break;
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.button_login_connect:
-                e_confirm.setVisibility(View.GONE);
-                e_password.setVisibility(View.GONE);
-                e_email.setVisibility(View.GONE);
-                e_cgu.setVisibility(View.GONE);
-                if (!checkedTextView.isChecked()) {
-                    e_cgu.setVisibility(View.VISIBLE);
-                    complete = false;
-                }
-                if (edit_password.length() < 6) {
-                    if (edit_password.length() == 0) {
-                        e_password.setText("Un mot de passe est requis");
-                        e_password.setVisibility(View.VISIBLE);
-                        Toast.makeText(v.getContext(), "Password Empty", Toast.LENGTH_SHORT).show();
-                        complete = false;
-                    }
-                    else {
-                        e_password.setText("Votre mot de passe doit contenir au moins 6 caractères");
-                        e_password.setVisibility(View.VISIBLE);
-                        Toast.makeText(v.getContext(), "Password too short (Length > 6 caracters)", Toast.LENGTH_SHORT).show();
-                        complete = false;
-                    }
-                }
-                if (edit_password.toString() == edit_confirmpassword.toString()/*!edit_password.toString().equals(edit_confirmpassword.toString())*/) {
-                    e_confirm.setText("Vous n'avez pas entré le même mot de passe");
-                    e_confirm.setVisibility(View.VISIBLE);
-                    Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
-                    complete = false;
-                }
-                if (complete && !uIsTaken) {
-                    InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
-                    im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
-                    new RetrieveRegisterAccount().execute();
-                    complete = true;
-                }
+                if (!validateId() || !validatePassword() || !validateEmail())
+                    Toast.makeText(v.getContext(), "Error formulaire", Toast.LENGTH_SHORT).show();
+//                if (!checkedTextView.isChecked()) {
+//                    complete = false;
+//                }
+//                if (edit_password.length() < 6) {
+//                    if (edit_password.length() == 0) {
+//                        e_password.setText("Un mot de passe est requis");
+//                        e_password.setVisibility(View.VISIBLE);
+//                        Toast.makeText(v.getContext(), "Password Empty", Toast.LENGTH_SHORT).show();
+//                        complete = false;
+//                    }
+//                    else {
+//                        e_password.setText("Votre mot de passe doit contenir au moins 6 caractères");
+//                        e_password.setVisibility(View.VISIBLE);
+//                        Toast.makeText(v.getContext(), "Password too short (Length > 6 caracters)", Toast.LENGTH_SHORT).show();
+//                        complete = false;
+//                    }
+//                }
+//                if (edit_password.toString() == edit_confirmpassword.toString()/*!edit_password.toString().equals(edit_confirmpassword.toString())*/) {
+//                    e_confirm.setText("Vous n'avez pas entré le même mot de passe");
+//                    e_confirm.setVisibility(View.VISIBLE);
+//                    Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
+//                    complete = false;
+//                }
+//                if (complete && !uIsTaken) {
+//                    InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
+//                    im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
+//                    new RetrieveRegisterAccount().execute();
+//                    complete = true;
+//                }
                 break;
             case R.id.checktext_cgu:
                 if (!checkedTextView.isChecked())
@@ -214,7 +297,7 @@ public class LoginFragmentRegister extends Fragment
         }
     }
 
-    private class RetrieveRegisterAccount extends AsyncTask<Void, Void, Integer> {
+    private class RetreiveRegisterAccount extends AsyncTask<Void, Void, Integer> {
 
         private int info_serv;
         private String username;
@@ -224,14 +307,14 @@ public class LoginFragmentRegister extends Fragment
         private String password;
         private boolean social;
 
-        RetrieveRegisterAccount() {
+        RetreiveRegisterAccount() {
             social = false;
             username = edit_id.getText().toString();
             password = edit_password.getText().toString();
             email = edit_email.getText().toString();
         }
 
-        RetrieveRegisterAccount(String username, Person currentPerson, String email) {
+        RetreiveRegisterAccount(String username, Person currentPerson, String email) {
             social = true;
             this.username = username;
             firstname = null;

@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,13 +28,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
+
 import com.upreal.upreal.list.ListActivity;
 import com.upreal.upreal.login.LoginActivity;
+import com.upreal.upreal.scan.Camera2Activity;
 import com.upreal.upreal.scan.CameraActivity;
 import com.upreal.upreal.scan.GetProductActivity;
 import com.upreal.upreal.user.UserActivity;
@@ -60,6 +64,8 @@ import static android.view.GestureDetector.SimpleOnGestureListener;
 public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private TabLayout tablayout;
+    private ViewPager viewPager;
 
     //RecyclerView Home
     private RecyclerView mRecyclerViewHome;
@@ -113,10 +119,12 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_news);
+        setContentView(R.layout.activity_home_news_historic);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        tablayout = (TabLayout) findViewById(R.id.tabs);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-//        Toast.makeText(getApplicationContext(), "IdUser=" + Integer.toString(sessionManagerUser.getUserId()), Toast.LENGTH_SHORT).show();
-        //sessionManagerUser.deleteALL();
 
         mDbHelper = new DatabaseHelper(this);
         mDbQuery = new DatabaseQuery(mDbHelper);
@@ -141,10 +149,15 @@ public class HomeActivity extends AppCompatActivity {
 
         ACCOUNT = new String[]{getString(R.string.connexion)};
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.ColorTabs));
         toolbar.setTitleTextColor(getResources().getColor(R.color.ColorTitle));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        AdapterViewPagerHome adapter = new AdapterViewPagerHome(getSupportFragmentManager(), new String[]{"News", "Fil d'actualité"});
+        viewPager.setAdapter(adapter);
+        //setupViewpager(viewPager);
+        tablayout.setupWithViewPager(viewPager);
+
         if (!sessionManagerUser.isLogged()) {
             String tab[] = sessionManagerUser.getRegisterLoginUser();
   //         Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
@@ -164,13 +177,13 @@ public class HomeActivity extends AppCompatActivity {
 */
         /*RecyclerView MainView News*/
 
-        mRecyclerViewHome = (RecyclerView) findViewById(R.id.RecyclerView_Home);
-        mRecyclerViewHome.setHasFixedSize(true);
-        mRecyclerViewHome.setLayoutManager(new GridLayoutManager(this, 1));
-        String Title[] = {"Welcome to upreal !","Les dernieres promotion du mois de juillet disponible !", "Fusion entre UpReal et Dealabs !"};
-        int type[] = {1, 2, 1};
-        String imagepath[] = {"path1", "path2", "path3"};
-        new RetreiveNews().execute();
+//        mRecyclerViewHome = (RecyclerView) findViewById(R.id.RecyclerView_Home);
+//        mRecyclerViewHome.setHasFixedSize(true);
+//        mRecyclerViewHome.setLayoutManager(new GridLayoutManager(this, 1));
+//        String Title[] = {"Welcome to upreal !","Les dernieres promotion du mois de juillet disponible !", "Fusion entre UpReal et Dealabs !"};
+//        int type[] = {1, 2, 1};
+//        String imagepath[] = {"path1", "path2", "path3"};
+//        new RetreiveNews().execute();
 
 
       /*RecyclerView NavigDrawL*/
@@ -523,6 +536,10 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    private void setupViewpager(ViewPager viewpager) {
+        AdapterViewPagerHome adapter = new AdapterViewPagerHome(getSupportFragmentManager(), new String[]{"News", "Fil d'actualité"});
+        viewpager.setAdapter(adapter);
+    }
 
     @Override
     protected void onDestroy() {
@@ -562,31 +579,6 @@ public class HomeActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
-    }
-
-    private class RetreiveNews extends AsyncTask<Void, Void, List<Article>> {
-
-        List<Article> listnews = new ArrayList<>();
-
-        @Override
-        protected List<Article> doInBackground(Void... params) {
-            SoapGlobalManager gm = new SoapGlobalManager();
-            listnews = gm.getNews();
-            return listnews;
-        }
-
-        @Override
-        protected void onPostExecute(List<Article> articles) {
-            super.onPostExecute(articles);
-            //Toast.makeText(getApplicationContext(), "Title= " + articles.get(0).getTitle() ,Toast.LENGTH_LONG).show();
-/*
-            for (Article article : articles) {
-                Toast.makeText(getApplicationContext(), "Title= " + article.getTitle() ,Toast.LENGTH_LONG).show();
-            }
-*/
-            mAdapterHome = new AdapterHomeNews(articles, getApplicationContext());
-            mRecyclerViewHome.setAdapter(mAdapterHome);
-        }
     }
 
 }

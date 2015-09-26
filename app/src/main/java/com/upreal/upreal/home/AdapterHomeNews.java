@@ -43,7 +43,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
         }
     }
 
-    AdapterHomeNews(List<Article> articles, Context context) {
+    public AdapterHomeNews(List<Article> articles, Context context) {
         this.articles = articles;
         this.context = context;
     }

@@ -38,7 +38,6 @@
                 android:elevation="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppBar.Light"
                 app:layout_collapseMode="pin"
                 app:titleTextAppearance="@color/red"/>
 
