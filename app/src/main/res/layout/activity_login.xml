@@ -19,7 +19,7 @@
         android:id="@+id/app_bar"
         layout="@layout/home_app_bar"/>
 
-    <com.upreal.upreal.view.SlidingTabLayout
+    <com.upreal.view.SlidingTabLayout
         android:id="@+id/login_sliding_tab"
         android:background="@color/material_deep_teal_200"
         android:layout_height="wrap_content"

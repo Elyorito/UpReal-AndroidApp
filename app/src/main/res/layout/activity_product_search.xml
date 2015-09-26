@@ -16,12 +16,12 @@
         android:background="@color/ColorPrimary"
         android:weightSum="3">
 
-        <com.upreal.upreal.view.SlidingTabLayout
+        <com.upreal.view.SlidingTabLayout
             android:id="@+id/sliding_tab"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".5">
-        </com.upreal.upreal.view.SlidingTabLayout>
+        </com.upreal.view.SlidingTabLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

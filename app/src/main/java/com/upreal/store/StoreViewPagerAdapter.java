@@ -1,0 +1,61 @@
+package com.upreal.store;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.upreal.utils.Store;
+
+/**
+ * Created by Kyosukke on 20/06/2015.
+ */
+public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
+
+    CharSequence title[];
+    int nbTab;
+    Store mStore;
+    Bundle bundle;
+
+    public StoreViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Store store) {
+        super(fm);
+        this.title = mTitle;
+        this.nbTab = mNbTab;
+        this.mStore = store;
+        bundle = new Bundle();
+        bundle.putParcelable("store", store);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+
+        switch (position) {
+            case 0: //Commentary
+                StoreFragmentCommentary com = new StoreFragmentCommentary();
+                com.setArguments(bundle);
+                return com;
+/*
+            case 1: //Social
+                StoreFragmentSocial social = new StoreFragmentSocial();
+                social.setArguments(bundle);
+                return social;
+            case 2: //Options
+                StoreFragmentOptions opt = new StoreFragmentOptions();
+                opt.setArguments(bundle);
+                return opt;
+*/
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return title[position];
+    }
+
+    @Override
+    public int getCount() {
+        return nbTab;
+    }
+}

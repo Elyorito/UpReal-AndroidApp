@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.upreal.uprealwear" >
+    package="com.upreal" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.DeviceDefault" >
         <activity
-            android:name=".home.HomeActivity"
+            android:name="com.upreal.home.HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,87 +25,87 @@
         </activity>
 
         <activity
-            android:name=".bridge.BridgeDeviceActivity"
+            android:name="com.upreal.bridge.BridgeDeviceActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".global.NewsActivity"
+            android:name="com.upreal.global.NewsActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".global.NewsResultActivity"
+            android:name="com.upreal.global.NewsResultActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".global.RateActivity"
+            android:name="com.upreal.global.RateActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".global.AddListActivity"
+            android:name="com.upreal.global.AddListActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".global.DeleteListActivity"
+            android:name="com.upreal.global.DeleteListActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".search.SearchActivity"
+            android:name="com.upreal.search.SearchActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".search.SearchResultActivity"
+            android:name="com.upreal.search.SearchResultActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".product.ProductActivity"
+            android:name="com.upreal.product.ProductActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.UserActivity"
+            android:name="com.upreal.user.UserActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.ProfileActivity"
+            android:name="com.upreal.user.ProfileActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.HistoryActivity"
+            android:name="com.upreal.user.HistoryActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.AchievementActivity"
+            android:name="com.upreal.user.AchievementActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.AchievementListActivity"
+            android:name="com.upreal.user.AchievementListActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.ItemActivity"
+            android:name="com.upreal.user.ItemActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".user.ListActivity"
+            android:name="com.upreal.user.ListActivity"
             android:label="@string/app_name" >
         </activity>
 
         <activity
-            android:name=".store.StoreActivity"
+            android:name="com.upreal.store.StoreActivity"
             android:label="@string/app_name" >
         </activity>
 

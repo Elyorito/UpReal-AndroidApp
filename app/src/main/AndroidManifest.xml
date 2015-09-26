@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.upreal.upreal" >
+    package="com.upreal" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +23,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <activity
-            android:name=".splashScreen.SplashScreenLoadingActivity"
+            android:name="com.upreal.splashScreen.SplashScreenLoadingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -48,14 +48,14 @@
         </activity>
 
         <activity
-            android:name=".home.HomeActivity"
+            android:name="com.upreal.home.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".home.ParameterActivity"
+            android:name="com.upreal.home.ParameterActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
@@ -64,21 +64,21 @@
         <!--Product-->
 
         <activity
-        android:name=".product.ProductActivity"
+        android:name="com.upreal.product.ProductActivity"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".product.ProductUpdateActivity"
+            android:name="com.upreal.product.ProductUpdateActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".product.ProductSearchActivity"
+            android:name="com.upreal.product.ProductSearchActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
@@ -87,14 +87,14 @@
         <!--News-->
 
         <activity
-            android:name=".news.NewsActivity"
+            android:name="com.upreal.news.NewsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".scan.AddProductFromScan"
+            android:name="com.upreal.scan.AddProductFromScan"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
@@ -102,69 +102,69 @@
         <!--User-->
 
         <activity
-            android:name=".user.UserActivity"
+            android:name="com.upreal.user.UserActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".user.UserUpdateActivity"
+        <activity android:name="com.upreal.user.UserUpdateActivity"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".user.UserChangePwd"
+        <activity android:name="com.upreal.user.UserChangePwd"
             android:label="UpReal"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".scan.CameraActivity"
+            android:name="com.upreal.scan.CameraActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".scan.Camera2Activity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".scan.GetProductActivity"
+            android:name="com.upreal.scan.Camera2Activity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".login.LoginActivity"
+            android:name="com.upreal.scan.GetProductActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".list.ListActivity"
+            android:name="com.upreal.login.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.upreal.list.ListActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".list.ListCustomActivity"
+            android:name="com.upreal.list.ListCustomActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".geolocalisation.GeolocalisationActivity"
+            android:name="com.upreal.geolocalisation.GeolocalisationActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".store.StoreActivity"
+            android:name="com.upreal.store.StoreActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
@@ -172,19 +172,19 @@
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".list.ListBaseActivity"
+            android:name="com.upreal.list.ListBaseActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".bridge.BridgeDeviceActivity"
+            android:name="com.upreal.bridge.BridgeDeviceActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".home.TestNews"
+            android:name="com.upreal.home.TestNews"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">

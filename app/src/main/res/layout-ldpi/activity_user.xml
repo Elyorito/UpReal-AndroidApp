@@ -27,7 +27,7 @@
         android:layout_weight="3"
         android:weightSum="4">
 
-        <com.upreal.upreal.view.SlidingTabLayout
+        <com.upreal.view.SlidingTabLayout
             android:id="@+id/sliding_tab"
             android:background="@color/material_blue_grey_900"
             android:layout_height="0dp"
