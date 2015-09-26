@@ -22,58 +22,61 @@ import com.upreal.utils.User;
 
 public class BridgeDeviceActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks {
 
-    private static final String CONNECT_ACCOUNT = "/connect_account";
-
     private int idUser = 0;
-
-    private GoogleApiClient client;
+    private GoogleApiClient gClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
-        initGoogleApiClient();
-        start(1);
-    }
-
-    private void initGoogleApiClient() {
-        client = new GoogleApiClient.Builder(this)
+        gClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .build();
-
-        if( client != null && !(client.isConnected() || client.isConnecting()))
-            client.connect();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(client != null && !(client.isConnected() || client.isConnecting()))
-            client.connect();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        gClient.connect();
     }
 
     @Override
     protected void onStop() {
-        if (client != null) {
-            Wearable.MessageApi.removeListener(client, this);
-            if (client.isConnected()) {
-                client.disconnect();
-            }
+        if (gClient != null && gClient.isConnected()) {
+            gClient.disconnect();
         }
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        if(client != null)
-            client.unregisterConnectionCallbacks(this);
         super.onDestroy();
+        gClient.disconnect();
+    }
+
+    @Override
+    public void onConnected( Bundle bundle ) {
+        Wearable.MessageApi.addListener(gClient, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent mEvent) {
+        Log.e("TOSt", mEvent.getPath());
+        if (mEvent.getPath().equals("/connect")) {
+            final String message = new String(mEvent.getData());
+            Log.e("ListenerService", "Message path received on watch is : " + mEvent.getPath());
+            Log.e("ListenerService", "Message is:" + message);
+            start(Integer.parseInt(message));
+        }
+        else {
+            Log.e("ListenerService", "Error.");
+            Log.e("ListenerService", "Message path received on watch is : " + mEvent.getPath());
+        }
     }
 
     // Our method to update the count
@@ -82,27 +85,6 @@ public class BridgeDeviceActivity extends Activity implements MessageApi.Message
         this.idUser = idUser;
         if (idUser > 0)
             new RetrieveUser().execute();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Wearable.MessageApi.addListener(client, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onMessageReceived(final MessageEvent messageEvent) {
-        runOnUiThread( new Runnable() {
-            @Override
-            public void run() {
-                if( messageEvent.getPath().equalsIgnoreCase(CONNECT_ACCOUNT)) {
-                    start(Integer.parseInt(new String(messageEvent.getData())));
-                }
-            }
-        });
     }
 
     private class RetrieveUser extends AsyncTask<Void, Void, User> {

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23"
 
     defaultConfig {
-        applicationId "com.upreal.upreal"
+        applicationId "com.upreal"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
