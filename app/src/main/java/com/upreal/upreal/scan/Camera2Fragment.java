@@ -69,9 +69,11 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
 
     private Context context;
     private byte mbyte[];
+    private Bundle mBundle;
 
-    public static Camera2Fragment newInstance() {
+    public static Camera2Fragment newInstance(Bundle bundle) {
         Camera2Fragment fragment = new Camera2Fragment();
+        fragment.setArguments(bundle);
         fragment.setRetainInstance(true);
         return fragment;
     }
@@ -112,6 +114,8 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
         context = getActivity().getApplicationContext();
+        mBundle = getActivity().getIntent().getExtras();
+
     }
 
     // An additional thread for running tasks that shouldn't block the UI.
@@ -472,12 +476,26 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
                                                    TotalCaptureResult result) {
                         //Toast.makeText(getActivity(), "Saved:" + mFile, Toast.LENGTH_SHORT).show();
                         unlockFocus();
-                        Intent intent = new Intent(context, GetProductActivity.class);
-                        intent.putExtra("bytes", mbyte);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.getApplicationContext().startActivity(intent);
+/*
+                        // add photo
+                        if (mBundle.getString("type").equals("addImage")) {
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("result", mbyte);
+                            getActivity().setResult(Activity.RESULT_OK, returnIntent);
+                        }
+                        // scan
+*/
+/*
+                        else {
+*/
+/*
+                            Intent intent = new Intent(context, GetProductActivity.class);
+                            intent.putExtra("bytes", mbyte);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.getApplicationContext().startActivity(intent);
                         getActivity().finish();
-
+*/
+//                        }
                     }
                 };
 
@@ -614,7 +632,7 @@ public class Camera2Fragment  extends Fragment implements View.OnClickListener {
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                context.getApplicationContext().startActivity(intent);
 //                getActivity().finish();
-                //new RetrieveProductFromImage().execute(mBytes);
+                new RetrieveProductFromImage().execute(mBytes);
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
 

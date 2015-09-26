@@ -6,8 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,17 +27,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.upreal.upreal.R;
-
 import com.upreal.upreal.list.ListActivity;
 import com.upreal.upreal.login.LoginActivity;
-import com.upreal.upreal.scan.Camera2Activity;
 import com.upreal.upreal.scan.CameraActivity;
+import com.upreal.upreal.scan.GetProductActivity;
 import com.upreal.upreal.user.UserActivity;
 import com.upreal.upreal.utils.Article;
 import com.upreal.upreal.utils.DividerItemDecoration;
@@ -41,16 +44,20 @@ import com.upreal.upreal.utils.SoapGlobalManager;
 import com.upreal.upreal.utils.database.DatabaseHelper;
 import com.upreal.upreal.utils.database.DatabaseQuery;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static android.view.GestureDetector.*;
+import static android.view.GestureDetector.SimpleOnGestureListener;
 
 /**
  * Created by Elyo on 03/02/2015.
  */
 public class HomeActivity extends AppCompatActivity {
-
 
     private Toolbar toolbar;
 
@@ -94,6 +101,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public HomeActivity(){}
     private SessionManagerUser sessionManagerUser;
+
+    // Camera
+    private static final int ACTIVITY_START_CAMERA = 0;
+    private String mImageFileLocation = "";
 
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
@@ -222,8 +233,22 @@ public class HomeActivity extends AppCompatActivity {
                                 butScan.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+
+/*
                                         intent = new Intent(v.getContext(), Camera2Activity.class);
+                                        intent.putExtra("type", "scan");
                                         v.getContext().startActivity(intent);
+*/
+                                        intent = new Intent();
+                                        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        File photoFile = null;
+                                        try {
+                                            photoFile = createImageFile();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                        startActivityForResult(intent, ACTIVITY_START_CAMERA);
                                     }
                                 });
                                 builder = new AlertDialog.Builder(rv.getContext());
@@ -312,8 +337,19 @@ public class HomeActivity extends AppCompatActivity {
                                 butScan.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        intent = new Intent(v.getContext(), Camera2Activity.class);
-                                        v.getContext().startActivity(intent);
+                                        intent = new Intent();
+                                        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        File photoFile = null;
+                                        try {
+                                            photoFile = createImageFile();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                        startActivityForResult(intent, ACTIVITY_START_CAMERA);
+/*                                        intent = new Intent(v.getContext(), Camera2Activity.class);
+                                        intent.putExtra("type", "scan");
+                                        v.getContext().startActivity(intent);*/
                                     }
                                 });
                                 builder = new AlertDialog.Builder(rv.getContext());
@@ -455,6 +491,36 @@ public class HomeActivity extends AppCompatActivity {
         };
         DrawerR.setDrawerListener(mDrawerToggleR);
         mDrawerToggleR.syncState();
+    }
+
+    File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMAGE_" + timeStamp + "_";
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
+        mImageFileLocation = image.getAbsolutePath();
+
+        return image;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACTIVITY_START_CAMERA && resultCode == RESULT_OK) {
+/*          Thumbnail
+            Bundle extras = data.getExtras();
+            Bitmap photoCapturedBitmap = (Bitmap) extras.get("data");
+*/
+            Toast.makeText(this, "ActivityResult", Toast.LENGTH_SHORT).show();
+            // Get Bitmap from File
+            Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            Intent intent = new Intent(this, GetProductActivity.class);
+            intent.putExtra("bytes", byteArray);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
 

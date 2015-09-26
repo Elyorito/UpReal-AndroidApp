@@ -97,8 +97,12 @@ public class GeolocalisationActivity extends ActionBarActivity implements Locati
             Log.i(TAG, "Id product is " + idStore + ".");
             new RetrieveAddress().execute();
         } else {
-            finish();
         }
+
+        absDistances.add("20");
+        absDistances.add("20");
+        absDistances.add("20");
+        absDistances.add("20");
 
         updateDistanceList(absDistances);
         updatePriceList(absPrices);

@@ -1,5 +1,6 @@
 package com.upreal.upreal.utils;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.ksoap2.HeaderProperty;
@@ -147,6 +148,29 @@ public class SoapGlobalManager {
             q.printStackTrace();
         }
         return responseComment;
+    }
+
+    public void uploadPicture(byte[] image, String name) {
+        String methodName = "uploadPicture";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("image", Base64.encodeToString(image, Base64.DEFAULT));
+        request.addProperty("name", name);
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
+
+        HttpTransportSE ht = getHttpTransportSE();
+        try {
+
+            ht.call(methodName, envelope);
+            testHttpResponse(ht);
+
+        } catch (SocketTimeoutException t) {
+            t.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
     }
 
     public List<Lists> getUserList(int userId) {
