@@ -9,7 +9,7 @@
         android:layout_height="300dp"
         android:src="@drawable/ic_action_camera"
         android:gravity="center_horizontal|center_vertical"
-        android:contentDescription="@string/profile_picture" />
+        android:contentDescription="@string/product_image" />
 
     <TextView
         android:layout_width="wrap_content"

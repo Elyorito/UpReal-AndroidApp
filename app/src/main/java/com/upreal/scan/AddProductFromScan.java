@@ -6,13 +6,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 import com.upreal.R;
 import com.upreal.product.ProductActivity;
 import com.upreal.utils.Product;
@@ -20,12 +24,18 @@ import com.upreal.utils.SoapGlobalManager;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Elyo on 24/04/2015.
  */
 public class AddProductFromScan extends Activity implements View.OnClickListener{
 
-    private static final int GET_IMAGE_REQUEST = 1;
+    private static final int ACTIVITY_START_CAMERA = 0;
 
     private EditText productName;
     private EditText brand;
@@ -39,6 +49,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
     private Bitmap bitmap;
     private byte[] image;
 
+    private String mImageFileLocation;
 
 
     private AlertDialog.Builder builder;
@@ -63,6 +74,14 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         shopNearby = (EditText) findViewById(R.id.attheshop);
         imageProduct = (ImageView) findViewById(R.id.image_product);
 
+        // Setting Initial values
+        productName.setText("");
+        brand.setText("");
+        desc.setText("");
+        barcode.setText("");
+        noticedPrice.setText("");
+        shopNearby.setText("");
+
         cancel = (Button) findViewById(R.id.addprodcancel);
         sendProduct = (Button) findViewById(R.id.addprodok);
 
@@ -80,9 +99,21 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.image_product:
+                Intent intent = new Intent();
+                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(intent, ACTIVITY_START_CAMERA);
+/*
                 Intent intent = new Intent(v.getContext(), Camera2Activity.class);
                 intent.putExtra("type", "addImage");
                 startActivityForResult(intent, GET_IMAGE_REQUEST);
+*/
                 break;
             case R.id.addprodok:
                 new CreateProductFromScan().execute();
@@ -90,13 +121,37 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         }
     }
 
+    File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMAGE_" + timeStamp + "_";
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
+        mImageFileLocation = image.getAbsolutePath();
+
+        return image;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GET_IMAGE_REQUEST) {
+        if (requestCode == ACTIVITY_START_CAMERA) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                image = data.getByteArrayExtra("result");
-                bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                int targetImageViewWidth = imageProduct.getWidth();
+                int targetImageViewHeight = imageProduct.getHeight();
+
+                BitmapFactory.Options bfOptions = new BitmapFactory.Options();
+                bfOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
+
+                int cameraImageWidth = bfOptions.outWidth;
+                int cameraImageHeight = bfOptions.outHeight;
+
+                int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
+                bfOptions.inSampleSize = scaleFactor;
+                bfOptions.inJustDecodeBounds = false;
+
+                bitmap = BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
                 if (bitmap != null)
                 imageProduct.setImageBitmap(bitmap);
             }
@@ -160,9 +215,19 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         @Override
         protected Void doInBackground(Integer... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            name = "2_" + params[0] + ".jpg";
+            Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            // Resize
+            photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, false);
+            photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            image = stream.toByteArray();
+            name = "2_" + params[0];
             gm.uploadPicture(image, name);
             return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            finish();
         }
     }
 }

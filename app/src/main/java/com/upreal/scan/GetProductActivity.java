@@ -3,6 +3,8 @@ package com.upreal.scan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,8 @@ import com.upreal.product.ProductActivity;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * Created by Elyo on 19/09/15.
  */
@@ -20,6 +24,7 @@ public class GetProductActivity extends AppCompatActivity {
 
      AnimatedCircleLoadingView animatedCircleLoadingView;
     private byte[] mBytes = null;
+    private String mImageFileLocation;
     Context context;
 
     @Override
@@ -27,7 +32,15 @@ public class GetProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getproduct);
         context = this;
-        mBytes = getIntent().getExtras().getByteArray("bytes");
+//        mBytes = getIntent().getExtras().getByteArray("bytes");
+        mImageFileLocation = getIntent().getExtras().getString("imageLocation");
+        // Get Bitmap from file location
+        Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Resize
+        photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, false);
+        photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        mBytes = stream.toByteArray();
         animatedCircleLoadingView = (AnimatedCircleLoadingView) findViewById(R.id.circle_loading_view);
         animatedCircleLoadingView.startIndeterminate();
         new RetrieveProductFromImage().execute(mBytes);

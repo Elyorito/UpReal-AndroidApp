@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,19 +28,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.upreal.R;
 import com.upreal.list.ListActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.scan.CameraActivity;
 import com.upreal.scan.GetProductActivity;
-import com.upreal.R;
-
 import com.upreal.user.UserActivity;
 import com.upreal.utils.DividerItemDecoration;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -517,12 +513,15 @@ public class HomeActivity extends AppCompatActivity {
 */
             Toast.makeText(this, "ActivityResult", Toast.LENGTH_SHORT).show();
             // Get Bitmap from File
+/*
             Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-            Intent intent = new Intent(this, GetProductActivity.class);
-            intent.putExtra("bytes", byteArray);
+*/
+            intent = new Intent(this, GetProductActivity.class);
+//            intent.putExtra("bytes", byteArray);
+            intent.putExtra("imageLocation", mImageFileLocation);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
