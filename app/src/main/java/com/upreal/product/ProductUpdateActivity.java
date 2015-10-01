@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -21,15 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.upreal.R;
+import com.upreal.home.HomeActivity;
 import com.upreal.utils.Product;
-import com.upreal.utils.SoapGlobalManager;
+import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SoapProductManager;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Eric on 23/06/2015.
@@ -50,6 +47,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
     private Bitmap bitmap;
     private byte[] image;
     private String mImageFileLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +93,8 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                 intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                 File photoFile = null;
                 try {
-                    photoFile = createImageFile();
+                    photoFile = HomeActivity.createImageFile();
+                    mImageFileLocation = photoFile.getAbsolutePath();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -144,7 +143,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                     mProduct.setEan(ean.getText().toString());
                     new updateProduct(mProduct, this).execute();
                     if (bitmap != null)
-                        new sendImage().execute(mProduct.getId());
+                        new SendImageTask(mImageFileLocation, image).execute(mProduct.getId());
                 }
                 break;
         }
@@ -187,16 +186,6 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
 
         }
     }
-    File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "IMAGE_" + timeStamp + "_";
-        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
-        mImageFileLocation = image.getAbsolutePath();
-
-        return image;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -221,27 +210,6 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                 if (bitmap != null)
                     imageProduct.setImageBitmap(bitmap);
             }
-        }
-    }
-
-    public class sendImage extends AsyncTask<Integer, Void, Void> {
-        String name;
-
-        @Override
-        protected Void doInBackground(Integer... params) {
-            SoapGlobalManager gm = new SoapGlobalManager();
-            Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            // Resize
-            photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, false);
-            photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            image = stream.toByteArray();
-            name = "2_" + params[0];
-            gm.uploadPicture(image, name);
-            return null;
-        }
-        protected void onPostExecute(Void result) {
-            finish();
         }
     }
 

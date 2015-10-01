@@ -245,6 +245,7 @@ public class HomeActivity extends AppCompatActivity {
                                         File photoFile = null;
                                         try {
                                             photoFile = createImageFile();
+                                            mImageFileLocation = photoFile.getAbsolutePath();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -343,6 +344,7 @@ public class HomeActivity extends AppCompatActivity {
                                         File photoFile = null;
                                         try {
                                             photoFile = createImageFile();
+                                            mImageFileLocation = photoFile.getAbsolutePath();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -494,13 +496,19 @@ public class HomeActivity extends AppCompatActivity {
         mDrawerToggleR.syncState();
     }
 
-    File createImageFile() throws IOException {
+    static public File createImageFile() throws IOException {
+        String FOLDER_LOCATION = "Upreal Pictures";
+        File imageFolder;
+
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "IMAGE_" + timeStamp + "_";
-        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
-        mImageFileLocation = image.getAbsolutePath();
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        imageFolder = new File(storageDirectory, FOLDER_LOCATION);
+        if (!imageFolder.exists())
+            imageFolder.mkdirs();
+
+        File image = File.createTempFile(imageFileName, ".jpg", imageFolder);
 
         return image;
     }
@@ -511,7 +519,6 @@ public class HomeActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap photoCapturedBitmap = (Bitmap) extras.get("data");
 */
-            Toast.makeText(this, "ActivityResult", Toast.LENGTH_SHORT).show();
             // Get Bitmap from File
 /*
             Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);

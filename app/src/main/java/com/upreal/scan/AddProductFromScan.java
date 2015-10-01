@@ -9,26 +9,22 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 import com.upreal.R;
+import com.upreal.home.HomeActivity;
 import com.upreal.product.ProductActivity;
 import com.upreal.utils.Product;
-import com.upreal.utils.SoapGlobalManager;
+import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Elyo on 24/04/2015.
@@ -103,7 +99,8 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                 File photoFile = null;
                 try {
-                    photoFile = createImageFile();
+                    photoFile = HomeActivity.createImageFile();
+                    mImageFileLocation = photoFile.getAbsolutePath();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -119,17 +116,6 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 new CreateProductFromScan().execute();
                 break;
         }
-    }
-
-    File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "IMAGE_" + timeStamp + "_";
-        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
-        mImageFileLocation = image.getAbsolutePath();
-
-        return image;
     }
 
     @Override
@@ -159,13 +145,26 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
     }
 
     public class CreateProductFromScan extends AsyncTask<Void, Void, Integer> {
-        Product product;
-        int id;
+        private Product product;
+        private int id;
+        private String mName;
+        private String mBrand;
+        private String mDesc;
+        private String mNoticedPrice;
+        private String mShopNearby;
+
+        public CreateProductFromScan() {
+            mName = productName.getText().toString();
+            mBrand = brand.getText().toString();
+            mDesc = desc.getText().toString();
+            mNoticedPrice = noticedPrice.getText().toString();
+            mShopNearby = shopNearby.getText().toString();
+        }
 
         @Override
         protected Integer doInBackground(Void... params) {
             SoapProductManager pm = new SoapProductManager();
-            id = pm.registerProduct(productName.getText().toString(), brand.getText().toString(), desc.getText().toString(), barcodeEAN, noticedPrice.getText().toString(), shopNearby.getText().toString());
+            id = pm.registerProduct(mName, mBrand, mDesc, barcodeEAN, mNoticedPrice, mShopNearby);
             product = pm.getProductInfo(id);
             return id;
         }
@@ -176,7 +175,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
 
             new CreateSpec().execute(i);
             if (bitmap != null)
-                new SendImage().execute(i);
+                new SendImageTask(mImageFileLocation, image).execute(i);
             builder.setTitle("Produit Ajouté")
                     .setMessage("Votre produit a été ajouté avec succès !" +
                             "Voulez-vous y accéder?")
@@ -201,33 +200,17 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
 
     public class CreateSpec extends AsyncTask<Integer, Void, Void> {
 
+        private String mDesc;
+
+        public CreateSpec () {
+            mDesc = desc.getText().toString();
+        }
+
         @Override
         protected Void doInBackground(Integer... params) {
             SoapProductUtilManager pm = new SoapProductUtilManager();
-            pm.createSpecification(params[0], "Description", desc.getText().toString());
+            pm.createSpecification(params[0], "Description", mDesc);
             return null;
-        }
-    }
-
-    public class SendImage extends AsyncTask<Integer, Void, Void> {
-        String name;
-
-        @Override
-        protected Void doInBackground(Integer... params) {
-            SoapGlobalManager gm = new SoapGlobalManager();
-            Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            // Resize
-            photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, false);
-            photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            image = stream.toByteArray();
-            name = "2_" + params[0];
-            gm.uploadPicture(image, name);
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            finish();
         }
     }
 }
