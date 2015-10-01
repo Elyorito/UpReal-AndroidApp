@@ -52,6 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1.32E"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                         android:layout_marginTop="150dp"
                         android:layout_marginStart="240dp"
                         android:gravity="center_vertical"/>
@@ -63,6 +64,7 @@
             android:id="@+id/tabsproduct"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_marginTop="13dp"
             app:tabIndicatorColor="@color/ColorPrimaryDark"
             app:tabSelectedTextColor="@color/ColorPrimaryDark"
             app:tabMode="fixed"
