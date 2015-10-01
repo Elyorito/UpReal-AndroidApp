@@ -2,14 +2,14 @@ package com.upreal.home;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.upreal.news.NewsFragment;
 
 /**
  * Created by Elyo on 23/09/15.
  */
-public class AdapterViewPagerHome extends FragmentPagerAdapter {
+public class AdapterViewPagerHome extends FragmentStatePagerAdapter {
 
     private NewsFragment fnews;
     private NewsFragment fthread;

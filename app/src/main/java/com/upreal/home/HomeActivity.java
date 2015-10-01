@@ -38,6 +38,7 @@ import com.upreal.utils.DividerItemDecoration;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
+import com.upreal.view.SlidingTabLayout;
 
 import java.io.File;
 import java.io.IOException;

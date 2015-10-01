@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.geolocalisation.GeolocalisationActivity;
+import com.upreal.utils.BlurImages;
+import com.upreal.utils.CircleTransform;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
@@ -30,10 +34,16 @@ import com.upreal.view.SlidingTabLayout;
  */
 public class ProductActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private ImageView imageBlurred;
+    private ImageView imageProduct;
+    private TabLayout tabLayout;
+
     private Toolbar toolbar;
 
     private ViewPager mViewPager;
-    private ProductViewPagerAdapter adapter;
+    //private ProductViewPagerAdapter adapter;
+    private ProductNewViewPagerAdapter adapter;
     private SlidingTabLayout mSlidingTabLayout;
     private Product prod;
     private CharSequence title;
@@ -49,43 +59,60 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-        prodName = (TextView) findViewById(R.id.product_name);
-        prodBrand = (TextView) findViewById(R.id.product_brand);
-        prodShortDesc = (TextView) findViewById(R.id.product_desc);
-        prodPicture = (ImageView) findViewById(R.id.product_picture);
 
-        geoloc = (Button) findViewById(R.id.geoloc);
-        geoloc.setOnClickListener(this);
-
+        tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
+        imageProduct = (ImageView) findViewById(R.id.imageproduct);
         prod = getIntent().getExtras().getParcelable("listprod");
 
-        title = new String(prod.getName());
-        prodName.setText(prod.getName());
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
-
-        prodBrand.setText(prod.getBrand());
-
-        CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-
+        collapsingToolbarLayout.setTitle(prod.getName());
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
+        CharSequence Tab[] = {"Info.", "Prix", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new ProductViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
+        adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
         mViewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(mViewPager);
+//        prodName = (TextView) findViewById(R.id.product_name);
+//        prodBrand = (TextView) findViewById(R.id.product_brand);
+//        prodShortDesc = (TextView) findViewById(R.id.product_desc);
+//        prodPicture = (ImageView) findViewById(R.id.product_picture);
+//
+//        geoloc = (Button) findViewById(R.id.geoloc);
+//        geoloc.setOnClickListener(this);
 
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
-        mSlidingTabLayout.setDistributeEvenly(true);
-      mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-          @Override
-          public int getIndicatorColor(int position) {
-              return getResources().getColor(R.color.ColorPrimaryDark);
-          }
-        });
-        mSlidingTabLayout.setViewPager(mViewPager);
+        //prod = getIntent().getExtras().getParcelable("listprod");
+
+
+        //title = new String(prod.getName());
+        //prodName.setText(prod.getName());
+        //Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
+        //Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
+
+//        prodBrand.setText(prod.getBrand());
+//
+//        CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
+//        toolbar = (Toolbar) findViewById(R.id.app_bar);
+//        toolbar.setTitle(title);
+//        setSupportActionBar(toolbar);
+
+//        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+//        adapter = new ProductViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
+//          mViewPager.setAdapter(adapter);
+//
+//        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
+//        mSlidingTabLayout.setDistributeEvenly(true);
+//      mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+//          @Override
+//          public int getIndicatorColor(int position) {
+//              return getResources().getColor(R.color.ColorPrimaryDark);
+//          }
+//        });
+//        mSlidingTabLayout.setViewPager(mViewPager);
 
         //new RetrievePicture().execute();
-        new RetrieveSpec().execute();
+        //new RetrieveSpec().execute();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.upreal.product;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.upreal.R;
@@ -12,7 +13,7 @@ import com.upreal.view.SlidingTabLayout;
 /**
  * Created by Elyo on 16/02/2015.
  */
-public class ProductSearchActivity extends ActionBarActivity {
+public class ProductSearchActivity extends AppCompatActivity {
 
     private CharSequence Title[];
 

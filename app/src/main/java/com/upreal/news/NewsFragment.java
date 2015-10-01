@@ -29,17 +29,18 @@ public class NewsFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Context context;
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = getActivity().getApplicationContext();
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_news, container, false);
+
         mRecyclerViewNews = (RecyclerView) v.findViewById(R.id.recyclerview_home_news);
         mRecyclerViewNews.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         mRecyclerViewNews.setLayoutManager(mLayoutManager);
 
         new RetreiveNews().execute();
+        mRecyclerViewNews.setAdapter(mAdapterNews);
         return v;
     }
 
@@ -57,6 +58,7 @@ public class NewsFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Article> articles) {
             super.onPostExecute(articles);
+            context = getActivity().getApplicationContext();
             mAdapterNews = new AdapterHomeNews(articles, context);
             mRecyclerViewNews.setAdapter(mAdapterNews);
         }

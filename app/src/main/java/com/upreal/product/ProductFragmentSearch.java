@@ -25,6 +25,7 @@ public class ProductFragmentSearch extends Fragment {
 
     //test
 /*    private String sProduct[];*/
+    private Context context;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private String mSearchName;
@@ -32,6 +33,7 @@ public class ProductFragmentSearch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        context = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_product_search, container, false);
         Bundle b = getArguments();
         this.mSearchName = b.getString("searchname");
@@ -77,9 +79,8 @@ public class ProductFragmentSearch extends Fragment {
             }
 */
             listProd = list;
-            Context context;
 
-            context = getActivity().getApplicationContext();
+
             if (context != null) {
                 mAdapter = new ProductSearchAdapter(listProd, context);
             }
