@@ -71,7 +71,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
         CharSequence Tab[] = {"Info.", "Prix", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
+        adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
 //        prodName = (TextView) findViewById(R.id.product_name);
