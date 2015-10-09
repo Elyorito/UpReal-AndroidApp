@@ -12,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.upreal.global.AddListActivity;
-import com.upreal.product.ProductActivity;
-import com.upreal.server.UserUtilManager;
 import com.upreal.R;
+import com.upreal.global.AddListActivity;
 import com.upreal.global.DeleteListActivity;
 import com.upreal.global.NewsActivity;
 import com.upreal.global.RateActivity;
+import com.upreal.product.ProductActivity;
+import com.upreal.search.SearchResultActivity;
+import com.upreal.server.UserUtilManager;
 import com.upreal.store.StoreActivity;
 import com.upreal.user.AchievementActivity;
 import com.upreal.user.ItemActivity;
@@ -118,6 +119,9 @@ public final class ListItemAdapter extends WearableListView.Adapter {
                          break ;
                     case 9:
                         intent = new Intent(context, AchievementActivity.class);
+                        break ;
+                    case 10:
+                        intent = new Intent(context, SearchResultActivity.class);
                         break ;
                     default:
                         return ;
