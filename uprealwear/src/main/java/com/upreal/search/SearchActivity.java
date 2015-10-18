@@ -2,70 +2,89 @@ package com.upreal.search;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.wearable.activity.ConfirmationActivity;
+import android.support.wearable.view.WearableListView;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.upreal.R;
+import com.upreal.server.ProductUtilManager;
+import com.upreal.utils.Item;
+import com.upreal.utils.ListItemAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kyosukke on 16/08/2015.
  */
-public class SearchActivity extends Activity implements View.OnClickListener {
+public class SearchActivity extends Activity implements WearableListView.ClickListener {
 
-    private ImageButton user;
-    private ImageButton product;
-    private ImageButton store;
+    private List<Item> categories;
 
-    private EditText searchText;
-    private ImageButton searchButton;
+    private WearableListView listView;
+    private ListItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.util_list);
 
-        user = (ImageButton) findViewById(R.id.user);
-        product = (ImageButton) findViewById(R.id.product);
-        store = (ImageButton) findViewById(R.id.store);
-        searchText = (EditText) findViewById(R.id.search_text);
-        searchButton = (ImageButton) findViewById(R.id.search_button);
+        categories = new ArrayList<Item>();
+        listView = (WearableListView) findViewById(R.id.wearable_list);
+        adapter = new ListItemAdapter(this, categories);
 
-        user.setOnClickListener(this);
-        product.setOnClickListener(this);
-        store.setOnClickListener(this);
-        searchButton.setOnClickListener(this);
+        new RetrieveCategory().execute();
+        listView.setAdapter(adapter);
+        listView.setClickListener(this);
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.user:
-                Log.e("SearchActivity", "User clicked.");
-                user.setAlpha((user.getAlpha() >= 1f) ? (.5f) : (1f));
-                break ;
-            case R.id.product:
-                Log.e("SearchActivity", "Product clicked.");
-                product.setAlpha((product.getAlpha() >= 1f) ? (.5f) : (1f));
-                break ;
-            case R.id.store:
-                Log.e("SearchActivity", "Store clicked.");
-                store.setAlpha((store.getAlpha() >= 1f) ? (.5f) : (1f));
-                break ;
-            case R.id.search_button:
-                Log.e("SearchActivity", "Search button clicked.");
-                Intent intent = new Intent(this, SearchResultActivity.class);
-                intent.putExtra("search_text", searchText.getText().toString());
-                intent.putExtra("user", (user.getAlpha() >= 1f) ? (true) : (false));
-                intent.putExtra("product", (product.getAlpha() >= 1f) ? (true) : (false));
-                intent.putExtra("store", (store.getAlpha() >= 1f) ? (true) : (false));
+    public void onClick(WearableListView.ViewHolder v) {
+        Integer tag = (Integer) v.itemView.getTag();
+    }
+
+    @Override
+    public void onTopEmptyRegionClick() {
+    }
+
+    private class RetrieveCategory extends AsyncTask<Void, Void, List<Item>> {
+
+        @Override
+        protected List<Item> doInBackground(Void... params) {
+
+            List<Item> list = new ArrayList<Item>();
+            ProductUtilManager pum = new ProductUtilManager();
+            List<String> cList = pum.getCategory();
+
+            if (!cList.isEmpty()) {
+                for (String a : cList) {
+                    list.add(new Item(0, 10, a, null));
+                }
+            }
+
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<Item> res) {
+            super.onPostExecute(res);
+            Log.e("NewsResultActivity", "WebService called. Result:");
+            categories.clear();
+            for (Item i : res) {
+                categories.add(i);
+                Log.e("NewsResultActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
+            }
+            if (categories.isEmpty()) {
+                Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
+                intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.FAILURE_ANIMATION);
+                intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, getString(R.string.search_empty));
                 startActivity(intent);
-                break ;
-            default:
-                Log.e("SearchActivity", "DEFAULT");
-                break ;
+                finish();
+            }
+            adapter.notifyDataSetChanged();
         }
     }
+
 }

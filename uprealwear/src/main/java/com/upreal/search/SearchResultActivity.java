@@ -32,26 +32,14 @@ public class SearchResultActivity extends Activity implements WearableListView.C
     private WearableListView listView;
     private ListItemAdapter adapter;
 
-    private String searchText;
-    private boolean user;
-    private boolean product;
-    private boolean store;
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.util_list);
 
-        searchText = getIntent().getStringExtra("search_text");
-        user = getIntent().getBooleanExtra("user", true);
-        product = getIntent().getBooleanExtra("product", true);
-        store = getIntent().getBooleanExtra("store", true);
-
-        if (user == false && product == false && store == false) {
-            user = true;
-            product = true;
-            store = true;
-        }
+        item = getIntent().getExtras().getParcelable("item");
 
         absProduct = new ArrayList<Item>();
         listView = (WearableListView) findViewById(R.id.wearable_list);
@@ -78,33 +66,31 @@ public class SearchResultActivity extends Activity implements WearableListView.C
 
             List<Item> list = new ArrayList<Item>();
 
-            if (user == true) {
+            if (item.getName().equals("User")) {
                 UserManager um = new UserManager();
-                List<User> uList = um.getUserByUsername(searchText);
+                List<User> uList = um.getUserByUsername("");
                 GlobalManager gm = new GlobalManager();
 
                 for (User u : uList) {
                     list.add(new Item(u.getId(), 1, u.getUsername(), gm.getPicture(u.getId(), 1)));
                 }
             }
-
-            if (product == true) {
-                ProductManager pm = new ProductManager();
-                List<Product> pList = pm.getProduct(searchText);
-                GlobalManager gm = new GlobalManager();
-
-                for (Product p : pList) {
-                    list.add(new Item(p.getId(), 2, p.getName(), gm.getPicture(p.getId(), 2)));
-                }
-            }
-
-            if (store == true) {
+            else if (item.getName().equals("Store")) {
                 StoreManager sm = new StoreManager();
-                List<Store> sList = sm.getStoreByName(searchText);
+                List<Store> sList = sm.getStoreByName("");
                 GlobalManager gm = new GlobalManager();
 
                 for (Store s : sList) {
                     list.add(new Item(s.getId(), 3, s.getName(), gm.getPicture(s.getId(), 3)));
+                }
+            }
+            else {
+                ProductManager pm = new ProductManager();
+                List<Product> pList = pm.getProduct(item.getName());
+                GlobalManager gm = new GlobalManager();
+
+                for (Product p : pList) {
+                    list.add(new Item(p.getId(), 2, p.getName(), gm.getPicture(p.getId(), 2)));
                 }
             }
 

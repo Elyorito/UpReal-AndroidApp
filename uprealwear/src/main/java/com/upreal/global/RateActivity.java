@@ -68,7 +68,8 @@ public class RateActivity extends Activity implements WearableListView.ClickList
             UserManager um = new UserManager();
 
             for (Rate a : rList) {
-                list.add(new Item(a.getId(), 5, a.getCommentary(), um.getUserPicture(a.getIdUser())));
+                if (a.getCommentary() != null && a.getCommentary() != "")
+                    list.add(new Item(a.getId(), 5, a.getCommentary(), um.getUserPicture(a.getIdUser())));
             }
 
             return list;

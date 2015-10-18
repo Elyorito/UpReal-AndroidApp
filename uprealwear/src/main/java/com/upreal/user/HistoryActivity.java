@@ -8,18 +8,20 @@ import android.support.wearable.activity.ConfirmationActivity;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
-import com.upreal.server.GlobalManager;
-import com.upreal.server.UserManager;
-import com.upreal.server.UserUtilManager;
 import com.upreal.R;
+import com.upreal.server.GlobalManager;
 import com.upreal.server.ProductManager;
 import com.upreal.server.StoreManager;
+import com.upreal.server.UserManager;
+import com.upreal.server.UserUtilManager;
 import com.upreal.utils.History;
 import com.upreal.utils.Item;
 import com.upreal.utils.ListItemAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Kyosukke on 18/08/2015.
@@ -44,6 +46,21 @@ public class HistoryActivity extends Activity {
         listView.setAdapter(adapter);
     }
 
+    protected Map<Integer, String> getActionType() {
+        Map<Integer, String> map = new HashMap<>();
+
+        map.put(1, getString(R.string.has_consulted));
+        map.put(2, getString(R.string.liked));
+        map.put(3, getString(R.string.disliked));
+        map.put(4, getString(R.string.unliked));
+        map.put(5, getString(R.string.shared));
+        map.put(6, getString(R.string.commented));
+        map.put(7, getString(R.string.modified_profile));
+        map.put(8, getString(R.string.added_product));
+
+        return map;
+    }
+
     private class RetrieveList extends AsyncTask<Void, Void, List<Item>> {
 
         @Override
@@ -60,35 +77,7 @@ public class HistoryActivity extends Activity {
                 for (History h : hList) {
                     String state = userSession.getUser().getUsername() + " ";
 
-                    switch (h.getActionType()) {
-                        case 1:
-                            state += getString(R.string.has_consulted);
-                            break ;
-                        case 2:
-                            state += getString(R.string.liked);
-                            break ;
-                        case 3:
-                            state += getString(R.string.disliked);
-                            break ;
-                        case 4:
-                            state += getString(R.string.unliked);
-                            break ;
-                        case 5:
-                            state += getString(R.string.shared);
-                            break ;
-                        case 6:
-                            state += getString(R.string.commented);
-                            break ;
-                        case 7:
-                            state += getString(R.string.modified_profile);
-                            break ;
-                        case 8:
-                            state += getString(R.string.added_product);
-                            break ;
-                        default:
-                            state += getString(R.string.error);
-                            break ;
-                    }
+                    state += getActionType().get(h.getActionType());
 
                     switch (h.getIdType()) {
                         case 1:
