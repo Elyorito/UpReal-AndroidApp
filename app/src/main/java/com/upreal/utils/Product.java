@@ -1,7 +1,13 @@
 package com.upreal.utils;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
 
 /**
  * Created by Elyo on 19/03/2015.
@@ -128,5 +134,75 @@ public class Product implements Parcelable{
 
     public void setShortDesc(String shortDesc) {
         this.shortDesc = shortDesc;
+    }
+
+    static public class setProductCategory extends AsyncTask<Void, Void, Void> {
+        private int mIdProduct;
+        private String mKeyword;
+
+        public setProductCategory(int idProduct, String keyword) {
+            mIdProduct = idProduct;
+            mKeyword = keyword;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SoapProductUtilManager sm = new SoapProductUtilManager();
+            sm.setProductCategory(mIdProduct, mKeyword);
+            return null;
+        }
+    }
+
+    static public class getCategory extends AsyncTask<Void, Void, ArrayList<String>> {
+
+        private Spinner mSpinner;
+        private Activity mActivity;
+
+        public getCategory(Spinner spinner, Activity activity) {
+            mSpinner = spinner;
+            mActivity = activity;
+        }
+
+        @Override
+        protected ArrayList<String> doInBackground(Void... params) {
+            ArrayList<String> list;
+            SoapProductUtilManager sm = new SoapProductUtilManager();
+            list = sm.getCategory();
+
+            return list;
+        }
+
+        protected void onPostExecute(ArrayList<String> list) {
+            super.onPostExecute(list);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
+                    (mActivity, android.R.layout.simple_spinner_item, list);
+
+            dataAdapter.setDropDownViewResource
+                    (android.R.layout.simple_spinner_dropdown_item);
+
+            mSpinner.setAdapter(dataAdapter);
+        }
+    }
+
+    static public class getProductCategory extends AsyncTask<Void, Void, String> {
+
+        private int mIdProduct;
+        private Spinner mCategory;
+
+        public getProductCategory(int idProduct, Spinner category) {
+            mIdProduct = idProduct;
+            mCategory = category;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            SoapProductUtilManager sm = new SoapProductUtilManager();
+            String cat = sm.getProductCategory(mIdProduct);
+            return cat;
+        }
+
+        protected void onPostExecute(String category) {
+            mCategory.setSelection(((ArrayAdapter) mCategory.getAdapter()).getPosition(category));
+        }
     }
 }

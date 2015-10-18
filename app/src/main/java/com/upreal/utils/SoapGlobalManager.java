@@ -402,8 +402,10 @@ public class SoapGlobalManager {
         rate.setmCommentary(soapObject.getPropertyAsString("commentary").toString());
         rate.setmDate(soapObject.getPropertyAsString("date").toString());
         rate.setmActive(Integer.parseInt(soapObject.getPropertyAsString("active").toString()));
+/*
         rate.setmUp(Integer.parseInt(soapObject.getPropertyAsString("up").toString()));
         rate.setmDown(Integer.parseInt(soapObject.getPropertyAsString("down").toString()));
+*/
         return rate;
     }
 

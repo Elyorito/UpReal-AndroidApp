@@ -13,10 +13,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.upreal.R;
@@ -31,7 +32,7 @@ import java.io.IOException;
 /**
  * Created by Eric on 23/06/2015.
  */
-public class ProductUpdateActivity extends Activity implements View.OnClickListener {
+public class ProductUpdateActivity extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int ACTIVITY_START_CAMERA = 0;
 
@@ -41,12 +42,13 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
     private Button cancel;
     private Button update;
     private Product mProduct;
-    private LinearLayout barcode;
     private ImageView imageProduct;
+    private Spinner spinner;
 
     private Bitmap bitmap;
     private byte[] image;
     private String mImageFileLocation;
+    private String category;
 
 
     @Override
@@ -61,19 +63,22 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
         brand = (EditText) findViewById(R.id.brand);
         cancel = (Button) findViewById(R.id.cancel);
         update = (Button) findViewById(R.id.update);
-        barcode = (LinearLayout) findViewById(R.id.barcode);
         imageProduct = (ImageView) findViewById(R.id.image_product);
+        spinner = (Spinner) findViewById(R.id.spinner);
 
         // Setting Initial values
         name.setText("");
         brand.setText("");
         ean.setText("");
+        new Product.getCategory(spinner, this).execute();
+        new Product.getProductCategory(mProduct.getId(), spinner).execute();
+        bitmap = null;
 
         name.setText(mProduct.getName());
         ean.setText(mProduct.getEan());
         brand.setText(mProduct.getBrand());
 
-        barcode.setOnClickListener(this);
+        spinner.setOnItemSelectedListener(this);
         cancel.setOnClickListener(this);
         update.setOnClickListener(this);
         imageProduct.setOnClickListener(this);
@@ -141,12 +146,22 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                     mProduct.setName(name.getText().toString());
                     mProduct.setBrand(brand.getText().toString());
                     mProduct.setEan(ean.getText().toString());
-                    new updateProduct(mProduct, this).execute();
                     if (bitmap != null)
                         new SendImageTask(mImageFileLocation, image).execute(mProduct.getId());
+                    new Product.setProductCategory(mProduct.getId(), category).execute();
+                    new updateProduct(mProduct, this).execute();
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        category = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     private class updateProduct extends AsyncTask<Void, Void, Boolean> {
@@ -171,6 +186,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                 Log.v("Product name", product.getName());
                 Log.v("Product brand", product.getBrand());
                 Log.v("Product ean", product.getEan());
+                finish();
             }
             else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -212,5 +228,4 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
             }
         }
     }
-
 }

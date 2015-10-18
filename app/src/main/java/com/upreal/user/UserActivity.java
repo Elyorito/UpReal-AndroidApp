@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,14 +77,14 @@ public class UserActivity extends ActionBarActivity {
         if (toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
             // User
             Tab = new CharSequence[]{getString(R.string.commentary), getString(R.string.options)};
-            Log.v("Options", "Here");
+//            Log.v("Options", "Here");
         }
         else {
             // Other User
             Tab = new CharSequence[] {getString(R.string.commentary), getString(R.string.social)};
-            Log.v("Social", "Here");
-            Log.v("session ID", String.valueOf(sessionManagerUser.getUserId()));
-            Log.v("user ID", String.valueOf(user.getId()));
+//            Log.v("Social", "Here");
+  //          Log.v("session ID", String.valueOf(sessionManagerUser.getUserId()));
+    //        Log.v("user ID", String.valueOf(user.getId()));
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);

@@ -28,9 +28,11 @@
         android:orientation="horizontal"
         android:background="@color/material_deep_teal_500"
         android:weightSum="2">
-
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -40,60 +42,33 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="@string/name_product"
+                android:text="@string/category"
+                android:id="@+id/TextView"
                 android:padding="10dp"/>
+
+            <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="@string/brand"
+                android:text="@string/name_product"
                 android:padding="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/description"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/barcode"
-                android:paddingLeft="10dp"
-                android:paddingTop="20dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/noticed_price"
-                android:paddingLeft="10dp"
-                android:paddingTop="25dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/at_the_shop"
-                android:paddingLeft="10dp"
-                android:paddingTop="25dp"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="@color/material_deep_teal_500"
-            android:layout_marginRight="5dp">
 
             <EditText
                 android:id="@+id/product_name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:inputType="text"/>
+                android:inputType="text" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/brand"
+                android:padding="10dp"/>
 
             <EditText
                 android:id="@+id/brand"
@@ -102,12 +77,26 @@
                 android:maxLines="1"
                 android:inputType="text"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/description"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"/>
+
             <EditText
                 android:id="@+id/description"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:inputType="text"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/barcode"
+                android:paddingLeft="10dp"
+                android:paddingTop="20dp"/>
 
             <EditText
                 android:id="@+id/barcode"
@@ -116,12 +105,26 @@
                 android:maxLines="1"
                 android:inputType="text"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/noticed_price"
+                android:paddingLeft="10dp"
+                android:paddingTop="25dp"/>
+
             <EditText
                 android:id="@+id/noticedprice"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:inputType="text"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/at_the_shop"
+                android:paddingLeft="10dp"
+                android:paddingTop="25dp"/>
 
             <EditText
                 android:id="@+id/attheshop"
@@ -130,7 +133,9 @@
                 android:maxLines="1"
                 android:inputType="text"/>
 
+
         </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
     <LinearLayout

@@ -52,7 +52,6 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 //formatTxt.setText("FORMAT: " + format);
                 //contentTxt.setText(contents);
                 new RetrieveScannedProduct(contents).execute();
-
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
                 Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
@@ -106,6 +105,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                                 intent.putExtra("ean", productEAN);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 getApplicationContext().startActivity(intent);
+                                finish();
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override

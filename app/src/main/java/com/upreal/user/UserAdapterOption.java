@@ -3,7 +3,6 @@ package com.upreal.user;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +57,6 @@ public class UserAdapterOption extends RecyclerView.Adapter<UserAdapterOption.Vi
             @Override
             public void onClick(final View v) {
                 if (i == 0) {
-                    Log.v("Editer mon compte", "tralala");
                     Intent intent = new Intent(v.getContext(), UserUpdateActivity.class);
                     v.getContext().startActivity(intent);
                 } else if (i == 1) {

@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
@@ -38,7 +39,6 @@ import com.upreal.utils.DividerItemDecoration;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
-import com.upreal.view.SlidingTabLayout;
 
 import java.io.File;
 import java.io.IOException;
@@ -509,9 +509,10 @@ public class HomeActivity extends AppCompatActivity {
         if (!imageFolder.exists())
             imageFolder.mkdirs();
 
-        File image = File.createTempFile(imageFileName, ".jpg", imageFolder);
-
-        return image;
+        File myImage = File.createTempFile(imageFileName, ".jpg", imageFolder);
+        if (myImage == null)
+            Log.v("ca ne fonctionne pas", "ca ne fonctionne pas du tout");
+        return myImage;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

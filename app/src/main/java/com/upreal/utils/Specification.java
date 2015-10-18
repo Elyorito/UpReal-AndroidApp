@@ -5,9 +5,10 @@ package com.upreal.utils;
  */
 public class Specification {
 
+    private int id;
     private int idProduct;
-    private String fieldName;
-    private String fielDesc;
+    private int idProperty;
+    private String value;
 
     Specification() {}
 
@@ -19,19 +20,27 @@ public class Specification {
         this.idProduct = idProduct;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public int getId() {
+        return id;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getFielDesc() {
-        return fielDesc;
+    public int getIdProperty() {
+        return idProperty;
     }
 
-    public void setFielDesc(String fielDesc) {
-        this.fielDesc = fielDesc;
+    public void setIdProperty(int idProperty) {
+        this.idProperty = idProperty;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

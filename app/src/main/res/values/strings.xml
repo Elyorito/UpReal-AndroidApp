@@ -283,5 +283,13 @@
     <string name="connect_to_change_pwd">Connectez vous pour changer votre mot de passe</string>
     <string name="connect_question">Voulez-vous vous connecter ?</string>
     <string name="product_image">Image du produit</string>
+    <string name="category">Catégorie</string>
+    <string name="nutrition_facts">Information nutritionnelle</string>
+    <string name="value">Valeur</string>
+    <string name="for_g">Pour 100g</string>
+    <string name="per_portion">Par portion</string>
+    <string name="percent_rdi">%AJR</string>
+    <string name="ingredient">Ingrédients</string>
+    <string name="additive">Additifs</string>
 
 </resources>
