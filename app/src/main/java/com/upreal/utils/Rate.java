@@ -5,6 +5,7 @@ package com.upreal.utils;
  */
 public class Rate {
 
+    private int mId;
     private int mId_user;
     private int mMark;
     private String mCommentary;
@@ -24,6 +25,14 @@ public class Rate {
         this.mActive = mActive;
         this.mUp = mUp;
         this.mDown = mDown;
+    }
+
+    public int getmId() {
+        return mId;
+    }
+
+    public void setmId(int mId) {
+        this.mId = mId;
     }
 
     public int getmId_user() {

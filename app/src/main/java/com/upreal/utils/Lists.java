@@ -14,12 +14,12 @@ public class Lists implements Parcelable {
     private int nb_items;
     private int id_user;
     private int type;
-    private int date;
+    private String date;
 
 
     public Lists() {}
 
-    public Lists(int id, String name, int l_public, int nb_items, int id_user, int type, int date) {
+    public Lists(int id, String name, int l_public, int nb_items, int id_user, int type, String date) {
         this.id = id;
         this.name = name;
         this.l_public = l_public;
@@ -77,11 +77,11 @@ public class Lists implements Parcelable {
         this.type = type;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -99,7 +99,7 @@ public class Lists implements Parcelable {
         dest.writeInt(nb_items);
         dest.writeInt(id_user);
         dest.writeInt(type);
-        dest.writeInt(date);
+        dest.writeString(date);
     }
 
     public static final Creator<Lists> CREATOR = new Creator<Lists>() {
@@ -121,6 +121,6 @@ public class Lists implements Parcelable {
         nb_items = in.readInt();
         id_user = in.readInt();
         type = in.readInt();
-        date = in.readInt();
+        date = in.readString();
     }
 }
