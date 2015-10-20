@@ -36,7 +36,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
     int nbTab;
     Product mProduct;
     Bundle bundle;
-    private Activity activity;
+    private Activity mActivity;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = ProductNewViewPagerAdapter.class.getSimpleName();
@@ -58,12 +58,12 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 //        new RetrieveAddress().execute();
         bundle = new Bundle();
         bundle.putParcelable("product", product);
-
+        mActivity = activity;
         initLocalisation();
     }
 
     public void initLocalisation() {
-        activityWeakReference = new WeakReference<Activity>(activity);
+        activityWeakReference = new WeakReference<Activity>(mActivity);
 
         gClient = new GoogleApiClient.Builder(activityWeakReference.get().getApplicationContext())
                 .addConnectionCallbacks(this)

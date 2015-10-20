@@ -11,9 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.upreal.R;
 import com.upreal.home.HomeActivity;
@@ -29,7 +31,7 @@ import java.io.IOException;
 /**
  * Created by Elyo on 24/04/2015.
  */
-public class AddProductFromScan extends Activity implements View.OnClickListener{
+public class AddProductFromScan extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int ACTIVITY_START_CAMERA = 0;
 
@@ -40,7 +42,9 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
     private EditText noticedPrice;
     private EditText shopNearby;
     private ImageView imageProduct;
+    private Spinner spinner;
 
+    private String category;
     private String barcodeEAN;
     private Bitmap bitmap;
     private byte[] image;
@@ -59,6 +63,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
 
         bitmap = null;
         image = null;
+        category = "Aucun";
 
         builder = new AlertDialog.Builder(AddProductFromScan.this);
         barcodeEAN = getIntent().getExtras().getString("ean");
@@ -69,6 +74,9 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         noticedPrice = (EditText) findViewById(R.id.noticedprice);
         shopNearby = (EditText) findViewById(R.id.attheshop);
         imageProduct = (ImageView) findViewById(R.id.image_product);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        cancel = (Button) findViewById(R.id.addprodcancel);
+        sendProduct = (Button) findViewById(R.id.addprodok);
 
         // Setting Initial values
         productName.setText("");
@@ -77,10 +85,10 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         barcode.setText("");
         noticedPrice.setText("");
         shopNearby.setText("");
+        new Product.getCategory(spinner, this).execute();
 
-        cancel = (Button) findViewById(R.id.addprodcancel);
-        sendProduct = (Button) findViewById(R.id.addprodok);
 
+        spinner.setOnItemSelectedListener(this);
         cancel.setOnClickListener(this);
         sendProduct.setOnClickListener(this);
         if (barcodeEAN != null)
@@ -144,6 +152,16 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        category = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     public class CreateProductFromScan extends AsyncTask<Void, Void, Integer> {
         private Product product;
         private int id;
@@ -173,9 +191,12 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
 
+            new Product.setProductCategory(i, category).execute();
             new CreateSpec().execute(i);
-            if (bitmap != null)
+            if (bitmap != null) {
                 new SendImageTask(mImageFileLocation, image).execute(i);
+                product.setPicture("2_" + i + ".jpg");
+            }
             builder.setTitle("Produit Ajouté")
                     .setMessage("Votre produit a été ajouté avec succès !" +
                             "Voulez-vous y accéder?")
@@ -213,4 +234,6 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
             return null;
         }
     }
+
+
 }

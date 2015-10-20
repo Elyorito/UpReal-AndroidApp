@@ -74,45 +74,51 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
-//        prodName = (TextView) findViewById(R.id.product_name);
-//        prodBrand = (TextView) findViewById(R.id.product_brand);
-//        prodShortDesc = (TextView) findViewById(R.id.product_desc);
-//        prodPicture = (ImageView) findViewById(R.id.product_picture);
-//
-//        geoloc = (Button) findViewById(R.id.geoloc);
-//        geoloc.setOnClickListener(this);
+/*
+        prodName = (TextView) findViewById(R.id.product_name);
+        prodBrand = (TextView) findViewById(R.id.product_brand);
+        prodShortDesc = (TextView) findViewById(R.id.product_desc);
+        prodPicture = (ImageView) findViewById(R.id.product_picture);
 
-        //prod = getIntent().getExtras().getParcelable("listprod");
+        geoloc = (Button) findViewById(R.id.geoloc);
+*/
+/*
+        geoloc.setOnClickListener(this);
+*/
+
+        prod = getIntent().getExtras().getParcelable("listprod");
 
 
-        //title = new String(prod.getName());
-        //prodName.setText(prod.getName());
-        //Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
-        //Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
+/*
+        title = new String(prod.getName());
+        prodName.setText(prod.getName());
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
+        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
 
-//        prodBrand.setText(prod.getBrand());
-//
-//        CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
-//        toolbar = (Toolbar) findViewById(R.id.app_bar);
-//        toolbar.setTitle(title);
-//        setSupportActionBar(toolbar);
+        prodBrand.setText(prod.getBrand());
 
-//        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-//        adapter = new ProductViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
-//          mViewPager.setAdapter(adapter);
-//
-//        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
-//        mSlidingTabLayout.setDistributeEvenly(true);
-//      mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-//          @Override
-//          public int getIndicatorColor(int position) {
-//              return getResources().getColor(R.color.ColorPrimaryDark);
-//          }
-//        });
-//        mSlidingTabLayout.setViewPager(mViewPager);
+        CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
 
-        //new RetrievePicture().execute();
-        //new RetrieveSpec().execute();
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        adapter = new ProductViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
+         mViewPager.setAdapter(adapter);
+
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+          @Override
+          public int getIndicatorColor(int position) {
+              return getResources().getColor(R.color.ColorPrimaryDark);
+          }
+        });
+        mSlidingTabLayout.setViewPager(mViewPager);
+*/
+
+/*        new RetrievePicture().execute(); */
+//        new RetrieveDesc().execute();
     }
 
     @Override
@@ -145,13 +151,13 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    class RetrieveSpec extends AsyncTask<Void, Void, Specification> {
+    class RetrieveDesc extends AsyncTask<Void, Void, Specification> {
 
         @Override
         protected Specification doInBackground(Void... params) {
             SoapProductUtilManager pm = new SoapProductUtilManager();
 
-            Specification spec = pm.getSpecification(prod.getId(), "Description");
+            Specification spec = pm.getDescription(prod.getId());
             return spec;
         }
 
@@ -159,7 +165,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         protected void onPostExecute(Specification spec) {
             super.onPostExecute(spec);
             if (spec != null) {
-                prodShortDesc.setText(spec.getFielDesc());
+                prodShortDesc.setText(spec.getValue());
             }
         }
     }
