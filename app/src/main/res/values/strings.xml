@@ -291,5 +291,7 @@
     <string name="percent_rdi">%AJR</string>
     <string name="ingredient">Ingrédients</string>
     <string name="additive">Additifs</string>
+    <string name="no_permission">Nous ne pouvons continuer cette action sans cette permission</string>
+    <string name="permission_camera_storage">La caméra et le stockage sont nécessaires à l\'utilisation de la reconnaissance d\'image</string>
 
 </resources>

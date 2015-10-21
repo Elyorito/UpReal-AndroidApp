@@ -1,16 +1,20 @@
 package com.upreal.product;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,6 +39,7 @@ import java.io.IOException;
 public class ProductUpdateActivity extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int ACTIVITY_START_CAMERA = 0;
+    private static final int PERMISSIONS_REQUEST = 1;
 
     private EditText name;
     private EditText ean;
@@ -50,6 +55,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
     private String mImageFileLocation;
     private String category;
 
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +102,30 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
             case R.id.image_product:
                 Intent intent = new Intent();
                 intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                File photoFile = null;
-                try {
-                    photoFile = HomeActivity.createImageFile();
-                    mImageFileLocation = photoFile.getAbsolutePath();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        photoFile = HomeActivity.createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.CAMERA)) {
+
+                        Toast.makeText(this, R.string.permission_camera_storage, Toast.LENGTH_SHORT).show();
+                    }
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                            PERMISSIONS_REQUEST);
                 }
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, ACTIVITY_START_CAMERA);
                 break;
             case R.id.update:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -147,7 +168,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                     mProduct.setBrand(brand.getText().toString());
                     mProduct.setEan(ean.getText().toString());
                     if (bitmap != null)
-                        new SendImageTask(mImageFileLocation, image).execute(mProduct.getId());
+                        new SendImageTask(mImageFileLocation, image, "2_" + mProduct.getId()).execute();
                     new Product.setProductCategory(mProduct.getId(), category).execute();
                     new updateProduct(mProduct, this).execute();
                 }
@@ -226,6 +247,39 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                 if (bitmap != null)
                     imageProduct.setImageBitmap(bitmap);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
+
+                    try {
+                        photoFile = HomeActivity.createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setTitle(R.string.scan).setMessage(R.string.no_permission).create().show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 }

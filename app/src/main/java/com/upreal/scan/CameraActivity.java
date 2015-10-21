@@ -54,7 +54,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 new RetrieveScannedProduct(contents).execute();
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
-                Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(this, "Le scan à été annulé", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.TOP, 25, 400);
                 toast.show();
                 Log.i("xZing", "Cancelled");
@@ -96,8 +96,8 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         protected void onPostExecute(Product prod) {
             super.onPostExecute(prod);
             if (prod == null) {
-                builder.setTitle("Product Not Found !")
-                        .setMessage("Would you like to add this product in our Database?")
+                builder.setTitle("Produit non trouvé !")
+                        .setMessage("Voulez-vous ajouter ce produit dans notre base de données ?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -107,7 +107,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                                 getApplicationContext().startActivity(intent);
                                 finish();
                             }
-                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();

@@ -1,33 +1,51 @@
 package com.upreal.user;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.R;
 
+import com.upreal.home.HomeActivity;
 import com.upreal.utils.Address;
+import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;
 import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.User;
+
+import java.io.File;
+import java.io.IOException;
 
 
 /**
  * Created by Eric on 11/06/2015.
  */
 public class UserUpdateActivity extends Activity implements View.OnClickListener {
+    private static final int ACTIVITY_START_CAMERA = 0;
+    private static final int PERMISSIONS_REQUEST = 1;
+
     private TextView firstName;
     private TextView lastName;
 
@@ -46,6 +64,12 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
     User user;
 /*    RecyclerView rv;*/
 
+    private String mImageFileLocation;
+    private File photoFile;
+    private Bitmap bitmap;
+    private byte[] image;
+    private ImageView imageUser;
+
     AlertDialog.Builder builder;
     LayoutInflater inflater;
     View layout;
@@ -57,6 +81,10 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         user = sessionManagerUser.getUser();
+
+        bitmap = null;
+        image = null;
+        imageUser = (ImageView) findViewById(R.id.image_user);
 
    /*     rv = (RecyclerView)findViewById(R.id.RecyclerView_userUpdate);
         rv.setHasFixedSize(true);
@@ -98,17 +126,14 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         address.setOnClickListener(this);
         update.setOnClickListener(this);
         cancel.setOnClickListener(this);
+        imageUser.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
         inflater = this.getLayoutInflater();
-
-
     }
 
     @Override
     public void onClick(View v) {
-
-        Log.v("onClick", "click here");
         switch (v.getId()) {
             case R.id.name:
                 Log.v("Name", "Name");
@@ -190,13 +215,40 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                 });
                 builder.show();
                 break;
+            case R.id.image_user:
+                Intent intent = new Intent();
+                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        photoFile = HomeActivity.createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.CAMERA)) {
+
+                        Toast.makeText(this, R.string.permission_camera_storage, Toast.LENGTH_SHORT).show();
+                    }
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                            PERMISSIONS_REQUEST);
+                }
             case R.id.update:
                 Log.v("update","update");
 
                 Address userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
                         country.getText().toString(), city.getText().toString(), (postalCode.getText().toString().equals("")) ? 0 : Integer.parseInt(postalCode.getText().toString()));
                 new updateUser(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
-                        (phoneNumber.getText().toString().equals("")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
+                        (phoneNumber.getText().toString().equals("") || phoneNumber.getText().toString().equals("non renseigné")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
                 break;
 
             case R.id.cancel:
@@ -259,17 +311,74 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         }
 
         protected void onPostExecute(Boolean success) {
-            if (success) {
                 User user = sessionManagerUser.getUser();
                 user.setFirstname(firstName.getText().toString());
                 user.setLastname(lastName.getText().toString());
-                user.setPhone((phoneNumber.getText().toString().equals("")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()));
-                user.setShort_desc(short_desc.getText().toString());
+                user.setPhone((phoneNumber.getText().toString().equals("") || phoneNumber.getText().toString().equals("non renseigné")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()));
+            user.setShort_desc((short_desc.getText().toString().equals("")) ? "" : short_desc.getText().toString());
                 sessionManagerUser.setUser(user);
-                finish();
+                if (bitmap != null) {
+                    new SendImageTask(mImageFileLocation, image, "1_" + user.getId()).execute();
+                }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
+
+                    try {
+                        photoFile = HomeActivity.createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+                    builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setTitle(R.string.scan).setMessage(R.string.no_permission).create().show();
+                }
+                return;
             }
-            else
-                Toast.makeText(getApplicationContext(), "Nothing to update", Toast.LENGTH_SHORT).show();
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACTIVITY_START_CAMERA) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                int targetImageViewWidth = imageUser.getWidth();
+                int targetImageViewHeight = imageUser.getHeight();
+
+                BitmapFactory.Options bfOptions = new BitmapFactory.Options();
+                bfOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
+
+                int cameraImageWidth = bfOptions.outWidth;
+                int cameraImageHeight = bfOptions.outHeight;
+
+                int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
+                bfOptions.inSampleSize = scaleFactor;
+                bfOptions.inJustDecodeBounds = false;
+
+                bitmap = BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
+                if (bitmap != null)
+                    imageUser.setImageBitmap(bitmap);
+            }
         }
     }
 }

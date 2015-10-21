@@ -152,8 +152,8 @@ public class SoapGlobalManager {
     public void uploadPicture(byte[] image, String name) {
         String methodName = "uploadPicture";
         SoapObject request = new SoapObject(NAMESPACE, methodName);
-        request.addProperty("image", Base64.encodeToString(image, Base64.DEFAULT));
         request.addProperty("name", name);
+        request.addProperty("image", Base64.encodeToString(image, Base64.DEFAULT));
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
         HttpTransportSE ht = getHttpTransportSE();

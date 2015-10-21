@@ -1,21 +1,26 @@
 package com.upreal.scan;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.upreal.R;
 import com.upreal.home.HomeActivity;
@@ -34,6 +39,7 @@ import java.io.IOException;
 public class AddProductFromScan extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int ACTIVITY_START_CAMERA = 0;
+    private static final int PERMISSIONS_REQUEST = 1;
 
     private EditText productName;
     private EditText brand;
@@ -50,7 +56,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
     private byte[] image;
 
     private String mImageFileLocation;
-
+    private File photoFile;
 
     private AlertDialog.Builder builder;
     private Button cancel;
@@ -105,20 +111,30 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
             case R.id.image_product:
                 Intent intent = new Intent();
                 intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                File photoFile = null;
-                try {
-                    photoFile = HomeActivity.createImageFile();
-                    mImageFileLocation = photoFile.getAbsolutePath();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        photoFile = HomeActivity.createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.CAMERA)) {
+
+                        Toast.makeText(this, R.string.permission_camera_storage, Toast.LENGTH_SHORT).show();
+                    }
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                            PERMISSIONS_REQUEST);
                 }
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, ACTIVITY_START_CAMERA);
-/*
-                Intent intent = new Intent(v.getContext(), Camera2Activity.class);
-                intent.putExtra("type", "addImage");
-                startActivityForResult(intent, GET_IMAGE_REQUEST);
-*/
                 break;
             case R.id.addprodok:
                 new CreateProductFromScan().execute();
@@ -149,6 +165,39 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 if (bitmap != null)
                 imageProduct.setImageBitmap(bitmap);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
+
+                    try {
+                        photoFile = HomeActivity.createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+                    builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setTitle(R.string.scan).setMessage(R.string.no_permission).create().show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 
@@ -194,7 +243,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
             new Product.setProductCategory(i, category).execute();
             new CreateSpec().execute(i);
             if (bitmap != null) {
-                new SendImageTask(mImageFileLocation, image).execute(i);
+                new SendImageTask(mImageFileLocation, image, "2_" + i).execute();
                 product.setPicture("2_" + i + ".jpg");
             }
             builder.setTitle("Produit Ajouté")

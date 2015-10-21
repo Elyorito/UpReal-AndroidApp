@@ -20,8 +20,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.geolocalisation.GeolocalisationActivity;
-import com.upreal.utils.BlurImages;
-import com.upreal.utils.CircleTransform;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
@@ -42,8 +40,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private Toolbar toolbar;
 
     private ViewPager mViewPager;
-    //private ProductViewPagerAdapter adapter;
-    private ProductNewViewPagerAdapter adapter;
+    private ProductViewPagerAdapter adapter;
+    //private ProductNewViewPagerAdapter adapter;
     private SlidingTabLayout mSlidingTabLayout;
     private Product prod;
     private CharSequence title;
@@ -60,7 +58,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
+/*        tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageProduct = (ImageView) findViewById(R.id.imageproduct);
@@ -73,23 +71,18 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this);
         mViewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(mViewPager);
-/*
+        tabLayout.setupWithViewPager(mViewPager);*/
         prodName = (TextView) findViewById(R.id.product_name);
         prodBrand = (TextView) findViewById(R.id.product_brand);
         prodShortDesc = (TextView) findViewById(R.id.product_desc);
         prodPicture = (ImageView) findViewById(R.id.product_picture);
 
         geoloc = (Button) findViewById(R.id.geoloc);
-*/
-/*
         geoloc.setOnClickListener(this);
-*/
 
         prod = getIntent().getExtras().getParcelable("listprod");
 
 
-/*
         title = new String(prod.getName());
         prodName.setText(prod.getName());
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
@@ -115,7 +108,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
           }
         });
         mSlidingTabLayout.setViewPager(mViewPager);
-*/
 
 /*        new RetrievePicture().execute(); */
 //        new RetrieveDesc().execute();

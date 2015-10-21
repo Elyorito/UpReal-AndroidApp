@@ -1,16 +1,20 @@
 package com.upreal.home;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
@@ -101,6 +104,10 @@ public class HomeActivity extends AppCompatActivity {
     private static final int ACTIVITY_START_CAMERA = 0;
     private String mImageFileLocation = "";
 
+    // Storage
+    private static final int PERMISSIONS_REQUEST = 1;
+    private File photoFile = null;
+
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
     private DatabaseQuery mDbQuery;
@@ -149,7 +156,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (!sessionManagerUser.isLogged()) {
             String tab[] = sessionManagerUser.getRegisterLoginUser();
-  //         Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
+            //         Toast.makeText(getApplicationContext(), "UserName[" + tab[0] +"]", Toast.LENGTH_SHORT).show();
         }
         /*RecyclerView MainView Home OLD*/
 /*
@@ -209,7 +216,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 if (child != null && mGestureDetector.onTouchEvent(e)) {
                     DrawerL.closeDrawers();
-    //                Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
+                    //                Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
                     if (!sessionManagerUser.isLogged()) {
                         Toast.makeText(HomeActivity.this, R.string.not_logged, Toast.LENGTH_SHORT).show();
                         switch (rv.getChildPosition(child)) {
@@ -243,15 +250,39 @@ public class HomeActivity extends AppCompatActivity {
 */
                                         intent = new Intent();
                                         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        File photoFile = null;
-                                        try {
-                                            photoFile = createImageFile();
-                                            mImageFileLocation = photoFile.getAbsolutePath();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(),
+                                                Manifest.permission.CAMERA)
+                                                == PackageManager.PERMISSION_GRANTED) {
+                                            try {
+                                                photoFile = createImageFile();
+                                                mImageFileLocation = photoFile.getAbsolutePath();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                            startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                                        } else {
+
+                                            // Should we show an explanation?
+                                            if (ActivityCompat.shouldShowRequestPermissionRationale(HomeActivity.this,
+                                                    Manifest.permission.CAMERA)) {
+
+                                                // Show an expanation to the user *asynchronously* -- don't block
+                                                // this thread waiting for the user's response! After the user
+                                                // sees the explanation, try again to request the permission.
+                                                Toast.makeText(HomeActivity.this, R.string.permission_camera_storage, Toast.LENGTH_SHORT).show();
+                                            }
+                                            ActivityCompat.requestPermissions(HomeActivity.this,
+                                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                                                    PERMISSIONS_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                                            // app-defined int constant. The callback method gets the
+                                            // result of the request.
+
                                         }
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                                        startActivityForResult(intent, ACTIVITY_START_CAMERA);
                                     }
                                 });
                                 builder = new AlertDialog.Builder(rv.getContext());
@@ -265,7 +296,7 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);
                                 return true;
 */
-                           case 2://Lists
+                            case 2://Lists
                                 intent = new Intent(rv.getContext(), ListActivity.class);
                                 rv.getContext().startActivity(intent);
                                 return true;
@@ -275,33 +306,33 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 4://Catalogue
-  //                              Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                              Toast.makeText(rv.getContext(), "Catalogue Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 5://Shop
-    //                            Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                            Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 6://Loyalty
-      //                          Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                          Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 7://Filleuls
-        //                        Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                        Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 8://Achievement
-                       //         Toast.makeText(rv.getContext(), "Achievement Not Implemented",Toast.LENGTH_SHORT).show();
+                                //         Toast.makeText(rv.getContext(), "Achievement Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
@@ -342,18 +373,30 @@ public class HomeActivity extends AppCompatActivity {
                                     public void onClick(View v) {
                                         intent = new Intent();
                                         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        File photoFile = null;
-                                        try {
-                                            photoFile = createImageFile();
-                                            mImageFileLocation = photoFile.getAbsolutePath();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(),
+                                                Manifest.permission.CAMERA)
+                                                == PackageManager.PERMISSION_GRANTED) {
+                                            try {
+                                                photoFile = createImageFile();
+                                                mImageFileLocation = photoFile.getAbsolutePath();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                            startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                                        } else {
+
+                                            if (ActivityCompat.shouldShowRequestPermissionRationale(HomeActivity.this,
+                                                    Manifest.permission.CAMERA)) {
+
+                                                Toast.makeText(HomeActivity.this, R.string.permission_camera_storage, Toast.LENGTH_SHORT).show();
+                                            }
+                                            ActivityCompat.requestPermissions(HomeActivity.this,
+                                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                                                    PERMISSIONS_REQUEST);
                                         }
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                                        startActivityForResult(intent, ACTIVITY_START_CAMERA);
-/*                                        intent = new Intent(v.getContext(), Camera2Activity.class);
-                                        intent.putExtra("type", "scan");
-                                        v.getContext().startActivity(intent);*/
                                     }
                                 });
                                 builder = new AlertDialog.Builder(rv.getContext());
@@ -378,28 +421,28 @@ public class HomeActivity extends AppCompatActivity {
                                 rv.getContext().startActivity(intent);*/
                                 return true;
                             case 5://Shop
-  //                              Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                              Toast.makeText(rv.getContext(), "Shop Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 6://Loyalty
-    //                            Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                            Toast.makeText(rv.getContext(), "Loyalty Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 7://Filleuls
-      //                          Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                          Toast.makeText(rv.getContext(), "Sponsorship Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
 */
                                 return true;
                             case 8://Achievement
-        //                        Toast.makeText(rv.getContext(), "Achievment Not Implemented",Toast.LENGTH_SHORT).show();
+                                //                        Toast.makeText(rv.getContext(), "Achievment Not Implemented",Toast.LENGTH_SHORT).show();
                                 /*
                                 intent = new Intent(rv.getContext(), CameraActivity.class);
                                 rv.getContext().startActivity(intent);
@@ -510,8 +553,6 @@ public class HomeActivity extends AppCompatActivity {
             imageFolder.mkdirs();
 
         File myImage = File.createTempFile(imageFileName, ".jpg", imageFolder);
-        if (myImage == null)
-            Log.v("ca ne fonctionne pas", "ca ne fonctionne pas du tout");
         return myImage;
     }
 
@@ -533,6 +574,37 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("imageLocation", mImageFileLocation);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
+
+                    try {
+                        photoFile = createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+                    builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setTitle(R.string.scan).setMessage(R.string.no_permission).create().show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 

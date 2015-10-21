@@ -9,19 +9,20 @@ import java.io.ByteArrayOutputStream;
 /**
  * Created by Eric on 30/09/2015.
  */
-public class SendImageTask extends AsyncTask<Integer, Void, Void> {
+public class SendImageTask extends AsyncTask<Void, Void, Void> {
 
     String mImageFileLocation;
     byte[] mImage;
-    String name;
+    String mName;
 
-    public SendImageTask(String imageFileLocation, byte[] image) {
+    public SendImageTask(String imageFileLocation, byte[] image, String name) {
         mImageFileLocation = imageFileLocation;
         mImage = image;
+        mName = name;
     }
 
     @Override
-    protected Void doInBackground(Integer... params) {
+    protected Void doInBackground(Void... params) {
         SoapGlobalManager gm = new SoapGlobalManager();
         Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -29,8 +30,7 @@ public class SendImageTask extends AsyncTask<Integer, Void, Void> {
         photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, false);
         photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         mImage = stream.toByteArray();
-        name = "2_" + params[0];
-        gm.uploadPicture(mImage, name);
+        gm.uploadPicture(mImage, mName);
         return null;
     }
 }
