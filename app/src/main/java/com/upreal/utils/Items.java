@@ -13,6 +13,8 @@ public class Items implements Parcelable {
     private int id_user;
     private int id;
 
+    public Items() {}
+
     protected Items(Parcel in) {
         id_list = in.readInt();
         id_product = in.readInt();

@@ -271,7 +271,7 @@ public class SoapUserManager {
             testHttpResponse(ht);
             SoapObject res2 = (SoapObject) envelope.getResponse();
 
-            user = convertToQuery(res2);
+            user = ConverterManager.convertToUser(res2);
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
@@ -279,29 +279,6 @@ public class SoapUserManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return user;
-    }
-
-    private User convertToQuery(SoapObject soapObject) {
-        User user = new User();
-        user.setEmail(soapObject.getProperty("email").toString());
-        if (soapObject.hasProperty("firstname") && soapObject.getProperty("firstname") != null)
-            user.setFirstname(soapObject.getProperty("firstname").toString());
-        user.setId(Integer.parseInt(soapObject.getPropertyAsString("id")));
-        if (soapObject.hasProperty("id_address") && soapObject.getProperty("id_address") != null)
-            user.setId_address(Integer.parseInt(soapObject.getPropertyAsString("id_address")));
-        user.setUsername(soapObject.getPropertyAsString("username"));
-        if (soapObject.hasProperty("lastname") && soapObject.getProperty("lastname") != null)
-            user.setLastname(soapObject.getPropertyAsString("lastname"));
-        if (soapObject.hasProperty("phone") && soapObject.getProperty("phone") != null)
-            user.setPhone(Integer.parseInt(soapObject.getPropertyAsString("phone")));
-        if (soapObject.hasProperty("short_desc") && soapObject.getProperty("short_desc") != null)
-         user.setShort_desc(soapObject.getPropertyAsString("short_desc"));
-        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-            user.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-        if (soapObject.hasProperty("picture") && soapObject.getProperty("picture") != null)
-            user.setPicture(soapObject.getProperty("picture").toString());
-
         return user;
     }
 
@@ -329,11 +306,11 @@ public class SoapUserManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listUsers.add(this.convertToQuery(res));
+                    listUsers.add(ConverterManager.convertToUser(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listUsers.add(this.convertToQuery(result));
+                listUsers.add(ConverterManager.convertToUser(result));
             }
 /*
             nbProduct = results.getAttributeCount();

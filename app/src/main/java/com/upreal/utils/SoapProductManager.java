@@ -141,7 +141,7 @@ public class SoapProductManager {
             if (results == null)
                 return null;
 
-            prod = convertToQuery(results);
+            prod = ConverterManager.convertToProduct(results);
 /*
             nbProduct = results.getAttributeCount();
 */
@@ -192,7 +192,7 @@ public class SoapProductManager {
             if (results == null)
                 return null;
 
-            prod = convertToQuery(results);
+            prod = ConverterManager.convertToProduct(results);
 
 /*
             nbProduct = results.getAttributeCount();
@@ -249,11 +249,11 @@ public class SoapProductManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listProds.add(this.convertToQuery(res));
+                    listProds.add(ConverterManager.convertToProduct(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listProds.add(this.convertToQuery(result));
+                listProds.add(ConverterManager.convertToProduct(result));
             }
 /*
             if (results instanceof SoapObject) {
@@ -295,7 +295,7 @@ public class SoapProductManager {
 
             if (results == null)
                 return null;
-            prod = convertToQuery(results);
+            prod = ConverterManager.convertToProduct(results);
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
         } catch (IOException i) {
@@ -353,24 +353,6 @@ public class SoapProductManager {
             q.printStackTrace();
         }
         return android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + type + "-" + id + ".jpg";
-    }
-
-    private Product convertToQuery(SoapObject soapObject) {
-        Product prod = new Product();
-        if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
-            prod.setName(soapObject.getProperty("name").toString());
-        if (soapObject.hasProperty("ean") && soapObject.getProperty("ean") != null)
-            prod.setEan(soapObject.getProperty("ean").toString());
-        if (soapObject.hasProperty("brand") && soapObject.getProperty("brand") != null)
-            prod.setBrand(soapObject.getProperty("brand").toString());
-        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-            prod.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-        if (soapObject.hasProperty("picture") && soapObject.getProperty("picture") != null)
-            prod.setPicture(soapObject.getPropertyAsString("picture").toString());
-/*        if (soapObject.hasProperty("shortDesc") && soapObject.getProperty("shortDesc") != null)
-            prod.setPicture(soapObject.getPropertyAsString("picture").toString());*/
-
-        return prod;
     }
 
     private SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {

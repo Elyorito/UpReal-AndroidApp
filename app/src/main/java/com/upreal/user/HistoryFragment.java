@@ -1,4 +1,4 @@
-package com.upreal.news;
+package com.upreal.user;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.upreal.home.AdapterHomeNews;
 import com.upreal.R;
+import com.upreal.home.AdapterHomeNews;
 import com.upreal.utils.Article;
 import com.upreal.utils.SoapGlobalManager;
 
@@ -20,31 +20,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Elyo on 24/09/15.
+ * Created by Kyosukke on 20/10/2015.
  */
-public class NewsFragment extends Fragment {
+public class HistoryFragment  extends Fragment {
 
-    private RecyclerView mRecyclerViewNews;
-    private RecyclerView.Adapter mAdapterNews;
+    private RecyclerView mRecyclerViewHistory;
+    private RecyclerView.Adapter mAdapterHistory;
     private RecyclerView.LayoutManager mLayoutManager;
     private Context context;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_news, container, false);
 
-        mRecyclerViewNews = (RecyclerView) v.findViewById(R.id.recyclerview_home_news);
-        mRecyclerViewNews.setHasFixedSize(true);
+        mRecyclerViewHistory = (RecyclerView) v.findViewById(R.id.recyclerview_home_news);
+        mRecyclerViewHistory.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
-        mRecyclerViewNews.setLayoutManager(mLayoutManager);
+        mRecyclerViewHistory.setLayoutManager(mLayoutManager);
 
-        new RetrieveNews().execute();
-        mRecyclerViewNews.setAdapter(mAdapterNews);
+        new RetrieveHistory().execute();
+        mRecyclerViewHistory.setAdapter(mAdapterHistory);
         return v;
     }
 
-    private class RetrieveNews extends AsyncTask<Void, Void, List<Article>> {
+    private class RetrieveHistory extends AsyncTask<Void, Void, List<Article>> {
 
         List<Article> listnews = new ArrayList<>();
 
@@ -59,8 +58,8 @@ public class NewsFragment extends Fragment {
         protected void onPostExecute(List<Article> articles) {
             super.onPostExecute(articles);
             context = getActivity().getApplicationContext();
-            mAdapterNews = new AdapterHomeNews(articles, context);
-            mRecyclerViewNews.setAdapter(mAdapterNews);
+            mAdapterHistory = new AdapterHomeNews(articles, context);
+            mRecyclerViewHistory.setAdapter(mAdapterHistory);
         }
     }
 }

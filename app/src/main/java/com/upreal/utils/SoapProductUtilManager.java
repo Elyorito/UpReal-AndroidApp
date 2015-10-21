@@ -131,7 +131,7 @@ public class SoapProductUtilManager {
             if (results == null)
                 return null;
 
-            spec = convertToQuerySpec(results);
+            spec = ConverterManager.convertToSpecification(results);
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -164,7 +164,7 @@ public class SoapProductUtilManager {
             if (results == null)
                 return null;
 
-            spec = convertToQuerySpec(results);
+            spec = ConverterManager.convertToSpecification(results);
 
         } catch (SocketTimeoutException t) {
             t.printStackTrace();
@@ -198,11 +198,11 @@ public class SoapProductUtilManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listSpec.add(this.convertToQuerySpec(res));
+                    listSpec.add(ConverterManager.convertToSpecification(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listSpec.add(this.convertToQuerySpec(result));
+                listSpec.add(ConverterManager.convertToSpecification(result));
             }
 
         } catch (SocketTimeoutException t) {
@@ -238,11 +238,11 @@ public class SoapProductUtilManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listAddress.add(this.convertToQuery(res));
+                    listAddress.add(ConverterManager.convertToAddress(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listAddress.add(this.convertToQuery(result));
+                listAddress.add(ConverterManager.convertToAddress(result));
             }
 
         } catch (SocketTimeoutException t) {
@@ -370,38 +370,6 @@ public class SoapProductUtilManager {
             q.printStackTrace();
         }
         return listPrices;
-    }
-
-    private Address convertToQuery(SoapObject soapObject) {
-        Address address = new Address();
-        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-            address.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-        if (soapObject.hasProperty("address") && soapObject.getProperty("address") != null)
-            address.setAddress(soapObject.getProperty("address").toString());
-        if (soapObject.hasProperty("address_2") && soapObject.getProperty("address_2") != null)
-            address.setAddress2(soapObject.getProperty("address_2").toString());
-        if (soapObject.hasProperty("city") && soapObject.getProperty("city") != null)
-            address.setCity(soapObject.getProperty("city").toString());
-        if (soapObject.hasProperty("country") && soapObject.getProperty("country") != null)
-            address.setCountry(soapObject.getProperty("country").toString());
-        if (soapObject.hasProperty("postal_code") && soapObject.getProperty("postal_code") != null)
-            address.setPostalCode(Integer.parseInt(soapObject.getProperty("postal_code").toString()));
-
-        return address;
-    }
-
-    private Specification convertToQuerySpec(SoapObject soapObject) {
-        Specification spec = new Specification();
-        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-            spec.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-        if (soapObject.hasProperty("id_product") && soapObject.getProperty("id_product") != null)
-            spec.setIdProduct(Integer.parseInt(soapObject.getProperty("id_product").toString()));
-        if (soapObject.hasProperty("id_property") && soapObject.getProperty("id_property") != null)
-            spec.setIdProperty(Integer.parseInt(soapObject.getProperty("id_property").toString()));
-        if (soapObject.hasProperty("value") && soapObject.getProperty("value") != null)
-            spec.setValue(soapObject.getProperty("value").toString());
-
-        return spec;
     }
 
     private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
