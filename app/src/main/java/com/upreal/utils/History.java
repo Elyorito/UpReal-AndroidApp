@@ -3,6 +3,10 @@ package com.upreal.utils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Kyosukke on 18/08/2015.
  */
@@ -13,11 +17,11 @@ public class History implements Parcelable {
     private int actionType;
     private int idType;
     private int idTarget;
-    private String date;
+    private Date date;
 
     public History() {}
 
-    public History(int id, int idUser, int actionType, int idType, int idTarget, String date) {
+    public History(int id, int idUser, int actionType, int idType, int idTarget, Date date) {
         this.id = id;
         this.idUser = idUser;
         this.actionType = actionType;
@@ -66,12 +70,18 @@ public class History implements Parcelable {
         this.idTarget = idTarget;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+
+        try {
+            this.date = formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -86,7 +96,7 @@ public class History implements Parcelable {
         dest.writeInt(this.actionType);
         dest.writeInt(this.idType);
         dest.writeInt(this.idTarget);
-        dest.writeString(this.date);
+        dest.writeSerializable(this.date);
     }
 
     public static final Creator<History> CREATOR = new Creator<History>() {
@@ -107,6 +117,6 @@ public class History implements Parcelable {
         this.actionType = in.readInt();
         this.idType = in.readInt();
         this.idTarget = in.readInt();
-        this.date = in.readString();
+        this.date = (Date) in.readSerializable();
     }
 }

@@ -3,6 +3,10 @@ package com.upreal.utils;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 /**
  * Created by Elyo on 07/04/2015.
  */
@@ -104,5 +108,33 @@ public class SoapUserUtilManager extends SoapManager {
         } catch (Exception q) {
             q.printStackTrace();
         }
+    }
+
+    public List<History> getUserHistory(int idUser) {
+        List<History> listHistory = new ArrayList<History>();
+        String methodname = "getUserHistory";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+
+        try {
+            Object res = callService(methodname, request);
+            if (res instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) res;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject o = results.get(i);
+                    listHistory.add(ConverterManager.convertToHistory(o));
+                }
+            } else if (res instanceof SoapObject) {
+                SoapObject o = (SoapObject) res;
+                listHistory.add(ConverterManager.convertToHistory(o));
+            }
+            return listHistory;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return null;
     }
 }

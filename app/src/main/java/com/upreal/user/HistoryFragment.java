@@ -1,6 +1,5 @@
 package com.upreal.user;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,9 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.upreal.R;
-import com.upreal.home.AdapterHomeNews;
-import com.upreal.utils.Article;
-import com.upreal.utils.SoapGlobalManager;
+import com.upreal.home.AdapterHomeHistory;
+import com.upreal.utils.History;
+import com.upreal.utils.SessionManagerUser;
+import com.upreal.utils.SoapUserUtilManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ public class HistoryFragment  extends Fragment {
     private RecyclerView mRecyclerViewHistory;
     private RecyclerView.Adapter mAdapterHistory;
     private RecyclerView.LayoutManager mLayoutManager;
-    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,22 +42,25 @@ public class HistoryFragment  extends Fragment {
         return v;
     }
 
-    private class RetrieveHistory extends AsyncTask<Void, Void, List<Article>> {
+    private class RetrieveHistory extends AsyncTask<Void, Void, List<History>> {
 
-        List<Article> listnews = new ArrayList<>();
+        List<History> hList = new ArrayList<>();
 
         @Override
-        protected List<Article> doInBackground(Void... params) {
-            SoapGlobalManager gm = new SoapGlobalManager();
-            listnews = gm.getNews();
-            return listnews;
+        protected List<History> doInBackground(Void... params) {
+
+            SessionManagerUser userSession = new SessionManagerUser(getActivity().getApplicationContext());
+            if (userSession.isLogged()) {
+                SoapUserUtilManager uum = new SoapUserUtilManager();
+                hList = uum.getUserHistory(userSession.getUserId());
+            }
+            return hList;
         }
 
         @Override
-        protected void onPostExecute(List<Article> articles) {
-            super.onPostExecute(articles);
-            context = getActivity().getApplicationContext();
-            mAdapterHistory = new AdapterHomeNews(articles, context);
+        protected void onPostExecute(List<History> hList) {
+            super.onPostExecute(hList);
+            mAdapterHistory = new AdapterHomeHistory(hList, getActivity().getApplicationContext());
             mRecyclerViewHistory.setAdapter(mAdapterHistory);
         }
     }
