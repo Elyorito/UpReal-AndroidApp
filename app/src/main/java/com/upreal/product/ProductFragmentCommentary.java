@@ -74,7 +74,7 @@ public class ProductFragmentCommentary extends Fragment {
         @Override
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            listRate = gm.getRate(prod.getId(), gm.getTarget_product());
+            listRate = gm.getRate(prod.getId(), 2);
             SoapUserManager um = new SoapUserManager();
             for (int i = 0; i < listRate.size(); i++) {
                 user = um.getAccountInfoUsername(listRate.get(i).getmId_user());

@@ -245,7 +245,7 @@ public class UserAdapterSocial extends RecyclerView.Adapter<UserAdapterSocial.Vi
         @Override
         protected Boolean doInBackground(Void... params) {
             SoapGlobalManager pum = new SoapGlobalManager();
-            pum.createComment(sessionManagerUser.getUserId(), mUser.getId(), pum.getTarget_user(), comment);
+            pum.createComment(sessionManagerUser.getUserId(), mUser.getId(), 1, comment);
             return true;
         }
 

@@ -197,7 +197,7 @@ public class StoreAdapterSocial extends RecyclerView.Adapter<StoreAdapterSocial.
         @Override
         protected Boolean doInBackground(Void... params) {
             SoapGlobalManager pum = new SoapGlobalManager();
-            pum.createComment(sessionManagerUser.getUserId(), mStore.getId(), pum.getTarget_store(), comment);
+            pum.createComment(sessionManagerUser.getUserId(), mStore.getId(), 3, comment);
             return true;
         }
 

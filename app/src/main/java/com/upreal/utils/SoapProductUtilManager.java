@@ -1,18 +1,8 @@
 package com.upreal.utils;
 
-import android.util.Log;
-
-import org.ksoap2.HeaderProperty;
-import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.net.Proxy;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -20,42 +10,25 @@ import java.util.Vector;
 /**
  * Created by Elyo on 07/04/2015.
  */
-public class SoapProductUtilManager {
+public class SoapProductUtilManager extends SoapManager {
 
-    private static final boolean DEBUG_SOAP_REQUEST_RESPONSE = true;
-    private static String MAIN_REQUEST_URL = "http://163.5.84.202/UpReal/services/ProductUtilManager/";
-    private static String NAMESPACE = "http://manager.entity.upreal";
-    private static final String SOAP_ACTION = "http://163.5.84.202/UpReal/services";
-    private static String SESSION_ID;
-
-    private final void testHttpResponse(HttpTransportSE ht) {
-        ht.debug = DEBUG_SOAP_REQUEST_RESPONSE;
-        if (DEBUG_SOAP_REQUEST_RESPONSE) {
-            Log.v("SOAP RETURN", "Request XML:\n" + ht.requestDump);
-            Log.v("SOAP RETURN", "\n\n\nResponse XML:\n" + ht.responseDump);
-        }
+    public SoapProductUtilManager() {
+        super("ProductUtilManager");
     }
 
     public Boolean rateProduct(int idUser, int idTarget, int mark) {
         Boolean isSuccess = false;
-        String methodName = "rateProduct";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "rateProduct";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_user", idUser);
         request.addProperty("id_target", idTarget);
         request.addProperty("mark", mark);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-        HttpTransportSE ht = getHttpTransportSE();
-
         try {
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive res = (SoapPrimitive) envelope.getResponse();
+            SoapPrimitive res = (SoapPrimitive) callService(methodname, request);
             isSuccess = Boolean.valueOf(res.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
         }
         return isSuccess;
     }
@@ -91,52 +64,32 @@ public class SoapProductUtilManager {
     }*/
 
     public void createSpecification(int idProduct, String fieldName, String fieldDesc) {
-        String methodName = "createSpecification";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "createSpecification";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
         request.addProperty("field_name", fieldName);
         request.addProperty("field_desc", fieldDesc);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-        HttpTransportSE ht = getHttpTransportSE();
-
         try {
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive res = (SoapPrimitive) envelope.getResponse();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            SoapPrimitive res = (SoapPrimitive) callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
         }
     }
 
     public Specification getDescription(int idProduct) {
         Specification spec = null;
-        String methodName = "getDescription";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "getDescription";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            SoapObject results= (SoapObject)envelope.getResponse();
+            SoapObject results= (SoapObject) callService(methodname, request);
 
             if (results == null)
                 return null;
 
             spec = ConverterManager.convertToSpecification(results);
-
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -145,31 +98,18 @@ public class SoapProductUtilManager {
 
     public Specification getSpecification(int idProduct, String fieldName) {
         Specification spec = null;
-        String methodName = "getSpecification";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "getSpecification";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
         request.addProperty("field_name", fieldName);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            SoapObject results= (SoapObject)envelope.getResponse();
+            SoapObject results= (SoapObject) callService(methodname, request);
 
             if (results == null)
                 return null;
 
             spec = ConverterManager.convertToSpecification(results);
-
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -178,20 +118,12 @@ public class SoapProductUtilManager {
 
     public List<Specification> getAllSpecification(int idProduct) {
         List<Specification> listSpec = null;
-        String methodName = "getAllSpecification";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "getAllSpecification";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            Object response = envelope.getResponse();
+            Object response = callService(methodname, request);
 
             if (response instanceof Vector) {
                 Vector<SoapObject> results = (Vector<SoapObject>) response;
@@ -204,11 +136,6 @@ public class SoapProductUtilManager {
                 SoapObject result = (SoapObject) response;
                 listSpec.add(ConverterManager.convertToSpecification(result));
             }
-
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -222,16 +149,8 @@ public class SoapProductUtilManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id", idProduct);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            Object response = envelope.getResponse();
+            Object response = callService(methodname, request);
 
             if (response instanceof Vector) {
                 Vector<SoapObject> results = (Vector<SoapObject>) response;
@@ -244,11 +163,6 @@ public class SoapProductUtilManager {
                 SoapObject result = (SoapObject) response;
                 listAddress.add(ConverterManager.convertToAddress(result));
             }
-
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -257,29 +171,17 @@ public class SoapProductUtilManager {
 
     public ArrayList<String> getCategory() {
         ArrayList<String> list = new ArrayList<>();
-        String methodName = "getCategory";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "getCategory";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            Object response = envelope.getResponse();
+            Object response = callService(methodname, request);
 
             Vector<SoapPrimitive> res = (Vector<SoapPrimitive>) response;
 
             for (int i = 0; i < res.size(); i++) {
                 list.add(res.get(i).getValue().toString());
             }
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -287,48 +189,33 @@ public class SoapProductUtilManager {
     }
 
     public void setProductCategory(int idProduct, String keyword) {
-        String methodName = "setProductCategory";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "setProductCategory";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
         request.addProperty("keyword", keyword);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-        HttpTransportSE ht = getHttpTransportSE();
-
         try {
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive res = (SoapPrimitive) envelope.getResponse();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            SoapPrimitive res = (SoapPrimitive) callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
         }
     }
 
     public String getProductCategory(int idProduct) {
         String cat = "Aucun";
-        String methodName = "getProductCategory";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "getProductCategory";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-        HttpTransportSE ht = getHttpTransportSE();
-
         try {
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            SoapPrimitive results = (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive results = (SoapPrimitive) callService(methodname, request);
 
             if (results == null)
                 return null;
 
             cat = results.getValue().toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+        } catch (Exception q) {
+            q.printStackTrace();
         }
         return cat;
     }
@@ -339,16 +226,8 @@ public class SoapProductUtilManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id", idProduct);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            Object response = envelope.getResponse();
+            Object response = callService(methodname, request);
 
             if (response instanceof Vector) {
                 Vector<SoapPrimitive> results = (Vector<SoapPrimitive>) response;
@@ -361,37 +240,9 @@ public class SoapProductUtilManager {
                 SoapPrimitive result = (SoapPrimitive) response;
                 listPrices.add(Double.parseDouble(result.toString()));
             }
-
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
         return listPrices;
-    }
-
-    private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.dotNet = true;
-        envelope.implicitTypes = true;
-        envelope.setAddAdornments(false);
-        envelope.setOutputSoapObject(request);
-        return envelope;
-    }
-
-    private final HttpTransportSE getHttpTransportSE() {
-        HttpTransportSE ht = new HttpTransportSE(Proxy.NO_PROXY,MAIN_REQUEST_URL,60000);
-        ht.debug = true;
-        ht.setXmlVersionTag("<?xml version=\"1.0\" encoding= \"UTF-8\" ?>");
-        return ht;
-    }
-
-    private final List<HeaderProperty> getHeader() {
-        List<HeaderProperty> header = new ArrayList<HeaderProperty>();
-        HeaderProperty headerPropertyObj = new HeaderProperty("cookie", SoapProductUtilManager.SESSION_ID);
-        header.add(headerPropertyObj);
-        return header;
     }
 }
