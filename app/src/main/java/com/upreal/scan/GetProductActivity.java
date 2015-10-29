@@ -63,7 +63,7 @@ public class GetProductActivity extends AppCompatActivity {
         protected void onPostExecute(Product product) {
             super.onPostExecute(product);
             String not = "notfound";
-            if (product.getName() == null || not.equals(product.getName())) {
+            if (product == null || product.getName() == null || not.equals(product.getName())) {
                 if (context != null) {
                     Intent intent = new Intent(getApplicationContext(), AddProductFromScan.class);
                     intent.putExtra("listprod", new Product(""));

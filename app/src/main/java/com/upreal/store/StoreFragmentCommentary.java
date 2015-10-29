@@ -61,7 +61,7 @@ public class StoreFragmentCommentary extends android.support.v4.app.Fragment {
         @Override
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
-            listRate = gm.getRate(user.getId(), gm.getTarget_user());
+            listRate = gm.getRate(user.getId(), 1);
             SoapUserManager um = new SoapUserManager();
             for (int i = 0; i < listRate.size(); i++) {
                 user = um.getAccountInfoUsername(listRate.get(i).getmId_user());

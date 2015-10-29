@@ -2,6 +2,8 @@ package com.upreal.utils;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.Date;
+
 /**
  * Created by Kyosukke on 27/07/2015.
  */

@@ -1,17 +1,8 @@
 package com.upreal.utils;
 
-import android.util.Log;
-
-import org.ksoap2.HeaderProperty;
-import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
 
-import java.io.IOException;
-import java.net.Proxy;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -19,23 +10,11 @@ import java.util.Vector;
 /**
  * Created by Elyo on 01/03/2015.
  */
-public class SoapUserManager {
+public class SoapUserManager extends SoapManager {
 
-    private static final boolean DEBUG_SOAP_REQUEST_RESPONSE = true;
-    private static String MAIN_REQUEST_URL = "http://163.5.84.202/UpReal/services/UserManager/";
-    private static String NAMESPACE = "http://manager.entity.upreal";
-    private static final String SOAP_ACTION = "http://163.5.84.202/UpReal/services";
-    private static String SESSION_ID;
-
-    private final void testHttpResponse(HttpTransportSE ht) {
-        ht.debug = DEBUG_SOAP_REQUEST_RESPONSE;
-        if (DEBUG_SOAP_REQUEST_RESPONSE) {
-            Log.v("SOAP RETURN", "Request XML:\n" + ht.requestDump);
-            Log.v("SOAP RETURN", "\n\n\nResponse XML:\n" + ht.responseDump);
-        }
+    public SoapUserManager() {
+        super("UserManager");
     }
-
-    //change int phone into String
 
     public boolean updateAccount(int id, String firstName, String lastName, int phone, int id_address, String shortDesc) {
         String methodname = "updateAccount";
@@ -48,19 +27,11 @@ public class SoapUserManager {
         request.addProperty("phone", phone);
         request.addProperty("id_address", id_address);
         request.addProperty("short_desc", shortDesc);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive results= (SoapPrimitive) callService(methodname, request);
 
             result = Boolean.getBoolean(results.toString());
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -75,19 +46,11 @@ public class SoapUserManager {
         request.addProperty("id_user", id);
         request.addProperty("old_password", old);
         request.addProperty("new_password", newP);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive results= (SoapPrimitive) callService(methodname, request);
 
             result = Boolean.valueOf(results.toString());
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -103,20 +66,12 @@ public class SoapUserManager {
         request.addProperty("username", id);
         request.addProperty("email", email);
         request.addProperty("password", password);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive results= (SoapPrimitive) callService(methodname, request);
 
             data = results.toString();
             result = Integer.parseInt(data);
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -134,20 +89,12 @@ public class SoapUserManager {
         request.addProperty("lastname", lastname);
         request.addProperty("email", email);
         request.addProperty("password", password);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive results= (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive results= (SoapPrimitive) callService(methodname, request);
 
             data = results.toString();
             result = Integer.parseInt(data);
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -162,20 +109,12 @@ public class SoapUserManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", username);
         request.addProperty("password", password);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive resultsBoolean= (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive resultsBoolean= (SoapPrimitive) callService(methodname, request);
 
             data = resultsBoolean.toString();
             result = Boolean.valueOf(data);
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -189,20 +128,12 @@ public class SoapUserManager {
 
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", username);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-            SoapPrimitive resultsString = (SoapPrimitive)envelope.getResponse();
+            SoapPrimitive resultsString = (SoapPrimitive) callService(methodname, request);
 
             data = resultsString.toString();
             result = Boolean.parseBoolean(data);
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -212,70 +143,32 @@ public class SoapUserManager {
     public User getAccountInfoUsername(int id) {
         User user = new User();
 
-        String methodName = "getAccountInfo";
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        String methodname = "getAccountInfo";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id", id);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-        HttpTransportSE ht = getHttpTransportSE();
+
         try {
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-            SoapObject res2 = (SoapObject) envelope.getResponse();
+            SoapObject res2 = (SoapObject) callService(methodname, request);
 
             user.setId(Integer.parseInt(res2.getPropertyAsString("id")));
             user.setUsername(res2.getPropertyAsString("username"));
-        } catch (SocketTimeoutException t){
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
         return user;
     }
 
-    private SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.dotNet = true;
-        envelope.implicitTypes = true;
-        envelope.setAddAdornments(false);
-        envelope.setOutputSoapObject(request);
-        return envelope;
-    }
-
-    private HttpTransportSE getHttpTransportSE() {
-        HttpTransportSE ht = new HttpTransportSE(Proxy.NO_PROXY,MAIN_REQUEST_URL,60000);
-        ht.debug = true;
-        ht.setXmlVersionTag("<?xml version=\"1.0\" encoding= \"UTF-8\" ?>");
-        return ht;
-    }
-
-    private List<HeaderProperty> getHeader() {
-        List<HeaderProperty> header = new ArrayList<>();
-        HeaderProperty headerPropertyObj = new HeaderProperty("cookie", SoapUserManager.SESSION_ID);
-        header.add(headerPropertyObj);
-        return header;
-    }
-
     public User getUserByUsername(String username) {
         User user = null;
-        String methodName = "getSingleUserByUsername";
+        String methodname = "getSingleUserByUsername";
 
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", username);
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
 
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-            ht.call(methodName, envelope);
-            testHttpResponse(ht);
-            SoapObject res2 = (SoapObject) envelope.getResponse();
+            SoapObject res2 = (SoapObject) callService(methodname, request);
 
             user = ConverterManager.convertToUser(res2);
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -290,16 +183,8 @@ public class SoapUserManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("username", searchName);
 
-        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope(request);
-        HttpTransportSE ht = getHttpTransportSE();
         try {
-
-            ht.call(methodname, envelope);
-            testHttpResponse(ht);
-
-            SoapObject res0 = (SoapObject) envelope.bodyIn;
-            /*SoapObject results= (SoapObject)envelope.getResponse();*/
-            Object response = envelope.getResponse();
+            Object response = callService(methodname, request);
 
             if (response instanceof Vector) {
                 Vector<SoapObject> results = (Vector<SoapObject>) response;
@@ -328,11 +213,6 @@ public class SoapUserManager {
                 data = results.getProperty("ean").toString();
             }
 */
-
-        } catch (SocketTimeoutException t) {
-            t.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
         } catch (Exception q) {
             q.printStackTrace();
         }
