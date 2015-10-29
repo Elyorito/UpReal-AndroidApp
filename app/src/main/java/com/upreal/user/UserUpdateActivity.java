@@ -247,7 +247,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
                 Address userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
                         country.getText().toString(), city.getText().toString(), (postalCode.getText().toString().equals("")) ? 0 : Integer.parseInt(postalCode.getText().toString()));
-                new updateUser(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
+                new updateAddress(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
                         (phoneNumber.getText().toString().equals("") || phoneNumber.getText().toString().equals("non renseigné")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
                 break;
 
@@ -275,7 +275,8 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private class updateUser extends AsyncTask<Void, Void, Boolean> {
+    private class updateAddress extends AsyncTask<Void, Void, Boolean> {
+
         private int id;
         private String fn;
         private String ln;
@@ -284,7 +285,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         private int id_address;
         private String shortDesc;
 
-        updateUser(int id, String firstName, String lastName, int phone, Address address, String shortDesc) {
+        updateAddress(int id, String firstName, String lastName, int phone, Address address, String shortDesc) {
             this.id = id;
             this.fn = firstName;
             this.ln = lastName;
@@ -295,19 +296,44 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            SoapUserManager pm = new SoapUserManager();
             SoapUserUtilManager pm2 = new SoapUserUtilManager();
             Boolean result;
-
             if (user.getId_address() == -1) {
                 id_address = pm2.registerAddress(this.add);
-                return pm.updateAccount(this.id, this.fn, this.ln, this.phone, id_address, this.shortDesc);
+                user.setId_address(id_address);
+                result = true;
             }
-            else {
+            else
                 result = pm2.updateAddress(this.add);
-                result = (pm.updateAccount(this.id, this.fn, this.ln, this.phone, user.getId_address(), this.shortDesc) == result);
-                return result;
-            }
+            return result;
+        }
+
+        protected void onPostExecute(Boolean success) {
+            new updateUser(id, fn, ln, phone, id_address, shortDesc).execute();
+        }
+    }
+
+    private class updateUser extends AsyncTask<Void, Void, Boolean> {
+        private int id;
+        private String fn;
+        private String ln;
+        private int phone;
+        private int id_address;
+        private String shortDesc;
+
+        updateUser(int id, String firstName, String lastName, int phone, int id_address, String shortDesc) {
+            this.id = id;
+            this.fn = firstName;
+            this.ln = lastName;
+            this.phone = phone;
+            this.id_address = id_address;
+            this.shortDesc = shortDesc;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            SoapUserManager pm = new SoapUserManager();
+            return pm.updateAccount(this.id, this.fn, this.ln, this.phone, id_address, this.shortDesc);
         }
 
         protected void onPostExecute(Boolean success) {
