@@ -47,7 +47,7 @@
         android:id="@+id/RecyclerView_NavigationDrawer"
         android:layout_width="320dp"
         android:layout_height="match_parent"
-        android:background="@drawable/abc_list_selector_background_transition_holo_dark"
+        android:background="@color/white"
         android:layout_gravity="start"
         android:scrollbars="vertical">
 
