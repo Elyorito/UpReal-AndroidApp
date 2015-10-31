@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
@@ -59,8 +61,13 @@ public class UserActivity extends ActionBarActivity {
 
         title = new String(user.getUsername());
         userUsername.setText(user.getUsername());
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/" + user.getPicture()).into(userPicture);
-
+        if (user.getPicture() != null && user.getPicture().length() >= 15) {
+            Picasso.with(getApplicationContext()).load(user.getPicture()).into(userPicture);
+        } else {
+            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/" + user.getPicture()).into(userPicture);
+        }
+        Toast.makeText(getApplicationContext(), user.getPicture(),Toast.LENGTH_LONG).show();
+//        Log.v("testok", user.getPicture().toString());
         /*
         userLocal.setText("Adresse " + getResources().getString(R.string.not_defined));
         if (user.getId_address() != -1 && user.getId_address() != 0)
@@ -141,7 +148,8 @@ public class UserActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        new getUser().execute(user.getUsername());
+        if (user.getPicture() != null && user.getPicture().length() < 15)
+            new getUser().execute(user.getUsername());
     }
 
     private class getUser extends AsyncTask<String, Void, User> {

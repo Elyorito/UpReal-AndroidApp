@@ -1,27 +1,39 @@
 package com.upreal.login;
 
 import android.content.Intent;
+import android.content.IntentSender;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.upreal.R;
+import com.upreal.home.HomeActivity;
 import com.upreal.utils.GoogleConnection;
+import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.State;
+import com.upreal.utils.User;
+import com.upreal.utils.WearManager;
+import com.upreal.utils.database.DatabaseHelper;
+import com.upreal.utils.database.DatabaseQuery;
 import com.upreal.view.SlidingTabLayout;
 
 import java.io.InputStream;
@@ -31,8 +43,20 @@ import java.util.Observer;
 /**
  * Created by Elyo on 01/03/2015.
  */
-public class LoginActivity extends ActionBarActivity implements View.OnClickListener, ResultCallback<People.LoadPeopleResult>, Observer {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, ResultCallback<People.LoadPeopleResult>, Observer, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private static final int RC_SIGN_IN = 0;
+    /* Is there a ConnectionResult resolution in progress? */
+    private boolean mIsResolving = false;
 
+    /* Should we automatically resolve ConnectionResults when possible? */
+    private boolean mShouldResolve = false;
+
+    private GoogleApiClient mGoogleApiClient;
+
+    private SessionManagerUser sessionManagerUser;
+    private SQLiteDatabase mDatabase;
+    private DatabaseHelper mDbHelper;
+    private DatabaseQuery mDbQuery;
     private static final String TAG = "LoginActivity";
 
     private CharSequence Tab[];
@@ -52,6 +76,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sessionManagerUser = new SessionManagerUser(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(R.string.connexion);
         setSupportActionBar(toolbar);
@@ -80,15 +105,15 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
         tConnect = (Button) findViewById(R.id.button_twitter);
         tConnect.setOnClickListener(this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(new Scope(Scopes.PROFILE))
+                .build();
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (GoogleConnection.REQUEST_CODE == requestCode) {
-            googleConnection.onActivityResult(resultCode);
-        }
-    }
 
     private void getProfileInformation() {
         GoogleApiClient mGoogleApiClient = googleConnection.getGoogleApiClient();
@@ -196,15 +221,116 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_google:
+                if (mGoogleApiClient.isConnected()) {
+                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mGoogleApiClient.disconnect();
+                }
                 googleConnection.connect();
+                Toast.makeText(v.getContext(), "Google +", Toast.LENGTH_SHORT).show();
+                onSignInClicked();
                 break;
             case R.id.button_twitter:
-                if (googleConnection.getGoogleApiClient().isConnected())
-                    Plus.AccountApi.clearDefaultAccount(googleConnection.getGoogleApiClient());
-                googleConnection.disconnect();
-                googleConnection.revokeAccessAndDisconnect();
+//                if (googleConnection.getGoogleApiClient().isConnected())
+//                    Plus.AccountApi.clearDefaultAccount(googleConnection.getGoogleApiClient());
+//                googleConnection.disconnect();
+//                googleConnection.revokeAccessAndDisconnect();
+
+
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
+
+        if (requestCode == RC_SIGN_IN) {
+            // If the error resolution was not successful we should not resolve further.
+            if (resultCode != RESULT_OK) {
+                mShouldResolve = false;
+            }
+
+            mIsResolving = false;
+            mGoogleApiClient.connect();
+        }
+    }
+
+    private void onSignInClicked() {
+        // User clicked the sign-in button, so begin the sign-in process and automatically
+        // attempt to resolve any errors that occur.
+        mShouldResolve = true;
+        mGoogleApiClient.connect();
+
+        // Show a message to the user that we are signing in.
+        Toast.makeText(getApplicationContext(), "We are signing in", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d(TAG, "onConnected:" + bundle);
+        User user = new User();
+        mShouldResolve = false;
+        if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+            Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            user.setUsername(currentPerson.getDisplayName());
+            user.setPicture(currentPerson.getImage().getUrl());
+            user.setFirstname(currentPerson.getName().getGivenName());
+            user.setLastname(currentPerson.getName().getFamilyName());
+            user.setPassword("google+");
+            String personGooglePlusProfile = currentPerson.getUrl();
+            sessionManagerUser.setUser(user);
+            //Toast.makeText(getApplicationContext(), "Username "+ user.getUsername() + "| Firstname " + user.getFirstname() + "| Picture " + user.getPicture(), Toast.LENGTH_SHORT).show();
+            /////////
+            WearManager.notifyWear(getApplicationContext(), "Connected successfully !");
+
+            mDbHelper = new DatabaseHelper(getApplicationContext());
+            mDbQuery = new DatabaseQuery(mDbHelper);
+            mDatabase = mDbHelper.openDataBase();
+            sessionManagerUser.setRegisterLoginUser(user.getUsername(), "google+");
+            mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "3"});
+            mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "2"});
+            mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "10"});
+            mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_commentary), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "11"});
+            mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "6"});
+            mDatabase.close();
+            HomeActivity homeActivity = new HomeActivity();
+            Intent close = new Intent(getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
+            Intent intent = new Intent(LoginActivity.this, homeActivity.getClass());
+            LoginActivity.this.sendBroadcast(close);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (!mIsResolving && mShouldResolve) {
+            if (connectionResult.hasResolution()) {
+                try {
+                    connectionResult.startResolutionForResult(this, RC_SIGN_IN);
+                    mIsResolving = true;
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(TAG, "Could not resolve ConnectionResult.", e);
+                    mIsResolving = false;
+                    mGoogleApiClient.connect();
+                }
+            } else {
+                // Could not resolve the connection result, show the user an
+                // error dialog.
+                Log.v("Cresult", connectionResult.toString());
+            }
+        } else {
+            // Show the signed-out UI
+            Log.v("Cresult", "Signed out");
+        }
+
+
+
     }
 
     /**

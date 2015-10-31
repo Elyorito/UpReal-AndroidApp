@@ -78,7 +78,7 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         this.mSOCIALOPT = SOCIALOPT;
         this.mProduct = product;
         this.sessionManagerUser = sessionManagerUser;
-        new isProductLiked().execute();
+        //new isProductLiked().execute();
     }
 
     @Override
