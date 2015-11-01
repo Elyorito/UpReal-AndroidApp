@@ -10,7 +10,7 @@
         android:id="@+id/rowIconHome"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/connection_img"
         android:paddingLeft="16dp"
         android:layout_weight="1"/>
 

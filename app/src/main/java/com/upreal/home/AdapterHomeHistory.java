@@ -55,7 +55,7 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
 
     @Override
     public void onBindViewHolder(AdapterHomeHistory.ViewHolder viewHolder, final int i) {
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/1_" + this.hList.get(i).getIdUser() + ".jpg").placeholder(R.drawable.logo_small).into(viewHolder.image);
+        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/1_" + this.hList.get(i).getIdUser() + ".jpg").placeholder(R.drawable.connection_img).into(viewHolder.image);
         if (this.hList.get(i).getDate() != null)
             viewHolder.type.setText(this.hList.get(i).getDate().toString());
 

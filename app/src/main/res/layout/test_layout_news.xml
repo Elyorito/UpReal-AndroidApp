@@ -34,7 +34,7 @@
 
             <ImageView
                 android:id="@+id/imagenews"
-                android:src="@drawable/logo"
+                android:src="@drawable/connection_img"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:scaleType="centerCrop"

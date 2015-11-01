@@ -5,19 +5,10 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:id="@+id/imageview_logo"
-        android:src="@drawable/logo"/>
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar_loading"
-        android:layout_below="@+id/imageview_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="63dp"
-        android:indeterminate="true" />
+        android:src="@drawable/splat"
+        android:scaleType="fitXY"/>
 
 </RelativeLayout>
