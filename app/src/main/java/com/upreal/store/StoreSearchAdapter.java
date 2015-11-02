@@ -73,7 +73,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.but_cardview_go_product:
-                        Toast.makeText(v.getContext(), "Fiche User :[" + list.get(position).getName() + "| " + Integer.toString(list.get(position).getId_address()) + "]", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Fiche Store :[" + list.get(position).getName() + "| " + Integer.toString(list.get(position).getId_address()) + "]", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(v.getContext(), StoreActivity.class);
                         intent.putExtra("store", list.get(position));
                         v.getContext().startActivity(intent);

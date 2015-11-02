@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.upreal.store.StoreFragmentSearch;
 import com.upreal.user.UserFragmentSearch;
 
 /**
@@ -18,7 +19,7 @@ public class ProductViewPagerSearchAdapter extends FragmentStatePagerAdapter {
     private Bundle b;
     private ProductFragmentSearch fSearchProduct;
     private UserFragmentSearch fSearchUser;
-//    private StoreFragmentSearch fSearchStore;
+    private StoreFragmentSearch fSearchStore;
 
     public ProductViewPagerSearchAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, String searchname) {
         super(fm);
@@ -29,10 +30,10 @@ public class ProductViewPagerSearchAdapter extends FragmentStatePagerAdapter {
         b.putString("searchname", this.mSearchName);
         fSearchProduct = new ProductFragmentSearch();
         fSearchUser = new UserFragmentSearch();
-//        fSearchStore = new StoreFragmentSearch();
+        fSearchStore = new StoreFragmentSearch();
         fSearchProduct.setArguments(b);
         fSearchUser.setArguments(b);
-//        fSearchStore.setArguments(b);
+        fSearchStore.setArguments(b);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ProductViewPagerSearchAdapter extends FragmentStatePagerAdapter {
                 ProductFragmentTab2 tab3 = new ProductFragmentTab2();
                 return tab3;
             case 3:
-                return null;//fSearchStore;
+                return fSearchStore;
             default:
                 return null;
         }

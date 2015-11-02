@@ -38,12 +38,13 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageStore = (ImageView) findViewById(R.id.imageproduct);
-        store = getIntent().getExtras().getParcelable("liststore");
+        store = getIntent().getExtras().getParcelable("store");
 
         collapsingToolbarLayout.setTitle(store.getName());
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Store/" + store.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Store/" + store.getPicture()).transform(new CircleTransform()).into(imageStore);
-        CharSequence tab[] = {"Info.", "Prix", "Avis"};
+        CharSequence tab[] = {"Info", "Produits", "Avis"};
+
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         adapter = new StoreViewPagerAdapter(getSupportFragmentManager(), tab, 3, store, this);
         mViewPager.setAdapter(adapter);

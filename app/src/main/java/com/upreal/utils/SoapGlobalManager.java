@@ -168,14 +168,8 @@ public class SoapGlobalManager extends SoapManager {
         String methodname = "getRate";
         Rate rate = new Rate();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
-        if (id_target_type == 1) {
-            request.addProperty("id_target", id_target);
-            request.addProperty("id_target_type", id_target_type);
-        }
-        if (id_target_type == 2){
-            request.addProperty("id_target", id_target);
-            request.addProperty("id_target_type", id_target_type);
-        }
+        request.addProperty("id_target", id_target);
+        request.addProperty("id_target_type", id_target_type);
 
         try {
             Object response = callService(methodname, request);

@@ -245,4 +245,31 @@ public class SoapProductUtilManager extends SoapManager {
         }
         return listPrices;
     }
+
+    public List<StoreSell> getProductByStore(int idStore) {
+    List<StoreSell> listStoreSells = new ArrayList<>();
+        String methodname = "getProductByStore";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", idStore);
+
+        try {
+            Object response = callService(methodname, request);
+
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listStoreSells.add(ConverterManager.convertToStoreSell(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listStoreSells.add(ConverterManager.convertToStoreSell(result));
+            }
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return listStoreSells;
+    }
 }

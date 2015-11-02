@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.upreal.product.ProductFragmentTab2;
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.Store;
 
 /**
@@ -28,18 +29,23 @@ public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
         this.activity = mActivity;
 
         bundle = new Bundle();
+        bundle.putInt("idStore", store.getId());
         bundle.putParcelable("store", store);
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
+            case 0:
+                return new ProductFragmentTab2();
             case 1:
-                return new ProductFragmentTab2();
+                StoreFragmentProduct sfp = new StoreFragmentProduct();
+                sfp.setArguments(bundle);
+                return sfp;
             case 2:
-                return new ProductFragmentTab2();
-            case 3:
-                return new ProductFragmentTab2();
+                FragmentCommentary fc = new FragmentCommentary();
+                fc.setArguments(bundle);
+                return fc;
             default:
                 return null;
         }
