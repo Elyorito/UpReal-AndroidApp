@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.upreal.store.StoreActivity;
 import com.upreal.R;
+import com.upreal.store.StoreActivity;
 import com.upreal.utils.Address;
 import com.upreal.utils.SoapStoreManager;
 import com.upreal.utils.Store;

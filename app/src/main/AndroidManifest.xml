@@ -84,6 +84,15 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <!-- Store -->
+
+        <activity
+            android:name="com.upreal.store.StoreActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
         <!--News-->
 
         <activity
@@ -160,11 +169,6 @@
 
         <activity
             android:name="com.upreal.geolocalisation.GeolocalisationActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="com.upreal.store.StoreActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
