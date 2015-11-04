@@ -50,7 +50,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         CharSequence tab[] = {"Info", "Produits", "Avis"};
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new StoreViewPagerAdapter(getSupportFragmentManager(), tab, 3, store, this);
+        adapter = new StoreViewPagerAdapter(getSupportFragmentManager(), tab, 3, store);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
     }

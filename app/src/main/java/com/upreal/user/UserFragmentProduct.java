@@ -1,4 +1,4 @@
-package com.upreal.store;
+package com.upreal.user;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,23 +14,22 @@ import com.upreal.R;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
-import com.upreal.utils.StoreSell;
+import com.upreal.utils.UserSell;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kyosukke on 01/11/2015.
+ * Created by Kyosukke on 04/11/2015.
  */
-public class StoreFragmentProduct extends Fragment {
-
+public class UserFragmentProduct extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Product> listProduct;
-    private List<StoreSell> listStoreSell;
+    private List<UserSell> listUserSell;
 
-    private int idStore = 0;
+    private int idUser = 0;
 
     @Nullable
     @Override
@@ -39,7 +38,7 @@ public class StoreFragmentProduct extends Fragment {
         View v = inflater.inflate(R.layout.fragment_product_commentary, container, false);
         Bundle b = getArguments();
 
-        idStore = b.getInt("idStore");
+        idUser = b.getInt("idUser");
 
         listProduct = new ArrayList<>();
 
@@ -48,33 +47,33 @@ public class StoreFragmentProduct extends Fragment {
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        new RetrieveStoreSell().execute();
+        new RetrieveUserSell().execute();
 
         return v;
     }
 
-    private class RetrieveStoreSell extends AsyncTask<Void, Void, Integer> {
+    private class RetrieveUserSell extends AsyncTask<Void, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Void... params) {
             SoapProductUtilManager pum = new SoapProductUtilManager();
 
-            listStoreSell = pum.getProductByStore(idStore);
+            listUserSell = pum.getProductByUser(idUser);
 
             SoapProductManager pm = new SoapProductManager();
 
-            for (StoreSell s : listStoreSell) {
+            for (UserSell s : listUserSell) {
                 listProduct.add(pm.getProductInfo(s.getIdProduct()));
             }
 
-            return listStoreSell.size();
+            return listUserSell.size();
         }
 
         @Override
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
-            if (listStoreSell != null && listProduct != null || i > 0) {
-                mAdapter = new AdapterStoreProduct(getActivity().getApplicationContext(), listStoreSell, listProduct);
+            if (listUserSell != null && listProduct != null || i > 0) {
+                mAdapter = new AdapterUserProduct(getActivity().getApplicationContext(), listUserSell, listProduct);
                 recyclerView.setAdapter(mAdapter);
             }
         }

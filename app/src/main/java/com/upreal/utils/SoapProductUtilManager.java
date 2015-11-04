@@ -272,4 +272,31 @@ public class SoapProductUtilManager extends SoapManager {
 
         return listStoreSells;
     }
+
+    public List<UserSell> getProductByUser(int idUser) {
+        List<UserSell> listUserSells = new ArrayList<>();
+        String methodname = "getProductByUser";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", idUser);
+
+        try {
+            Object response = callService(methodname, request);
+
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    listUserSells.add(ConverterManager.convertToUserSell(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                listUserSells.add(ConverterManager.convertToUserSell(result));
+            }
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return listUserSells;
+    }
 }

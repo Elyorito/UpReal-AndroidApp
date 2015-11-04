@@ -1,6 +1,5 @@
 package com.upreal.store;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,14 +18,12 @@ public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
     int nbTab;
     Store store;
     Bundle bundle;
-    private Activity activity;
 
-    public StoreViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Store mStore, Activity mActivity) {
+    public StoreViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Store mStore) {
         super(fm);
         this.title = mTitle;
         this.nbTab = mNbTab;
         this.store = mStore;
-        this.activity = mActivity;
 
         bundle = new Bundle();
         bundle.putInt("idStore", store.getId());

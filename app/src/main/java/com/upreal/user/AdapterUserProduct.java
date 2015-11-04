@@ -1,4 +1,4 @@
-package com.upreal.store;
+package com.upreal.user;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,17 +14,16 @@ import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.Product;
-import com.upreal.utils.StoreSell;
+import com.upreal.utils.UserSell;
 
 import java.util.List;
 
 /**
- * Created by Kyosukke on 01/11/2015.
+ * Created by Kyosukke on 04/11/2015.
  */
-public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHolder> {
-
+public class AdapterUserProduct extends RecyclerView.Adapter<AdapterUserProduct.ViewHolder> {
     Context context;
-    List<StoreSell> listStoreSell;
+    List<UserSell> listUserSell;
     List<Product> listProduct;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,8 +45,8 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
         }
     }
 
-    public AdapterProduct(Context context, List<StoreSell> listStoreSell, List<Product> listProduct) {
-        this.listStoreSell = listStoreSell;
+    public AdapterUserProduct(Context context, List<UserSell> listUserSell, List<Product> listProduct) {
+        this.listUserSell = listUserSell;
         this.listProduct = listProduct;
     }
 
@@ -71,7 +70,7 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
         Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + listProduct.get(position).getPicture()).transform(new CircleTransform()).into(holder.productImg);
         holder.productName.setText(this.listProduct.get(position).getName());
         holder.productRate.setRating(2f);
-        holder.productPrice.setText(this.listStoreSell.get(position).getPrice() + " €");
+        holder.productPrice.setText(this.listUserSell.get(position).getPrice() + " €");
         holder.productPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -87,6 +86,6 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
 
     @Override
     public int getItemCount() {
-        return listStoreSell.size();
+        return listUserSell.size();
     }
 }
