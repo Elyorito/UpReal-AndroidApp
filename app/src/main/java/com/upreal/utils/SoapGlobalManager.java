@@ -170,6 +170,7 @@ public class SoapGlobalManager extends SoapManager {
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_target", id_target);
         request.addProperty("id_target_type", id_target_type);
+
         try {
             Object response = callService(methodname, request);
             if (response instanceof Vector) {

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
@@ -65,7 +66,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
         login = (EditText) v.findViewById(R.id.edittext_login_mail);
         password = (EditText) v.findViewById(R.id.edittext_login_password);
         connect = (Button) v.findViewById(R.id.button_login_connect);
-
         login.addTextChangedListener(new myTextWatcher(login));
 
         builder = new AlertDialog.Builder(v.getContext());
@@ -78,8 +78,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                     }
                 });
         connect.setOnClickListener(this);
-
-
         // Google+
         mContext = getActivity().getApplicationContext();
 
@@ -226,6 +224,7 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
         protected void onPostExecute(User user) {
             super.onPostExecute(user);
             sessionManagerUser.setUser(user);
+            getActivity().finish();
         }
     }
 
@@ -265,7 +264,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 mDbQuery = new DatabaseQuery(mDbHelper);
                 mDatabase = mDbHelper.openDataBase();
                 sessionManagerUser.setRegisterLoginUser(login.getText().toString(), password.getText().toString());
-                new RetrieveUser().execute();
                 mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "3"});
                 mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "2"});
                 mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "10"});
@@ -277,8 +275,9 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
                 Intent intent = new Intent(getActivity().getApplicationContext(), homeActivity.getClass());
                 getActivity().sendBroadcast(close);
+                new RetrieveUser().execute();
                 startActivity(intent);
-                getActivity().finish();
+                //getActivity().finish();
                 //Toast.makeText(getActivity().getApplicationContext(), "Response:" + s, Toast.LENGTH_SHORT).show();
             }
         }

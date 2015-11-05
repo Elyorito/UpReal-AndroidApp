@@ -14,7 +14,7 @@
         android:id="@+id/rowIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/connection_img"
         android:paddingLeft="16dp"/>
 
     <TextView

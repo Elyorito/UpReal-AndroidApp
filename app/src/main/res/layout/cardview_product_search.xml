@@ -17,13 +17,19 @@
             android:orientation="vertical"
             android:weightSum="3">
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0"
+                android:text="Title Product"/>
+
             <ImageView
                 android:id="@+id/image_cardview_product"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:src="@drawable/logo"
+                android:src="@drawable/connection_img"
                 android:scaleType="fitXY"
-                android:layout_weight="2"/>
+                android:layout_weight="3"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -48,9 +54,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/ic_action_share"
                     android:layout_weight=".8"/>
-
             </LinearLayout>
-
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

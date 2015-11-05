@@ -2,6 +2,7 @@ package com.upreal.home;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleImageView;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.User;
+
+import java.util.Objects;
 
 /**
  * Created by Elyo on 06/02/2015.
@@ -98,13 +101,19 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                 Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).into(imageBackground);
                 holder.layoutBackground.addView(imageBackground);
                 */
-                Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
-                holder.connexion_name.setText(this.mNavAccount);
+                if (user.getPicture() != null && user.getPicture().length() > 15) {
+                    Picasso.with(this.context).load(user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
+                    holder.connexion_name.setText(this.mNavAccount);
+                    Picasso.with(this.context).load(this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                } else {
+                    Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
+                    holder.connexion_name.setText(this.mNavAccount);
+                    Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                }
                 /*Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);
                 holder.mImageViewProfile.setImageBitmap(output);
                 */
-                Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
             }
         }
     }

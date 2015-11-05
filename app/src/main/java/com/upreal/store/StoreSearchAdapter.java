@@ -66,14 +66,14 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     @Override
     public void onBindViewHolder(StoreSearchAdapter.ViewHolder holder, final int position) {
 
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Store/" + list.get(position).getPicture()).placeholder(R.drawable.logo_small).resize(400, 600).into(holder.imageStore);
+        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Store/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageStore);
         holder.userUsername.setText(list.get(position).getName());
         holder.userUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.but_cardview_go_product:
-                        Toast.makeText(v.getContext(), "Fiche User :[" + list.get(position).getName() + "| " + Integer.toString(list.get(position).getId_address()) + "]", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Fiche Store :[" + list.get(position).getName() + "| " + Integer.toString(list.get(position).getId_address()) + "]", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(v.getContext(), StoreActivity.class);
                         intent.putExtra("store", list.get(position));
                         v.getContext().startActivity(intent);

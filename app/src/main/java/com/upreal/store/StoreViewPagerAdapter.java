@@ -5,51 +5,49 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.upreal.product.ProductFragmentTab2;
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.Store;
 
 /**
- * Created by Kyosukke on 20/06/2015.
+ * Created by Kyosukke on 01/11/2015.
  */
 public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
 
     CharSequence title[];
     int nbTab;
-    Store mStore;
+    Store store;
     Bundle bundle;
 
-    public StoreViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Store store) {
+    public StoreViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Store mStore) {
         super(fm);
         this.title = mTitle;
         this.nbTab = mNbTab;
-        this.mStore = store;
+        this.store = mStore;
+
         bundle = new Bundle();
+        bundle.putInt("idStore", store.getId());
         bundle.putParcelable("store", store);
     }
 
     @Override
     public Fragment getItem(int position) {
-
         switch (position) {
-            case 0: //Commentary
-                StoreFragmentCommentary com = new StoreFragmentCommentary();
-                com.setArguments(bundle);
-                return com;
-/*
-            case 1: //Social
-                StoreFragmentSocial social = new StoreFragmentSocial();
-                social.setArguments(bundle);
-                return social;
-            case 2: //Options
-                StoreFragmentOptions opt = new StoreFragmentOptions();
-                opt.setArguments(bundle);
-                return opt;
-*/
+            case 0:
+                return new ProductFragmentTab2();
+            case 1:
+                StoreFragmentProduct sfp = new StoreFragmentProduct();
+                sfp.setArguments(bundle);
+                return sfp;
+            case 2:
+                FragmentCommentary fc = new FragmentCommentary();
+                fc.setArguments(bundle);
+                return fc;
             default:
                 return null;
         }
     }
 
-    @Override
     public CharSequence getPageTitle(int position) {
         return title[position];
     }

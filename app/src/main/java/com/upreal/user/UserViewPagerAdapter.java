@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.User;
 
@@ -14,24 +15,26 @@ import com.upreal.utils.User;
  */
 public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    CharSequence Title[];
+    CharSequence title[];
     int nbTab;
-    User mUser;
+    User user;
     Bundle bundle;
     private SessionManagerUser sessionManagerUser;
     private static boolean toggleAccount = false;
 
 
-    public UserViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, User user, Context context) {
+    public UserViewPagerAdapter(FragmentManager fm, CharSequence mtitle[], int mNbTab, User mUser, Context mContext) {
         super(fm);
-        this.Title = mTitle;
+        this.title = mtitle;
         this.nbTab = mNbTab;
-        this.mUser = user;
-        bundle = new Bundle();
-        bundle.putParcelable("user", user);
-        sessionManagerUser = new SessionManagerUser(context);
-        toggleAccount = sessionManagerUser.isLogged();
+        this.user = mUser;
 
+        bundle = new Bundle();
+        bundle.putInt("idUser", user.getId());
+        bundle.putParcelable("user", user);
+
+        sessionManagerUser = new SessionManagerUser(mContext);
+        toggleAccount = sessionManagerUser.isLogged();
     }
 
     @Override
@@ -42,17 +45,13 @@ public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
                 com.setArguments(bundle);
                 return com;
             case 1:
-                if (toggleAccount && sessionManagerUser.getUserId() == mUser.getId()) {
-                    //Options
-                    UserFragmentOptions opt = new UserFragmentOptions();
-                    opt.setArguments(bundle);
-                    return opt;
-                } else {
-                    //Social
-                    UserFragmentSocial social = new UserFragmentSocial();
-                    social.setArguments(bundle);
-                    return social;
-                }
+                UserFragmentProduct ufp = new UserFragmentProduct();
+                ufp.setArguments(bundle);
+                return ufp;
+            case 2:
+                FragmentCommentary fc = new FragmentCommentary();
+                fc.setArguments(bundle);
+                return fc;
             default:
                 return null;
         }
@@ -60,7 +59,7 @@ public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Title[position];
+        return title[position];
     }
 
     @Override

@@ -10,11 +10,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
     <include
         android:id="@+id/app_bar"
         layout="@layout/home_app_bar"/>
@@ -26,51 +21,49 @@
         android:layout_width="match_parent"
         android:elevation="2dp"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/login_viewpager"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
-    </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:weightSum="2">
+            <android.support.v4.view.ViewPager
+                android:id="@+id/login_viewpager"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="0.3"/>
+            <LinearLayout
+                android:id="@+id/social_network"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1.7"
+                android:weightSum="3">
 
-        <TextView
-            android:id="@+id/textview_rs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ou Via Reseau Social"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"/>
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/button_google"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_red_light"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"/>
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/button_google"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textview_rs"
-            android:background="@android:color/holo_red_light"
-            android:layout_margin="10dp"/>
-
-        <Button
-            android:id="@+id/button_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button_google"
-            android:text="@string/facebook"
-            android:background="@android:color/holo_blue_dark"
-            android:layout_margin="10dp"/>
-
-        <Button
-            android:id="@+id/button_twitter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button_facebook"
-            android:text="@string/twitter"
-            android:background="@android:color/holo_blue_bright"
-            android:layout_margin="10dp"/>
-
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/button_facebook"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/facebook"
+                    android:background="@android:color/holo_blue_dark"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/button_twitter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/twitter"
+                    android:background="@android:color/holo_blue_bright"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -11,7 +11,7 @@
         <!--Without Account-->
                <!--Header-->
     <string name="connexion">Connexion Via</string>
-    <string name="connect_account_email">Connexion</string>
+    <string name="connect_account_email">Connectez-vous ici</string>
     <string name="social_network">Réseaux Sociaux</string>
                 <!--Header-->
     <string name="scan">Scan</string>

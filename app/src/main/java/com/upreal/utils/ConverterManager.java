@@ -2,8 +2,6 @@ package com.upreal.utils;
 
 import org.ksoap2.serialization.SoapObject;
 
-import java.util.Date;
-
 /**
  * Created by Kyosukke on 27/07/2015.
  */
@@ -194,5 +192,33 @@ public class ConverterManager {
             spec.setValue(soapObject.getProperty("value").toString());
 
         return spec;
+    }
+
+    public static StoreSell convertToStoreSell(SoapObject soapObject) {
+        StoreSell obj = new StoreSell();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            obj.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("price") && soapObject.getProperty("price") != null)
+            obj.setPrice(Double.parseDouble(soapObject.getProperty("price").toString()));
+        if (soapObject.hasProperty("id_product") && soapObject.getProperty("id_product") != null)
+            obj.setIdProduct(Integer.parseInt(soapObject.getProperty("id_product").toString()));
+        if (soapObject.hasProperty("id_store") && soapObject.getProperty("id_store") != null)
+            obj.setIdStore(Integer.parseInt(soapObject.getProperty("id_store").toString()));
+
+        return obj;
+    }
+
+    public static UserSell convertToUserSell(SoapObject soapObject) {
+        UserSell obj = new UserSell();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            obj.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("price") && soapObject.getProperty("price") != null)
+            obj.setPrice(Double.parseDouble(soapObject.getProperty("price").toString()));
+        if (soapObject.hasProperty("id_product") && soapObject.getProperty("id_product") != null)
+            obj.setIdProduct(Integer.parseInt(soapObject.getProperty("id_product").toString()));
+        if (soapObject.hasProperty("id_user") && soapObject.getProperty("id_user") != null)
+            obj.setIdUser(Integer.parseInt(soapObject.getProperty("id_user").toString()));
+
+        return obj;
     }
 }
