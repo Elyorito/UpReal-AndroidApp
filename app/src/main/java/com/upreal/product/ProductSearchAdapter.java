@@ -75,22 +75,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         //Log.v("Picture", list.get(position).getPicture());
         Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageProduct);
                 holder.descProduct.setText(list.get(position).getName());
-        holder.mCardview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.but_cardview_go_product:
-                        Toast.makeText(v.getContext(), "Fiche Product :[" + list.get(position).getName() + "]", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(v.getContext(), ProductActivity.class);
-                        intent.putExtra("listprod", list.get(position));
-                        v.getContext().startActivity(intent);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-//        holder.descProduct.setOnClickListener(new View.OnClickListener() {
+//        holder.mCardview.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                switch (v.getId()) {
@@ -105,6 +90,21 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 //                }
 //            }
 //        });
+        holder.descProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.but_cardview_go_product:
+                        Toast.makeText(v.getContext(), "Fiche Product :[" + list.get(position).getName() + "]", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(v.getContext(), ProductActivity.class);
+                        intent.putExtra("listprod", list.get(position));
+                        v.getContext().startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         holder.shareProduct.setOnClickListener(new View.OnClickListener() {
             @Override
