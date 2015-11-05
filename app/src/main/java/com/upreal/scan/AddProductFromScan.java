@@ -279,7 +279,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         @Override
         protected Void doInBackground(Integer... params) {
             SoapProductUtilManager pm = new SoapProductUtilManager();
-            pm.createSpecification(params[0], "Description", mDesc);
+            pm.createSpecification(params[0], "Description", mDesc, 0);
             return null;
         }
     }

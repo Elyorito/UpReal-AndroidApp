@@ -58,6 +58,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 //        new RetrieveAddress().execute();
         bundle = new Bundle();
         bundle.putParcelable("product", product);
+        bundle.putInt("idProduct", product.getId());
         mActivity = activity;
         initLocalisation();
     }
@@ -87,7 +88,9 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 //                ProductFragmentCommentary com = new ProductFragmentCommentary();
 //                com.setArguments(bundle);
 //                return com;
-                return new ProductFragmentTab2();
+                ProductFragmentInfo pfi = new ProductFragmentInfo();
+                pfi.setArguments(bundle);
+                return pfi;
             case 1: //Prix
 /*                ProductFragmentPrice price = new ProductFragmentPrice();
                 price.setArguments(bundle);

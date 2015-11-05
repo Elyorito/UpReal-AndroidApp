@@ -47,6 +47,7 @@ public class AdapterStoreProduct extends RecyclerView.Adapter<AdapterStoreProduc
     }
 
     public AdapterStoreProduct(Context context, List<StoreSell> listStoreSell, List<Product> listProduct) {
+        this.context = context;
         this.listStoreSell = listStoreSell;
         this.listProduct = listProduct;
     }

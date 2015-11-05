@@ -180,18 +180,18 @@ public class ConverterManager {
         return address;
     }
 
-    public static Specification convertToSpecification(SoapObject soapObject) {
-        Specification spec = new Specification();
-        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
-            spec.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
-        if (soapObject.hasProperty("id_product") && soapObject.getProperty("id_product") != null)
-            spec.setIdProduct(Integer.parseInt(soapObject.getProperty("id_product").toString()));
-        if (soapObject.hasProperty("id_property") && soapObject.getProperty("id_property") != null)
-            spec.setIdProperty(Integer.parseInt(soapObject.getProperty("id_property").toString()));
+    public static Characteristic convertToCharacteristic(SoapObject soapObject) {
+        Characteristic c = new Characteristic();
+        if (soapObject.hasProperty("type") && soapObject.getProperty("type") != null)
+            c.setType(Integer.parseInt(soapObject.getProperty("type").toString()));
+        if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
+            c.setName(soapObject.getProperty("name").toString());
         if (soapObject.hasProperty("value") && soapObject.getProperty("value") != null)
-            spec.setValue(soapObject.getProperty("value").toString());
+            c.setValue(soapObject.getProperty("value").toString());
+        if (soapObject.hasProperty("healthy") && soapObject.getProperty("healthy") != null)
+            c.setHealthy(Integer.parseInt(soapObject.getProperty("healthy").toString()));
 
-        return spec;
+        return c;
     }
 
     public static StoreSell convertToStoreSell(SoapObject soapObject) {

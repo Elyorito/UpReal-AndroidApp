@@ -63,62 +63,51 @@ public class SoapProductUtilManager extends SoapManager {
         return responseComment;
     }*/
 
-    public void createSpecification(int idProduct, String fieldName, String fieldDesc) {
+    public void createSpecification(int idProduct, String name, String value, int type) {
         String methodname = "createSpecification";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
-        request.addProperty("field_name", fieldName);
-        request.addProperty("field_desc", fieldDesc);
+        request.addProperty("type", type);
+        request.addProperty("name", name);
+        request.addProperty("value", value);
 
         try {
-            SoapPrimitive res = (SoapPrimitive) callService(methodname, request);
+            callService(methodname, request);
         } catch (Exception q) {
             q.printStackTrace();
         }
     }
 
-    public Specification getDescription(int idProduct) {
-        Specification spec = null;
-        String methodname = "getDescription";
+    public List<Characteristic> getSpecificationByType(int idProduct, int type) {
+        List<Characteristic> list = new ArrayList<>();
+        String methodname = "getSpecificationByType";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
+        request.addProperty("type", type);
 
         try {
-            SoapObject results= (SoapObject) callService(methodname, request);
+            Object response = callService(methodname, request);
 
-            if (results == null)
-                return null;
-
-            spec = ConverterManager.convertToSpecification(results);
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    list.add(ConverterManager.convertToCharacteristic(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                list.add(ConverterManager.convertToCharacteristic(result));
+            }
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return spec;
+        return list;
     }
 
-    public Specification getSpecification(int idProduct, String fieldName) {
-        Specification spec = null;
+    public List<Characteristic> getSpecification(int idProduct) {
         String methodname = "getSpecification";
-        SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("id_product", idProduct);
-        request.addProperty("field_name", fieldName);
-
-        try {
-            SoapObject results= (SoapObject) callService(methodname, request);
-
-            if (results == null)
-                return null;
-
-            spec = ConverterManager.convertToSpecification(results);
-        } catch (Exception q) {
-            q.printStackTrace();
-        }
-        return spec;
-    }
-
-    public List<Specification> getAllSpecification(int idProduct) {
-        List<Specification> listSpec = null;
-        String methodname = "getAllSpecification";
+        List<Characteristic> list = new ArrayList<>();
         SoapObject request = new SoapObject(NAMESPACE, methodname);
         request.addProperty("id_product", idProduct);
 
@@ -130,16 +119,16 @@ public class SoapProductUtilManager extends SoapManager {
                 int length = results.size();
                 for (int i = 0; i < length; ++i) {
                     SoapObject res = results.get(i);
-                    listSpec.add(ConverterManager.convertToSpecification(res));
+                    list.add(ConverterManager.convertToCharacteristic(res));
                 }
             } else if (response instanceof SoapObject) {
                 SoapObject result = (SoapObject) response;
-                listSpec.add(ConverterManager.convertToSpecification(result));
+                list.add(ConverterManager.convertToCharacteristic(result));
             }
         } catch (Exception q) {
             q.printStackTrace();
         }
-        return listSpec;
+        return list;
     }
 
 

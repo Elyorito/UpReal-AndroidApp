@@ -24,8 +24,6 @@ import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
-import com.upreal.utils.SoapProductUtilManager;
-import com.upreal.utils.Specification;
 import com.upreal.view.SlidingTabLayout;
 
 
@@ -144,26 +142,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 break ;
         }
     }
-
-    class RetrieveDesc extends AsyncTask<Void, Void, Specification> {
-
-        @Override
-        protected Specification doInBackground(Void... params) {
-            SoapProductUtilManager pm = new SoapProductUtilManager();
-
-            Specification spec = pm.getDescription(prod.getId());
-            return spec;
-        }
-
-        @Override
-        protected void onPostExecute(Specification spec) {
-            super.onPostExecute(spec);
-            if (spec != null) {
-                prodShortDesc.setText(spec.getValue());
-            }
-        }
-    }
-
 
     class RetrievePicture extends AsyncTask<Void, Void, String> {
 

@@ -308,4 +308,8 @@
     <string name="modified_profile">a modifié son profil</string>
     <string name="added_product">a ajouté un produit</string>
 
+    <!-- Specification Type -->
+    <string name="nutritional">Valeur Nutritionnelle</string>
+    <string name="component">Composants</string>
+
 </resources>
