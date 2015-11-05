@@ -244,7 +244,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
             new CreateSpec().execute(i);
             if (bitmap != null) {
                 new SendImageTask(mImageFileLocation, image, "2_" + i).execute();
-                product.setPicture("2_" + i + ".jpg");
+//                product.setPicture("2_" + i + ".jpg");
             }
             builder.setTitle("Produit Ajouté")
                     .setMessage("Votre produit a été ajouté avec succès !" +

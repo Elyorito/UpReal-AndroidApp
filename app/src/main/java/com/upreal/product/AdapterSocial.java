@@ -204,7 +204,8 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                             } catch (android.content.ActivityNotFoundException ex) {
                                 Toast.makeText(v.getContext(), v.getContext().getString(R.string.need_mail_app)
                                         , Toast.LENGTH_SHORT).show();
-                            }                            break;
+                            }
+                            break;
                     }
             }
 

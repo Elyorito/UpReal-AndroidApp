@@ -87,10 +87,17 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         holder.shareUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                builder = new AlertDialog.Builder(v.getContext());
-                builder.setTitle("Partager [" + list.get(position).getName() + "] avec")
-                        .setView(R.layout.dialog_share)
-                        .create().show();
+                Intent i = new Intent(Intent.ACTION_SEND);
+
+                i.putExtra(Intent.EXTRA_TEXT, "Venez voir le magasin : " + list.get(position).getName() + " sur UpReal");
+                i.setType("text/plain");
+                try {
+                    v.getContext().startActivity(Intent.createChooser(i, "Partager ce produit avec ..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(v.getContext(), v.getContext().getString(R.string.need_mail_app)
+                            , Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
