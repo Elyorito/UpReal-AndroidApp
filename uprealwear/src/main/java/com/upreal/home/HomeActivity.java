@@ -3,6 +3,7 @@ package com.upreal.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,17 +13,22 @@ import com.upreal.R;
 import com.upreal.bridge.BridgeDeviceActivity;
 import com.upreal.global.NewsResultActivity;
 import com.upreal.search.SearchActivity;
+import com.upreal.search.SearchResultActivity;
 import com.upreal.user.ListActivity;
 import com.upreal.user.ProfileActivity;
 import com.upreal.user.SessionManagerUser;
+import com.upreal.utils.Item;
 
-public class HomeActivity extends Activity implements View.OnClickListener {
+import java.util.List;
+
+public class HomeActivity extends Activity implements View.OnClickListener, View.OnLongClickListener {
 
     private TextView username;
     private ImageButton news;
     private ImageButton list;
     private ImageButton search;
     private ImageButton disconnect;
+    private static final int SPEECH_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
         news.setOnClickListener(this);
         list.setOnClickListener(this);
         search.setOnClickListener(this);
+        search.setOnLongClickListener(this);
         disconnect.setOnClickListener(this);
 
         SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
@@ -88,5 +95,50 @@ public class HomeActivity extends Activity implements View.OnClickListener {
                 Log.e("HomeActivity", "DEFAULT");
                 break ;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.username:
+                break ;
+            case R.id.disconnect:
+                break ;
+            case R.id.news:
+                break ;
+            case R.id.list:
+                break ;
+            case R.id.search:
+                Log.e("HomeActivity", "Search long clicked.");
+                recordSpeech();
+                break ;
+            default:
+                Log.e("HomeActivity", "DEFAULT");
+                break ;
+        }
+        return true;
+    }
+
+    private void recordSpeech() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = results.get(0);
+
+            Log.e("SPOKE?", spokenText);
+
+            Intent intent = new Intent(getApplicationContext(), SearchResultActivity.class);
+            intent.putExtra("item", new Item(0, 0, spokenText, null));
+            getApplicationContext().startActivity(intent);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

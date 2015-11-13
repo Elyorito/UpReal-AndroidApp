@@ -14,13 +14,13 @@
 
         <ImageView
             android:layout_gravity="center_horizontal"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_width="wrap_content"
             android:src="@drawable/upreal_logo" />
 
         <ImageButton
             android:id="@+id/disconnect"
-            android:background="@drawable/user"
+            android:background="@drawable/disconnect"
             android:layout_gravity="top|right"
             android:layout_height="30dp"
             android:layout_width="30dp" />
