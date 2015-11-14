@@ -62,7 +62,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
 
-        boolean toggleAccount = sessionManagerUser.isLogged();
+        final boolean toggleAccount = sessionManagerUser.isLogged();
 
         if (getIntent().getExtras() == null)
             user = sessionManagerUser.getUser();
@@ -71,12 +71,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         new NavigationBar(this);
 
-        CharSequence tab[] = null;
-
-        if (toggleAccount && sessionManagerUser.getUserId() == user.getId())
-            tab = new CharSequence[]{"Info", "Produits", "Avis"};
-        else
-            tab = new CharSequence[]{"Info", "Produits", "Avis"};
+        CharSequence tab[] = new CharSequence[]{"Info", "Produits", "Avis"};
 
         collapsingToolbarLayout.setTitle(user.getUsername());
         Log.e("TEST", "\"http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg");
@@ -93,28 +88,37 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         menu.setOnClickListener(this);
         context = getApplicationContext();
         activity = this;
-
-        final String[] option = new String[] { "Partager", "Rafraichir" };
+        String[] option = null;
+        if (toggleAccount && sessionManagerUser.getUserId() == user.getId())
+            option = new String[] { "Editer son profil", "Partager", "Rafraichir" };
+        else
+            option = new String[] { "Suivre", "Partager", "Rafraichir" };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quel action voulez-vous faire ?");
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent;
                         switch (which) {
-                            case 0: // Share
-                                Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(Intent.ACTION_SEND);
+                            case 0: // Edit - Follow
+                                if (toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
+                                    intent = new Intent(context, UserUpdateActivity.class);
+                                    context.startActivity(intent);
+                                }
+                                break;
+                            case 1: // Share
+                                intent = new Intent(Intent.ACTION_SEND);
 
-                                i.putExtra(Intent.EXTRA_TEXT, "Venez voir l'utilisateur : " + user.getUsername() + " sur UpReal");
-                                i.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_TEXT, "Venez voir l'utilisateur : " + user.getUsername() + " sur UpReal");
+                                intent.setType("text/plain");
                                 try {
-                                    startActivity(Intent.createChooser(i, "Partager ce produit avec ..."));
+                                    startActivity(Intent.createChooser(intent, "Partager ce produit avec ..."));
                                 } catch (android.content.ActivityNotFoundException ex) {
                                     Toast.makeText(context, context.getString(R.string.need_mail_app)
                                             , Toast.LENGTH_SHORT).show();
                                 }
                                 break;
-                            case 1: // Refresh
+                            case 2: // Refresh
                                 new Refresh(activity, 1, user.getId()).execute();
                                 break;
                             default:
