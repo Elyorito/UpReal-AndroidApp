@@ -44,9 +44,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageUser = (ImageView) findViewById(R.id.imageproduct);
-        user = getIntent().getExtras().getParcelable("user");
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
+        user = getIntent().getExtras().getParcelable("user");
 
         boolean toggleAccount = sessionManagerUser.isLogged();
 

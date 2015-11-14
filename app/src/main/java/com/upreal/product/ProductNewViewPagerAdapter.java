@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.upreal.geolocalisation.WebLocationManager;
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductUtilManager;
 import com.upreal.utils.SoapStoreManager;
@@ -59,6 +60,8 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         bundle = new Bundle();
         bundle.putParcelable("product", product);
         bundle.putInt("idProduct", product.getId());
+        bundle.putInt("id", product.getId());
+        bundle.putInt("type", 2);
         mActivity = activity;
         initLocalisation();
     }
@@ -100,13 +103,9 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 //                return social;
                 return new ProductFragmentTab2();
             case 2: //Avis
-//                ProductFragmentOptions opt = new ProductFragmentOptions();
-//                opt.setArguments(bundle);
-//                return opt;
-//                ProductFragmentCommentary com = new ProductFragmentCommentary();
-//                com.setArguments(bundle);
-//                return com;
-                return new ProductFragmentTab2();
+                FragmentCommentary com = new FragmentCommentary();
+                com.setArguments(bundle);
+                return com;
             default:
                 return null;
         }
@@ -130,7 +129,9 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 
         if (mLocation == null) {
             Log.i(TAG, "Trying to locate user.");
+/*
             LocationServices.FusedLocationApi.requestLocationUpdates(gClient, mLocRequest, this);
+*/
         }
     }
 

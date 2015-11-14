@@ -37,6 +37,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         Button shareUser;
         ImageView imageStore;
 
+
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
 

@@ -1,26 +1,20 @@
 package com.upreal.product;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.login.LoginActivity;
 import com.upreal.utils.Product;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;
@@ -38,7 +32,6 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
 
     private static final int TARGET_PRODUCT = 2;
 
-    private AlertDialog.Builder builder;
 
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
@@ -101,11 +94,9 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
         viewHolder.mCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                builder = new AlertDialog.Builder(v.getContext());
-                LayoutInflater inflater;
-                final View layout;
                     switch (i) {
                         case 0: //Like
+/*
                             Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
                             if (!sessionManagerUser.isLogged()) {
                                 builder.setTitle("Like this product?").setMessage("Sign in to make your opinion count")
@@ -127,68 +118,16 @@ public class AdapterSocial extends RecyclerView.Adapter<AdapterSocial.ViewHolder
                                 mDbHelper = new DatabaseHelper(v.getContext());
                                 mDbQuery = new DatabaseQuery(mDbHelper);
                                 new SendLike(0).execute();
-                                /*if (isLiked == true)
+                                */
+/*if (isLiked == true)
                                     new SendLike(0).execute();
-                                else
-                                    new SendLike(1).execute();*/
+x                                else
+                                    new SendLike(1).execute();*//*
+
                             }
+*/
                             break;
                         case 1: //Commenter
-                            Toast.makeText(v.getContext(), "Comment", Toast.LENGTH_SHORT).show();
-                            if (!sessionManagerUser.isLogged()) {
-                                builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
-                                        .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                                                v.getContext().startActivity(intent);
-                                                dialog.dismiss();
-                                            }
-                                        }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                }).create().show();
-                            } else {
-                                builder.setTitle(mProduct.getName());
-                                inflater = LayoutInflater.from(v.getContext());
-                                layout = inflater.inflate(R.layout.dialog_comment, null);
-                                builder.setView(layout);
-                                final EditText comment = (EditText) layout.findViewById(R.id.comment);
-                                final TextView limit = (TextView) layout.findViewById(R.id.limit);
-                                comment.addTextChangedListener(new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                    }
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                    }
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-                                        limit.setText(s.length() + " / " + String.valueOf(250));
-                                        if (s.length() > 250)
-                                            comment.setText(s.subSequence(0, 250));
-                                    }
-                                });
-                                builder.setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (comment.getText().toString().equals(""))
-                                            Toast.makeText(v.getContext(), "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
-                                        else
-                                            new sendComment(comment.getText().toString(), v.getContext()).execute();
-                                    }
-                                });
-                                builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                                builder.create().show();
-                            }
-
                             break;
                         case 2: //Similar product
                             Toast.makeText(v.getContext(), "Similar Product", Toast.LENGTH_SHORT).show();

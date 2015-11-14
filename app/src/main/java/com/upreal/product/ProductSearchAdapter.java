@@ -110,7 +110,6 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_SEND);
-
                 i.putExtra(Intent.EXTRA_TEXT, "Venez voir le produit : " + list.get(position).getName() + " sur UpReal");
                 i.setType("text/plain");
                 try {

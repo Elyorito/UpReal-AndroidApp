@@ -32,6 +32,8 @@ public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
         bundle = new Bundle();
         bundle.putInt("idUser", user.getId());
         bundle.putParcelable("user", user);
+        bundle.putInt("id", user.getId());
+        bundle.putInt("type", 1);
 
         sessionManagerUser = new SessionManagerUser(mContext);
         toggleAccount = sessionManagerUser.isLogged();

@@ -1,11 +1,14 @@
 package com.upreal.product;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,6 +56,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView prodPicture;
 
     private Button geoloc;
+    private FloatingActionButton menu;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,20 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
+        menu = (FloatingActionButton) findViewById(R.id.fab);
+        menu.setOnClickListener(this);
+
+        final String[] option = new String[] { "Add", "View", "Change", "Delete" };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Option");
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+                    }
+                }
+        );
+        dialog = builder.create();
 //        prodName = (TextView) findViewById(R.id.product_name);
 //        prodBrand = (TextView) findViewById(R.id.product_brand);
 //        prodShortDesc = (TextView) findViewById(R.id.product_desc);
@@ -138,6 +158,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra("id_product", prod.getId());
                 v.getContext().startActivity(intent);
                 break ;
+            case R.id.fab:
+                dialog.show();
+                break;
             default:
                 break ;
         }

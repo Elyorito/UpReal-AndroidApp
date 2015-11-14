@@ -28,6 +28,9 @@ public class StoreViewPagerAdapter extends FragmentStatePagerAdapter {
         bundle = new Bundle();
         bundle.putInt("idStore", store.getId());
         bundle.putParcelable("store", store);
+        bundle.putInt("id", store.getId());
+        bundle.putInt("type", 3);
+
     }
 
     @Override
