@@ -97,7 +97,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
                     case R.id.but_cardview_go_product:
                         Toast.makeText(v.getContext(), "Fiche Product :[" + list.get(position).getName() + "]", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(v.getContext(), ProductActivity.class);
-                        intent.putExtra("listprod", list.get(position));
+                        intent.putExtra("prod", list.get(position));
                         v.getContext().startActivity(intent);
                         break;
                     default:

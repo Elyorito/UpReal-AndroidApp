@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.upreal.R;
 import com.upreal.list.ListActivity;
 import com.upreal.login.LoginActivity;
-import com.upreal.scan.Camera2Activity;
 import com.upreal.scan.CameraActivity;
 import com.upreal.scan.GetProductActivity;
 import com.upreal.user.UserActivity;
@@ -224,9 +223,6 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
         butScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(v.getContext(), Camera2Activity.class);
-                intent.putExtra("type", "scan");
-                v.getContext().startActivity(intent);
                 intent = new Intent();
                 intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
@@ -241,7 +237,7 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
                         e.printStackTrace();
                     }
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                    activity.startActivityForResult(intent, ACTIVITY_START_CAMERA);
                 } else {
 
                     // Should we show an explanation?
@@ -324,7 +320,7 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
                         e.printStackTrace();
                     }
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                    activity.startActivityForResult(intent, ACTIVITY_START_CAMERA);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
                     builder.setTitle(R.string.scan).setMessage(R.string.no_permission).create().show();

@@ -1,20 +1,29 @@
 package com.upreal.user;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.home.NavigationBar;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.User;
 
@@ -27,14 +36,19 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView imageBlurred;
     private ImageView imageUser;
     private TabLayout tabLayout;
+    private Activity activity;
+    private Context context;
 
     private ViewPager mViewPager;
 
     private UserViewPagerAdapter adapter;
 
     private User user;
-
     private SessionManagerUser sessionManagerUser;
+
+    private FloatingActionButton menu;
+    private AlertDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +59,15 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageUser = (ImageView) findViewById(R.id.imageproduct);
-        user = getIntent().getExtras().getParcelable("user");
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
-        user = getIntent().getExtras().getParcelable("user");
 
         boolean toggleAccount = sessionManagerUser.isLogged();
 
         if (getIntent().getExtras() == null)
             user = sessionManagerUser.getUser();
         else
-            user = getIntent().getExtras().getParcelable("listuser");
+            user = getIntent().getExtras().getParcelable("user");
 
         new NavigationBar(this);
 
@@ -76,6 +88,43 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         adapter = new UserViewPagerAdapter(getSupportFragmentManager(), tab, 3, user, getApplicationContext());
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
+
+        menu = (FloatingActionButton) findViewById(R.id.fab);
+        menu.setOnClickListener(this);
+        context = getApplicationContext();
+        activity = this;
+
+        final String[] option = new String[] { "Partager", "Rafraichir" };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Quel action voulez-vous faire ?");
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: // Share
+                                Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(Intent.ACTION_SEND);
+
+                                i.putExtra(Intent.EXTRA_TEXT, "Venez voir l'utilisateur : " + user.getUsername() + " sur UpReal");
+                                i.setType("text/plain");
+                                try {
+                                    startActivity(Intent.createChooser(i, "Partager ce produit avec ..."));
+                                } catch (android.content.ActivityNotFoundException ex) {
+                                    Toast.makeText(context, context.getString(R.string.need_mail_app)
+                                            , Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            case 1: // Refresh
+                                new Refresh(activity, 1, user.getId()).execute();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+        );
+        dialog = builder.create();
+
     }
 
     @Override
@@ -86,5 +135,10 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                dialog.show();
+                break;
+        }
     }
 }
