@@ -42,7 +42,7 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
         }
     }
 
-    AdapterNavDrawerConnectHome(String Account[], String Titles[]) {
+    public AdapterNavDrawerConnectHome(String Account[], String Titles[]) {
         this.mNavAccount = Account;
         this.mNavWithoutAccount= Titles;
     }
@@ -87,7 +87,7 @@ public class AdapterNavDrawerConnectHome extends RecyclerView.Adapter<AdapterNav
 
     @Override
     public int getItemCount() {
-        return mNavWithoutAccount.length;
+        return mNavWithoutAccount.length + 1;
     }
 
     @Override

@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -26,8 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.R;
-
-import com.upreal.home.HomeActivity;
+import com.upreal.home.NavigationBar;
 import com.upreal.utils.Address;
 import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SessionManagerUser;
@@ -224,7 +222,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        photoFile = HomeActivity.createImageFile();
+                        photoFile = NavigationBar.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -362,7 +360,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                     // storage-related task you need to do.
 
                     try {
-                        photoFile = HomeActivity.createImageFile();
+                        photoFile = NavigationBar.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -2,7 +2,6 @@ package com.upreal.home;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +11,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
-
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleImageView;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.User;
-
-import java.util.Objects;
 
 /**
  * Created by Elyo on 06/02/2015.
@@ -61,7 +57,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         }
     }
 
-    AdapterNavDrawerHome(String Account, String Titles[], Context context, User user) {
+    public AdapterNavDrawerHome(String Account, String Titles[], Context context, User user) {
         this.mNavAccount = Account;
         this.mNavTitles = Titles;
         this.context = context;
