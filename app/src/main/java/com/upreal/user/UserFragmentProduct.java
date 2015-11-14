@@ -72,7 +72,7 @@ public class UserFragmentProduct extends Fragment {
         @Override
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
-            if (listUserSell != null && listProduct != null || i > 0) {
+            if (listUserSell != null && listProduct != null || i > 0 && getActivity() != null) {
                 mAdapter = new AdapterUserProduct(getActivity().getApplicationContext(), listUserSell, listProduct);
                 recyclerView.setAdapter(mAdapter);
             }

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.home.NavigationBar;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.SessionManagerUser;
@@ -44,11 +45,19 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageUser = (ImageView) findViewById(R.id.imageproduct);
+        user = getIntent().getExtras().getParcelable("user");
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         user = getIntent().getExtras().getParcelable("user");
 
         boolean toggleAccount = sessionManagerUser.isLogged();
+
+        if (getIntent().getExtras() == null)
+            user = sessionManagerUser.getUser();
+        else
+            user = getIntent().getExtras().getParcelable("listuser");
+
+        new NavigationBar(this);
 
         CharSequence tab[] = null;
 

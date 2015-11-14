@@ -25,7 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.home.HomeActivity;
+import com.upreal.home.NavigationBar;
 import com.upreal.utils.Product;
 import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SoapProductManager;
@@ -108,7 +108,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        photoFile = HomeActivity.createImageFile();
+                        photoFile = NavigationBar.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -263,7 +263,7 @@ public class ProductUpdateActivity extends Activity implements View.OnClickListe
                     // storage-related task you need to do.
 
                     try {
-                        photoFile = HomeActivity.createImageFile();
+                        photoFile = NavigationBar.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -23,7 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.home.HomeActivity;
+import com.upreal.home.NavigationBar;
 import com.upreal.product.ProductActivity;
 import com.upreal.utils.Product;
 import com.upreal.utils.SendImageTask;
@@ -117,7 +117,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        photoFile = HomeActivity.createImageFile();
+                        photoFile = NavigationBar.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -181,7 +181,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                     // storage-related task you need to do.
 
                     try {
-                        photoFile = HomeActivity.createImageFile();
+                        photoFile = NavigationBar.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();

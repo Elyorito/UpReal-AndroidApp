@@ -18,7 +18,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="5dp"
-        android:background="@drawable/round_button"
+        android:background="@drawable/cancel"
         android:layout_toRightOf="@+id/ok" />
 
 </RelativeLayout>
