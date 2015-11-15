@@ -30,10 +30,10 @@ public class StoreFragmentSearch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_user_search, container, false);
+        View v = inflater.inflate(R.layout.fragment_base_layout, container, false);
         Bundle b = getArguments();
         this.mSearchName = b.getString("searchname");
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_ProductSearch);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 2));
         //Test

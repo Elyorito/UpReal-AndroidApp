@@ -42,10 +42,10 @@ public class UserViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: //Commentary
-                UserFragmentCommentary com = new UserFragmentCommentary();
-                com.setArguments(bundle);
-                return com;
+            case 0:
+                FragmentCommentary t = new FragmentCommentary();
+                t.setArguments(bundle);
+                return t;
             case 1:
                 UserFragmentProduct ufp = new UserFragmentProduct();
                 ufp.setArguments(bundle);

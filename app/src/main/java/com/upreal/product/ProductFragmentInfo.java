@@ -32,12 +32,12 @@ public class ProductFragmentInfo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_product_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_base_layout, container, false);
         Bundle b = getArguments();
 
         idProduct = b.getInt("idProduct");
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_Product_info);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(false);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
