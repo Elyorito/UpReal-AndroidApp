@@ -32,9 +32,9 @@ public class NewsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home_news, container, false);
+        View v = inflater.inflate(R.layout.fragment_base_layout, container, false);
 
-        mRecyclerViewNews = (RecyclerView) v.findViewById(R.id.recyclerview_home_news);
+        mRecyclerViewNews = (RecyclerView) v.findViewById(R.id.recyclerView);
         mRecyclerViewNews.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         mRecyclerViewNews.setLayoutManager(mLayoutManager);
