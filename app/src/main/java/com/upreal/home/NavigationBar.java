@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import com.upreal.R;
 import com.upreal.list.ListActivity;
 import com.upreal.login.LoginActivity;
+import com.upreal.miscellaneous.LoyaltyActivity;
 import com.upreal.scan.CameraActivity;
 import com.upreal.scan.ScanActivity;
 import com.upreal.user.UserActivity;
@@ -87,6 +88,7 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
             ITEM_WACCOUNT = new String[]{activity.getString(R.string.news),
                     activity.getString(R.string.scan),
                     activity.getString(R.string.list),
+                    "Mes cartes de fidélité",
                     activity.getString(R.string.settings),
                     activity.getString(R.string.deconnexion)};
             mAdapter = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT, activity.getApplicationContext(), sessionManagerUser.getUser());
@@ -136,11 +138,15 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
                     intent = new Intent(rv.getContext(), ListActivity.class);
                     rv.getContext().startActivity(intent);
                     return true;
-                case 4://Settings
+                case 4://Loyalty
+                    intent = new Intent(rv.getContext(), LoyaltyActivity.class);
+                    rv.getContext().startActivity(intent);
+                    return true;
+                case 5://Settings
                     intent = new Intent(rv.getContext(), ParameterActivity.class);
                     rv.getContext().startActivity(intent);
                     return true;
-                case 5://Disconnect
+                case 6://Disconnect
                     sessionManagerUser.deleteCurrentUser();
                     new DatabaseHelper(activity).deleteDataBase();
                     intent = new Intent(rv.getContext(), HomeActivity.class);

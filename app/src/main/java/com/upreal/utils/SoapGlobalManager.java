@@ -119,6 +119,30 @@ public class SoapGlobalManager extends SoapManager {
         return listUserLists;
     }
 
+    public List<Loyalty> getUserPossess(int userId) {
+        List<Loyalty> loyalties = new ArrayList<>();
+
+        String methodname = "getUserPossess";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        try {
+            Object response = callService(methodname, request);
+            if (response instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) response;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject res = results.get(i);
+                    loyalties.add(ConverterManager.convertToLoyalty(res));
+                }
+            } else if (response instanceof SoapObject) {
+                SoapObject result = (SoapObject) response;
+                loyalties.add(ConverterManager.convertToLoyalty(result));
+            }
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return loyalties;
+    }
+
     public List<Article> getNews(){
         List<Article> listNews = new ArrayList<Article>();
         String methodname = "getNews";

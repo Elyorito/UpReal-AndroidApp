@@ -212,6 +212,20 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name="com.upreal.miscellaneous.LoyaltyActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.upreal.miscellaneous.LoyaltyCardActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyChPHKdhfJmM6TBhVzhocIX3hd4ItCOfIs" />
