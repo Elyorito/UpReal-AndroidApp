@@ -28,24 +28,24 @@ public class ProductFragmentInfo extends Fragment {
 
     private int idProduct = 0;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View v = inflater.inflate(R.layout.fragment_product_info, container, false);
-        Bundle b = getArguments();
-
-        idProduct = b.getInt("idProduct");
-
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_Product_info);
-        recyclerView.setHasFixedSize(false);
-        mLayoutManager = new GridLayoutManager(v.getContext(), 1);
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        new RetrieveProductSpecification().execute();
-
-        return v;
-    }
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//
+////        View v = inflater.inflate(R.layout.fragment_product_info, container, false);
+////        Bundle b = getArguments();
+////
+////        idProduct = b.getInt("idProduct");
+////
+////        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_Product_info);
+////        recyclerView.setHasFixedSize(false);
+////        mLayoutManager = new GridLayoutManager(v.getContext(), 1);
+////        recyclerView.setLayoutManager(mLayoutManager);
+////
+////        new RetrieveProductSpecification().execute();
+////
+////        return v;
+//    }
 
     private class RetrieveProductSpecification extends AsyncTask<Void, Void, Integer> {
 

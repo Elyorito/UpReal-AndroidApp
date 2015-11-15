@@ -13,7 +13,7 @@ import com.upreal.home.HomeActivity;
  */
 public class SplashScreenLoadingActivity extends Activity {
 
-    private static int SPLASH_TIME = 4500;
+    private static int SPLASH_TIME = 1500;
     private Intent intent;
 
     @Override

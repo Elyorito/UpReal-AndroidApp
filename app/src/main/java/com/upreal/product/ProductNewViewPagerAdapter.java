@@ -19,6 +19,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.upreal.geolocalisation.WebLocationManager;
 import com.upreal.utils.FragmentCommentary;
+import com.upreal.utils.LocationService;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductUtilManager;
 import com.upreal.utils.SoapStoreManager;
@@ -51,7 +52,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
     private List<String> distances = new ArrayList<>();
     private List<String> prices = new ArrayList<>();
 
-    public ProductNewViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Product product, Activity activity) {
+    public ProductNewViewPagerAdapter(FragmentManager fm, CharSequence mTitle[], int mNbTab, Product product, Activity activity, LocationService locationService) {
         super(fm);
         this.Title = mTitle;
         this.nbTab = mNbTab;
@@ -60,10 +61,13 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         bundle = new Bundle();
         bundle.putParcelable("product", product);
         bundle.putInt("idProduct", product.getId());
+        bundle.putDouble("latitude", locationService.latitude
+        );
+        bundle.putDouble("longitude", locationService.longitude);
         bundle.putInt("id", product.getId());
         bundle.putInt("type", 2);
         mActivity = activity;
-        initLocalisation();
+        //initLocalisation();
     }
 
     public void initLocalisation() {
@@ -88,12 +92,12 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 
         switch (position) {
             case 0: //Info
-//                ProductFragmentCommentary com = new ProductFragmentCommentary();
-//                com.setArguments(bundle);
-//                return com;
-                ProductFragmentInfo pfi = new ProductFragmentInfo();
-                pfi.setArguments(bundle);
-                return pfi;
+                ProductFragmentCommentary comd = new ProductFragmentCommentary();
+                comd.setArguments(bundle);
+                return comd;
+//                ProductFragmentInfo pfi = new ProductFragmentInfo();
+//                pfi.setArguments(bundle);
+//                return pfi;
             case 1: //Prix
 /*                ProductFragmentPrice price = new ProductFragmentPrice();
                 price.setArguments(bundle);
@@ -101,7 +105,9 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 //                ProductFragmentSocial social = new ProductFragmentSocial();
 //                social.setArguments(bundle);
 //                return social;
-                return new ProductFragmentTab2();
+                ProductFragmentNewPrice pfnp = new ProductFragmentNewPrice();
+                pfnp.setArguments(bundle);
+                return pfnp;
             case 2: //Avis
                 FragmentCommentary com = new FragmentCommentary();
                 com.setArguments(bundle);

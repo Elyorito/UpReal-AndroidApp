@@ -42,8 +42,8 @@ public class AdapterListStore extends RecyclerView.Adapter<AdapterListStore.View
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
-            layout = (RelativeLayout) itemView.findViewById(R.id.layout);
-            address_id = (TextView) itemView.findViewById(R.id.address_id);
+            //layout = (RelativeLayout) itemView.findViewById(R.id.layout);
+            //address_id = (TextView) itemView.findViewById(R.id.address_id);
             address_name = (TextView) itemView.findViewById(R.id.address_name);
             address_distance = (TextView) itemView.findViewById(R.id.address_distance);
             product_price = (TextView) itemView.findViewById(R.id.product_price);

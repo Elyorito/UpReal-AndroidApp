@@ -1,6 +1,8 @@
 package com.upreal.home;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -143,6 +146,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -152,10 +158,10 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_settings:
                 return true;
             case R.id.action_search:
-                if (!DrawerR.isDrawerVisible(Gravity.RIGHT))
-                    DrawerR.openDrawer(Gravity.RIGHT);
-                else
-                    DrawerR.closeDrawers();
+//                if (!DrawerR.isDrawerVisible(Gravity.RIGHT))
+//                    DrawerR.openDrawer(Gravity.RIGHT);
+//                else
+//                    DrawerR.closeDrawers();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
