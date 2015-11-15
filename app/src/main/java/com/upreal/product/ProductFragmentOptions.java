@@ -26,12 +26,12 @@ public class ProductFragmentOptions extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_product_options, container, false);
+        View v = inflater.inflate(R.layout.fragment_base_layout, container, false);
         SessionManagerUser sessionManagerUser = new SessionManagerUser(v.getContext());
         Bundle b = getArguments();
         Product prod = b.getParcelable("product");
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_Product_options);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);

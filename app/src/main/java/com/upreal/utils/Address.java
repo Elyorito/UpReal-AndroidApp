@@ -13,6 +13,9 @@ public class Address implements Parcelable {
     private String city;
     private String country;
     private int postalCode;
+    private Double latitude;
+    private Double longitude;
+
     // + date
 
     public Address (int id, String address, String address2, String country, String city, int postalCode) {
@@ -24,6 +27,16 @@ public class Address implements Parcelable {
         this.postalCode = postalCode;
     }
 
+    public Address (int id, String address, String address2, String country, String city, int postalCode, Double latitude, Double longitude) {
+        this.id = id;
+        this.address = address;
+        this.address2 = address2;
+        this.city = city;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
     public Address() {
 
     }
@@ -76,6 +89,23 @@ public class Address implements Parcelable {
         this.country = country;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -89,6 +119,8 @@ public class Address implements Parcelable {
         dest.writeString(this.city);
         dest.writeString(this.country);
         dest.writeInt(this.postalCode);
+        dest.writeDouble(this.latitude);
+        dest.writeDouble(this.longitude);
     }
 
     public static final Creator<Address> CREATOR = new Parcelable.Creator<Address>() {
@@ -111,5 +143,7 @@ public class Address implements Parcelable {
         this.city = in.readString();
         this.country = in.readString();
         this.postalCode = in.readInt();
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
     }
 }

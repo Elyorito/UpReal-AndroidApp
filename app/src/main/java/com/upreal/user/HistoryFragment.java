@@ -30,9 +30,9 @@ public class HistoryFragment  extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home_news, container, false);
+        View v = inflater.inflate(R.layout.fragment_base_layout, container, false);
 
-        mRecyclerViewHistory = (RecyclerView) v.findViewById(R.id.recyclerview_home_news);
+        mRecyclerViewHistory = (RecyclerView) v.findViewById(R.id.recyclerView);
         mRecyclerViewHistory.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         mRecyclerViewHistory.setLayoutManager(mLayoutManager);

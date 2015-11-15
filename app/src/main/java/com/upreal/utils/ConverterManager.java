@@ -176,6 +176,10 @@ public class ConverterManager {
             address.setCountry(soapObject.getProperty("country").toString());
         if (soapObject.hasProperty("postal_code") && soapObject.getProperty("postal_code") != null)
             address.setPostalCode(Integer.parseInt(soapObject.getProperty("postal_code").toString()));
+        if (soapObject.hasProperty("latitude") && soapObject.getProperty("latitude") != null)
+            address.setLatitude(Double.parseDouble(soapObject.getProperty("latitude").toString()));
+        if (soapObject.hasProperty("longitude") && soapObject.getProperty("longitude") != null)
+            address.setLongitude(Double.parseDouble(soapObject.getProperty("longitude").toString()));
 
         return address;
     }

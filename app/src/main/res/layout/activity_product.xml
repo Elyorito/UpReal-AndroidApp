@@ -12,7 +12,7 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="250dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginStart="48dp"
@@ -29,22 +29,22 @@
             <LinearLayout
                 android:id="@+id/quickinfo_product"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="250dp"
                 android:background="@color/blue">
                 <FrameLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
                     <ImageView
-                    android:id="@+id/imageproductblurred"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:scaleX="2"
-                    android:scaleY="2"/>
+                        android:id="@+id/imageproductblurred"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:scaleX="2"
+                        android:scaleY="2"/>
                     <ImageView
                         android:id="@+id/imageproduct"
-                        android:layout_width="140dp"
+                        android:layout_width="70dp"
                         android:layout_height="140dp"
-                        android:layout_marginTop="150dp"
+                        android:layout_marginTop="80dp"
                         android:layout_marginStart="30dp"
                         android:src="@drawable/ic_action_camera"
                         android:gravity="center_vertical"/>
@@ -53,8 +53,8 @@
                         android:layout_height="wrap_content"
                         android:text="1.32E"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                        android:layout_marginTop="150dp"
-                        android:layout_marginStart="240dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginStart="120dp"
                         android:gravity="center_vertical"/>
 
                 </FrameLayout>
@@ -72,13 +72,25 @@
             app:tabGravity="fill">
 
         </android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </android.support.v4.view.ViewPager>
-    </android.support.design.widget.AppBarLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -91,50 +103,3 @@
 
     </android.support.design.widget.FloatingActionButton>
 </android.support.design.widget.CoordinatorLayout>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context="com.upreal.product.ProductActivity"-->
-    <!--android:weightSum="5">-->
-
-    <!--<include-->
-        <!--android:id="@+id/app_bar"-->
-        <!--layout="@layout/home_app_bar"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="match_parent"/>-->
-
-    <!--<include-->
-        <!--android:id="@+id/product_info"-->
-        <!--layout="@layout/product_info"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_weight="2"/>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_weight="3"-->
-        <!--android:weightSum="4">-->
-
-        <!--<com.upreal.view.SlidingTabLayout-->
-            <!--android:id="@+id/sliding_tab"-->
-            <!--android:background="@color/ColorPrimaryDark"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:elevation="2dp"-->
-            <!--android:layout_weight=".8"-->
-            <!--android:fillViewport="false" />-->
-
-        <!--<android.support.v4.view.ViewPager-->
-            <!--android:id="@+id/viewpager"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:background="#ffc0c0c0"-->
-            <!--android:layout_weight="3.2"/>-->
-
-    <!--</LinearLayout>-->
-
-<!--</LinearLayout>-->

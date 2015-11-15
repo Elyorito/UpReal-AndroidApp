@@ -1,19 +1,22 @@
 package com.upreal.product;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,6 +35,7 @@ import com.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.LocationService;
 import com.upreal.utils.Product;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
@@ -77,6 +81,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView prodPicture;
 
     private Button geoloc;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     private FloatingActionButton menu;
     private AlertDialog dialog;
 
@@ -85,6 +91,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        LocationService locationService = LocationService.getLocationManager(getApplicationContext());
         tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
@@ -96,7 +103,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
         CharSequence Tab[] = {"Info.", "Prix", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this);
+        adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this, locationService);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
         menu = (FloatingActionButton) findViewById(R.id.fab);

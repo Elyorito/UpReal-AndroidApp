@@ -7,7 +7,17 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.MyCompatTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/ColorPrimaryDark</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="actionBarStyle">@style/ActionBar</item>
+    </style>
 
+    <style name="ActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/ColorPrimaryDark</item>
+        <item name="background">@color/ColorPrimaryDark</item>
+    </style>
     <!-- TabLayout -->
     <style name="tablayout" parent="Widget.Design.TabLayout">
 

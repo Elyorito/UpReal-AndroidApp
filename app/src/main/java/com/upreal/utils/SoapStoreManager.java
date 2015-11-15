@@ -1,6 +1,7 @@
 package com.upreal.utils;
 
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,47 @@ public class SoapStoreManager extends SoapManager {
 
     public SoapStoreManager() {
         super("StoreManager");
+    }
+
+    public List<List<String>> getProductByLocation(Double latitude, Double longitude, int radius, int idProduct) {
+        List<String> listStoreProduct = new ArrayList<>();
+        List<List<String>> listStoreReturn = new ArrayList<>();
+        String methodname = "getProductByLocation";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("latitude", latitude.toString());
+        request.addProperty("longitude", longitude.toString());
+        request.addProperty("radius", radius);
+        request.addProperty("id_product", idProduct);
+
+        try {
+            Object response = callService(methodname, request);
+
+            Vector<SoapObject> res = (Vector<SoapObject>) response;
+
+                for (SoapObject obj : res) {
+                    String price = obj.getProperty(0).toString();
+                    String shop = obj.getProperty(1).toString();
+                    String address = obj.getProperty(2).toString();
+                    String latitude_ = obj.getProperty(3).toString();
+                    String longitude_ = obj.getProperty(4).toString();
+                    String distance = obj.getProperty(5).toString();
+
+                    listStoreProduct.add(price);
+                    listStoreProduct.add(shop);
+                    listStoreProduct.add(address);
+                    listStoreProduct.add(latitude_);
+                    listStoreProduct.add(longitude_);
+                    listStoreProduct.add(distance);
+
+                    listStoreReturn.add(listStoreProduct);
+                    listStoreProduct = new ArrayList<>();
+                }
+
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return listStoreReturn;
     }
 
     public Store getStoreByAddress(int id_address) {
