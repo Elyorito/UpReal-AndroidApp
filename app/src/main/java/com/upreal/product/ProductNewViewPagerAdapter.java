@@ -92,7 +92,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 
         switch (position) {
             case 0: //Info
-                ProductFragmentCommentary comd = new ProductFragmentCommentary();
+                ProductFragmentInfo comd = new ProductFragmentInfo();
                 comd.setArguments(bundle);
                 return comd;
 //                ProductFragmentInfo pfi = new ProductFragmentInfo();
