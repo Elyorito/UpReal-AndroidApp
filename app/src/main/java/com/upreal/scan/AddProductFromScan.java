@@ -117,7 +117,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        photoFile = NavigationBar.createImageFile();
+                        photoFile = CameraActivity.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -181,7 +181,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                     // storage-related task you need to do.
 
                     try {
-                        photoFile = NavigationBar.createImageFile();
+                        photoFile = CameraActivity.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();

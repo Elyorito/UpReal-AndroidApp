@@ -1,126 +1,145 @@
 package com.upreal.scan;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.product.ProductActivity;
-import com.upreal.utils.Product;
-import com.upreal.utils.SoapProductManager;
 
-public class CameraActivity extends Activity implements View.OnClickListener {
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    private Button scanner;
-    private TextView formatTxt, contentTxt;
-    private AlertDialog.Builder builder;
+/**
+ * Created by Elyo on 17/05/2015.
+ */
+public class CameraActivity extends Activity {
     private Intent intent;
+    // Camera
+    private static final int ACTIVITY_START_CAMERA = 0;
+    private String mImageFileLocation = "";
 
-    /** Called when the activity is first created. */
+    // Storage
+    private static final int PERMISSIONS_REQUEST = 1;
+    private File photoFile = null;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_camera);
-
-
-        /*scanner = (Button) findViewById(R.id.scanner);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
-        //scanner.setOnClickListener(this);*/
-        builder = new AlertDialog.Builder(CameraActivity.this);
-
-        intent = new Intent("com.google.zxing.client.android.SCAN");
-        intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
-        startActivityForResult(intent, 0);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent){
-        if(requestCode == 0){
-            if(resultCode == RESULT_OK){
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                Log.d("xZing", "contents: "+contents+" format: "+format); // Handle successful scan
-                //formatTxt.setText("FORMAT: " + format);
-                //contentTxt.setText(contents);
-                new RetrieveScannedProduct(contents).execute();
+        intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                photoFile = createImageFile();
+                mImageFileLocation = photoFile.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            else if(resultCode == RESULT_CANCELED){ // Handle cancel
-                Toast toast = Toast.makeText(this, "Le scan à été annulé", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 25, 400);
-                toast.show();
-                Log.i("xZing", "Cancelled");
-                this.finish();
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            startActivityForResult(intent, ACTIVITY_START_CAMERA);
+        } else {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(CameraActivity.this,
+                    Manifest.permission.CAMERA)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Toast.makeText(this, R.string.permission_camera_storage, Toast.LENGTH_SHORT).show();
             }
+            ActivityCompat.requestPermissions(CameraActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                    PERMISSIONS_REQUEST);
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+
         }
     }
+    static public File createImageFile() throws IOException {
+        String FOLDER_LOCATION = "Upreal Pictures";
+        File imageFolder;
 
-    public void onClick(View v) {
-        if (v.getId() == R.id.scanner) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMAGE_" + timeStamp + "_";
 
-            intent = new Intent("com.google.zxing.client.android.SCAN");
-            intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
-/*
-            intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        imageFolder = new File(storageDirectory, FOLDER_LOCATION);
+        if (!imageFolder.exists())
+            imageFolder.mkdirs();
+
+        File myImage = File.createTempFile(imageFileName, ".jpg", imageFolder);
+        return myImage;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v("NavigationBar", String.valueOf(requestCode));
+        if (requestCode == ACTIVITY_START_CAMERA && resultCode == RESULT_OK) {
+/*          Thumbnail
+            Bundle extras = data.getExtras();
+            Bitmap photoCapturedBitmap = (Bitmap) extras.get("data");
 */
-            startActivityForResult(intent, 0);
+            // Get Bitmap from File
+/*
+            Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+*/
+            intent = new Intent(this, GetProductActivity.class);
+//            intent.putExtra("bytes", byteArray);
+            intent.putExtra("imageLocation", mImageFileLocation);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
+        finish();
     }
 
-    public class RetrieveScannedProduct extends AsyncTask<String, Void, Product> {
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-        private Product prod = new Product();
-        private String productEAN;
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
 
-        public RetrieveScannedProduct(String productEAN) {
-            this.productEAN = productEAN;
-        }
-
-        @Override
-        protected Product doInBackground(String... params) {
-
-            SoapProductManager pm = new SoapProductManager();
-            prod = pm.getProductbyEAN(productEAN);
-            return prod;
-        }
-
-        @Override
-        protected void onPostExecute(Product prod) {
-            super.onPostExecute(prod);
-            if (prod == null) {
-                builder.setTitle("Produit non trouvé !")
-                        .setMessage("Voulez-vous ajouter ce produit dans notre base de données ?")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), AddProductFromScan.class);
-                                intent.putExtra("ean", productEAN);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                getApplicationContext().startActivity(intent);
-                                finish();
-                            }
-                        }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                    try {
+                        photoFile = createImageFile();
+                        mImageFileLocation = photoFile.getAbsolutePath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }).create();
-                builder.show();
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, ACTIVITY_START_CAMERA);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setTitle(R.string.scan).setMessage(R.string.no_permission).create().show();
+                }
                 return;
             }
-            Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-            intent.putExtra("listprod", prod);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(intent);
-            finish();
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 }

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.home.NavigationBar;
+import com.upreal.scan.CameraActivity;
 import com.upreal.utils.Address;
 import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SessionManagerUser;
@@ -222,7 +222,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        photoFile = NavigationBar.createImageFile();
+                        photoFile = CameraActivity.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -360,7 +360,7 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
                     // storage-related task you need to do.
 
                     try {
-                        photoFile = NavigationBar.createImageFile();
+                        photoFile = CameraActivity.createImageFile();
                         mImageFileLocation = photoFile.getAbsolutePath();
                     } catch (IOException e) {
                         e.printStackTrace();

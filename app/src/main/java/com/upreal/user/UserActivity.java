@@ -103,7 +103,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                             case 0: // Edit - Follow
                                 if (toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
                                     intent = new Intent(context, UserUpdateActivity.class);
-                                    context.startActivity(intent);
+                                    startActivity(intent);
                                 }
                                 break;
                             case 1: // Share
