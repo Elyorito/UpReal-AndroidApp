@@ -28,11 +28,12 @@ public class AdapterLoyaltyCard extends RecyclerView.Adapter<AdapterLoyaltyCard.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         ImageView image;
-        LinearLayout news;
+        LinearLayout lcard;
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.loyalty_name);
             image = (ImageView) itemView.findViewById(R.id.image_loyalty);
+            lcard = (LinearLayout) itemView.findViewById(R.id.loyalty_card);
         }
     }
     public AdapterLoyaltyCard(List<Loyalty> loyalties, Context context) {
@@ -51,7 +52,7 @@ public class AdapterLoyaltyCard extends RecyclerView.Adapter<AdapterLoyaltyCard.
         Bitmap bitmap = this.loyalties.get(position).getBarcode();
         holder.image.setImageBitmap(bitmap);
         holder.title.setText(this.loyalties.get(position).getName());
-        holder.news.setOnClickListener(new View.OnClickListener() {
+        holder.lcard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), LoyaltyCardActivity.class);

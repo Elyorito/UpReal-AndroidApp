@@ -228,10 +228,10 @@ public class ConverterManager {
 
     public static Loyalty convertToLoyalty(SoapObject soapObject) {
         Loyalty obj = new Loyalty();
-        if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
-            obj.setName(soapObject.getProperty("name").toString());
-        if (soapObject.hasProperty("ean") && soapObject.getProperty("ean") != null)
-            obj.setEan(soapObject.getProperty("ean").toString());
+        // Name
+            obj.setName(soapObject.getProperty(0).toString());
+        // Ean
+            obj.setEan(soapObject.getProperty(1).toString());
         return obj;
     }
 }

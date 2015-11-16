@@ -100,6 +100,7 @@ public class SoapGlobalManager extends SoapManager {
 
         String methodname = "getUserList";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", userId);
         try {
             Object response = callService(methodname, request);
             if (response instanceof Vector) {
@@ -124,6 +125,7 @@ public class SoapGlobalManager extends SoapManager {
 
         String methodname = "getUserPossess";
         SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", userId);
         try {
             Object response = callService(methodname, request);
             if (response instanceof Vector) {
