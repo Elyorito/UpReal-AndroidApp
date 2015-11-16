@@ -27,9 +27,9 @@ public class LoyaltyActivity extends Activity {
         setContentView(R.layout.activity_loyalty);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         mRecyclerViewLoyalty = (RecyclerView) findViewById(R.id.recyclerlist);
-//        mRecyclerViewLoyalty.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewLoyalty.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(getApplicationContext(), 1);
+        mRecyclerViewLoyalty.setLayoutManager(mLayoutManager);
         new RetrieveLoyalty().execute();
     }
 

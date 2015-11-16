@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="2"
-            android:orientation="vertical">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerlist"
                 android:layout_height="0dp"
@@ -20,17 +14,14 @@
                 android:scrollbars="vertical"
                 android:layout_weight="0.8">
             </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-y        <com.github.clans.fab.FloatingActionButton
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabaddlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_action_new"
-            fab:fab_colorNormal="@color/ColorPrimary"
-            fab:fab_colorPressed="@color/ColorPrimary"
-            fab:fab_colorRipple="@color/ColorPrimary"/>
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_action_new"/>
+
     </FrameLayout>
 </LinearLayout>

@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -135,10 +136,13 @@ public class LoginFragmentRegister extends Fragment
         String password = edit_password.getText().toString().trim();
         String password2 = edit_confirmpassword.getText().toString().trim();
 
-        if (password.isEmpty() || (password.length() < 6 && password2.length() < 6)|| password.equals(password2)) {
-            textInputPassword.setError("Assurer vous d'avoir entre au moins 6 caractere(contre " + password.length());
-            textInputPassword2.setError("Assurer vous d'avoir entre au moins 6 caractere(contre " + password2.length());
+        if (password.isEmpty() || password2.length() < 6 || password.length() < 6) {
+            textInputPassword.setError("Assurer vous d'avoir entre au moins 6 caractere(contre " + password.length() + ")");
+            textInputPassword2.setError("Assurer vous d'avoir entre au moins 6 caractere(contre " + password2.length() + ")");
             return false;
+        } else if (password.equals(password2)) {
+            textInputPassword.setError("Mot de passe pas identique");
+            textInputPassword2.setError("Mot de passe pas identique");
         } else {
             textInputPassword.setErrorEnabled(false);
             textInputPassword2.setErrorEnabled(false);
@@ -203,6 +207,12 @@ public class LoginFragmentRegister extends Fragment
             case R.id.button_login_connect:
                 if (!validateId() || !validatePassword() || !validateEmail())
                     Toast.makeText(v.getContext(), "Error formulaire", Toast.LENGTH_SHORT).show();
+                else {
+                    InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
+                    new RetreiveRegisterAccount().execute();
+                    complete = true;
+                }
 //                if (!checkedTextView.isChecked()) {
 //                    complete = false;
 //                }
@@ -225,12 +235,6 @@ public class LoginFragmentRegister extends Fragment
 //                    e_confirm.setVisibility(View.VISIBLE);
 //                    Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
 //                    complete = false;
-//                }
-//                if (complete && !uIsTaken) {
-//                    InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
-//                    im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
-//                    new RetrieveRegisterAccount().execute();
-//                    complete = true;
 //                }
                 break;
             case R.id.checktext_cgu:
@@ -295,39 +299,6 @@ public class LoginFragmentRegister extends Fragment
             username = edit_id.getText().toString();
             password = edit_password.getText().toString();
             email = edit_email.getText().toString();
-        }
-
-        RetreiveRegisterAccount(String username, Person currentPerson, String email) {
-            social = true;
-            this.username = username;
-            firstname = null;
-            if (currentPerson.getName().hasGivenName())
-                firstname = currentPerson.getName().getGivenName();
-            lastname = null;
-            if (currentPerson.getName().hasFamilyName())
-                this.lastname = currentPerson.getName().getFamilyName();
-            this.email = email;
-            SecretKeySpec sks = null;
-            try {
-                SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-                sr.setSeed("any data used as random seed".getBytes());
-                KeyGenerator kg = KeyGenerator.getInstance("AES");
-                kg.init(128, sr);
-                sks = new SecretKeySpec((kg.generateKey()).getEncoded(), "AES");
-            } catch (Exception e) {
-                Log.e(TAG, "AES secret key spec error");
-            }
-
-            // Encode the original data with AES
-            byte[] encodedBytes = null;
-            try {
-                Cipher c = Cipher.getInstance("AES");
-                c.init(Cipher.ENCRYPT_MODE, sks);
-                encodedBytes = c.doFinal(this.email.getBytes());
-            } catch (Exception e) {
-                Log.e(TAG, "AES encryption error");
-            }
-            this.password = Base64.encodeToString(encodedBytes, Base64.DEFAULT);
         }
 
         @Override
