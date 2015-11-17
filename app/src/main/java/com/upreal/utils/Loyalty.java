@@ -19,6 +19,7 @@ import java.util.Map;
 public class Loyalty implements Parcelable {
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
+    private int id;
     private String name;
     private String ean;
     private Bitmap barcode;
@@ -63,6 +64,7 @@ public class Loyalty implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.ean);
+        dest.writeInt(this.id);
     }
 
     public static final Creator<Loyalty> CREATOR = new Creator<Loyalty>() {
@@ -85,6 +87,7 @@ public class Loyalty implements Parcelable {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+        this.id = in.readInt();
     }
 
     private Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
@@ -132,4 +135,11 @@ public class Loyalty implements Parcelable {
         return null;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

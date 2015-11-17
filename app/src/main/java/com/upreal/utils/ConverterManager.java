@@ -232,6 +232,8 @@ public class ConverterManager {
             obj.setName(soapObject.getProperty(0).toString());
         // Ean
             obj.setEan(soapObject.getProperty(1).toString());
+        // Id
+            obj.setId(Integer.parseInt(soapObject.getProperty(2).toString()));
         return obj;
     }
 }

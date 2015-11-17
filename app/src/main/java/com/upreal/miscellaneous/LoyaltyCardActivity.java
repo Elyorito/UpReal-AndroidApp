@@ -7,9 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.upreal.R;
-import com.upreal.utils.Article;
 import com.upreal.utils.Loyalty;
 
 /**
@@ -26,14 +24,14 @@ public class LoyaltyCardActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_news);
-        setContentView(R.layout.test_layout_news);
+        setContentView(R.layout.activity_loyalty_card);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         image = (ImageView) findViewById(R.id.image_loyalty);
         body = (TextView) findViewById(R.id.body_loyalty);
         loyalty = getIntent().getExtras().getParcelable("loyalty");
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(loyalty.getName());
+//        collapsingToolbarLayout.setTitle(loyalty.getName());
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.black));
 
 //        toolbar.setTitle(article.getTitle());

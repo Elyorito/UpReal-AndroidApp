@@ -16,6 +16,21 @@ public class SoapStoreManager extends SoapManager {
         super("StoreManager");
     }
 
+    public Integer registerStore(String name) {
+        Integer id_store = -1;
+        String methodName = "registerStore";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("name", name);
+        try {
+            SoapPrimitive response = (SoapPrimitive) callService(methodName, request);
+            id_store = Integer.parseInt(response.toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return id_store;
+    }
+
     public List<List<String>> getProductByLocation(Double latitude, Double longitude, int radius, int idProduct) {
         List<String> listStoreProduct = new ArrayList<>();
         List<List<String>> listStoreReturn = new ArrayList<>();

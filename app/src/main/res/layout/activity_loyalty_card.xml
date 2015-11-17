@@ -37,7 +37,7 @@
                 android:src="@drawable/connection_img"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"/>
 

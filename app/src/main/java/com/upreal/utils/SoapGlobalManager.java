@@ -120,6 +120,25 @@ public class SoapGlobalManager extends SoapManager {
         return listUserLists;
     }
 
+    public Boolean createPossess(int id_user, int id_store, String ean) {
+        Boolean result = false;
+        String methodName = "createPossess";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id_user", id_user);
+        request.addProperty("id_store", id_store);
+        request.addProperty("ean", ean);
+
+        try {
+            SoapPrimitive response = (SoapPrimitive) callService(methodName, request);
+             result = Boolean.parseBoolean(response.toString());
+
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return result;
+    }
+
     public List<Loyalty> getUserPossess(int userId) {
         List<Loyalty> loyalties = new ArrayList<>();
 

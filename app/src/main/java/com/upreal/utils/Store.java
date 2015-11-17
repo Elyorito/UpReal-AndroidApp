@@ -113,4 +113,9 @@ public class Store implements Parcelable {
         this.id_company = in.readInt();
         this.picture = in.readString();
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

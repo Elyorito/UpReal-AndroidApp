@@ -311,5 +311,9 @@
     <!-- Specification Type -->
     <string name="nutritional">Valeur Nutritionnelle</string>
     <string name="component">Composants</string>
+    <string name="store_or_company">Magasin ou compagnie</string>
+    <string name="store_not_found">Vous ne trouvez pas le magasin ?</string>
+    <string name="comment_no_null">Le commentaire ne peut être vide</string>
+    <string name="stores_name">Nom du magasin</string>
 
 </resources>
