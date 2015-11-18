@@ -8,17 +8,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.upreal.R;
 import com.upreal.product.ProductActivity;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 
-public class ScanActivity extends Activity implements View.OnClickListener {
+public class ScanActivity extends Activity {
 
     private Button scanner;
     private TextView formatTxt, contentTxt;
@@ -63,17 +61,21 @@ public class ScanActivity extends Activity implements View.OnClickListener {
         }
     }
 
+/*
     public void onClick(View v) {
         if (v.getId() == R.id.scanner) {
 
             intent = new Intent("com.google.zxing.client.android.SCAN");
             intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
+*/
 /*
             intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-*/
+*//*
+
             startActivityForResult(intent, 0);
         }
     }
+*/
 
     public class RetrieveScannedProduct extends AsyncTask<String, Void, Product> {
 
@@ -117,7 +119,7 @@ public class ScanActivity extends Activity implements View.OnClickListener {
                 return;
             }
             Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-            intent.putExtra("listprod", prod);
+            intent.putExtra("prod", prod);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(intent);
             finish();
