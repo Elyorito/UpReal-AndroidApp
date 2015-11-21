@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.Store;
 
@@ -30,6 +31,7 @@ import com.upreal.utils.Store;
  * Created by Kyosukke on 01/11/2015.
  */
 public class StoreActivity extends AppCompatActivity implements View.OnClickListener {
+    private ConnectionDetector cd;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private SupportMapFragment map;
@@ -51,6 +53,8 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
 
+        context = getApplicationContext();
+        cd = new ConnectionDetector(context);
         tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageStore = (ImageView) findViewById(R.id.imageproduct);
@@ -59,7 +63,10 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         createMapView();
 
         collapsingToolbarLayout.setTitle(store.getName());
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Store/" + store.getPicture()).transform(new CircleTransform()).into(imageStore);
+        if (cd.isConnectedToInternet()) {
+            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Store/" + store.getPicture()).transform(new CircleTransform()).into(imageStore);
+        } else
+            Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
         CharSequence tab[] = {"Info", "Produits", "Avis"};
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -69,7 +76,6 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
-        context = getApplicationContext();
         activity = this;
 
         final String[] option = new String[] { "Partager", "Rafraichir" };
@@ -93,7 +99,11 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
                                 }
                                 break;
                             case 1: // Refresh
-                                new Refresh(activity, 3, store.getId()).execute();
+                                if (cd.isConnectedToInternet()) {
+                                    new Refresh(activity, 3, store.getId()).execute();
+                                }
+                                else
+                                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 break;

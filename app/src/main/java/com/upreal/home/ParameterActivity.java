@@ -23,6 +23,8 @@ import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.view.SlidingTabLayout;
 
+import java.io.File;
+
 /**
  * Created by Eric on 22/06/2015.
  */
@@ -103,6 +105,14 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
                 break;
             case R.id.clear_cache:
                 mDbHelper.deleteDataBase();
+                try {
+                    File dir = getApplicationContext().getCacheDir();
+                    if (dir != null && dir.isDirectory()) {
+                        deleteDir(dir);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.like_facebook:
                 break;
@@ -200,6 +210,21 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
             case 2:
                 builder.setMessage(R.string.connect_question);
                 break;
+        }
+    }
+
+    private boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else {
+            return false;
         }
     }
 }

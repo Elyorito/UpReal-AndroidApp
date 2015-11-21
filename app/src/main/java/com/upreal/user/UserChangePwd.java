@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upreal.R;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;
 import com.upreal.utils.User;
@@ -21,6 +23,7 @@ import com.upreal.utils.User;
  */
 public class UserChangePwd extends Activity implements View.OnClickListener {
 
+    private ConnectionDetector cd;
     private EditText oldPassword;
     private EditText nPassword;
     private EditText cPassword;
@@ -55,6 +58,7 @@ public class UserChangePwd extends Activity implements View.OnClickListener {
         update.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
+        cd = new ConnectionDetector(getApplicationContext());
     }
 
     @Override
@@ -72,8 +76,12 @@ public class UserChangePwd extends Activity implements View.OnClickListener {
                 break;
             case R.id.update:
                 Log.v("update", "update");
-                if (updatePassword())
-                    new changePassword().execute();
+                if (cd.isConnectedToInternet()) {
+                    if (updatePassword())
+                        new changePassword().execute();
+                } else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
@@ -87,11 +95,18 @@ public class UserChangePwd extends Activity implements View.OnClickListener {
     }
 
     private class changePassword extends AsyncTask<Void, Void, Boolean> {
+        private String oPassword;
+        private String newPassword;
+
+        changePassword() {
+            oPassword = oldPassword.getText().toString();
+            newPassword = nPassword.getText().toString();
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             SoapUserManager pm = new SoapUserManager();
-            return pm.updatePassword(user.getId(), oldPassword.getText().toString(), nPassword.getText().toString());
+            return pm.updatePassword(user.getId(), oPassword, newPassword);
         }
 
         protected void onPostExecute(Boolean success) {

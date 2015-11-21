@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -35,6 +34,7 @@ import com.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.LocationService;
 import com.upreal.utils.Product;
 import com.upreal.utils.Refresh;
@@ -52,6 +52,7 @@ import com.upreal.view.SlidingTabLayout;
  */
 public class ProductActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private ConnectionDetector cd;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ImageView imageBlurred;
     private ImageView imageProduct;
@@ -91,6 +92,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        context = getApplicationContext();
+        activity = this;
+        cd = new ConnectionDetector(context);
         LocationService locationService = LocationService.getLocationManager(getApplicationContext());
         tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -99,8 +103,12 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         prod = getIntent().getExtras().getParcelable("prod");
 
         collapsingToolbarLayout.setTitle(prod.getName());
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
+        if (cd.isConnectedToInternet()) {
+            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
+            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
+        }
+        else
+            Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
         CharSequence Tab[] = {"Info.", "Prix", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this, locationService);
@@ -108,8 +116,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         tabLayout.setupWithViewPager(mViewPager);
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
-        context = getApplicationContext();
-        activity = this;
         sessionManagerUser = new SessionManagerUser(context);
 
         mDbHelper = new DatabaseHelper(context);
@@ -140,11 +146,15 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                         }
                                     }).create().show();
                                 } else {
-                                    listLike = context.getString(R.string.liked_product);
-                                    if (isLiked == true)
-                                        new SendLike(0).execute();
+                                    if (cd.isConnectedToInternet()) {
+                                        listLike = context.getString(R.string.liked_product);
+                                        if (isLiked == true)
+                                            new SendLike(0).execute();
+                                        else
+                                            new SendLike(1).execute();
+                                    }
                                     else
-                                        new SendLike(1).execute();
+                                        Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " +  getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 }
                                 break;
                             case 1: // Add to list
@@ -163,7 +173,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                                 break;
                             case 3: // Refresh
-                                new Refresh(activity, 2, prod.getId()).execute();
+                                if (cd.isConnectedToInternet()) {
+                                    new Refresh(activity, 2, prod.getId()).execute();
+                                }
+                                else
+                                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 break;

@@ -315,5 +315,9 @@
     <string name="store_not_found">Vous ne trouvez pas le magasin ?</string>
     <string name="comment_no_null">Le commentaire ne peut être vide</string>
     <string name="stores_name">Nom du magasin</string>
+    <string name="no_internet_connection">Vous n\'êtes pas connecté à internet</string>
+    <string name="please_reload">, veuillez recharger la page dès que vous êtes connecté</string>
+    <string name="retry_retrieve_connection">Rééssayez après vous être connecté à internet</string>
+    <string name="loyalty_card">Mes cartes de fidélité</string>
 
 </resources>

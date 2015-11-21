@@ -10,10 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.upreal.home.AdapterHomeNews;
 import com.upreal.R;
 import com.upreal.utils.Article;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SoapGlobalManager;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.List;
  * Created by Elyo on 24/09/15.
  */
 public class NewsFragment extends Fragment {
-
+    private ConnectionDetector cd;
     private RecyclerView mRecyclerViewNews;
     private RecyclerView.Adapter mAdapterNews;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -38,8 +40,11 @@ public class NewsFragment extends Fragment {
         mRecyclerViewNews.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         mRecyclerViewNews.setLayoutManager(mLayoutManager);
-
-        new RetrieveNews().execute();
+        cd = new ConnectionDetector(context);
+        if (cd.isConnectedToInternet()) {
+            new RetrieveNews().execute();
+        } else
+            Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
         mRecyclerViewNews.setAdapter(mAdapterNews);
         return v;
     }

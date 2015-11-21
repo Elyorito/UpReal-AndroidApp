@@ -40,7 +40,6 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
     Bundle bundle;
     private Activity mActivity;
 
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     public static final String TAG = ProductNewViewPagerAdapter.class.getSimpleName();
 
     private GoogleApiClient gClient;

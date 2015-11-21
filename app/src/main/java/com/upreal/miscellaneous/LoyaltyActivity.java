@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.upreal.R;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Loyalty;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;
@@ -30,6 +31,7 @@ import java.util.List;
  * Created by Eric on 15/11/2015.
  */
 public class LoyaltyActivity extends Activity {
+    private ConnectionDetector cd;
     private RecyclerView mRecyclerViewLoyalty;
     private AdapterLoyaltyCard mAdapterLoyalty;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -56,6 +58,7 @@ public class LoyaltyActivity extends Activity {
         mRecyclerViewLoyalty.setLayoutManager(mLayoutManager);
         builder = new AlertDialog.Builder(this);
         activity = this;
+        cd = new ConnectionDetector(getApplicationContext());
         addButton = (FloatingActionButton) findViewById(R.id.fabaddlist);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +74,9 @@ public class LoyaltyActivity extends Activity {
                 checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (((CheckBox)v).isChecked())
+                        if (((CheckBox) v).isChecked())
                             storeName.setVisibility(View.VISIBLE);
-                        else if (!((CheckBox)v).isChecked())
+                        else if (!((CheckBox) v).isChecked())
                             storeName.setVisibility(View.GONE);
                     }
                 });
@@ -114,7 +117,10 @@ public class LoyaltyActivity extends Activity {
 
             }
         });
-        new RetrieveLoyalty().execute();
+        if (cd.isConnectedToInternet()) {
+            new RetrieveLoyalty().execute();
+        } else
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
     }
 
     private class RetrieveLoyalty extends AsyncTask<Void, Void, List<Loyalty>> {

@@ -9,9 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.upreal.R;
 import com.upreal.utils.Characteristic;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SoapProductUtilManager;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  * Created by Kyosukke on 05/11/2015.
  */
 public class ProductFragmentInfo extends Fragment {
-
+    private ConnectionDetector cd;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -41,8 +43,11 @@ public class ProductFragmentInfo extends Fragment {
         recyclerView.setHasFixedSize(false);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        new RetrieveProductSpecification().execute();
+        cd = new ConnectionDetector(v.getContext());
+        if (cd.isConnectedToInternet())
+            new RetrieveProductSpecification().execute();
+        else
+            Toast.makeText(v.getContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
 
         return v;
     }

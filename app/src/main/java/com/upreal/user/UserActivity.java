@@ -23,6 +23,7 @@ import com.upreal.R;
 import com.upreal.home.NavigationBar;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.User;
@@ -31,6 +32,8 @@ import com.upreal.utils.User;
  * Created by Eric on 26/05/2015.
  */
 public class UserActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private ConnectionDetector cd;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ImageView imageBlurred;
@@ -55,12 +58,14 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        context = getApplicationContext();
+        cd = new ConnectionDetector(context);
         tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageUser = (ImageView) findViewById(R.id.imageproduct);
 
-        sessionManagerUser = new SessionManagerUser(getApplicationContext());
+        sessionManagerUser = new SessionManagerUser(context);
 
         final boolean toggleAccount = sessionManagerUser.isLogged();
 
@@ -74,10 +79,13 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         CharSequence tab[] = new CharSequence[]{"Info", "Produits", "Avis"};
 
         collapsingToolbarLayout.setTitle(user.getUsername());
-        Log.e("TEST", "\"http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg");
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
-        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new CircleTransform()).into(imageUser);
-
+        if (cd.isConnectedToInternet()) {
+            Log.e("TEST", "\"http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg");
+            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
+            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new CircleTransform()).into(imageUser);
+        }
+        else
+            Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         adapter = new UserViewPagerAdapter(getSupportFragmentManager(), tab, 3, user, getApplicationContext());
@@ -86,7 +94,6 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
-        context = getApplicationContext();
         activity = this;
         String[] option = null;
         if (toggleAccount && sessionManagerUser.getUserId() == user.getId())
@@ -119,7 +126,10 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                                 }
                                 break;
                             case 2: // Refresh
-                                new Refresh(activity, 1, user.getId()).execute();
+                                if (cd.isConnectedToInternet())
+                                    new Refresh(activity, 1, user.getId()).execute();
+                                else
+                                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                                 break;

@@ -1,31 +1,26 @@
 package com.upreal.product;
 
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.geolocalisation.WebLocationManager;
-import com.upreal.utils.Address;
-import com.upreal.utils.SoapProductUtilManager;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SoapStoreManager;
-import com.upreal.utils.Store;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Elyo on 12/11/15.
  */
 public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
+    private ConnectionDetector cd;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -52,7 +47,11 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         Toast.makeText(getActivity().getApplicationContext(), "latitude View[" + latitude + "] | longitude View[" + longitude + "]", Toast.LENGTH_SHORT).show();
-        new RetrieveShopFromLocation().execute();
+        cd = new ConnectionDetector(recyclerView.getContext());
+        if (cd.isConnectedToInternet())
+            new RetrieveShopFromLocation().execute();
+        else
+            Toast.makeText(recyclerView.getContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
 
         return v;
     }

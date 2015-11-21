@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.History;
 import com.upreal.utils.SessionManagerUser;
 
@@ -26,6 +28,8 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
 
     private List<History> hList;
     private Context context;
+    private ConnectionDetector cd;
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         Button type;
@@ -44,6 +48,7 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
     public AdapterHomeHistory(List<History> hList, Context context) {
         this.hList = hList;
         this.context = context;
+        cd = new ConnectionDetector(context);
     }
 
     @Override
@@ -55,7 +60,10 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
 
     @Override
     public void onBindViewHolder(AdapterHomeHistory.ViewHolder viewHolder, final int i) {
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/1_" + this.hList.get(i).getIdUser() + ".jpg").placeholder(R.drawable.connection_img).into(viewHolder.image);
+        if (cd.isConnectedToInternet()) {
+            Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/1_" + this.hList.get(i).getIdUser() + ".jpg").placeholder(R.drawable.connection_img).into(viewHolder.image);
+        } else
+            Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
         if (this.hList.get(i).getDate() != null)
             viewHolder.type.setText(this.hList.get(i).getDate().toString());
 

@@ -8,10 +8,12 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 import com.upreal.R;
 import com.upreal.product.ProductActivity;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 
@@ -22,7 +24,8 @@ import java.io.ByteArrayOutputStream;
  */
 public class GetProductActivity extends AppCompatActivity {
 
-     AnimatedCircleLoadingView animatedCircleLoadingView;
+    private ConnectionDetector cd;
+    AnimatedCircleLoadingView animatedCircleLoadingView;
     private byte[] mBytes = null;
     private String mImageFileLocation;
     Context context;
@@ -32,6 +35,7 @@ public class GetProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getproduct);
         context = this;
+        cd = new ConnectionDetector(context);
 //        mBytes = getIntent().getExtras().getByteArray("bytes");
         mImageFileLocation = getIntent().getExtras().getString("imageLocation");
         // Get Bitmap from file location
@@ -43,7 +47,10 @@ public class GetProductActivity extends AppCompatActivity {
         mBytes = stream.toByteArray();
         animatedCircleLoadingView = (AnimatedCircleLoadingView) findViewById(R.id.circle_loading_view);
         animatedCircleLoadingView.startIndeterminate();
-        new RetrieveProductFromImage().execute(mBytes);
+        if (cd.isConnectedToInternet()) {
+            new RetrieveProductFromImage().execute(mBytes);
+        } else
+            Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
 //        animatedCircleLoadingView.setVisibility(View.VISIBLE);
 //        animatedCircleLoadingView.resetLoading();
     }

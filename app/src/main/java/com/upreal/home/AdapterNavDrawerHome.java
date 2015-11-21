@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleImageView;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.User;
 
 /**
@@ -21,6 +23,7 @@ import com.upreal.utils.User;
  */
 public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerHome.ViewHolder> {
 
+    private ConnectionDetector cd;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
     private Context context;
@@ -62,6 +65,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         this.mNavTitles = Titles;
         this.context = context;
         this.user = user;
+        cd = new ConnectionDetector(context);
     }
 
     @Override
@@ -102,9 +106,12 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                     holder.connexion_name.setText(this.mNavAccount);
                     Picasso.with(this.context).load(this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
                 } else {
-                    Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
-                    holder.connexion_name.setText(this.mNavAccount);
-                    Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                    if (cd.isConnectedToInternet()) {
+                        Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
+                        holder.connexion_name.setText(this.mNavAccount);
+                        Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                    } else
+                        Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
                 }
                 /*Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);

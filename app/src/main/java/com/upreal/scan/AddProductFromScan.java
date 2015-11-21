@@ -23,8 +23,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.upreal.R;
-import com.upreal.home.NavigationBar;
 import com.upreal.product.ProductActivity;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Product;
 import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SoapProductManager;
@@ -41,6 +41,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
     private static final int ACTIVITY_START_CAMERA = 0;
     private static final int PERMISSIONS_REQUEST = 1;
 
+    private ConnectionDetector cd;
     private EditText productName;
     private EditText brand;
     private EditText desc;
@@ -91,8 +92,11 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         barcode.setText("");
         noticedPrice.setText("");
         shopNearby.setText("");
-        new Product.getCategory(spinner, this).execute();
-
+        cd = new ConnectionDetector(getApplicationContext());
+        if (cd.isConnectedToInternet()) {
+            new Product.getCategory(spinner, this).execute();
+        } else
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
 
         spinner.setOnItemSelectedListener(this);
         cancel.setOnClickListener(this);
@@ -137,7 +141,10 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 }
                 break;
             case R.id.addprodok:
-                new CreateProductFromScan().execute();
+                if (cd.isConnectedToInternet()) {
+                    new CreateProductFromScan().execute();
+                } else
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

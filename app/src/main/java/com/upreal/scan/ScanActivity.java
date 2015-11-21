@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.upreal.R;
 import com.upreal.product.ProductActivity;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 
@@ -22,6 +24,7 @@ public class ScanActivity extends Activity {
     private TextView formatTxt, contentTxt;
     private AlertDialog.Builder builder;
     private Intent intent;
+    private ConnectionDetector cd;
 
     /** Called when the activity is first created. */
     @Override
@@ -35,7 +38,7 @@ public class ScanActivity extends Activity {
         contentTxt = (TextView)findViewById(R.id.scan_content);
         //scanner.setOnClickListener(this);*/
         builder = new AlertDialog.Builder(ScanActivity.this);
-
+        cd = new ConnectionDetector(getApplicationContext());
         intent = new Intent("com.google.zxing.client.android.SCAN");
         intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
         startActivityForResult(intent, 0);
@@ -49,7 +52,10 @@ public class ScanActivity extends Activity {
                 Log.d("xZing", "contents: "+contents+" format: "+format); // Handle successful scan
                 //formatTxt.setText("FORMAT: " + format);
                 //contentTxt.setText(contents);
-                new RetrieveScannedProduct(contents).execute();
+                if (cd.isConnectedToInternet()) {
+                    new RetrieveScannedProduct(contents).execute();
+                } else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
                 Toast toast = Toast.makeText(this, "Le scan à été annulé", Toast.LENGTH_LONG);

@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.upreal.R;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Product;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 public class StoreFragmentProduct extends Fragment {
 
+    private ConnectionDetector cd;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -39,6 +42,7 @@ public class StoreFragmentProduct extends Fragment {
         View v = inflater.inflate(R.layout.fragment_product_commentary, container, false);
         Bundle b = getArguments();
 
+        cd = new ConnectionDetector(getContext());
         idStore = b.getInt("idStore");
 
         listProduct = new ArrayList<>();
@@ -48,7 +52,10 @@ public class StoreFragmentProduct extends Fragment {
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        new RetrieveStoreSell().execute();
+        if (cd.isConnectedToInternet()) {
+            new RetrieveStoreSell().execute();
+        } else
+            Toast.makeText(getContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
 
         return v;
     }

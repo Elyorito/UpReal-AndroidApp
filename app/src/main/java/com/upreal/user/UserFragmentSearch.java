@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.upreal.R;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SoapUserManager;
 import com.upreal.utils.User;
 
@@ -28,6 +30,7 @@ public class UserFragmentSearch extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private String mSearchName;
     private List<User> listUser = new ArrayList<User>();
+    private ConnectionDetector cd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,7 +41,11 @@ public class UserFragmentSearch extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 2));
         //Test
-        new RetrieveUser().execute();
+        cd = new ConnectionDetector(v.getContext());
+        if (cd.isConnectedToInternet())
+            new RetrieveUser().execute();
+        else
+            Toast.makeText(v.getContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
 /*//test
         mAdapter = new ProductSearchAdapter(sProduct);
 */

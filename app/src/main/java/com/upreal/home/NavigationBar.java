@@ -88,7 +88,7 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
             ITEM_WACCOUNT = new String[]{activity.getString(R.string.news),
                     activity.getString(R.string.scan),
                     activity.getString(R.string.list),
-                    "Mes cartes de fidélité",
+                    getString(R.string.loyalty_card),
                     activity.getString(R.string.settings),
                     activity.getString(R.string.deconnexion)};
             mAdapter = new AdapterNavDrawerHome(sessionManagerUser.getRegisterLoginUser()[0], ITEM_WACCOUNT, activity.getApplicationContext(), sessionManagerUser.getUser());

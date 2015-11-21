@@ -10,11 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.news.NewsActivity;
 import com.upreal.utils.Article;
+import com.upreal.utils.ConnectionDetector;
 
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
 
     private List<Article> articles;
     private Context context;
+    private ConnectionDetector cd;
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         Button type;
@@ -43,6 +47,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
     public AdapterHomeNews(List<Article> articles, Context context) {
         this.articles = articles;
         this.context = context;
+        cd = new ConnectionDetector(context);
     }
 
     @Override
@@ -54,7 +59,10 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
 
     @Override
     public void onBindViewHolder(AdapterHomeNews.ViewHolder viewHolder, final int i) {
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/News/" + this.articles.get(i).getPicture()).placeholder(R.drawable.connection_img).into(viewHolder.image);
+        if (cd.isConnectedToInternet()) {
+            Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/News/" + this.articles.get(i).getPicture()).placeholder(R.drawable.connection_img).into(viewHolder.image);
+        } else
+            Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
         viewHolder.title.setText(this.articles.get(i).getTitle());
         viewHolder.type.setText(Integer.toString(this.articles.get(i).getType()));
         viewHolder.news.setOnClickListener(new View.OnClickListener() {

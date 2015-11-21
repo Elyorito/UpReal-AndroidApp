@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Product;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     private List<Product> list = new ArrayList<Product>();
     private AlertDialog.Builder builder;
     private Context context;
+    private ConnectionDetector cd;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         int holderId;
@@ -56,6 +58,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
         this.list = listprod;
         this.context = context;
+        cd = new ConnectionDetector(context);
     }
 
     @Override
@@ -73,8 +76,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 */
 /*        holder.mNameProduct.setText(list.get(position).getName());*/
         //Log.v("Picture", list.get(position).getPicture());
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageProduct);
-                holder.descProduct.setText(list.get(position).getName());
+        if (cd.isConnectedToInternet()) {
+            Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageProduct);
+            holder.descProduct.setText(list.get(position).getName());
+        } else
+        Toast.makeText(context, R.string.no_internet_connection + R.string.retry_retrieve_connection, Toast.LENGTH_SHORT).show();
 //        holder.mCardview.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

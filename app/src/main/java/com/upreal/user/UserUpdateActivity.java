@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.upreal.R;
 import com.upreal.scan.CameraActivity;
 import com.upreal.utils.Address;
+import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SendImageTask;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapUserManager;
@@ -44,18 +45,17 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
     private static final int ACTIVITY_START_CAMERA = 0;
     private static final int PERMISSIONS_REQUEST = 1;
 
+    private ConnectionDetector cd;
+
     private TextView firstName;
     private TextView lastName;
-
     private TextView phoneNumber;
     //private ImageView phoneAllow;
-
     private TextView homeAddress;
     private TextView homeAddress2;
     private TextView city;
     private TextView postalCode;
     private TextView country;
-
     private EditText short_desc;
 
     private SessionManagerUser sessionManagerUser;
@@ -76,6 +76,8 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_update);
+
+        cd = new ConnectionDetector(getApplicationContext());
 
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         user = sessionManagerUser.getUser();
@@ -110,9 +112,23 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
         city = (TextView) findViewById(R.id.city);
         postalCode = (TextView) findViewById(R.id.postalCode);
-        if (user.getId_address() != -1)
-            new getAddress().execute(user.getId_address());
 
+        builder = new AlertDialog.Builder(this);
+        inflater = this.getLayoutInflater();
+
+        if (user.getId_address() != -1) {
+            if (cd.isConnectedToInternet())
+                new getAddress().execute(user.getId_address());
+            else {
+                builder.setTitle(R.string.no_internet_connection);
+                builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setMessage(R.string.retry_retrieve_connection).show();
+            }
+        }
         short_desc = (EditText) findViewById(R.id.shortDesc);
         short_desc.setText(user.getShort_desc());
 
@@ -125,9 +141,6 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         update.setOnClickListener(this);
         cancel.setOnClickListener(this);
         imageUser.setOnClickListener(this);
-
-        builder = new AlertDialog.Builder(this);
-        inflater = this.getLayoutInflater();
     }
 
     @Override
@@ -245,8 +258,12 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
 
                 Address userAddress = new Address(user.getId_address(), homeAddress.getText().toString(), homeAddress2.getText().toString(),
                         country.getText().toString(), city.getText().toString(), (postalCode.getText().toString().equals("")) ? 0 : Integer.parseInt(postalCode.getText().toString()));
-                new updateAddress(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
-                        (phoneNumber.getText().toString().equals("") || phoneNumber.getText().toString().equals("non renseigné")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
+                if (cd.isConnectedToInternet()) {
+                    new updateAddress(sessionManagerUser.getUserId(), firstName.getText().toString(), lastName.getText().toString(),
+                            (phoneNumber.getText().toString().equals("") || phoneNumber.getText().toString().equals("non renseigné")) ? 0 : Integer.parseInt(phoneNumber.getText().toString()), userAddress, short_desc.getText().toString()).execute();
+                }
+                else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.cancel:
