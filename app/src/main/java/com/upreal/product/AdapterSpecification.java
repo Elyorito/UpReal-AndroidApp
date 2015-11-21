@@ -18,8 +18,10 @@ import java.util.List;
  */
 public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecification.ViewHolder> {
 
+    Context context;
     List<Characteristic> listCharacteristics;
     List<String> types;
+    int size = 0;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
@@ -38,13 +40,21 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
     }
 
     public AdapterSpecification(Context context, List<Characteristic> listCharacteristics) {
+        this.context = context;
         this.listCharacteristics = listCharacteristics;
 
         this.types = new ArrayList<String>();
 
         types.add(context.getString(R.string.description));
-        types.add(context.getString(R.string.nutritional));
-        types.add(context.getString(R.string.component));
+
+        for (Characteristic c : listCharacteristics) {
+            if (c.getType() == 1)
+                types.add(context.getString(R.string.nutritional));
+            if (c.getType() == 2)
+                types.add(context.getString(R.string.component));
+        }
+
+        size = types.size();
     }
 
     @Override
@@ -65,28 +75,47 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
     public void onBindViewHolder(final ViewHolder holder, int position) {
         String value = "";
 
-        for (Characteristic c : listCharacteristics) {
-            if (c.getType() == position && position != 0) {
-                value += c.getName() + ": " + c.getValue() + " " + c.getHealthy() + "\n";
-            }
-            else if (c.getType() == position && position == 0) {
-                value = c.getValue();
-                break ;
-            }
+        if (types.get(position).equals(context.getString(R.string.description))) {
+            value = getCharacteristicFromType(0);
+        }
+        else if (types.get(position).equals(context.getString(R.string.nutritional))) {
+            value = getCharacteristicFromType(1);
+        }
+        else if (types.get(position).equals(context.getString(R.string.component))) {
+            value = getCharacteristicFromType(2);
         }
 
-        if (value != null || value != "") {
+        if (value != null && value != "") {
             holder.typeName.setText(types.get(position));
             holder.typeValue.setText(value);
         }
         else {
-            holder.typeName.setText(null);
-            holder.typeValue.setText(null);
+            holder.typeName.setText("");
+            holder.typeValue.setText("");
         }
+    }
+
+    public String getCharacteristicFromType(int type) {
+        String value = "";
+
+        for (Characteristic c : listCharacteristics) {
+            if (type == c.getType()) {
+                if (type == 0)
+                    value = c.getValue();
+                else
+                    value += c.getName() + ": " + c.getValue() + " " + c.getHealthy() + "\n";
+            }
+        }
+        if (value != null && value != "")
+            return value;
+        else if (type == 0)
+            return context.getString(R.string.not_defined);
+
+        return null;
     }
 
     @Override
     public int getItemCount() {
-        return types.size();
+        return size;
     }
 }

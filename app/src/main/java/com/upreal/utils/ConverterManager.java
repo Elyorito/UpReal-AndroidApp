@@ -226,6 +226,19 @@ public class ConverterManager {
         return obj;
     }
 
+    public static Company convertToCompany(SoapObject soapObject) {
+        Company obj = new Company();
+
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            obj.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+        if (soapObject.hasProperty("name") && soapObject.getProperty("name") != null)
+            obj.setName(soapObject.getProperty("name").toString());
+        if (soapObject.hasProperty("website") && soapObject.getProperty("website") != null)
+            obj.setWebsite(soapObject.getProperty("website").toString());
+
+        return obj;
+    }
+
     public static Loyalty convertToLoyalty(SoapObject soapObject) {
         Loyalty obj = new Loyalty();
         // Name

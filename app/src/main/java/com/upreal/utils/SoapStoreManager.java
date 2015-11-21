@@ -110,6 +110,25 @@ public class SoapStoreManager extends SoapManager {
         return address;
     }
 
+    public Company getCompanyByStore(int id) {
+        String methodname = "getCompanyByStore";
+        Company company = null;
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id", id);
+
+        try {
+            SoapObject results= (SoapObject) callService(methodname, request);
+
+            if (results == null)
+                return null;
+
+            company = ConverterManager.convertToCompany(results);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return company;
+    }
+
     public List<Store> getListStore(String searchName) {
 
         List<Store> listStore = new ArrayList<>();
