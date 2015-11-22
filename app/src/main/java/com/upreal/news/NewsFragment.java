@@ -40,6 +40,7 @@ public class NewsFragment extends Fragment {
         mRecyclerViewNews.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         mRecyclerViewNews.setLayoutManager(mLayoutManager);
+        context = getActivity().getApplicationContext();
         cd = new ConnectionDetector(context);
         if (cd.isConnectedToInternet()) {
             new RetrieveNews().execute();
@@ -63,7 +64,6 @@ public class NewsFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Article> articles) {
             super.onPostExecute(articles);
-            context = getActivity().getApplicationContext();
             mAdapterNews = new AdapterHomeNews(articles, context);
             mRecyclerViewNews.setAdapter(mAdapterNews);
         }
