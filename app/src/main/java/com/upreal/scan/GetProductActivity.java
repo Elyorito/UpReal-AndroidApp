@@ -73,7 +73,6 @@ public class GetProductActivity extends AppCompatActivity {
             if (product == null || product.getName() == null || not.equals(product.getName())) {
                 if (context != null) {
                     Intent intent = new Intent(getApplicationContext(), AddProductFromScan.class);
-                    intent.putExtra("listprod", new Product(""));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplicationContext().startActivity(intent);
                     finish();
@@ -82,7 +81,7 @@ public class GetProductActivity extends AppCompatActivity {
             else {
                 if (context != null) {
                     Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-                    intent.putExtra("listprod", product);
+                    intent.putExtra("prod", product);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplicationContext().startActivity(intent);
                     finish();

@@ -73,7 +73,9 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         category = "Aucun";
 
         builder = new AlertDialog.Builder(AddProductFromScan.this);
-        barcodeEAN = getIntent().getExtras().getString("ean");
+        barcodeEAN = "";
+        if (getIntent().getExtras() != null)
+            barcodeEAN = getIntent().getExtras().getString("ean");
         productName = (EditText) findViewById(R.id.product_name);
         brand = (EditText) findViewById(R.id.brand);
         desc = (EditText) findViewById(R.id.description);
@@ -233,6 +235,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
             mDesc = desc.getText().toString();
             mNoticedPrice = noticedPrice.getText().toString();
             mShopNearby = shopNearby.getText().toString();
+            barcodeEAN = barcode.getText().toString();
         }
 
         @Override
@@ -260,7 +263,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-                            intent.putExtra("listprod", product);
+                            intent.putExtra("prod", product);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getApplicationContext().startActivity(intent);
                             finish();
