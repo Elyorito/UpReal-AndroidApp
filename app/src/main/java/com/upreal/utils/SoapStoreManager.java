@@ -54,6 +54,7 @@ public class SoapStoreManager extends SoapManager {
                     String latitude_ = obj.getProperty(3).toString();
                     String longitude_ = obj.getProperty(4).toString();
                     String distance = obj.getProperty(5).toString();
+                    String idStore = obj.getProperty(6).toString();
 
                     listStoreProduct.add(price);
                     listStoreProduct.add(shop);
@@ -61,6 +62,7 @@ public class SoapStoreManager extends SoapManager {
                     listStoreProduct.add(latitude_);
                     listStoreProduct.add(longitude_);
                     listStoreProduct.add(distance);
+                    listStoreProduct.add(idStore);
 
                     listStoreReturn.add(listStoreProduct);
                     listStoreProduct = new ArrayList<>();

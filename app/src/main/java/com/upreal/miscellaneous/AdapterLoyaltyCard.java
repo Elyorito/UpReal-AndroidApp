@@ -49,8 +49,8 @@ public class AdapterLoyaltyCard extends RecyclerView.Adapter<AdapterLoyaltyCard.
 
     @Override
     public void onBindViewHolder(AdapterLoyaltyCard.ViewHolder holder, final int position) {
-        Bitmap bitmap = this.loyalties.get(position).getBarcode();
-        holder.image.setImageBitmap(bitmap);
+//        Bitmap bitmap = this.loyalties.get(position).getBarcode();
+//        holder.image.setImageBitmap(bitmap);
         holder.title.setText(this.loyalties.get(position).getName());
         holder.lcard.setOnClickListener(new View.OnClickListener() {
             @Override

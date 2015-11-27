@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,11 +35,15 @@
                 <FrameLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
+
                     <fragment
-                        android:id="@+id/map_view"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"/>
+                        android:name="com.google.android.gms.maps.MapFragment"
+                        android:id="@+id/map_store"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        map:cameraZoom="13"
+                        map:mapType="normal"
+                        map:liteMode="true"/>
                     <ImageView
                         android:id="@+id/imageproduct"
                         android:layout_width="140dp"
@@ -71,13 +76,22 @@
             app:tabGravity="fill">
 
         </android.support.design.widget.TabLayout>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </android.support.v4.view.ViewPager>
-    </android.support.design.widget.AppBarLayout>
+
+    </android.support.v4.widget.NestedScrollView>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -90,50 +104,3 @@
 
     </android.support.design.widget.FloatingActionButton>
 </android.support.design.widget.CoordinatorLayout>
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context="com.upreal.product.ProductActivity"-->
-    <!--android:weightSum="5">-->
-
-    <!--<include-->
-    <!--android:id="@+id/app_bar"-->
-    <!--layout="@layout/home_app_bar"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="match_parent"/>-->
-
-    <!--<include-->
-    <!--android:id="@+id/product_info"-->
-    <!--layout="@layout/product_info"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_weight="2"/>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_weight="3"-->
-    <!--android:weightSum="4">-->
-
-    <!--<com.upreal.view.SlidingTabLayout-->
-    <!--android:id="@+id/sliding_tab"-->
-    <!--android:background="@color/ColorPrimaryDark"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:elevation="2dp"-->
-    <!--android:layout_weight=".8"-->
-    <!--android:fillViewport="false" />-->
-
-    <!--<android.support.v4.view.ViewPager-->
-    <!--android:id="@+id/viewpager"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:background="#ffc0c0c0"-->
-    <!--android:layout_weight="3.2"/>-->
-
-    <!--</LinearLayout>-->
-
-    <!--</LinearLayout>-->

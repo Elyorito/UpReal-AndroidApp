@@ -2,6 +2,7 @@ package com.upreal.list;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.upreal.R;
 import com.upreal.utils.DividerItemDecoration;
+import com.upreal.utils.Items;
 import com.upreal.utils.Lists;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;
@@ -26,6 +29,7 @@ import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Elyo on 11/05/2015.
@@ -74,6 +78,8 @@ public class ListActivity extends AppCompatActivity {
 
     private View view;
     private final ArrayList<String[]> arrayListCust = new ArrayList<String[]>();
+
+    private Items item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,29 +161,29 @@ public class ListActivity extends AppCompatActivity {
         listsBase.add(getProduct(getITEMS, mDbQuery));
 */
         floatingButtonAddList = (FloatingActionButton) findViewById(R.id.fabaddlist);
-        mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlist);
-        mRecyclerViewList.setHasFixedSize(true);
-        mRecyclerViewList.addItemDecoration(
-                new DividerItemDecoration(this, null));
-        mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-        mAdapterList = new AdapterListHomeBase(listsBase, base_list, delimiter);
-        mRecyclerViewList.setAdapter(mAdapterList);
-        mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean b) {
-
-            }
-        });
+//        mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlist);
+//        mRecyclerViewList.setHasFixedSize(true);
+//        mRecyclerViewList.addItemDecoration(
+//                new DividerItemDecoration(this, null));
+//        mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
+//        mAdapterList = new AdapterListHomeBase(listsBase, base_list, delimiter);
+//        mRecyclerViewList.setAdapter(mAdapterList);
+//        mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//            @Override
+//            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void onRequestDisallowInterceptTouchEvent(boolean b) {
+//
+//            }
+//        });
 
         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
         //Toast.makeText(getApplicationContext(), "TEST" + " length= " + lists.length, Toast.LENGTH_SHORT).show();
@@ -203,11 +209,13 @@ public class ListActivity extends AppCompatActivity {
         for(String[] list : lists){
             arrayListCust.add(list);
         }
-        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
-        mRecyclerViewListCust.setAdapter(mAdapterListCust);
+//        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
+//        mRecyclerViewListCust.setAdapter(mAdapterListCust);
         RecyclerView.ItemAnimator animator = mRecyclerViewListCust.getItemAnimator();
         animator.setAddDuration(1500);
         animator.setRemoveDuration(1000);
+
+        new RetrieveList().execute();
 
         floatingButtonAddList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,15 +237,16 @@ public class ListActivity extends AppCompatActivity {
                         String[] listsend = {editList.getText().toString(), Integer.toString(1), "8", Integer.toString(0), Integer.toString(sessionManagerUser.getUserId())};
                         mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{editList.getText().toString(), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "8"});
                         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-                        for(String[] list : lists){
+                        for (String[] list : lists){
                             arrayListCust.add(list);
                         }
                         new SendCreatedLists().execute(listsend);
                         // TODO Auto-generated method stub
                          /*Refresh list item [BUG]*/
-                        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
-                        mRecyclerViewListCust.setAdapter(mAdapterListCust);
-                        mAdapterListCust.notifyDataSetChanged();
+//                        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
+//                        mRecyclerViewListCust.setAdapter(mAdapterListCust);
+//                        mAdapterListCust.notifyDataSetChanged();
+                        new RetrieveList().execute();
                          /*dialog.dismiss();*/
                         mDatabase.close();
                     }
@@ -267,6 +276,52 @@ public class ListActivity extends AppCompatActivity {
         //lists.setDate();
         return lists;
     }
+
+    private class RetrieveList extends AsyncTask<Void, Void, List<Lists>> {
+
+        @Override
+        protected List<Lists> doInBackground(Void... params) {
+
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+            int targetType = (item == null) ? (6) : (8);
+
+            if (userSession.isLogged()) {
+                SoapGlobalManager gm = new SoapGlobalManager();
+                List<Lists> lList = gm.getUserList(userSession.getUserId());
+
+                return lList;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Lists> res) {
+            super.onPostExecute(res);
+            Log.e("ListActivity", "WebService called. Result:");
+//            for (Lists items : res) {
+//                //Toast.makeText(getApplicationContext(), "Name[" + items.getName() + "]|NbItem[" + items.getNb_items() + "]|id[" + items.getId() + "]",Toast.LENGTH_SHORT).show();
+//            }
+            mAdapterListCust = new AdapterListHomeCustom(res, delimiter);
+            mRecyclerViewListCust.setAdapter(mAdapterListCust);
+//            if (res != null) {
+//                absLists.clear();
+//                for (Item i : res) {
+//                    absLists.add(i);
+//                    Log.e("ListActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
+//                }
+//            }
+//            if (absLists.isEmpty()) {
+//                Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
+//                intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.FAILURE_ANIMATION);
+//                intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, getString(R.string.search_empty));
+//                startActivity(intent);
+//                finish();
+//            }
+//            adapter.notifyDataSetChanged();
+        }
+    }
+
 
     private class SendGetDiffListsServer extends AsyncTask<ArrayList<Lists>, Void, ArrayList<Lists>> {
 

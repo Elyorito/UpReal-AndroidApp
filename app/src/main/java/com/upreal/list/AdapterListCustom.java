@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.upreal.R;
+import com.upreal.utils.Lists;
 import com.upreal.utils.Product;
 
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ import java.util.List;
 public class AdapterListCustom extends UltimateViewAdapter {
         private ArrayList<Product> products;
 
-        public AdapterListCustom(ArrayList<Product> prod) {
-            this.products = prod;
+        public AdapterListCustom(List<Product> prod) {
+            this.products = (ArrayList<Product>) prod;
         }
 
     @Override
@@ -48,7 +49,9 @@ public class AdapterListCustom extends UltimateViewAdapter {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (products != null) {
                 ((ViewHolder) holder).nameList.setText(products.get(position).getName());
+            }
         }
 
     @Override

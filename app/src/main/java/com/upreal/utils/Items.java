@@ -7,7 +7,21 @@ import android.os.Parcelable;
  * Created by Elyo on 06/09/15.
  */
 public class Items implements Parcelable {
+    /*
+                TARGET_TYPE
+                1 = id_user
+                2 = id_product
+                3 = id_store
+                4 = id_article
+                5 = id_ovr_rate
 
+                UNOFFICIAL
+                6 = id_lists
+                7 = id_items
+                8 = id_items
+                9 = id_achievement
+                10 = id_history
+             */
     private int id_list;
     private int id_product;
     private int id_user;

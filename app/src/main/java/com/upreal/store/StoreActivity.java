@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,14 +18,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.utils.Address;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.Refresh;
+import com.upreal.utils.SoapStoreManager;
+import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.Store;
 
 /**
@@ -35,6 +42,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private SupportMapFragment map;
+    private MapFragment map_store;
     private ImageView imageStore;
     private TabLayout tabLayout;
     private Activity activity;
@@ -48,6 +56,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
     private FloatingActionButton menu;
     private AlertDialog dialog;
+    private Address storeAddress;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +68,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageStore = (ImageView) findViewById(R.id.imageproduct);
         store = getIntent().getExtras().getParcelable("store");
+        new RetreiveAddressStore().execute();
 
         createMapView();
 
@@ -116,8 +126,20 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
     private void createMapView() {
         try {
-            if (map == null) {
-                map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_view));
+//            if (map == null) {
+//                map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_store));
+//                if (map == null) {
+//                    Toast.makeText(getApplicationContext(), "Error creating map", Toast.LENGTH_SHORT).show();
+//                }
+            if (map_store == null) {
+                map_store = (MapFragment) getFragmentManager()
+                        .findFragmentById(R.id.map_store);
+                map_store.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+//                        addMarker(store.getName(), storeAddress.getLatitude(), storeAddress.getLongitude());
+                    }
+                });
                 if (map == null) {
                     Toast.makeText(getApplicationContext(), "Error creating map", Toast.LENGTH_SHORT).show();
                 }
@@ -139,5 +161,21 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
+    }
+
+    private class RetreiveAddressStore extends AsyncTask<Void, Void, Address> {
+
+        @Override
+        protected Address doInBackground(Void... params) {
+            SoapStoreManager sm = new SoapStoreManager();
+            storeAddress = sm.getAddressByStore(store.getId());
+            return storeAddress;
+        }
+
+        @Override
+        protected void onPostExecute(Address address) {
+            super.onPostExecute(address);
+            addMarker(store.getName(), storeAddress.getLatitude(), storeAddress.getLongitude());
+        }
     }
 }

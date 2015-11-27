@@ -1,6 +1,7 @@
 package com.upreal.utils;
 
 import android.util.Base64;
+import android.util.Log;
 
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -16,6 +17,34 @@ public class SoapGlobalManager extends SoapManager {
 
     public SoapGlobalManager() {
         super("GlobalManager");
+    }
+
+    public List<Items> getItemsLists(int idList) {
+        List<Items> listItems = new ArrayList<>();
+        String methodname = "getItemsLists";
+        Log.v("TANAME", NAMESPACE);
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_list", idList);
+
+        try {
+            Object res = callService(methodname, request);
+            if (res instanceof Vector) {
+                Vector<SoapObject> results = (Vector<SoapObject>) res;
+                int length = results.size();
+                for (int i = 0; i < length; ++i) {
+                    SoapObject o = results.get(i);
+                    listItems.add(ConverterManager.convertToItems(o));
+                }
+            } else if (res instanceof SoapObject) {
+                SoapObject o = (SoapObject) res;
+                listItems.add(ConverterManager.convertToItems(o));
+            }
+            return listItems;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return null;
     }
 
     public ArrayList<Lists> getDiffListServer(ArrayList<Lists> lists) {

@@ -69,22 +69,22 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         //initLocalisation();
     }
 
-    public void initLocalisation() {
-        activityWeakReference = new WeakReference<Activity>(mActivity);
-
-        gClient = new GoogleApiClient.Builder(activityWeakReference.get().getApplicationContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        gClient.connect();
-
-        mLocRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-    }
+//    public void initLocalisation() {
+//        activityWeakReference = new WeakReference<Activity>(mActivity);
+//
+//        gClient = new GoogleApiClient.Builder(activityWeakReference.get().getApplicationContext())
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//
+//        gClient.connect();
+//
+//        mLocRequest = LocationRequest.create()
+//                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+//                .setInterval(10 * 1000)
+//                .setFastestInterval(1 * 1000);
+//    }
 
     @Override
     public Fragment getItem(int position) {
@@ -94,16 +94,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
                 ProductFragmentInfo comd = new ProductFragmentInfo();
                 comd.setArguments(bundle);
                 return comd;
-//                ProductFragmentInfo pfi = new ProductFragmentInfo();
-//                pfi.setArguments(bundle);
-//                return pfi;
             case 1: //Prix
-/*                ProductFragmentPrice price = new ProductFragmentPrice();
-                price.setArguments(bundle);
-                return price;*/
-//                ProductFragmentSocial social = new ProductFragmentSocial();
-//                social.setArguments(bundle);
-//                return social;
                 ProductFragmentNewPrice pfnp = new ProductFragmentNewPrice();
                 pfnp.setArguments(bundle);
                 return pfnp;
@@ -174,9 +165,6 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         int kmInDec = Integer.valueOf(newFormat.format(km));
         double meter = valueResult % 1000;
         int meterInDec = Integer.valueOf(newFormat.format(meter));
-        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-                + " Meter   " + meterInDec);
-
         return Radius * c;
     }
 

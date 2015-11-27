@@ -1,5 +1,6 @@
 package com.upreal.product;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -66,8 +67,9 @@ public class ProductFragmentInfo extends Fragment {
         @Override
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
-            if (listCharacteristics != null || i > 0) {
-                mAdapter = new AdapterSpecification(getActivity().getApplicationContext(), listCharacteristics);
+            Context context = getActivity().getApplicationContext();
+            if (listCharacteristics != null || i > 0 || context != null) {
+                mAdapter = new AdapterSpecification(context, listCharacteristics);
                 recyclerView.setAdapter(mAdapter);
             }
         }

@@ -19,11 +19,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +47,8 @@ import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
 import com.upreal.view.SlidingTabLayout;
+
+import java.util.ArrayList;
 
 
 /**
@@ -72,6 +76,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private Boolean isLiked = false;
     private CharSequence title;
 
+    private Product mProduct;
+
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
     private DatabaseQuery mDbQuery;
@@ -87,6 +93,13 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private FloatingActionButton menu;
     private AlertDialog dialog;
 
+    private View dialogView;
+    private AlertDialog.Builder builderCustom;
+    private AlertDialog.Builder builderList;
+    private ArrayList<Integer> checkedList = new ArrayList<>();
+
+    private String[] lists;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +114,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageProduct = (ImageView) findViewById(R.id.imageproduct);
         prod = getIntent().getExtras().getParcelable("prod");
-
+        mProduct = prod;
+        if (prod == null)
+            return;
         collapsingToolbarLayout.setTitle(prod.getName());
         if (cd.isConnectedToInternet()) {
             Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
@@ -129,7 +144,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0: // Like
-                                if (!sessionManagerUser.isLogged()) {
+                                if (sessionManagerUser.isLogged()) {
                                     AlertDialog.Builder builderl = new  AlertDialog.Builder(context);
                                     builderl.setTitle("Vous aimez ce produit?").setMessage("Veuillez-vous connecter d'abord.")
                                             .setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
@@ -158,6 +173,102 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                                 break;
                             case 1: // Add to list
+                                mDbHelper = new DatabaseHelper(getApplicationContext());
+                                mDbQuery = new DatabaseQuery(mDbHelper);
+                                mDatabase = mDbHelper.openDataBase();
+
+                                final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
+                                mDatabase.close();
+                                lists = new String[listsElements.length];
+
+
+                                for (int i = 0; i < listsElements.length; i++) {
+                                    lists[i] = listsElements[i][0];
+                                }
+                                Toast.makeText(ProductActivity.this, "ListLength:" + lists[0],Toast.LENGTH_SHORT).show();
+                                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
+                                TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
+                                addCustom.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        builderCustom = new AlertDialog.Builder(v.getContext());
+                                        LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                        View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
+                                        final EditText editList = (EditText) view.findViewById(R.id.namelist);
+                                        builderCustom.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                if (editList.getText().length() <= 0) {
+                                                    dialog.cancel();
+                                                }
+                                                dialog.dismiss();
+                                            }
+                                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                        builderCustom.setView(view).create().show();
+                                    }
+                                });
+
+                                builderList = new AlertDialog.Builder(ProductActivity.this);
+                                builderList.setTitle(getString(R.string.add_product_in_which_list))
+                                        .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                                if (isChecked) {
+                                                    checkedList.add(which);
+                                                } else if (checkedList.contains(which)) {
+                                                    checkedList.remove(Integer.valueOf(which));
+                                                }
+                                                mDbHelper = new DatabaseHelper(dialogView.getContext());
+                                                mDbQuery = new DatabaseQuery(mDbHelper);
+                                                mDatabase = mDbHelper.openDataBase();
+                                            }
+                                        })
+                                        .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+//                                        mDbHelper = new DatabaseHelper(dialogView.getContext());
+//                                        mDbQuery = new DatabaseQuery(mDbHelper);
+//                                        mDatabase = mDbHelper.openDataBase();
+//
+//                                        String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
+//                                        String getProduct[] = mDbQuery.QueryGetProduct("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
+//                                        if (getProductElement[0] != null) {
+//                                            Toast.makeText(dialogView.getContext(), "|Name=" + getProductElement[0] + "|Ean=" + getProductElement[1] + "|Brand=" + getProductElement[2] + "|Picture=" + getProductElement[3] + "|idProduct=" + getProductElement[4], Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(dialogView.getContext(), "|Name=" + getProduct[0] + "|Ean=" + getProduct[1] + "|Brand=" + getProduct[2] + "|Picture=" + getProduct[3] + "|idProduct=" + getProduct[4], Toast.LENGTH_SHORT).show();
+//                                        } else if (getProductElement[0] == null) {
+//                                            if (mProduct.getPicture() == null)
+//                                                mProduct.setPicture("");
+//                                            mDbQuery.InsertData("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, new String[]{mProduct.getName(), mProduct.getEan(), mProduct.getPicture(), mProduct.getBrand(), Integer.toString(mProduct.getId())});
+//                                        }
+//                                        for (int i = 0; i < checkedList.size(); i++) {
+//                                            String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{lists[checkedList.get(i)], "8"}, null, null, null);
+//
+//                                            String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(mProduct.getId()), getListId[0][0]}, null, null, null);
+//                                            if (getITEMS[0] == null)
+//                                                mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(sessionManagerUser.getUserId())});
+//                                        }
+//                                        mDatabase.close();
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton(getString(R.string.cancel),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        }
+                                )
+                                       // .setView(dialogView)
+                                       .create().show();
                                 break;
                             case 2: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();

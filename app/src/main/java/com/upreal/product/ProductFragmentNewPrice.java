@@ -1,10 +1,12 @@
 package com.upreal.product;
 
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,9 @@ import android.widget.Toast;
 import com.upreal.R;
 import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.SoapStoreManager;
+import com.upreal.utils.Store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,7 +66,7 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
         @Override
         protected List<List<String>> doInBackground(Void... voids) {
             SoapStoreManager sm = new SoapStoreManager();
-            storeNearby = sm.getProductByLocation(latitude, longitude, 999, idProduct);
+            storeNearby = sm.getProductByLocation(latitude, longitude, 2, idProduct);
             return storeNearby;
         }
 

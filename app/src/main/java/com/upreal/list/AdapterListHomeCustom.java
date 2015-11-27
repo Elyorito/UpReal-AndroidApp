@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.upreal.R;
+import com.upreal.utils.Lists;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Elyo on 18/05/2015.
@@ -18,7 +20,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
 
     private static final int TYPE_CUSTOM = 1;
 
-    private ArrayList<String[]> mListCust;
+    private List<Lists> lists;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
@@ -34,9 +36,9 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
         }
     }
 
-    AdapterListHomeCustom(ArrayList<String[]> list_cust, String delimiter[]) {
+    AdapterListHomeCustom(List<Lists> lists, String delimiter[]) {
 
-        this.mListCust = list_cust;
+        this.lists = lists;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     @Override
     public void onBindViewHolder(AdapterListHomeCustom.ViewHolder holder, final int position) {
         if (holder.HolderId == 1) {
-            holder.list_name.setText(mListCust.get(position)[0]);
+            holder.list_name.setText(lists.get(position).getName());
         }
         holder.list_name.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -61,7 +63,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
                 switch (v.getId()) {
                     case R.id.rowtextlist:
                         //Toast.makeText(v.getContext(),mListCust.get(position -1)[0], Toast.LENGTH_SHORT).show();
-                        mListCust.remove(position);
+                        lists.remove(position);
                         notifyItemRemoved(position);
                         return true;
                     default:
@@ -76,7 +78,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
                 switch (v.getId()) {
                     case R.id.rowtextlist:
                         Intent intent = new Intent(v.getContext(), ListCustomActivity.class);
-                        intent.putExtra("listcustom", mListCust.get(position));
+                        intent.putExtra("listcustom", lists.get(position));
                         v.getContext().startActivity(intent);
                         break;
                     default:
@@ -95,6 +97,6 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     public int getItemCount() {/*
         if (mListCust.length == 0)
             return mListCust.length;*/
-        return mListCust.size();
+        return lists.size();
     }
 }

@@ -52,13 +52,15 @@ public class AdapterListBase extends UltimateViewAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).nameList.setText(prod.get(position)[position]);
-        ((ViewHolder) holder).nameList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (prod.get(position)[position] != null) {
+            ((ViewHolder) holder).nameList.setText(prod.get(position)[position]);
+            ((ViewHolder) holder).nameList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
+                }
+            });
+        }
 
     }
 
