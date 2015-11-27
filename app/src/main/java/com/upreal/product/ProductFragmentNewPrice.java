@@ -50,7 +50,7 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        Toast.makeText(getActivity().getApplicationContext(), "latitude View[" + latitude + "] | longitude View[" + longitude + "]", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getApplicationContext(), "latitude View[" + latitude + "] | longitude View[" + longitude + "]", Toast.LENGTH_SHORT).show();
         cd = new ConnectionDetector(recyclerView.getContext());
         if (cd.isConnectedToInternet())
             new RetrieveShopFromLocation().execute();
@@ -66,14 +66,15 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
         @Override
         protected List<List<String>> doInBackground(Void... voids) {
             SoapStoreManager sm = new SoapStoreManager();
-            storeNearby = sm.getProductByLocation(latitude, longitude, 2, idProduct);
+            //storeNearby = sm.getProductByLocation(latitude, longitude, 2, idProduct);
+            storeNearby = sm.getProductByLocation(48.8153326, 2.360979, 5, idProduct);
             return storeNearby;
         }
 
         @Override
         protected void onPostExecute(List<List<String>> stores) {
             super.onPostExecute(stores);
-            Toast.makeText(getActivity().getApplicationContext(), "Store.size" + storeNearby.size(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity().getApplicationContext(), "Store.size" + storeNearby.size(), Toast.LENGTH_SHORT).show();
             mAdapter = new AdapterListNewStore(stores);
             recyclerView.setAdapter(mAdapter);
         }
