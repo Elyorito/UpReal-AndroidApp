@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.geolocalisation.GeolocalisationActivity;
+import com.upreal.home.NavigationBar;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
@@ -136,6 +137,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mDbHelper = new DatabaseHelper(context);
         mDbQuery = new DatabaseQuery(mDbHelper);
 
+        new NavigationBar(this);
         new RetrieveRateStatus().execute();
 
         final String[] option = new String[]{"J'aime", "Ajouter à ses ventes", "Ajouter à une liste", "Partager", "Rafraichir", "Suggestion"};

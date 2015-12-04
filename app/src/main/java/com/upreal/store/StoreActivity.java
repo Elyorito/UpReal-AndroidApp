@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.home.NavigationBar;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.Address;
 import com.upreal.utils.CircleTransform;
@@ -84,6 +85,8 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
         new RetrieveRateStatus().execute();
         new RetrieveAddressStore().execute();
+
+        new NavigationBar(this);
 
         createMapView();
 
