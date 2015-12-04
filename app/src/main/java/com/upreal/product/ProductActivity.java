@@ -98,7 +98,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Integer> checkedList = new ArrayList<>();
     private String[] lists;
 
-    int status = 0;
+    private int status = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +158,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                                 break ;
                                             case 3:
                                                 new SendRateStatus().execute(1);
+                                                break ;
+                                            default:
+                                                new SendRateStatus().execute(2);
                                                 break ;
                                         }
 /*                                        if (isLiked == true)
@@ -364,45 +367,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 }
         );
         dialog = builder.create();
-//        prodName = (TextView) findViewById(R.id.product_name);
-//        prodBrand = (TextView) findViewById(R.id.product_brand);
-//        prodShortDesc = (TextView) findViewById(R.id.product_desc);
-//        prodPicture = (ImageView) findViewById(R.id.product_picture);
-//
-//        geoloc = (Button) findViewById(R.id.geoloc);
-//        geoloc.setOnClickListener(this);
-//
-//        prod = getIntent().getExtras().getParcelable("listprod");
-//
-//
-//        title = new String(prod.getName());
-//        prodName.setText(prod.getName());
-//        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
-//        Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).into(prodPicture);
-//
-//        prodBrand.setText(prod.getBrand());
-//
-//        CharSequence Tab[] = {getString(R.string.commentary), getString(R.string.social), getString(R.string.options)};
-//        toolbar = (Toolbar) findViewById(R.id.app_bar);
-//        toolbar.setTitle(title);
-//        setSupportActionBar(toolbar);
-//
-//        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-//        adapter = new ProductViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod);
-//         mViewPager.setAdapter(adapter);
-//
-//        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab);
-//        mSlidingTabLayout.setDistributeEvenly(true);
-//        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-//          @Override
-//          public int getIndicatorColor(int position) {
-//              return getResources().getColor(R.color.ColorPrimaryDark);
-//          }
-//        });
-//        mSlidingTabLayout.setViewPager(mViewPager);
-
-/*        new RetrievePicture().execute(); */
-//        new RetrieveDesc().execute();
     }
 
     @Override
@@ -502,15 +466,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             super.onPostExecute(res);
 
             status = res;
-            /*
-            if (res == 2)
-                like.setAlpha(1f);
-            else
-                like.setAlpha(.5f);
-
-            likeValue.setText(likeV + "");
-            dislikeValue.setText(dislikeV + "");
-            */
+            Log.e("TEST", "stat: " + res);
         }
     }
 
@@ -559,88 +515,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             return null;
         }
     }
-
-    /*
-    private class isProductLiked extends AsyncTask<Void, Void, Boolean> {
-        Boolean isLike = false;
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            SoapUserUtilManager uum = new SoapUserUtilManager();
-            isLike = uum.isProductLiked(Integer.toString(sessionManagerUser.getUserId()), Integer.toString(prod.getId()));
-            return isLike;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            isLiked = aBoolean;
-        }
-    }*/
-
-    /*
-    private class SendLike extends AsyncTask<Void, Void, Boolean> {
-        Boolean isSuccess = false;
-        Boolean isLike = false;
-        private int type;
-
-        public SendLike(int type) {
-            this.type = type;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            SoapUserUtilManager uum = new SoapUserUtilManager();
-            SoapProductUtilManager pum = new SoapProductUtilManager();
-            isLike = uum.isProductLiked(Integer.toString(sessionManagerUser.getUserId()), Integer.toString(prod.getId()));
-            if (!isLike) {
-                isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), prod.getId(), 1);
-                return isSuccess;
-            } else if (isLike) {
-                isSuccess = pum.rateProduct(sessionManagerUser.getUserId(), prod.getId(), -1);
-                if (isSuccess == true)
-                    return false;
-                return isSuccess;
-                    /*
-                    isSuccess = pum.rateUser(sessionManagerUser.getUserId(), )
-            }
-            return isSuccess;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean b) {
-            super.onPostExecute(b);
-            if (b == true && sessionManagerUser.isLogged()) {
-                isLiked = true;
-                mDatabase = mDbHelper.openDataBase();
-                String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
-                String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(prod.getId())}, null, null, null);
-                if (getProductElement[0] == null) {
-                    if (prod.getPicture() == null)
-                        prod.setPicture("");
-                    mDbQuery.InsertData("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, new String[]{prod.getName(), prod.getEan(), prod.getPicture(), prod.getBrand(), Integer.toString(prod.getId())});
-                }
-                String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(prod.getId()), getListId[0][0]}, null, null, null);
-                if (getITEMS[0] == null)
-                    mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(prod.getId()), Integer.toString(sessionManagerUser.getUserId())});
-            } else if (b == false) {
-                isLiked = false;
-                Log.v("HEOUAIS", "DISLIKE PRODUCT");
-                mDatabase = mDbHelper.openDataBase();
-                String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
-                String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(prod.getId())}, null, null, null);
-                mDbQuery.DeleteData("items", "id_list=? AND id_product=? AND id_user=?", new String[]{getListId[0][0], Integer.toString(prod.getId()), Integer.toString(sessionManagerUser.getUserId())});
-            }
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-    }*/
 
     private class AddUserSell extends AsyncTask<Double, Void, Void> {
         @Override

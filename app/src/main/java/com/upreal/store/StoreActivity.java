@@ -13,9 +13,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -26,13 +30,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.login.LoginActivity;
 import com.upreal.utils.Address;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Refresh;
+import com.upreal.utils.SessionManagerUser;
+import com.upreal.utils.SoapGlobalManager;
 import com.upreal.utils.SoapStoreManager;
+import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.Store;
 
 /**
@@ -59,6 +67,9 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
     private AlertDialog dialog;
     private Address storeAddress;
 
+    private int status = 0;
+    private int idType = 0;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
@@ -71,7 +82,8 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         store = getIntent().getExtras().getParcelable("store");
         new History.createHistory(context, 1, 3 , store.getId()).execute();
 
-        new RetreiveAddressStore().execute();
+        new RetrieveRateStatus().execute();
+        new RetrieveAddressStore().execute();
 
         createMapView();
 
@@ -91,14 +103,30 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         menu.setOnClickListener(this);
         activity = this;
 
-        final String[] option = new String[] { "Partager", "Rafraichir" };
+        final String[] option = new String[] { "J'aime", "Partager", "Rafraichir", "Suggestion" };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quel action voulez-vous faire ?");
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: // Share
+                            case 0: // Like
+                                if (cd.isConnectedToInternet()) {
+                                    switch (status) {
+                                        case 1:
+                                            new SendRateStatus().execute(2);
+                                            break ;
+                                        case 2:
+                                            new SendRateStatus().execute(1);
+                                            break ;
+                                        default:
+                                            new SendRateStatus().execute(2);
+                                            break ;
+                                    }
+                                } else
+                                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                                break ;
+                            case 1: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(Intent.ACTION_SEND);
 
@@ -111,12 +139,59 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
                                             , Toast.LENGTH_SHORT).show();
                                 }
                                 break;
-                            case 1: // Refresh
+                            case 2: // Refresh
                                 if (cd.isConnectedToInternet()) {
                                     new Refresh(activity, 3, store.getId()).execute();
                                 }
                                 else
                                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                                break;
+                            case 3: // Suggest
+                                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                View dialogView = layoutInflater.inflate(R.layout.dialog_suggestion, null);
+                                Spinner spinner = (Spinner) dialogView.findViewById(R.id.spinner);
+                                final EditText text = (EditText) dialogView.findViewById(R.id.text);
+
+                                String[] array = {"Suggérer", "Signaler"};
+
+                                ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
+                                        (activity, android.R.layout.simple_spinner_item, array);
+
+                                dataAdapter.setDropDownViewResource
+                                        (android.R.layout.simple_spinner_dropdown_item);
+
+                                spinner.setAdapter(dataAdapter);
+                                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        if (parent.getItemAtPosition(position).equals("Suggérer"))
+                                            idType = 1;
+                                        else if (parent.getItemAtPosition(position).equals("Signaler"))
+                                            idType = 2;
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
+                                        idType = 0;
+                                    }
+                                });
+
+                                AlertDialog.Builder builderCustom = new AlertDialog.Builder(StoreActivity.this);
+                                builderCustom.setView(dialogView)
+                                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                new AddSuggestion().execute(text.getText().toString());
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                builderCustom.create().show();
                                 break;
                             default:
                                 break;
@@ -162,11 +237,37 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
+        SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
+        switch (v.getId()) {
+            case R.id.fab:
+                if (!userSession.isLogged()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(R.string.error)
+                            .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                }
+                else
+                    dialog.show();
+                break ;
+            default:
+                break ;
+        }
     }
 
-    private class RetreiveAddressStore extends AsyncTask<Void, Void, Address> {
+    private class RetrieveAddressStore extends AsyncTask<Void, Void, Address> {
 
         @Override
         protected Address doInBackground(Void... params) {
@@ -179,6 +280,87 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         protected void onPostExecute(Address address) {
             super.onPostExecute(address);
             addMarker(store.getName(), storeAddress.getLatitude(), storeAddress.getLongitude());
+        }
+    }
+
+    private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {
+
+        int likeV = 0;
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+
+            SoapGlobalManager gm = new SoapGlobalManager();
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            likeV = gm.countRate(store.getId(), 3, 2);
+            if (userSession.isLogged()) {
+                return gm.getRateStatus(store.getId(), 3, userSession.getUserId());
+            }
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer res) {
+            super.onPostExecute(res);
+
+            status = res;
+            Log.e("TEST", "stat: " + res);
+        }
+    }
+
+    private class SendRateStatus extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            Log.e("ProductActivity", "SendRateStatus called :" + params[0]);
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged()) {
+                SoapGlobalManager gm = new SoapGlobalManager();
+
+                switch (params[0]) {
+                    case 1:
+                        gm.unLikeSomething(store.getId(), 3, userSession.getUserId());
+                        break ;
+                    case 2:
+                        gm.likeSomething(store.getId(), 3, userSession.getUserId());
+                        break ;
+                    default:
+                        break ;
+                }
+
+                SoapUserUtilManager uum = new SoapUserUtilManager();
+
+                switch (params[0]) {
+                    case 1:
+                        uum.createHistory(userSession.getUserId(), 2, 3, store.getId());
+                        break ;
+                    case 2:
+                        uum.createHistory(userSession.getUserId(), 4, 3, store.getId());
+                        break ;
+                    default:
+                        break ;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    private class AddSuggestion extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged())
+                gm.createSuggestion(userSession.getUserId(), idType, 2, store.getId(), params[0]);
+
+            return null;
         }
     }
 }
