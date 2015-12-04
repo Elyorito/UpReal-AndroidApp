@@ -16,6 +16,7 @@ import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleImageView;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.User;
 
 /**
@@ -107,9 +108,9 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                     Picasso.with(this.context).load(this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
                 } else {
                     if (cd.isConnectedToInternet()) {
-                        Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
+                        Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
                         holder.connexion_name.setText(this.mNavAccount);
-                        Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                        Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
                     } else
                         Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
                 }

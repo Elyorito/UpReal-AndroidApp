@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.CircleTransform;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Product;
 import com.upreal.utils.StoreSell;
 
@@ -69,7 +70,7 @@ public class AdapterStoreProduct extends RecyclerView.Adapter<AdapterStoreProduc
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + listProduct.get(position).getPicture()).transform(new CircleTransform()).into(holder.productImg);
+        Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/Product/" + listProduct.get(position).getPicture()).transform(new CircleTransform()).into(holder.productImg);
         holder.productName.setText(this.listProduct.get(position).getName());
         holder.productRate.setRating(2f);
         holder.productPrice.setText(this.listStoreSell.get(position).getPrice() + " €");

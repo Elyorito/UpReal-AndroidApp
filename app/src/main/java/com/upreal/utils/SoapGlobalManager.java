@@ -311,4 +311,20 @@ public class SoapGlobalManager extends SoapManager {
         }
         return listRate;
     }
+
+    public void createSuggestion(int idUser, int idType, int targetType, int idTarget, String text) {
+        String methodname = "createSuggestion";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+        request.addProperty("description", text);
+        request.addProperty("priority", idType);
+
+        try {
+            callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
 }

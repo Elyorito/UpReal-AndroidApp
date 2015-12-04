@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.Article;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 
 /**
  * Created by Sofiane on 08/08/2015.
@@ -43,7 +44,7 @@ public class NewsActivity extends AppCompatActivity {
         bodyArticle.setText(article.getBody());
         cd = new ConnectionDetector(getApplicationContext());
         if (cd.isConnectedToInternet()) {
-            Picasso.with(NewsActivity.this).load("http://163.5.84.202/Symfony/web/images/News/" + article.getPicture()).into(imageArticle);
+            Picasso.with(NewsActivity.this).load(new IPDefiner().getIP() + "Symfony/web/images/News/" + article.getPicture()).into(imageArticle);
         } else
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
 //        Toast.makeText(NewsActivity.this, article.getTitle(), Toast.LENGTH_SHORT).show();

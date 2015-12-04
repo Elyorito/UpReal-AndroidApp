@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Product;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 /*        holder.mNameProduct.setText(list.get(position).getName());*/
         //Log.v("Picture", list.get(position).getPicture());
         if (cd.isConnectedToInternet()) {
-            Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Product/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageProduct);
+            Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/Product/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageProduct);
             holder.descProduct.setText(list.get(position).getName());
         } else
         Toast.makeText(context, R.string.no_internet_connection + R.string.retry_retrieve_connection, Toast.LENGTH_SHORT).show();

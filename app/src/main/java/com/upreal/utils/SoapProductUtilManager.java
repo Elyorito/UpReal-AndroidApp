@@ -288,4 +288,18 @@ public class SoapProductUtilManager extends SoapManager {
 
         return listUserSells;
     }
+
+    public void createUserSell(int idProduct, int idUser, Double price) {
+        String methodname = "createUserSell";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_product", idProduct);
+        request.addProperty("id_user", idUser);
+        request.addProperty("price", price.toString());
+
+        try {
+            callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
 }

@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.History;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.SessionManagerUser;
 
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
     @Override
     public void onBindViewHolder(AdapterHomeHistory.ViewHolder viewHolder, final int i) {
         if (cd.isConnectedToInternet()) {
-            Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/User/1_" + this.hList.get(i).getIdUser() + ".jpg").placeholder(R.drawable.connection_img).into(viewHolder.image);
+            Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + this.hList.get(i).getIdUser() + ".jpg").placeholder(R.drawable.connection_img).into(viewHolder.image);
         } else
             Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
         if (this.hList.get(i).getDate() != null)

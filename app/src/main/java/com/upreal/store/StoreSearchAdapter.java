@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Store;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     @Override
     public void onBindViewHolder(StoreSearchAdapter.ViewHolder holder, final int position) {
 
-        Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/Store/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageStore);
+        Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/Store/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageStore);
         holder.userUsername.setText(list.get(position).getName());
         holder.userUsername.setOnClickListener(new View.OnClickListener() {
             @Override

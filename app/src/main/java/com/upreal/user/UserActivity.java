@@ -24,6 +24,7 @@ import com.upreal.home.NavigationBar;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.User;
@@ -80,9 +81,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         collapsingToolbarLayout.setTitle(user.getUsername());
         if (cd.isConnectedToInternet()) {
-            Log.e("TEST", "\"http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg");
-            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
-            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new CircleTransform()).into(imageUser);
+            Log.e("TEST", "Symfony/web/images/User/1_" + user.getId() + ".jpg");
+            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
+            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new CircleTransform()).into(imageUser);
         }
         else
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();

@@ -17,6 +17,7 @@ import com.upreal.R;
 import com.upreal.news.NewsActivity;
 import com.upreal.utils.Article;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
     @Override
     public void onBindViewHolder(AdapterHomeNews.ViewHolder viewHolder, final int i) {
         if (cd.isConnectedToInternet()) {
-            Picasso.with(context).load("http://163.5.84.202/Symfony/web/images/News/" + this.articles.get(i).getPicture()).placeholder(R.drawable.connection_img).into(viewHolder.image);
+            Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/News/" + this.articles.get(i).getPicture()).placeholder(R.drawable.connection_img).into(viewHolder.image);
         } else
             Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
         viewHolder.title.setText(this.articles.get(i).getTitle());

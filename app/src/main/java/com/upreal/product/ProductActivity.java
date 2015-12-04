@@ -23,10 +23,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,10 +39,12 @@ import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.LocationService;
 import com.upreal.utils.Product;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
+import com.upreal.utils.SoapGlobalManager;
 import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
 import com.upreal.utils.SoapUserUtilManager;
@@ -56,6 +60,7 @@ import java.util.ArrayList;
  */
 public class ProductActivity extends AppCompatActivity implements View.OnClickListener {
 
+    LayoutInflater layoutInflater;
     private ConnectionDetector cd;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ImageView imageBlurred;
@@ -64,40 +69,35 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private Context context;
     private Activity activity;
     private Toolbar toolbar;
-
     private ViewPager mViewPager;
     //private ProductViewPagerAdapter adapter;
     private ProductNewViewPagerAdapter adapter;
     private SlidingTabLayout mSlidingTabLayout;
     private SessionManagerUser sessionManagerUser;
-
     private Product prod;
     private String listLike;
     private Boolean isLiked = false;
     private CharSequence title;
-
     private Product mProduct;
-
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
     private DatabaseQuery mDbQuery;
-
     private TextView prodName;
     private TextView prodBrand;
     private TextView prodShortDesc;
     private ImageView prodPicture;
-
     private Button geoloc;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private FloatingActionButton menu;
     private AlertDialog dialog;
-
+    private Spinner spinner;
+    private int idType;
+    private EditText text;
     private View dialogView;
     private AlertDialog.Builder builderCustom;
     private AlertDialog.Builder builderList;
     private ArrayList<Integer> checkedList = new ArrayList<>();
-
     private String[] lists;
 
     @Override
@@ -119,10 +119,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             return;
         collapsingToolbarLayout.setTitle(prod.getName());
         if (cd.isConnectedToInternet()) {
-            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
-            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
-        }
-        else
+            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/Product/" + prod.getPicture()).transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
+            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/Product/" + prod.getPicture()).transform(new CircleTransform()).into(imageProduct);
+        } else
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
         CharSequence Tab[] = {"Info.", "Prix", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -136,7 +135,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mDbHelper = new DatabaseHelper(context);
         mDbQuery = new DatabaseQuery(mDbHelper);
 
-        final String[] option = new String[] { "J'aime", "Ajouter à une liste", "Partager", "Rafraichir" };
+        final String[] option = new String[]{"J'aime", "Ajouter à ses ventes", "Ajouter à une liste", "Partager", "Rafraichir", "Suggestion"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quel action voulez-vous faire ?");
@@ -144,35 +143,42 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0: // Like
-                                if (sessionManagerUser.isLogged()) {
-                                    AlertDialog.Builder builderl = new  AlertDialog.Builder(context);
-                                    builderl.setTitle("Vous aimez ce produit?").setMessage("Veuillez-vous connecter d'abord.")
-                                            .setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent intent = new Intent(context, LoginActivity.class);
-                                                    startActivity(intent);
-                                                    dialog.dismiss();
-                                                }
-                                            }).setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                        }
-                                    }).create().show();
-                                } else {
                                     if (cd.isConnectedToInternet()) {
                                         listLike = context.getString(R.string.liked_product);
                                         if (isLiked == true)
                                             new SendLike(0).execute();
                                         else
                                             new SendLike(1).execute();
-                                    }
-                                    else
-                                        Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " +  getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
-                                }
+                                    } else
+                                        Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
-                            case 1: // Add to list
+                            case 1: // Ajouter à ses ventes
+                                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                dialogView = layoutInflater.inflate(R.layout.dialog_add_usersell, null);
+                                final EditText price = (EditText) dialogView.findViewById(R.id.product_price);
+
+                                builderCustom = new AlertDialog.Builder(ProductActivity.this);
+                                builderCustom.setView(dialogView)
+                                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                if (price.getText().toString() == null || price.getText().toString().equals(""))
+                                                    new AddUserSell().execute(0.);
+                                                else
+                                                    new AddUserSell().execute(Double.parseDouble(price.getText().toString()));
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                builderCustom.create().show();
+
+                                break;
+                            case 2: // Add to list
                                 mDbHelper = new DatabaseHelper(getApplicationContext());
                                 mDbQuery = new DatabaseQuery(mDbHelper);
                                 mDatabase = mDbHelper.openDataBase();
@@ -185,8 +191,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 for (int i = 0; i < listsElements.length; i++) {
                                     lists[i] = listsElements[i][0];
                                 }
-                                Toast.makeText(ProductActivity.this, "ListLength:" + lists[0],Toast.LENGTH_SHORT).show();
-                                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                Toast.makeText(ProductActivity.this, "ListLength:" + lists[0], Toast.LENGTH_SHORT).show();
+                                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                                 TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
                                 addCustom.setOnClickListener(new View.OnClickListener() {
@@ -233,8 +239,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                             }
                                         })
                                         .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 //                                        mDbHelper = new DatabaseHelper(dialogView.getContext());
 //                                        mDbQuery = new DatabaseQuery(mDbHelper);
 //                                        mDatabase = mDbHelper.openDataBase();
@@ -257,9 +263,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 //                                                mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(sessionManagerUser.getUserId())});
 //                                        }
 //                                        mDatabase.close();
-                                        dialog.dismiss();
-                                    }
-                                }).setNegativeButton(getString(R.string.cancel),
+                                                dialog.dismiss();
+                                            }
+                                        }).setNegativeButton(getString(R.string.cancel),
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -267,10 +273,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                             }
                                         }
                                 )
-                                       // .setView(dialogView)
-                                       .create().show();
+                                        // .setView(dialogView)
+                                        .create().show();
                                 break;
-                            case 2: // Share
+                            case 3: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(Intent.ACTION_SEND);
 
@@ -283,12 +289,58 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                             , Toast.LENGTH_SHORT).show();
                                 }
                                 break;
-                            case 3: // Refresh
+                            case 4: // Refresh
                                 if (cd.isConnectedToInternet()) {
                                     new Refresh(activity, 2, prod.getId()).execute();
-                                }
-                                else
+                                } else
                                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                                break;
+                            case 5: // Suggestion
+                                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                dialogView = layoutInflater.inflate(R.layout.dialog_suggestion, null);
+                                spinner = (Spinner) dialogView.findViewById(R.id.spinner);
+                                text = (EditText) dialogView.findViewById(R.id.text);
+
+                                String[] array = {"Suggérer", "Signaler"};
+
+                                ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
+                                        (activity, android.R.layout.simple_spinner_item, array);
+
+                                dataAdapter.setDropDownViewResource
+                                        (android.R.layout.simple_spinner_dropdown_item);
+
+                                spinner.setAdapter(dataAdapter);
+                                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        if (parent.getItemAtPosition(position).equals("Suggérer"))
+                                            idType = 1;
+                                        else if (parent.getItemAtPosition(position).equals("Signaler"))
+                                            idType = 2;
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
+                                        idType = 0;
+                                    }
+                                });
+
+                                builderCustom = new AlertDialog.Builder(ProductActivity.this);
+                                builderCustom.setView(dialogView)
+                                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                new AddSuggestion().execute(text.getText().toString());
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                builderCustom.create().show();
                                 break;
                             default:
                                 break;
@@ -356,19 +408,59 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.geoloc:
                 Intent intent = new Intent(v.getContext(), GeolocalisationActivity.class);
                 intent.putExtra("id_product", prod.getId());
                 v.getContext().startActivity(intent);
-                break ;
+                break;
             case R.id.fab:
-                dialog.show();
+                if (!sessionManagerUser.isLogged()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(R.string.error)
+                            .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+/*
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("Vous aimez ce produit?").setMessage("Veuillez-vous connecter d'abord.")
+                            .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    }).create().show();*/
+                }
+                else
+                    dialog.show();
                 break;
             default:
-                break ;
+                break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        recreate();
     }
 
     class RetrievePicture extends AsyncTask<Void, Void, String> {
@@ -390,12 +482,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 prodPicture.setImageBitmap(BitmapFactory.decodeFile(path, options));
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        recreate();
     }
 
     private class isProductLiked extends AsyncTask<Void, Void, Boolean> {
@@ -447,7 +533,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         protected void onPostExecute(Boolean b) {
             super.onPostExecute(b);
-            if(b == true && sessionManagerUser.isLogged()){
+            if (b == true && sessionManagerUser.isLogged()) {
                 isLiked = true;
                 mDatabase = mDbHelper.openDataBase();
                 String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{listLike, "3"}, null, null, null);
@@ -476,6 +562,31 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         public void setType(int type) {
             this.type = type;
+        }
+    }
+
+    private class AddUserSell extends AsyncTask<Double, Void, Void> {
+        @Override
+        protected Void doInBackground(Double... params) {
+            SoapProductUtilManager pum = new SoapProductUtilManager();
+
+            if (sessionManagerUser.isLogged())
+                pum.createUserSell(prod.getId(), sessionManagerUser.getUserId(), params[0]);
+
+            return null;
+        }
+    }
+
+    private class AddSuggestion extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+
+            if (sessionManagerUser.isLogged())
+                gm.createSuggestion(sessionManagerUser.getUserId(), idType, 2, prod.getId(), params[0]);
+
+            return null;
         }
     }
 }

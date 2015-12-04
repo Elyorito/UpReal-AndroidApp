@@ -29,9 +29,9 @@ import com.upreal.R;
 import com.upreal.utils.Address;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SoapStoreManager;
-import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.Store;
 
 /**
@@ -74,7 +74,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
         collapsingToolbarLayout.setTitle(store.getName());
         if (cd.isConnectedToInternet()) {
-            Picasso.with(getApplicationContext()).load("http://163.5.84.202/Symfony/web/images/Store/" + store.getPicture()).transform(new CircleTransform()).into(imageStore);
+            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/Store/" + store.getPicture()).transform(new CircleTransform()).into(imageStore);
         } else
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
         CharSequence tab[] = {"Info", "Produits", "Avis"};

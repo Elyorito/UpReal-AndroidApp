@@ -77,6 +77,7 @@
     <string name="at_the_shop">Dans le magasin</string>
     <string name="submit">Soumettre</string>
     <string name="cancel">Annuler</string>
+    <string name="add_product">Ajouter ce produit ?</string>
     
     <!--ListHome-->
     <string name="liked_product">Produit aimés</string>
@@ -321,5 +322,10 @@
     <string name="loyalty_card">Mes cartes de fidélité</string>
     <string name="ean_not_filled">Le champ du code barre doit être rempli</string>
     <string name="name_not_filled">Le champ du nom du produit doit être rempli</string>
+
+    <!-- Suggestion -->
+    <string name="suggestion">Suggestion</string>
+    <string name="suggestion_type">Type de suggestion</string>
+    <string name="write_suggestion">Écrivez ici...</string>
 
 </resources>
