@@ -199,6 +199,9 @@ public class LoyaltyActivity extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        recreate();
+        if (cd.isConnectedToInternet()) {
+            new RetrieveLoyalty().execute();
+        } else
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
     }
 }

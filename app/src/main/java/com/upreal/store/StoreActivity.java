@@ -29,6 +29,7 @@ import com.upreal.R;
 import com.upreal.utils.Address;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SoapStoreManager;
@@ -68,6 +69,8 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageStore = (ImageView) findViewById(R.id.imageproduct);
         store = getIntent().getExtras().getParcelable("store");
+        new History.createHistory(context, 1, 3 , store.getId()).execute();
+
         new RetreiveAddressStore().execute();
 
         createMapView();

@@ -1,5 +1,7 @@
 package com.upreal.utils;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -118,5 +120,29 @@ public class History implements Parcelable {
         this.idType = in.readInt();
         this.idTarget = in.readInt();
         this.date = (Date) in.readSerializable();
+    }
+
+    public static class createHistory extends AsyncTask<Void, Void, Void> {
+
+        private SessionManagerUser sessionManagerUser;
+        private int action;
+        private int type;
+        private int target;
+
+        public createHistory(Context context, int action_type, int id_type, int id_target) {
+            sessionManagerUser = new SessionManagerUser(context.getApplicationContext());
+            action = action_type;
+            type = id_type;
+            target = id_target;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SoapUserUtilManager su = new SoapUserUtilManager();
+
+            if (sessionManagerUser.isLogged())
+                su.createHistory(sessionManagerUser.getUserId(), action, type, target);
+            return null;
+        }
     }
 }

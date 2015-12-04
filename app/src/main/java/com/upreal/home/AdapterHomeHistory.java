@@ -18,6 +18,8 @@ import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.SessionManagerUser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +49,9 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
     }
 
     public AdapterHomeHistory(List<History> hList, Context context) {
-        this.hList = hList;
+        ArrayList<History> tmp = new ArrayList<>(hList);
+        Collections.reverse(tmp);
+        this.hList = tmp;
         this.context = context;
         cd = new ConnectionDetector(context);
     }

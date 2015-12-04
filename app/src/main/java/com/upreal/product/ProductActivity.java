@@ -37,6 +37,7 @@ import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.LocationService;
 import com.upreal.utils.Product;
@@ -130,6 +131,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
         sessionManagerUser = new SessionManagerUser(context);
+        new History.createHistory(context, 1, 2 , prod.getId()).execute();
 
         mDbHelper = new DatabaseHelper(context);
         mDbQuery = new DatabaseQuery(mDbHelper);

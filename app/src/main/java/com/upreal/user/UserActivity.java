@@ -24,6 +24,7 @@ import com.upreal.home.NavigationBar;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
@@ -67,13 +68,13 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         imageUser = (ImageView) findViewById(R.id.imageproduct);
 
         sessionManagerUser = new SessionManagerUser(context);
-
         final boolean toggleAccount = sessionManagerUser.isLogged();
 
         if (getIntent().getExtras() == null)
             user = sessionManagerUser.getUser();
         else
             user = getIntent().getExtras().getParcelable("user");
+        new History.createHistory(context, 1, 1 , user.getId()).execute();
 
         new NavigationBar(this);
 
