@@ -137,4 +137,22 @@ public class SoapUserUtilManager extends SoapManager {
 
         return null;
     }
+
+    public int createHistory(int idUser, int actionType, int idType, int idTarget) {
+        String methodname = "createHistory";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("action_type", actionType);
+        request.addProperty("id_type", idType);
+        request.addProperty("id_target", idTarget);
+
+        try {
+            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return 0;
+    }
+
 }

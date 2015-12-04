@@ -327,4 +327,85 @@ public class SoapGlobalManager extends SoapManager {
             q.printStackTrace();
         }
     }
+
+    public void likeSomething(int idTarget, int targetType, int idUser) {
+        String methodname = "likeSomething";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+
+        try {
+            callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
+
+    public void dislikeSomething(int idTarget, int targetType, int idUser) {
+        String methodname = "dislikeSomething";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+
+        try {
+            callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
+
+    public void unLikeSomething(int idTarget, int targetType, int idUser) {
+        String methodname = "unLikeSomething";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+
+        try {
+            callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
+
+    public int countRate(int idTarget, int targetType, int type) {
+        String methodname = "countRate";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+        request.addProperty("type", type);
+
+        try {
+            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int getRateStatus(int idTarget, int targetType, int idUser) {
+        String methodname = "getRateStatus";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_target", idTarget);
+        request.addProperty("id_target_type", targetType);
+
+        try {
+            int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            Log.e(NAMESPACE, "'getRateStatus': " + res);
+            return res;
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return 0;
+    }
 }

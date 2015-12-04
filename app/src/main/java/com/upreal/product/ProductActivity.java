@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -45,7 +43,6 @@ import com.upreal.utils.Product;
 import com.upreal.utils.Refresh;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;
-import com.upreal.utils.SoapProductManager;
 import com.upreal.utils.SoapProductUtilManager;
 import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.database.DatabaseHelper;
@@ -100,6 +97,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Integer> checkedList = new ArrayList<>();
     private String[] lists;
 
+    int status = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +134,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mDbHelper = new DatabaseHelper(context);
         mDbQuery = new DatabaseQuery(mDbHelper);
 
+        new RetrieveRateStatus().execute();
+
         final String[] option = new String[]{"J'aime", "Ajouter à ses ventes", "Ajouter à une liste", "Partager", "Rafraichir", "Suggestion"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -145,10 +146,22 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                             case 0: // Like
                                     if (cd.isConnectedToInternet()) {
                                         listLike = context.getString(R.string.liked_product);
-                                        if (isLiked == true)
-                                            new SendLike(0).execute();
+
+                                        switch (status) {
+                                            case 1:
+                                                new SendRateStatus().execute(2);
+                                                break ;
+                                            case 2:
+                                                new SendRateStatus().execute(3);
+                                                break ;
+                                            case 3:
+                                                new SendRateStatus().execute(1);
+                                                break ;
+                                        }
+/*                                        if (isLiked == true)
+                                            new SendRateStatus().execute(1);
                                         else
-                                            new SendLike(1).execute();
+                                            new SendLike(1).execute();*/
                                     } else
                                         Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
@@ -463,27 +476,89 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 //        recreate();
     }
 
-    class RetrievePicture extends AsyncTask<Void, Void, String> {
+    private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {
+
+        int likeV = 0;
+        int dislikeV = 0;
 
         @Override
-        protected String doInBackground(Void... params) {
-            SoapProductManager pm = new SoapProductManager();
+        protected Integer doInBackground(Void... params) {
 
-            String path = pm.getPicture(prod.getId(), 0);
-            return path;
+            SoapGlobalManager gm = new SoapGlobalManager();
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            likeV = gm.countRate(prod.getId(), 2, 2);
+            dislikeV = gm.countRate(prod.getId(), 2, 3);
+            if (userSession.isLogged()) {
+                return gm.getRateStatus(prod.getId(), 2, userSession.getUserId());
+            }
+            return 0;
         }
 
         @Override
-        protected void onPostExecute(String path) {
-            super.onPostExecute(path);
-            if (path != null) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                prodPicture.setImageBitmap(BitmapFactory.decodeFile(path, options));
-            }
+        protected void onPostExecute(Integer res) {
+            super.onPostExecute(res);
+
+            status = res;
+            /*
+            if (res == 2)
+                like.setAlpha(1f);
+            else
+                like.setAlpha(.5f);
+
+            likeValue.setText(likeV + "");
+            dislikeValue.setText(dislikeV + "");
+            */
         }
     }
 
+    private class SendRateStatus extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            Log.e("ProductActivity", "SendRateStatus called :" + params[0]);
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged()) {
+                SoapGlobalManager gm = new SoapGlobalManager();
+
+                switch (params[0]) {
+                    case 1:
+                        gm.unLikeSomething(prod.getId(), 2, userSession.getUserId());
+                        break ;
+                    case 2:
+                        gm.likeSomething(prod.getId(), 2, userSession.getUserId());
+                        break ;
+                    case 3:
+                        gm.dislikeSomething(prod.getId(), 2, userSession.getUserId());
+                        break ;
+                    default:
+                        break ;
+                }
+
+                SoapUserUtilManager uum = new SoapUserUtilManager();
+
+                switch (params[0]) {
+                    case 1:
+                        uum.createHistory(userSession.getUserId(), 2, 2, prod.getId());
+                        break ;
+                    case 2:
+                        uum.createHistory(userSession.getUserId(), 4, 2, prod.getId());
+                        break ;
+                    case 3:
+                        uum.createHistory(userSession.getUserId(), 3, 2, prod.getId());
+                        break ;
+                    default:
+                        break ;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    /*
     private class isProductLiked extends AsyncTask<Void, Void, Boolean> {
         Boolean isLike = false;
 
@@ -499,8 +574,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             super.onPostExecute(aBoolean);
             isLiked = aBoolean;
         }
-    }
+    }*/
 
+    /*
     private class SendLike extends AsyncTask<Void, Void, Boolean> {
         Boolean isSuccess = false;
         Boolean isLike = false;
@@ -525,7 +601,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 return isSuccess;
                     /*
                     isSuccess = pum.rateUser(sessionManagerUser.getUserId(), )
-*/
             }
             return isSuccess;
         }
@@ -563,7 +638,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         public void setType(int type) {
             this.type = type;
         }
-    }
+    }*/
 
     private class AddUserSell extends AsyncTask<Double, Void, Void> {
         @Override
