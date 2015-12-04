@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,10 +53,18 @@ public class ScanActivity extends Activity {
                 Log.d("xZing", "contents: "+contents+" format: "+format); // Handle successful scan
                 //formatTxt.setText("FORMAT: " + format);
                 //contentTxt.setText(contents);
-                if (cd.isConnectedToInternet()) {
+                if (cd.isConnectedToInternet() && format.toString().equals("QR_CODE")) {
+                    Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(contents));
+                    startActivity(in);
+                    finish();
+                }
+                else if (cd.isConnectedToInternet()) {
                     new RetrieveScannedProduct(contents).execute();
-                } else
+                }
+                else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
                 Toast toast = Toast.makeText(this, "Le scan à été annulé", Toast.LENGTH_LONG);

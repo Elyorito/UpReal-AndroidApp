@@ -319,5 +319,7 @@
     <string name="please_reload">, veuillez recharger la page dès que vous êtes connecté</string>
     <string name="retry_retrieve_connection">Rééssayez après vous être connecté à internet</string>
     <string name="loyalty_card">Mes cartes de fidélité</string>
+    <string name="ean_not_filled">Le champ du code barre doit être rempli</string>
+    <string name="name_not_filled">Le champ du nom du produit doit être rempli</string>
 
 </resources>

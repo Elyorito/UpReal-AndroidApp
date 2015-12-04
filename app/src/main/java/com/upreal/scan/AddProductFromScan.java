@@ -144,7 +144,12 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 break;
             case R.id.addprodok:
                 if (cd.isConnectedToInternet()) {
-                    new CreateProductFromScan().execute();
+                    if (barcode.getText().toString().equals(""))
+                        Toast.makeText(getApplicationContext(), R.string.ean_not_filled, Toast.LENGTH_SHORT).show();
+                    else if (productName.getText().toString().equals(""))
+                        Toast.makeText(getApplicationContext(), R.string.name_not_filled, Toast.LENGTH_SHORT).show();
+                    else
+                        new CreateProductFromScan().execute();
                 } else
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 break;
