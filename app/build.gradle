@@ -48,8 +48,4 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.jlmd:AnimatedCircleLoadingView:cf73a696b7'
     wearApp project(':uprealwear')
-    compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
 }

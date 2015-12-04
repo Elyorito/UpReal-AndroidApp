@@ -195,4 +195,10 @@ public class LoyaltyActivity extends Activity {
             recreate();
         }
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        recreate();
+    }
 }

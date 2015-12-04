@@ -168,6 +168,23 @@ public class SoapGlobalManager extends SoapManager {
         return result;
     }
 
+    public Boolean deletePossess(int id) {
+        Boolean result = false;
+        String methodName = "deletePossess";
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id", id);
+
+        try {
+            SoapPrimitive response = (SoapPrimitive) callService(methodName, request);
+            result = Boolean.parseBoolean(response.toString());
+
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return result;
+    }
+
     public List<Loyalty> getUserPossess(int userId) {
         List<Loyalty> loyalties = new ArrayList<>();
 
