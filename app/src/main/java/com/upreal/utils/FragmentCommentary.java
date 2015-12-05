@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.upreal.R;
 import com.upreal.login.LoginActivity;
-import com.upreal.product.AdapterCommentary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +45,6 @@ public class FragmentCommentary extends Fragment {
     private SessionManagerUser sessionManagerUser;
     private Context context;
 
-    /*
-        private int idProduct = 0;
-        private int idUser = 0;
-        private int idStore = 0;
-    */
     private int id = 0;
     private int type = 0;
 
@@ -63,11 +57,7 @@ public class FragmentCommentary extends Fragment {
 
         id = b.getInt("id");
         type = b.getInt("type");
-/*
-        idProduct = b.getInt("idProduct");
-        idUser = b.getInt("idUser");
-        idStore = b.getInt("idStore");
-*/
+
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_Product_commentary);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(v.getContext(), 1);
@@ -159,17 +149,6 @@ public class FragmentCommentary extends Fragment {
         protected List<RateComment> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
 
-            //        Log.e("FC", idUser + " " + idProduct + " " + idStore + " ");
-/*
-            if (idUser != 0)
-                listRate = gm.getRate(idUser, 1);
-            else if (idProduct != 0)
-                listRate = gm.getRate(idProduct, 2);
-            else if (idStore != 0)
-                listRate = gm.getRate(idStore, 3);
-            else
-                return null;
-*/
             listRate = gm.getRate(id, type);
 
             SoapUserManager um = new SoapUserManager();
@@ -177,6 +156,7 @@ public class FragmentCommentary extends Fragment {
                 Log.e("FC", "test:" + listRate.get(i).getmCommentary());
                 user = um.getAccountInfoUsername(listRate.get(i).getmId_user());
                 rateComment = new RateComment();
+                rateComment.setId(listRate.get(i).getmId());
                 rateComment.setmNameUser(user.getUsername());
                 rateComment.setmTextComment(listRate.get(i).getmCommentary());
                 listComment.add(rateComment);
@@ -188,7 +168,7 @@ public class FragmentCommentary extends Fragment {
         protected void onPostExecute(List<RateComment> rateComments) {
             super.onPostExecute(rateComments);
             if (rateComments != null) {
-                mAdapter = new AdapterCommentary(rateComments);
+                mAdapter = new AdapterCommentary(context, rateComments);
                 recyclerView.setAdapter(mAdapter);
             }
         }
@@ -201,14 +181,6 @@ public class FragmentCommentary extends Fragment {
         public SendComment(String comment, Context context) {
             this.comment = comment;
             this.mContext = context;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
         }
 
         @Override

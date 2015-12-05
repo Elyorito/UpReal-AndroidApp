@@ -7,16 +7,26 @@ import java.util.Date;
  */
 public class RateComment {
 
+    private int id;
     private String mTextComment;
     private Date mDateTime;
     private String mNameUser;
 
     public RateComment() {}
 
-    public RateComment(String textComment, Date dateTime, String userName) {
+    public RateComment(int id, String textComment, Date dateTime, String userName) {
+        this.id = id;
         this.mTextComment = textComment;
         this.mDateTime = dateTime;
         this.mNameUser = userName;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getmTextComment() {
