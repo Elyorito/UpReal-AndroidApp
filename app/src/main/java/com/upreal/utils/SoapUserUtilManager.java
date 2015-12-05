@@ -155,4 +155,16 @@ public class SoapUserUtilManager extends SoapManager {
         return 0;
     }
 
+    public void followUser(int idUser, int idFollower) {
+        String methodname = "followUser";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_user", idUser);
+        request.addProperty("id_follower", idFollower);
+
+        try {
+            callService(methodname, request);
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
 }

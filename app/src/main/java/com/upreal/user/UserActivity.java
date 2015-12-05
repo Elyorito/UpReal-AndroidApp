@@ -140,6 +140,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                                     intent = new Intent(context, UserUpdateActivity.class);
                                     startActivity(intent);
                                 }
+                                else {
+                                    new FollowUser().execute();
+                                }
                                 break;
                             case 2: // Share
                                 intent = new Intent(Intent.ACTION_SEND);
@@ -307,6 +310,21 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
             if (userSession.isLogged())
                 gm.createSuggestion(userSession.getUserId(), idType, 2, user.getId(), params[0]);
+
+            return null;
+        }
+    }
+
+    private class FollowUser extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SoapUserUtilManager uum = new SoapUserUtilManager();
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession.isLogged())
+                uum.followUser(user.getId(), userSession.getUserId());
 
             return null;
         }
