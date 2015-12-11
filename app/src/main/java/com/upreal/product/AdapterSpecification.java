@@ -42,16 +42,22 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
     public AdapterSpecification(Context context, List<Characteristic> listCharacteristics) {
         this.context = context;
         this.listCharacteristics = listCharacteristics;
+        boolean hasNutritional = false;
+        boolean hasComponent = false;
 
         this.types = new ArrayList<String>();
 
         types.add(context.getString(R.string.description));
 
         for (Characteristic c : listCharacteristics) {
-            if (c.getType() == 1)
+            if (c.getType() == 1 && !hasNutritional) {
                 types.add(context.getString(R.string.nutritional));
-            if (c.getType() == 2)
+                hasNutritional = true;
+            }
+            if (c.getType() == 2 && !hasComponent) {
                 types.add(context.getString(R.string.component));
+                hasComponent = true;
+            }
         }
 
         size = types.size();
