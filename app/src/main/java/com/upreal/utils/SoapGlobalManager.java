@@ -400,7 +400,6 @@ public class SoapGlobalManager extends SoapManager {
 
         try {
             int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
-            Log.e(NAMESPACE, "'getRateStatus': " + res);
             return res;
         } catch (Exception q) {
             q.printStackTrace();

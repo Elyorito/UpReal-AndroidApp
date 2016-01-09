@@ -1,10 +1,8 @@
 package com.upreal.utils;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +18,12 @@ import java.util.List;
  * Created by Elyo on 12/03/2015.
  */
 public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.ViewHolder>{
-
-    private AlertDialog.Builder builder;
     private List<RateComment> listComment = new ArrayList<RateComment>();
     private Context context;
 
-    private ViewHolder holder;
+    private ViewHolder[] holder;
+
+    private int status = 1;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int holderId;
@@ -51,6 +49,7 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
     public AdapterCommentary(Context context, List<RateComment> list) {
         this.context = context;
         this.listComment = list;
+        this.holder = new ViewHolder[list.size()];
     }
 
     @Override
@@ -64,31 +63,29 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
 
         ViewHolder vhCom = new ViewHolder(v, viewType);
 
-        this.holder = vhCom;
-
-        for (int i = 0; i < getItemCount(); i++) {
-            new RetrieveRateStatus().execute(i);
-        }
-
         return vhCom;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        this.holder[position] = holder;
+
         holder.text_username.setText(this.listComment.get(position).getmNameUser());
         holder.text_comment.setText(this.listComment.get(position).getmTextComment());
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SendRateStatus().execute((holder.like.getAlpha() >= 1f) ? (1) : (2));
+                status = (holder.like.getAlpha() >= 1f) ? (1) : (2);
+                new SendRateStatus().execute(position);
                 new RetrieveRateStatus().execute(position);
             }
         });
         holder.dislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SendRateStatus().execute((holder.dislike.getAlpha() >= 1f) ? (1) : (3));
+                status = (holder.dislike.getAlpha() >= 1f) ? (1) : (3);
+                new SendRateStatus().execute(position);
                 new RetrieveRateStatus().execute(position);
             }
         });
@@ -97,15 +94,13 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
     @Override
     public int getItemCount() {
         return listComment.size();
-/*
-        return mUser.length;
-*/
     }
 
     private class RetrieveRateStatus extends AsyncTask<Integer, Void, Integer> {
 
         int likeV = 0;
         int dislikeV = 0;
+        int position = 0;
 
         @Override
         protected Integer doInBackground(Integer... params) {
@@ -115,6 +110,8 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
 
             likeV = gm.countRate(listComment.get(params[0]).getId(), 5, 2);
             dislikeV = gm.countRate(listComment.get(params[0]).getId(), 5, 3);
+            position = params[0];
+
             if (userSession.isLogged()) {
                 return gm.getRateStatus(listComment.get(params[0]).getId(), 5, userSession.getUserId());
             }
@@ -125,25 +122,25 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
         protected void onPostExecute(Integer res) {
             super.onPostExecute(res);
 
-            holder.likeV.setText(likeV + "");
-            holder.dislikeV.setText(dislikeV + "");
+            holder[position].likeV.setText(likeV + "");
+            holder[position].dislikeV.setText(dislikeV + "");
 
             switch (res) {
                 case 1:
-                    holder.like.setAlpha(.5f);
-                    holder.dislike.setAlpha(.5f);
+                    holder[position].like.setAlpha(.5f);
+                    holder[position].dislike.setAlpha(.5f);
                     break ;
                 case 2:
-                    holder.like.setAlpha(1f);
-                    holder.dislike.setAlpha(.5f);
+                    holder[position].like.setAlpha(1f);
+                    holder[position].dislike.setAlpha(.5f);
                     break ;
                 case 3:
-                    holder.like.setAlpha(.5f);
-                    holder.dislike.setAlpha(1f);
+                    holder[position].like.setAlpha(.5f);
+                    holder[position].dislike.setAlpha(1f);
                     break ;
                 default:
-                    holder.like.setAlpha(.5f);
-                    holder.dislike.setAlpha(.5f);
+                    holder[position].like.setAlpha(.5f);
+                    holder[position].dislike.setAlpha(.5f);
                     break ;
             }
         }
@@ -153,14 +150,12 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
 
         @Override
         protected Void doInBackground(Integer... params) {
-            Log.e("AdapterCommentary", "SendRateStatus called :" + params[0]);
-
             SessionManagerUser userSession = new SessionManagerUser(context);
 
             if (userSession.isLogged()) {
                 SoapGlobalManager gm = new SoapGlobalManager();
 
-                switch (params[0]) {
+                switch (status) {
                     case 1:
                         gm.unLikeSomething(listComment.get(params[0]).getId(), 5, userSession.getUserId());
                         break ;
@@ -176,7 +171,7 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
 
                 SoapUserUtilManager uum = new SoapUserUtilManager();
 
-                switch (params[0]) {
+                switch (status) {
                     case 1:
                         uum.createHistory(userSession.getUserId(), 2, 5, listComment.get(params[0]).getId());
                         break ;
