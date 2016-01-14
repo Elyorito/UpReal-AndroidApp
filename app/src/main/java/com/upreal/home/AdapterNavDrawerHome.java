@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
@@ -111,9 +110,7 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                         Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
                         holder.connexion_name.setText(this.mNavAccount);
                         Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
-                    } else
-                        Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
-                }
+                    }                }
                 /*Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
                 Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);
                 holder.mImageViewProfile.setImageBitmap(output);
