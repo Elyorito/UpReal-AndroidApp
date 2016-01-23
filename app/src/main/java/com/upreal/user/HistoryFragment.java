@@ -50,7 +50,7 @@ public class HistoryFragment  extends Fragment {
         protected List<History> doInBackground(Void... params) {
 
             SessionManagerUser userSession = new SessionManagerUser(getActivity().getApplicationContext());
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 SoapUserUtilManager uum = new SoapUserUtilManager();
                 hList = uum.getUserHistory(userSession.getUserId());
             }

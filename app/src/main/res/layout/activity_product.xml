@@ -97,7 +97,6 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -106,7 +105,20 @@
         android:clickable="true"
         android:src="@drawable/com_facebook_button_login_silver_background"
         app:layout_anchor="@id/quickinfo_product"
-        app:layout_anchorGravity="bottom|right|end">
+        app:layout_anchorGravity="bottom|end">
+
+    </android.support.design.widget.FloatingActionButton>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="80dp"
+        android:clickable="true"
+        android:src="@drawable/floating_action_button_ic_fab_star"
+        app:layout_anchor="@id/quickinfo_product"
+        app:backgroundTint="@color/result_minor_text"
+        app:layout_anchorGravity="bottom|end">
 
     </android.support.design.widget.FloatingActionButton>
 </android.support.design.widget.CoordinatorLayout>

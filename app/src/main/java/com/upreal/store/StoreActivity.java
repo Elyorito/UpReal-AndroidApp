@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -65,6 +66,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
     private Store store;
 
     private FloatingActionButton menu;
+    private FloatingActionButton like;
     private AlertDialog dialog;
     private Address storeAddress;
 
@@ -104,32 +106,18 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
+        like = (FloatingActionButton) findViewById(R.id.like);
+        like.setOnClickListener(this);
         activity = this;
 
-        final String[] option = new String[] { "J'aime", "Partager", "Rafraichir", "Suggestion" };
+        final String[] option = new String[] { "Partager", "Rafraichir", "Suggestion" };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quel action voulez-vous faire ?");
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: // Like
-                                if (cd.isConnectedToInternet()) {
-                                    switch (status) {
-                                        case 1:
-                                            new SendRateStatus().execute(2);
-                                            break ;
-                                        case 2:
-                                            new SendRateStatus().execute(1);
-                                            break ;
-                                        default:
-                                            new SendRateStatus().execute(2);
-                                            break ;
-                                    }
-                                } else
-                                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
-                                break ;
-                            case 1: // Share
+                            case 0: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(Intent.ACTION_SEND);
 
@@ -142,14 +130,14 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
                                             , Toast.LENGTH_SHORT).show();
                                 }
                                 break;
-                            case 2: // Refresh
+                            case 1: // Refresh
                                 if (cd.isConnectedToInternet()) {
                                     new Refresh(activity, 3, store.getId()).execute();
                                 }
                                 else
                                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
-                            case 3: // Suggest
+                            case 2: // Suggest
                                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 View dialogView = layoutInflater.inflate(R.layout.dialog_suggestion, null);
                                 Spinner spinner = (Spinner) dialogView.findViewById(R.id.spinner);
@@ -265,6 +253,23 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
                 else
                     dialog.show();
                 break ;
+            case R.id.like:
+                if (cd.isConnectedToInternet()) {
+                    switch (status) {
+                        case 1:
+                            new SendRateStatus().execute(2);
+                            break ;
+                        case 2:
+                            new SendRateStatus().execute(1);
+                            break ;
+                        default:
+                            new SendRateStatus().execute(2);
+                            break ;
+                    }
+                } else
+                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                new RetrieveRateStatus().execute();
+                break ;
             default:
                 break ;
         }
@@ -297,7 +302,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
             likeV = gm.countRate(store.getId(), 3, 2);
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(store.getId(), 3, userSession.getUserId());
             }
             return 0;
@@ -308,7 +313,14 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
             super.onPostExecute(res);
 
             status = res;
-            Log.e("TEST", "stat: " + res);
+            switch (status) {
+                case 1:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.result_minor_text)));
+                    break;
+                case 2:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    break;
+            }
         }
     }
 
@@ -320,7 +332,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 SoapGlobalManager gm = new SoapGlobalManager();
 
                 switch (params[0]) {
@@ -360,7 +372,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged())
+            if (userSession != null && userSession.isLogged())
                 gm.createSuggestion(userSession.getUserId(), idType, 2, store.getId(), params[0]);
 
             return null;

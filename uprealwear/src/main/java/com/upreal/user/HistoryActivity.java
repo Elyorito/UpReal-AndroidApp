@@ -68,7 +68,7 @@ public class HistoryActivity extends Activity {
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 List<Item> list = new ArrayList<Item>();
                 UserUtilManager uum = new UserUtilManager();
 

@@ -286,7 +286,7 @@ public class ListActivity extends AppCompatActivity {
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
             int targetType = (item == null) ? (6) : (8);
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 SoapGlobalManager gm = new SoapGlobalManager();
                 List<Lists> lList = gm.getUserList(userSession.getUserId());
 

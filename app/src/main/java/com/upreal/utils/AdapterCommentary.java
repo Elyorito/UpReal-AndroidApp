@@ -112,7 +112,7 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
             dislikeV = gm.countRate(listComment.get(params[0]).getId(), 5, 3);
             position = params[0];
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(listComment.get(params[0]).getId(), 5, userSession.getUserId());
             }
             return 0;
@@ -152,7 +152,7 @@ public class AdapterCommentary extends RecyclerView.Adapter<AdapterCommentary.Vi
         protected Void doInBackground(Integer... params) {
             SessionManagerUser userSession = new SessionManagerUser(context);
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 SoapGlobalManager gm = new SoapGlobalManager();
 
                 switch (status) {

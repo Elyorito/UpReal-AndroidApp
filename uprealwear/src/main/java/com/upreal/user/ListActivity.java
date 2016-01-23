@@ -63,7 +63,7 @@ public class ListActivity extends Activity implements WearableListView.ClickList
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
             int targetType = (item == null) ? (6) : (8);
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 GlobalManager gm = new GlobalManager();
                 List<Item> list = new ArrayList<Item>();
                 List<Lists> lList = gm.getUserList(userSession.getUserId());

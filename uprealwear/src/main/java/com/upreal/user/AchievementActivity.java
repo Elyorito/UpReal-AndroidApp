@@ -45,7 +45,7 @@ public class AchievementActivity extends Activity {
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 if (uum.hasAchievement(userSession.getUserId(), item.getId()))
                     return 1;
             }

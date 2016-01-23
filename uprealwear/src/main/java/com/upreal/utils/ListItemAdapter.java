@@ -148,7 +148,7 @@ public final class ListItemAdapter extends WearableListView.Adapter {
             SessionManagerUser userSession = new SessionManagerUser(context);
             UserUtilManager uum = new UserUtilManager();
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 Item item = dataset.get(params[0]);
 
                 uum.createHistory(userSession.getUserId(), 1, item.getTargetType(), item.getId());

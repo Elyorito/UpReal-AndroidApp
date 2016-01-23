@@ -207,13 +207,6 @@
         </activity>
 
         <activity
-            android:name="com.upreal.home.TestNews"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
             android:name="com.upreal.miscellaneous.LoyaltyActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"

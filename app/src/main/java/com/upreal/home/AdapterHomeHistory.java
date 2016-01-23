@@ -97,15 +97,6 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
                 break ;
         }
         viewHolder.title.setText(state);
-/*        viewHolder.news.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), HistoryActivity.class);
-                intent.putExtra("hList", hList.get(i));
-                v.getContext().startActivity(intent);
-            }
-        });*/
-
     }
 
     @Override

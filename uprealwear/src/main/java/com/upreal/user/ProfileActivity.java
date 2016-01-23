@@ -88,7 +88,7 @@ public class ProfileActivity extends Activity implements View.OnClickListener {
         protected User doInBackground(Void... params) {
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 GlobalManager gm = new GlobalManager();
                 likeV = gm.countRate(userSession.getUserId(), 1, 2);
                 dislikeV = gm.countRate(userSession.getUserId(), 1, 3);

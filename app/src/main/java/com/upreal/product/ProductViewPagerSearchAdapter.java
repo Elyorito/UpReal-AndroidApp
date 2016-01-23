@@ -44,9 +44,6 @@ public class ProductViewPagerSearchAdapter extends FragmentStatePagerAdapter {
             case 1: //Tab2
                 return fSearchUser;
             case 2:
-                ProductFragmentTab2 tab3 = new ProductFragmentTab2();
-                return tab3;
-            case 3:
                 return fSearchStore;
             default:
                 return null;

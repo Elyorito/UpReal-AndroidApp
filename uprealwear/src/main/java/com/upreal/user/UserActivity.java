@@ -96,7 +96,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
             likeV = gm.countRate(item.getId(), item.getTargetType(), 2);
             dislikeV = gm.countRate(item.getId(), item.getTargetType(), 3);
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(item.getId(), item.getTargetType(), userSession.getUserId());
             }
             return 0;
@@ -123,7 +123,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 GlobalManager gm = new GlobalManager();
 
                 switch (params[0]) {

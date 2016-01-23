@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,7 +33,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
-import com.upreal.geolocalisation.GeolocalisationActivity;
 import com.upreal.home.NavigationBar;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
@@ -89,6 +89,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private LocationManager locationManager;
     private LocationListener locationListener;
     private FloatingActionButton menu;
+    private FloatingActionButton like;
     private AlertDialog dialog;
     private Spinner spinner;
     private int idType;
@@ -131,6 +132,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         tabLayout.setupWithViewPager(mViewPager);
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
+        like = (FloatingActionButton) findViewById(R.id.like);
+        like.setOnClickListener(this);
         sessionManagerUser = new SessionManagerUser(context);
         new History.createHistory(context, 1, 2 , prod.getId()).execute();
 
@@ -140,39 +143,14 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         new NavigationBar(this);
         new RetrieveRateStatus().execute();
 
-        final String[] option = new String[]{"J'aime", "Ajouter à ses ventes", "Ajouter à une liste", "Partager", "Rafraichir", "Suggestion"};
+        final String[] option = new String[]{"Ajouter à ses ventes", "Ajouter à une liste", "Partager", "Rafraichir", "Suggestion"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quel action voulez-vous faire ?");
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: // Like
-                                    if (cd.isConnectedToInternet()) {
-                                        listLike = context.getString(R.string.liked_product);
-
-                                        switch (status) {
-                                            case 1:
-                                                new SendRateStatus().execute(2);
-                                                break ;
-                                            case 2:
-                                                new SendRateStatus().execute(3);
-                                                break ;
-                                            case 3:
-                                                new SendRateStatus().execute(1);
-                                                break ;
-                                            default:
-                                                new SendRateStatus().execute(2);
-                                                break ;
-                                        }
-/*                                        if (isLiked == true)
-                                            new SendRateStatus().execute(1);
-                                        else
-                                            new SendLike(1).execute();*/
-                                    } else
-                                        Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
-                                break;
-                            case 1: // Ajouter à ses ventes
+                            case 0: // Ajouter à ses ventes
                                 layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 dialogView = layoutInflater.inflate(R.layout.dialog_add_usersell, null);
                                 final EditText price = (EditText) dialogView.findViewById(R.id.product_price);
@@ -198,7 +176,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 builderCustom.create().show();
 
                                 break;
-                            case 2: // Add to list
+                            case 1: // Add to list
                                 mDbHelper = new DatabaseHelper(getApplicationContext());
                                 mDbQuery = new DatabaseQuery(mDbHelper);
                                 mDatabase = mDbHelper.openDataBase();
@@ -296,7 +274,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                         // .setView(dialogView)
                                         .create().show();
                                 break;
-                            case 3: // Share
+                            case 2: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(Intent.ACTION_SEND);
 
@@ -309,13 +287,13 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                             , Toast.LENGTH_SHORT).show();
                                 }
                                 break;
-                            case 4: // Refresh
+                            case 3: // Refresh
                                 if (cd.isConnectedToInternet()) {
                                     new Refresh(activity, 2, prod.getId()).execute();
                                 } else
                                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
-                            case 5: // Suggestion
+                            case 4: // Suggestion
                                 layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 dialogView = layoutInflater.inflate(R.layout.dialog_suggestion, null);
                                 spinner = (Spinner) dialogView.findViewById(R.id.spinner);
@@ -391,11 +369,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.geoloc:
-                Intent intent = new Intent(v.getContext(), GeolocalisationActivity.class);
-                intent.putExtra("id_product", prod.getId());
-                v.getContext().startActivity(intent);
-                break;
             case R.id.fab:
                 if (!sessionManagerUser.isLogged()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -433,6 +406,29 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 else
                     dialog.show();
                 break;
+            case R.id.like:
+                if (cd.isConnectedToInternet()) {
+                    listLike = context.getString(R.string.liked_product);
+
+                    switch (status) {
+                        case 1:
+                            new SendRateStatus().execute(2);
+                            break ;
+                        case 2:
+                            new SendRateStatus().execute(3);
+                            break ;
+                        case 3:
+                            new SendRateStatus().execute(1);
+                            break ;
+                        default:
+                            new SendRateStatus().execute(2);
+                            break ;
+                    }
+
+                    new RetrieveRateStatus().execute();
+                } else
+                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                break ;
             default:
                 break;
         }
@@ -457,7 +453,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
             likeV = gm.countRate(prod.getId(), 2, 2);
             dislikeV = gm.countRate(prod.getId(), 2, 3);
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(prod.getId(), 2, userSession.getUserId());
             }
             return 0;
@@ -468,6 +464,17 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             super.onPostExecute(res);
 
             status = res;
+            switch (status) {
+                case 1:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.result_minor_text)));
+                    break;
+                case 2:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    break;
+                case 3:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+                    break;
+            }
             Log.e("TEST", "stat: " + res);
         }
     }
@@ -480,9 +487,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 SoapGlobalManager gm = new SoapGlobalManager();
 
+                Log.e("ProductActivity", "SENDING : I am user " + userSession.getUserId());
                 switch (params[0]) {
                     case 1:
                         gm.unLikeSomething(prod.getId(), 2, userSession.getUserId());

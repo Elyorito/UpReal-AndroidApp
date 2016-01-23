@@ -37,7 +37,7 @@ public class BridgeDeviceActivity extends Activity implements GoogleApiClient.Co
     public void onConnected(Bundle bundle) {
         SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-        if (userSession.isLogged()) {
+        if (userSession != null && userSession.isLogged()) {
             new SendToDataLayerThread("/connect", userSession.getUserId() + "").start();
         }
     }

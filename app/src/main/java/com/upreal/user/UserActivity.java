@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -59,6 +60,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     private SessionManagerUser sessionManagerUser;
 
     private FloatingActionButton menu;
+    private FloatingActionButton like;
     private AlertDialog dialog;
 
     private int status = 0;
@@ -106,12 +108,14 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         menu = (FloatingActionButton) findViewById(R.id.fab);
         menu.setOnClickListener(this);
+        like = (FloatingActionButton) findViewById(R.id.like);
+        like.setOnClickListener(this);
         activity = this;
         String[] option = null;
         if (toggleAccount && sessionManagerUser.getUserId() == user.getId())
-            option = new String[] { "J'aime", "Editer son profil", "Partager", "Rafraichir", "Suggestion" };
+            option = new String[] {"Editer son profil", "Partager", "Rafraichir", "Suggestion" };
         else
-            option = new String[] { "J'aime", "Suivre", "Partager", "Rafraichir", "Suggestion" };
+            option = new String[] {"Suivre", "Partager", "Rafraichir", "Suggestion" };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, option);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Quel action voulez-vous faire ?");
@@ -119,23 +123,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent;
                         switch (which) {
-                            case 0: // Like
-                                if (cd.isConnectedToInternet()) {
-                                    switch (status) {
-                                        case 1:
-                                            new SendRateStatus().execute(2);
-                                            break ;
-                                        case 2:
-                                            new SendRateStatus().execute(1);
-                                            break ;
-                                        default:
-                                            new SendRateStatus().execute(2);
-                                            break ;
-                                    }
-                                } else
-                                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
-                                break ;
-                            case 1: // Edit - Follow
+                            case 0: // Edit - Follow
                                 if (toggleAccount && sessionManagerUser.getUserId() == user.getId()) {
                                     intent = new Intent(context, UserUpdateActivity.class);
                                     startActivity(intent);
@@ -144,7 +132,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                                     new FollowUser().execute();
                                 }
                                 break;
-                            case 2: // Share
+                            case 1: // Share
                                 intent = new Intent(Intent.ACTION_SEND);
 
                                 intent.putExtra(Intent.EXTRA_TEXT, "Venez voir l'utilisateur : " + user.getUsername() + " sur UpReal");
@@ -156,13 +144,13 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                                             , Toast.LENGTH_SHORT).show();
                                 }
                                 break;
-                            case 3: // Refresh
+                            case 2: // Refresh
                                 if (cd.isConnectedToInternet())
                                     new Refresh(activity, 1, user.getId()).execute();
                                 else
                                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                                 break;
-                            case 4: // Suggest
+                            case 3: // Suggest
                                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 View dialogView = layoutInflater.inflate(R.layout.dialog_suggestion, null);
                                 Spinner spinner = (Spinner) dialogView.findViewById(R.id.spinner);
@@ -231,6 +219,23 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fab:
                 dialog.show();
                 break;
+            case R.id.like:
+                if (cd.isConnectedToInternet()) {
+                    switch (status) {
+                        case 1:
+                            new SendRateStatus().execute(2);
+                            break ;
+                        case 2:
+                            new SendRateStatus().execute(1);
+                            break ;
+                        default:
+                            new SendRateStatus().execute(2);
+                            break ;
+                    }
+                } else
+                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                new RetrieveRateStatus().execute();
+                break ;
         }
     }
 
@@ -245,7 +250,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
             likeV = gm.countRate(user.getId(), 1, 2);
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(user.getId(), 1, userSession.getUserId());
             }
             return 0;
@@ -256,7 +261,14 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(res);
 
             status = res;
-            Log.e("TEST", "stat: " + res);
+            switch (status) {
+                case 1:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.result_minor_text)));
+                    break;
+                case 2:
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    break;
+            }
         }
     }
 
@@ -268,7 +280,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 SoapGlobalManager gm = new SoapGlobalManager();
 
                 switch (params[0]) {
@@ -308,7 +320,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged())
+            if (userSession != null && userSession.isLogged())
                 gm.createSuggestion(userSession.getUserId(), idType, 2, user.getId(), params[0]);
 
             return null;
@@ -323,7 +335,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged())
+            if (userSession != null && userSession.isLogged())
                 uum.followUser(user.getId(), userSession.getUserId());
 
             return null;

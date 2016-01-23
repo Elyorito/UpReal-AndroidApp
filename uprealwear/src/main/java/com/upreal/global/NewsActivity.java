@@ -108,7 +108,7 @@ public class NewsActivity extends Activity implements View.OnClickListener {
             GlobalManager gm = new GlobalManager();
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(item.getId(), item.getTargetType(), userSession.getUserId());
             }
             return 0;
@@ -132,7 +132,7 @@ public class NewsActivity extends Activity implements View.OnClickListener {
 
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
 
-            if (userSession.isLogged()) {
+            if (userSession != null && userSession.isLogged()) {
                 GlobalManager gm = new GlobalManager();
 
                 switch (params[0]) {
