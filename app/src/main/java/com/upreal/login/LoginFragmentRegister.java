@@ -14,8 +14,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.plus.model.people.Person;
 import com.upreal.R;
 import com.upreal.home.HomeActivity;
 import com.upreal.utils.SessionManagerUser;
@@ -36,12 +33,6 @@ import com.upreal.utils.SoapUserManager;
 import com.upreal.utils.User;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
-
-import java.security.SecureRandom;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Elyo on 01/03/2015.
@@ -61,6 +52,7 @@ public class LoginFragmentRegister extends Fragment
     private EditText edit_password;
     private EditText edit_confirmpassword;
     private EditText edit_email;
+    private EditText edit_referral;
     private TextView e_id;
     private TextView e_password;
     private TextView e_confirm;
@@ -94,6 +86,7 @@ public class LoginFragmentRegister extends Fragment
         edit_password = (EditText) v.findViewById(R.id.edittext_register_password);
         edit_confirmpassword = (EditText) v.findViewById(R.id.edittext_register_password2);
         edit_email = (EditText) v.findViewById(R.id.edittext_register_email);
+        edit_referral = (EditText) v.findViewById(R.id.referral);
         but_register = (Button) v.findViewById(R.id.button_login_connect);
         checkedTextView = (CheckedTextView) v.findViewById(R.id.checktext_cgu);
 
@@ -210,7 +203,7 @@ public class LoginFragmentRegister extends Fragment
                 else {
                     InputMethodManager im = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
                     im.hideSoftInputFromWindow(edit_email.getWindowToken(), 0);
-                    new RetreiveRegisterAccount().execute();
+                    new RetrieveRegisterAccount().execute();
                     complete = true;
                 }
 //                if (!checkedTextView.isChecked()) {
@@ -284,7 +277,7 @@ public class LoginFragmentRegister extends Fragment
         }
     }
 
-    private class RetreiveRegisterAccount extends AsyncTask<Void, Void, Integer> {
+    private class RetrieveRegisterAccount extends AsyncTask<Void, Void, Integer> {
 
         private int info_serv;
         private String username;
@@ -294,7 +287,7 @@ public class LoginFragmentRegister extends Fragment
         private String password;
         private boolean social;
 
-        RetreiveRegisterAccount() {
+        RetrieveRegisterAccount() {
             social = false;
             username = edit_id.getText().toString();
             password = edit_password.getText().toString();

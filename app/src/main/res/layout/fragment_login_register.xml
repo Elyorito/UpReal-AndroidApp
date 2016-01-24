@@ -71,14 +71,21 @@
                 android:hint="@string/adresse_email"/>
         </android.support.design.widget.TextInputLayout>
 
-
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Parrain"
+            android:id="@+id/referral"
+            android:layout_below="@+id/input_register_email"/>
 
         <CheckedTextView
             android:paddingTop="5dp"
             android:id="@+id/checktext_cgu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/input_register_email"
+            android:layout_below="@+id/referral"
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"
             android:checked="false"
             android:text="@string/cgu"/>

@@ -66,6 +66,8 @@ public class ConverterManager {
 
     public static Article convertToArticle(SoapObject soapObject) {
         Article news = new Article();
+        if (soapObject.hasProperty("id") && soapObject.getProperty("id") != null)
+            news.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
         if (soapObject.hasProperty("title") && soapObject.getProperty("title") != null)
             news.setTitle(soapObject.getPropertyAsString("title").toString());
         if (soapObject.hasProperty("body") && soapObject.getProperty("body") != null)

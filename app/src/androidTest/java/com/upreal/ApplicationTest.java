@@ -1,4 +1,4 @@
-package com.upreal.upreal;
+package com.upreal;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

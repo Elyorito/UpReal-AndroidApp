@@ -7,6 +7,7 @@ import android.os.Parcelable;
  * Created by Sofiane on 06/08/2015.
  */
 public class Article implements Parcelable {
+    private int id;
     private String title;
     private String body;
     private String creation;
@@ -15,8 +16,9 @@ public class Article implements Parcelable {
 
     public Article(){}
 
-    public Article(String title, String body, String creation, int type, String picture) {
+    public Article(int id, String title, String body, String creation, int type, String picture) {
 
+        this.id = id;
         this.title = title;
         this.body = body;
         this.creation = creation;
@@ -72,6 +74,7 @@ public class Article implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeString(this.title);
         dest.writeString(this.body);
         dest.writeString(this.creation);
@@ -92,10 +95,19 @@ public class Article implements Parcelable {
     };
 
     protected Article(Parcel in) {
+        this.id = in.readInt();
         this.title = in.readString();
         this.body = in.readString();
         this.creation = in.readString();
         this.type = in.readInt();
         this.picture = in.readString();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
