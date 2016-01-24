@@ -94,6 +94,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         barcode.setText("");
         noticedPrice.setText("");
         shopNearby.setText("");
+        mImageFileLocation = getIntent().getExtras().getString("imageLocation");
         cd = new ConnectionDetector(getApplicationContext());
         if (cd.isConnectedToInternet()) {
             new Product.getCategory(spinner, this).execute();
@@ -106,6 +107,12 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         if (barcodeEAN != null)
             barcode.setText(barcodeEAN.toString());
         imageProduct.setOnClickListener(this);
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (mImageFileLocation != null)
+            showImage();
     }
 
     @Override
@@ -156,11 +163,34 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
         }
     }
 
+    void showImage() {
+        int targetImageViewWidth = imageProduct.getWidth();
+        int targetImageViewHeight = imageProduct.getHeight();
+
+        BitmapFactory.Options bfOptions = new BitmapFactory.Options();
+        bfOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
+
+        int cameraImageWidth = bfOptions.outWidth;
+        int cameraImageHeight = bfOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
+        bfOptions.inSampleSize = scaleFactor;
+        bfOptions.inJustDecodeBounds = false;
+
+        bitmap = BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
+        if (bitmap != null)
+            imageProduct.setImageBitmap(bitmap);
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACTIVITY_START_CAMERA) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
+                showImage();
+/*
                 int targetImageViewWidth = imageProduct.getWidth();
                 int targetImageViewHeight = imageProduct.getHeight();
 
@@ -178,6 +208,7 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
                 bitmap = BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
                 if (bitmap != null)
                 imageProduct.setImageBitmap(bitmap);
+*/
             }
         }
     }

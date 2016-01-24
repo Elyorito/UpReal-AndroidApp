@@ -49,4 +49,5 @@ dependencies {
     compile 'com.github.jlmd:AnimatedCircleLoadingView:cf73a696b7'
     wearApp project(':uprealwear')
     compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:support-v4:22.0.0'
 }

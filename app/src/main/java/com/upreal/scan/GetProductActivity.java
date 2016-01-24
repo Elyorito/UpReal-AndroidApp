@@ -74,6 +74,7 @@ public class GetProductActivity extends AppCompatActivity {
                 if (context != null) {
                     Intent intent = new Intent(getApplicationContext(), AddProductFromScan.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("imageLocation", mImageFileLocation);
                     getApplicationContext().startActivity(intent);
                     finish();
                 }
