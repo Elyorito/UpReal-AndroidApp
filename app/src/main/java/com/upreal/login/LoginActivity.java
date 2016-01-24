@@ -14,8 +14,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
@@ -36,14 +45,18 @@ import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
 import com.upreal.view.SlidingTabLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
  * Created by Elyo on 01/03/2015.
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, ResultCallback<People.LoadPeopleResult>, Observer, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, ResultCallback<People.LoadPeopleResult>, Observer, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, FacebookCallback<LoginResult> {
     private static final int RC_SIGN_IN = 0;
     /* Is there a ConnectionResult resolution in progress? */
     private boolean mIsResolving = false;
@@ -71,13 +84,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SignInButton gConnect;
     private Button tConnect;
 
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_login);
 
+        callbackManager = CallbackManager.Factory.create();
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        loginButton = (LoginButton) findViewById(R.id.facebookconnect);
+        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
+        loginButton.registerCallback(callbackManager, this);
         toolbar.setTitle(R.string.connexion);
         setSupportActionBar(toolbar);
         Tab = new CharSequence[]{getString(R.string.select_connexion), getString(R.string.select_register)};
@@ -253,6 +274,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             mIsResolving = false;
             mGoogleApiClient.connect();
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -330,6 +353,75 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
 
+
+    }
+
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        final User user = new User();
+        GraphRequest request = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        if (response.getError() != null) {
+                            // handle error
+                            System.out.println("ERROR");
+                        } else {
+                            System.out.println("Success");
+                           try {
+
+                                String jsonresult = String.valueOf(object);
+                                System.out.println("JSON Result" + jsonresult);
+
+                                user.setEmail(object.getString("email"));
+                                //user.setId(Integer.parseInt(object.getString("id")));
+                                //user.setFirstname(object.getString("first_name"));
+                                //user.setLastname(object.getString("last_name"));
+                                user.setUsername(object.getString("name"));
+                                user.setPassword("facebook");
+                                sessionManagerUser.setUser(user);
+                               mDbHelper = new DatabaseHelper(getApplicationContext());
+                               mDbQuery = new DatabaseQuery(mDbHelper);
+                               mDatabase = mDbHelper.openDataBase();
+                               //Toast.makeText(this, "Success Facebook !Username="+user.getUsername(), Toast.LENGTH_SHORT).show();
+                               sessionManagerUser.setRegisterLoginUser(user.getUsername(), "facebook");
+                               mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "3"});
+                               mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "2"});
+                               mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.product_seen_history), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "10"});
+                               mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_commentary), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "11"});
+                               mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "6"});
+                               mDatabase.close();
+                               WearManager.notifyWear(getApplicationContext(), "Connected successfully !");
+                               HomeActivity homeActivity = new HomeActivity();
+                               Intent close = new Intent(getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
+                               Intent intent = new Intent(LoginActivity.this, homeActivity.getClass());
+                               LoginActivity.this.sendBroadcast(close);
+                               startActivity(intent);
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+        Toast.makeText(this, "Success Facebook !UserId="+loginResult.getAccessToken().getUserId(), Toast.LENGTH_SHORT).show();
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender, birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onError(FacebookException error) {
 
     }
 

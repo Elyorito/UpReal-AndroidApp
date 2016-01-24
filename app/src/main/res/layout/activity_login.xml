@@ -47,14 +47,13 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"/>
 
-                <Button
-                    android:id="@+id/button_facebook"
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/facebookconnect"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/facebook"
-                    android:background="@android:color/holo_blue_dark"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"/>
+
                 <Button
                     android:id="@+id/button_twitter"
                     android:layout_width="0dp"

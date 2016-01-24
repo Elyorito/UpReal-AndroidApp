@@ -6,10 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -27,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,23 +72,30 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private Context context;
     private Activity activity;
     private Toolbar toolbar;
+
     private ViewPager mViewPager;
     //private ProductViewPagerAdapter adapter;
     private ProductNewViewPagerAdapter adapter;
     private SlidingTabLayout mSlidingTabLayout;
     private SessionManagerUser sessionManagerUser;
+
     private Product prod;
     private String listLike;
     private Boolean isLiked = false;
     private CharSequence title;
+
     private Product mProduct;
+
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDbHelper;
     private DatabaseQuery mDbQuery;
+
     private TextView prodName;
     private TextView prodBrand;
     private TextView prodShortDesc;
     private ImageView prodPicture;
+    private ProgressBar progressBar;
+
     private Button geoloc;
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -98,9 +109,14 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private AlertDialog.Builder builderCustom;
     private AlertDialog.Builder builderList;
     private ArrayList<Integer> checkedList = new ArrayList<>();
+
     private String[] lists;
 
     private int status = 0;
+    LocationService locationService;
+    private TextView averagePrice;
+    private int progressStatus = 0;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +126,14 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         context = getApplicationContext();
         activity = this;
         cd = new ConnectionDetector(context);
-        LocationService locationService = LocationService.getLocationManager(getApplicationContext());
+        locationService = LocationService.getLocationManager(getApplicationContext());
         tabLayout = (TabLayout) findViewById(R.id.tabsproduct);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageProduct = (ImageView) findViewById(R.id.imageproduct);
+        averagePrice = (TextView) findViewById(R.id.averageprice);
+        progressBar = (ProgressBar) findViewById(R.id.progressBarProduct);
+
         prod = getIntent().getExtras().getParcelable("prod");
         mProduct = prod;
         if (prod == null)
@@ -442,6 +461,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
     private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {
 
+
         int likeV = 0;
         int dislikeV = 0;
 
@@ -476,6 +496,28 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                     break;
             }
             Log.e("TEST", "stat: " + res);
+            new Thread(new Runnable() {
+                public void run() {
+                    progressBar.setMax(likeV + dislikeV);
+                    while (progressStatus < likeV) {
+                        progressStatus += 1;
+                        // Update the progress bar and display the
+                        //current value in the text view
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(progressStatus);
+                            }
+                        });
+                        try {
+                            // Sleep for 200 milliseconds.
+                            //Just to display the progress slowly
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
         }
     }
 

@@ -1,5 +1,6 @@
 package com.upreal.product;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,9 +68,10 @@ public class ProductFragmentInfo extends Fragment {
         @Override
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
-            Context context = getActivity().getApplicationContext();
-            if (listCharacteristics != null || i > 0 || context != null) {
-                mAdapter = new AdapterSpecification(context, listCharacteristics);
+            Activity activity = getActivity();
+
+            if (activity != null && listCharacteristics != null || i > 0) {
+                mAdapter = new AdapterSpecification(activity.getApplicationContext(), listCharacteristics);
                 recyclerView.setAdapter(mAdapter);
             }
         }
