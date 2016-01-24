@@ -22,42 +22,43 @@ import com.upreal.utils.User;
 
 public class BridgeDeviceActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks {
 
-    private int idUser = 0;
+    private int idUser = 1;
     private GoogleApiClient gClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
-        gClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .build();
+//        gClient = new GoogleApiClient.Builder(this)
+//                .addApi(Wearable.API)
+//                .addConnectionCallbacks(this)
+//                .build();
+        new RetrieveUser().execute();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        gClient.connect();
+//        gClient.connect();
     }
 
     @Override
     protected void onStop() {
-        if (gClient != null && gClient.isConnected()) {
-            gClient.disconnect();
-        }
+//        if (gClient != null && gClient.isConnected()) {
+//            gClient.disconnect();
+//        }
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        gClient.disconnect();
+//        gClient.disconnect();
     }
 
     @Override
     public void onConnected( Bundle bundle ) {
-        Wearable.MessageApi.addListener(gClient, this);
+//        Wearable.MessageApi.addListener(gClient, this);
     }
 
     @Override
@@ -93,9 +94,14 @@ public class BridgeDeviceActivity extends Activity implements MessageApi.Message
         @Override
         protected User doInBackground(Void... params) {
             return um.getAccountInfo(idUser);
+            //return null;
         }
 
         protected void onPostExecute(User res) {
+            Log.v("taRetrieveError", "-----------------------------------------------------------");
+            Log.v("taRetrieveError", "-----------------------------------------------------------");
+//            res = new User();
+//            res.setId(1);
             SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
             userSession.setUser(res);
             userSession.login();

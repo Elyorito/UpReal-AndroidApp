@@ -30,7 +30,6 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Double latitude;
     private Double longitude;
-    private List<List<String>> storeNearby;
 
     private int idProduct;
 
@@ -61,13 +60,13 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
     }
 
     private class RetrieveShopFromLocation extends AsyncTask<Void, Void, List<List<String>>> {
-
-
+        
         @Override
         protected List<List<String>> doInBackground(Void... voids) {
             SoapStoreManager sm = new SoapStoreManager();
-            //storeNearby = sm.getProductByLocation(latitude, longitude, 2, idProduct);
-            storeNearby = sm.getProductByLocation(48.8153326, 2.360979, 5, idProduct);
+
+            List<List<String>> storeNearby = sm.getProductByLocation(latitude, longitude, 2, idProduct);
+            //storeNearby = sm.getProductByLocation(48.8153326, 2.360979, 5, idProduct);
             return storeNearby;
         }
 

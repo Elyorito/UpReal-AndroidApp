@@ -1,5 +1,6 @@
 package com.upreal.user;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -79,8 +80,10 @@ public class UserFragmentProduct extends Fragment {
         @Override
         protected void onPostExecute(Integer i) {
             super.onPostExecute(i);
-            if (listUserSell != null && listProduct != null || i > 0 && getActivity() != null) {
-                mAdapter = new AdapterUserProduct(getActivity().getApplicationContext(), listUserSell, listProduct);
+            Activity activity = getActivity();
+
+            if (activity != null && listUserSell != null && listProduct != null || i > 0 && getActivity() != null) {
+                mAdapter = new AdapterUserProduct(activity.getApplicationContext(), listUserSell, listProduct);
                 recyclerView.setAdapter(mAdapter);
             }
         }

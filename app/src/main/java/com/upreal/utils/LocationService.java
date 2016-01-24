@@ -47,7 +47,7 @@ public class LocationService implements LocationListener {
         return instance;
     }
 
-    private LocationService( Context context )     {
+    private LocationService(Context context )     {
 
         initLocationService(context);
         Log.v("taglocation","LocationService created");

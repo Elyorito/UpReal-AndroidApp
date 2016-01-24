@@ -42,6 +42,7 @@
     <string name="password">Mot de passe</string>
     <string name="connect">Se Connecter</string>
     <string name="facebook">Facebook</string>
+    <string name="facebook_app_id">693250270809405</string>
     <string name="google">google</string>
     <string name="twitter">twitter</string>
     <string name="confirm_password">Confirmation du mot de passe</string>

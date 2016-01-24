@@ -56,7 +56,6 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.upreal.home.SearchResultsActivity">
-
             </meta-data>
         </activity>
 
@@ -85,7 +84,7 @@
         <activity
         android:name="com.upreal.product.ProductActivity"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Theme.AppCompat.Light"
         android:screenOrientation="portrait">
         </activity>
 
@@ -220,6 +219,13 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyChPHKdhfJmM6TBhVzhocIX3hd4ItCOfIs" />

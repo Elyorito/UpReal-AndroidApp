@@ -45,24 +45,35 @@
                         android:id="@+id/imageproductblurred"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:scaleX="2"
-                        android:scaleY="2"/>
+                        android:scaleX="4"
+                        android:scaleY="4"/>
                     <ImageView
                         android:id="@+id/imageproduct"
                         android:layout_width="70dp"
                         android:layout_height="140dp"
-                        android:layout_marginTop="80dp"
+                        android:layout_marginTop="60dp"
                         android:layout_marginStart="30dp"
                         android:src="@drawable/ic_action_camera"
                         android:gravity="center_vertical"/>
                     <TextView
+                        android:id="@+id/averageprice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1.32E"
+                        android:text="N'appartient à aucun magasin"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                         android:layout_marginTop="80dp"
                         android:layout_marginStart="120dp"
                         android:gravity="center_vertical"/>
+
+                    <ProgressBar
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="119dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/progressBarProduct"
+                        android:layout_gravity="left|bottom"
+                        android:progressDrawable="@drawable/progress_bar"
+                        android:indeterminate="false" />
+
 
                 </FrameLayout>
             </LinearLayout>
