@@ -1,7 +1,5 @@
 package com.upreal.home;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -21,8 +19,6 @@ import android.widget.EditText;
 import com.upreal.R;
 import com.upreal.utils.SessionManagerUser;
 
-import java.io.File;
-
 import static android.view.GestureDetector.SimpleOnGestureListener;
 
 /**
@@ -34,14 +30,6 @@ public class HomeActivity extends AppCompatActivity {
     private TabLayout tablayout;
     private ViewPager viewPager;
 
-    //RecyclerView Home
-    private RecyclerView mRecyclerViewHome;
-    private RecyclerView.Adapter mAdapterHome;
-    private ViewPager mViewpager_slideshow;
-
-
-    private AlertDialog.Builder builder;
-
     //RecyclerView NavDrawerR
     private RecyclerView mRecyclerViewR;
     private RecyclerView.Adapter mAdapterR;
@@ -49,22 +37,12 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout DrawerR;
     private ActionBarDrawerToggle mDrawerToggleR;
 
-    private Intent intent;
-
     private static boolean toggleAccount = false;
 
     public static final String ACTION_CLOSE_HOME = "HomeActivity.ACTION_CLOSE";
 
     public HomeActivity(){}
     private SessionManagerUser sessionManagerUser;
-
-    // Camera
-    private static final int ACTIVITY_START_CAMERA = 0;
-    private String mImageFileLocation = "";
-
-    // Storage
-    private static final int PERMISSIONS_REQUEST = 1;
-    private File photoFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,9 +120,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return super.onCreateOptionsMenu(menu);
     }
 
