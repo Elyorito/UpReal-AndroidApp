@@ -44,17 +44,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="5dp">
-                <include
-                    android:layout_gravity="center|left"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    layout="@layout/item_like" />
-
-                <include
-                    android:layout_gravity="center|right"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    layout="@layout/item_dislike" />
             </FrameLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
         <android.support.design.widget.TabLayout
@@ -118,5 +107,18 @@
 
         </android.support.v4.view.ViewPager>
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:clickable="true"
+        android:src="@drawable/floating_action_button_ic_fab_star"
+        app:layout_anchor="@+id/tabsnews"
+        app:backgroundTint="@color/result_minor_text"
+        app:layout_anchorGravity="bottom|end">
+
+    </android.support.design.widget.FloatingActionButton>
 
 </android.support.design.widget.CoordinatorLayout>
