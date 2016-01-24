@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.R;
@@ -22,18 +23,21 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
     List<Characteristic> listCharacteristics;
     List<String> types;
     int size = 0;
+    int health = 0;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int HolderId;
 
         TextView typeName;
         TextView typeValue;
+        ImageView health;
 
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
             typeName = (TextView) itemView.findViewById(R.id.type_name);
             typeValue = (TextView) itemView.findViewById(R.id.type_value);
+            health = (ImageView) itemView.findViewById(R.id.health);
 
             HolderId = 0;
         }
@@ -44,6 +48,7 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         this.listCharacteristics = listCharacteristics;
         boolean hasNutritional = false;
         boolean hasComponent = false;
+        boolean hasAdditive = false;
 
         this.types = new ArrayList<String>();
 
@@ -57,6 +62,10 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
             if (c.getType() == 2 && !hasComponent) {
                 types.add(context.getString(R.string.component));
                 hasComponent = true;
+            }
+            if (c.getType() == 3 && !hasAdditive) {
+                types.add(context.getString(R.string.additive));
+                hasAdditive = true;
             }
         }
 
@@ -90,6 +99,20 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         else if (types.get(position).equals(context.getString(R.string.component))) {
             value = getCharacteristicFromType(2);
         }
+        else if (types.get(position).equals(context.getString(R.string.additive))) {
+            value = getCharacteristicFromType(3);
+            switch (health) {
+                case 1:
+                    holder.health.setImageResource(R.drawable.very_good_health);
+                    break ;
+                case 0:
+                    holder.health.setImageResource(R.drawable.ok_health);
+                    break ;
+                case -1:
+                    holder.health.setImageResource(R.drawable.bad_health);
+                    break ;
+            }
+        }
 
         if (value != null && value != "") {
             holder.typeName.setText(types.get(position));
@@ -103,15 +126,32 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
 
     public String getCharacteristicFromType(int type) {
         String value = "";
+        int num = 0;
 
         for (Characteristic c : listCharacteristics) {
             if (type == c.getType()) {
                 if (type == 0)
                     value = c.getValue();
                 else
-                    value += c.getName() + ": " + c.getValue() + " " + c.getHealthy() + "\n";
+                    value += c.getName() + ": " + c.getValue() + "\n";
+
+                if (c.getType() == 3) {
+                    num++;
+                    if (c.getHealthy() == 1)
+                        health++;
+                    else if (c.getHealthy() == 0)
+                        health--;
+                }
             }
         }
+
+        if (health < 0)
+            health = -1;
+        else if (health == 0 || num - health > num / 2)
+            health = 0;
+        else
+            health = 1;
+
         if (value != null && value != "")
             return value;
         else if (type == 0)
