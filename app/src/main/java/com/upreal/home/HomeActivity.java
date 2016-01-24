@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerViewHome;
     private RecyclerView.Adapter mAdapterHome;
     private ViewPager mViewpager_slideshow;
-    private SlideViewPagerAdapter mAdapterSlide;
+
 
     private AlertDialog.Builder builder;
 
