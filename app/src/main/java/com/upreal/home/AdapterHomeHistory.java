@@ -81,17 +81,17 @@ public class AdapterHomeHistory extends RecyclerView.Adapter<AdapterHomeHistory.
         switch (this.hList.get(i).getIdType()) {
             case 1:
                 if (this.hList.get(i).getActionType() != 7) {
-                    state += " " + context.getString(R.string.user) + " " + this.hList.get(i).getIdTarget();
+                    state += " " + context.getString(R.string.user) + " " + this.hList.get(i).getNameTarget();
                 }
                 break ;
             case 2:
-                state += " " + context.getString(R.string.product) + " " + this.hList.get(i).getIdTarget();
+                state += " " + context.getString(R.string.product) + " " + this.hList.get(i).getNameTarget();
                 break ;
             case 3:
-                state += " " + context.getString(R.string.store) + " " + this.hList.get(i).getIdTarget();
+                state += " " + context.getString(R.string.store) + " " + this.hList.get(i).getNameTarget();
                 break ;
             case 4:
-                state += " " + context.getString(R.string.article) + " " + this.hList.get(i).getIdTarget();
+                state += " " + context.getString(R.string.article) + " " + this.hList.get(i).getNameTarget();
                 break ;
             default:
                 break ;

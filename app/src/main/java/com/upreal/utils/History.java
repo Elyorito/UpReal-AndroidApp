@@ -20,6 +20,7 @@ public class History implements Parcelable {
     private int idType;
     private int idTarget;
     private Date date;
+    private String nameTarget;
 
     public History() {}
 
@@ -86,6 +87,14 @@ public class History implements Parcelable {
         }
     }
 
+    public String getNameTarget() {
+        return this.nameTarget;
+    }
+
+    public void setNameTarget(String nameTarget) {
+        this.nameTarget = nameTarget;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -99,6 +108,7 @@ public class History implements Parcelable {
         dest.writeInt(this.idType);
         dest.writeInt(this.idTarget);
         dest.writeSerializable(this.date);
+        dest.writeString(this.nameTarget);
     }
 
     public static final Creator<History> CREATOR = new Creator<History>() {
@@ -120,6 +130,7 @@ public class History implements Parcelable {
         this.idType = in.readInt();
         this.idTarget = in.readInt();
         this.date = (Date) in.readSerializable();
+        this.nameTarget = in.readString();
     }
 
     public static class createHistory extends AsyncTask<Void, Void, Void> {

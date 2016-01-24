@@ -1,8 +1,10 @@
 package com.upreal.news;
 
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +27,7 @@ import com.upreal.utils.SoapUserUtilManager;
 /**
  * Created by Sofiane on 08/08/2015.
  */
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ConnectionDetector cd;
     private Toolbar toolbar;
@@ -36,12 +38,9 @@ public class NewsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager mViewPager;
     private NewsViewPagerAdapter adapter;
-    private ImageView like;
-    private ImageView dislike;
-    private TextView likeV;
-    private TextView dislikeV;
+    private FloatingActionButton like;
 
-
+    private int status;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,10 +49,7 @@ public class NewsActivity extends AppCompatActivity {
         setContentView(R.layout.test_layout_news);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         imageArticle = (ImageView) findViewById(R.id.imagenews);
-        like = (ImageView) findViewById(R.id.logo_like);
-        dislike = (ImageView) findViewById(R.id.logo_dislike);
-        likeV = (TextView) findViewById(R.id.like_value);
-        dislikeV = (TextView) findViewById(R.id.dislike_value);
+        like = (FloatingActionButton) findViewById(R.id.like);
         article = getIntent().getExtras().getParcelable("listnews");
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -74,20 +70,32 @@ public class NewsActivity extends AppCompatActivity {
         adapter = new NewsViewPagerAdapter(getSupportFragmentManager(), Tab, 2, article, this);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
-        like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SendRateStatus().execute((like.getAlpha() >= 1f) ? (1) : (2));
+        like.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.like:
+                if (cd.isConnectedToInternet()) {
+                    switch (status) {
+                        case 1:
+                            new SendRateStatus().execute(2);
+                            break;
+                        case 2:
+                            new SendRateStatus().execute(1);
+                            break;
+                        default:
+                            new SendRateStatus().execute(2);
+                            break;
+                    }
+                } else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 new RetrieveRateStatus().execute();
-            }
-        });
-        dislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SendRateStatus().execute((dislike.getAlpha() >= 1f) ? (1) : (3));
-                new RetrieveRateStatus().execute();
-            }
-        });
+                break;
+            default:
+                break;
+        }
     }
 
     private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {
@@ -113,26 +121,14 @@ public class NewsActivity extends AppCompatActivity {
         protected void onPostExecute(Integer res) {
             super.onPostExecute(res);
 
-            likeV.setText(nbLike + "");
-            dislikeV.setText(nbDislike + "");
-
-            switch (res) {
+            status = res;
+            switch (status) {
                 case 1:
-                    like.setAlpha(.5f);
-                    dislike.setAlpha(.5f);
-                    break ;
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.result_minor_text)));
+                    break;
                 case 2:
-                    like.setAlpha(1f);
-                    dislike.setAlpha(.5f);
-                    break ;
-                case 3:
-                    like.setAlpha(.5f);
-                    dislike.setAlpha(1f);
-                    break ;
-                default:
-                    like.setAlpha(.5f);
-                    dislike.setAlpha(.5f);
-                    break ;
+                    like.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    break;
             }
         }
     }
@@ -154,9 +150,6 @@ public class NewsActivity extends AppCompatActivity {
                     case 2:
                         gm.likeSomething(article.getId(), 4, userSession.getUserId());
                         break ;
-                    case 3:
-                        gm.dislikeSomething(article.getId(), 4, userSession.getUserId());
-                        break ;
                     default:
                         break ;
                 }
@@ -169,9 +162,6 @@ public class NewsActivity extends AppCompatActivity {
                         break ;
                     case 2:
                         uum.createHistory(userSession.getUserId(), 4, 4, article.getId());
-                        break ;
-                    case 3:
-                        uum.createHistory(userSession.getUserId(), 3, 4, article.getId());
                         break ;
                     default:
                         break ;

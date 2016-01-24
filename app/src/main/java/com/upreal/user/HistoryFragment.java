@@ -12,8 +12,13 @@ import android.view.ViewGroup;
 
 import com.upreal.R;
 import com.upreal.home.AdapterHomeHistory;
+import com.upreal.utils.Article;
 import com.upreal.utils.History;
 import com.upreal.utils.SessionManagerUser;
+import com.upreal.utils.SoapGlobalManager;
+import com.upreal.utils.SoapProductManager;
+import com.upreal.utils.SoapStoreManager;
+import com.upreal.utils.SoapUserManager;
 import com.upreal.utils.SoapUserUtilManager;
 
 import java.util.ArrayList;
@@ -53,6 +58,37 @@ public class HistoryFragment  extends Fragment {
             if (userSession != null && userSession.isLogged()) {
                 SoapUserUtilManager uum = new SoapUserUtilManager();
                 hList = uum.getUserHistory(userSession.getUserId());
+
+                for (History h : hList) {
+                    switch (h.getIdType()) {
+                        case 1:
+                            SoapUserManager um = new SoapUserManager();
+                            h.setNameTarget(um.getAccountInfoUsername(h.getIdTarget()).getUsername());
+                            break ;
+                        case 2:
+                            SoapProductManager pm = new SoapProductManager();
+                            h.setNameTarget(pm.getProductInfo(h.getIdTarget()).getName());
+                            break ;
+                        case 3:
+                            SoapStoreManager sm = new SoapStoreManager();
+                            h.setNameTarget(sm.getStoreInfo(h.getIdTarget()).getName());
+                            break ;
+                        case 4:
+                            SoapGlobalManager gm = new SoapGlobalManager();
+                            List<Article> listNews = gm.getNews();
+                            Article article = null;
+
+                            for (Article a : listNews) {
+                                if (a.getId() == h.getIdTarget()) {
+                                    article = a;
+                                    break ;
+                                }
+                            }
+                            if (article != null)
+                                h.setNameTarget(article.getTitle());
+                            break ;
+                    }
+                }
             }
             return hList;
         }
