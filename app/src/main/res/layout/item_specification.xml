@@ -29,8 +29,14 @@
                     android:layout_height="fill_parent"
                     android:orientation="vertical">
 
+                    <ImageView
+                    android:id="@+id/health"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"/>
+
                     <TextView
                         android:id="@+id/type_name"
+                        android:layout_toRightOf="@+id/health"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Specification"

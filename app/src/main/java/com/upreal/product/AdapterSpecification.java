@@ -1,8 +1,6 @@
 package com.upreal.product;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -10,6 +8,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.R;
@@ -102,12 +101,17 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         }
         else if (types.get(position).equals(context.getString(R.string.additive))) {
             builder = getCharacteristicFromType(3);
-        }
-
-/*
-        if (value != null && value != "" && builder == null) {
-            holder.typeName.setText(types.get(position));
-            holder.typeValue.setText(value, TextView.BufferType.NORMAL);
+            switch (health) {
+                case 1:
+                    holder.health.setImageResource(R.drawable.very_good_health);
+                    break ;
+                case 0:
+                    holder.health.setImageResource(R.drawable.ok_health);
+                    break ;
+                case -1:
+                    holder.health.setImageResource(R.drawable.bad_health);
+                    break ;
+            }
         }
 */
         if (builder != null) {
@@ -149,7 +153,7 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
 
     public SpannableStringBuilder getCharacteristicFromType(int type) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
-
+        int num = 0;
         for (Characteristic c : listCharacteristics) {
             if (type == c.getType()) {
                 if (type == 0) {
