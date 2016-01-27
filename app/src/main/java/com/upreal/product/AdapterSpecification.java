@@ -1,7 +1,12 @@
 package com.upreal.product;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +49,9 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         this.listCharacteristics = listCharacteristics;
         boolean hasNutritional = false;
         boolean hasComponent = false;
+        boolean hasAdditive = false;
 
-        this.types = new ArrayList<String>();
+        this.types = new ArrayList<>();
 
         types.add(context.getString(R.string.description));
 
@@ -57,6 +63,10 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
             if (c.getType() == 2 && !hasComponent) {
                 types.add(context.getString(R.string.component));
                 hasComponent = true;
+            }
+            if (c.getType() == 3 && !hasAdditive) {
+                types.add(context.getString(R.string.additive));
+                hasAdditive = true;
             }
         }
 
@@ -79,21 +89,31 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        String value = "";
+        SpannableStringBuilder builder = null;
 
         if (types.get(position).equals(context.getString(R.string.description))) {
-            value = getCharacteristicFromType(0);
+            builder = getCharacteristicFromType(0);
         }
         else if (types.get(position).equals(context.getString(R.string.nutritional))) {
-            value = getCharacteristicFromType(1);
+            builder = getCharacteristicFromType(1);
         }
         else if (types.get(position).equals(context.getString(R.string.component))) {
-            value = getCharacteristicFromType(2);
+            builder = getCharacteristicFromType(2);
+        }
+        else if (types.get(position).equals(context.getString(R.string.additive))) {
+            builder = getCharacteristicFromType(3);
         }
 
-        if (value != null && value != "") {
+/*
+        if (value != null && value != "" && builder == null) {
             holder.typeName.setText(types.get(position));
-            holder.typeValue.setText(value);
+            holder.typeValue.setText(value, TextView.BufferType.NORMAL);
+        }
+*/
+        if (builder != null) {
+            holder.typeName.setTypeface(null, Typeface.BOLD);
+            holder.typeName.setText(types.get(position));
+            holder.typeValue.setText(builder, TextView.BufferType.SPANNABLE);
         }
         else {
             holder.typeName.setText("");
@@ -101,22 +121,74 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         }
     }
 
-    public String getCharacteristicFromType(int type) {
-        String value = "";
+    public int getColor(Characteristic c) {
+        int color;
+        switch (c.getHealthy()) {
+            case 0:
+                color = Color.rgb(76,175,80);
+                break;
+            case 1:
+                color = Color.rgb(139,195,74);
+                break;
+            case 2:
+                color = Color.rgb(205, 220, 57);
+                break;
+            case 3:
+                color = Color.rgb(255,193,7);
+                break;
+            case 4:
+                color = Color.rgb(243, 190, 82);
+                break;
+            default:
+                color = Color.RED;
+                break;
+        }
+        return color;
+    }
+
+
+    public SpannableStringBuilder getCharacteristicFromType(int type) {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
 
         for (Characteristic c : listCharacteristics) {
             if (type == c.getType()) {
-                if (type == 0)
-                    value = c.getValue();
-                else
-                    value += c.getName() + ": " + c.getValue() + " " + c.getHealthy() + "\n";
+                if (type == 0) {
+                    SpannableString value = new SpannableString(c.getValue());
+                    value.setSpan(new ForegroundColorSpan(Color.BLACK), 0, value.length(), 0);
+                    builder.append(value);
+                }
+                if (type == 1) {
+                    String[] array = c.getValue().split(",");
+                    StringBuffer s = new StringBuffer();
+                    for (int i = 0; i < array.length; i += 2) {
+                        s.append(array[i] + " : " +  array[i + 1] + "\n");
+                    }
+                    SpannableString value = new SpannableString(s);
+                    value.setSpan(new ForegroundColorSpan(Color.BLACK), 0, value.length(), 0);
+                    builder.append(value);
+                }
+                else if (type == 3) {
+                    int color;
+                    color = getColor(c);
+                    SpannableString healthy = new SpannableString(c.getName() + "\n");
+                    healthy.setSpan(new ForegroundColorSpan(color), 0, healthy.length(), 0);
+                    builder.append(healthy);
+                }
+                else {
+                    SpannableString value = new SpannableString(c.getName() + ": " + c.getValue() + "\n");
+                    value.setSpan(new ForegroundColorSpan(Color.BLACK), 0, value.length(), 0);
+                    builder.append(value);
+                }
             }
         }
-        if (value != null && value != "")
-            return value;
-        else if (type == 0)
-            return context.getString(R.string.not_defined);
-
+        if (builder != null)
+            return builder;
+        else if (type == 0) {
+            SpannableString value = new SpannableString(context.getString(R.string.not_defined));
+            value.setSpan(new ForegroundColorSpan(Color.BLACK), 0, value.length(), 0);
+            builder.append(value);
+            return builder;
+        }
         return null;
     }
 
