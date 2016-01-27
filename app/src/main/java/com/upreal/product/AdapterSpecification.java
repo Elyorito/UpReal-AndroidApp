@@ -1,6 +1,8 @@
 package com.upreal.product;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -8,7 +10,6 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.upreal.R;
@@ -101,19 +102,7 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         }
         else if (types.get(position).equals(context.getString(R.string.additive))) {
             builder = getCharacteristicFromType(3);
-            switch (health) {
-                case 1:
-                    holder.health.setImageResource(R.drawable.very_good_health);
-                    break ;
-                case 0:
-                    holder.health.setImageResource(R.drawable.ok_health);
-                    break ;
-                case -1:
-                    holder.health.setImageResource(R.drawable.bad_health);
-                    break ;
-            }
         }
-*/
         if (builder != null) {
             holder.typeName.setTypeface(null, Typeface.BOLD);
             holder.typeName.setText(types.get(position));
@@ -129,7 +118,7 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
         int color;
         switch (c.getHealthy()) {
             case 0:
-                color = Color.rgb(76,175,80);
+                color = Color.rgb(76, 175, 80);
                 break;
             case 1:
                 color = Color.rgb(139,195,74);
