@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.home.NavigationBar;
@@ -104,8 +106,17 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         collapsingToolbarLayout.setTitle(user.getUsername());
         if (cd.isConnectedToInternet()) {
             Log.e("TEST", "Symfony/web/images/User/1_" + user.getId() + ".jpg");
-            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new BlurImages(getApplicationContext(), 25)).into(imageBlurred);
-            Picasso.with(getApplicationContext()).load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new CircleTransform()).into(imageUser);
+            Picasso.with(getApplicationContext())
+                    .load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + user.getId() + ".jpg").transform(new BlurImages(getApplicationContext(), 25))
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .into(imageBlurred);
+            Picasso.with(getApplicationContext())
+                    .load(new IPDefiner().getIP() + "Symfony/web/images/User/1_" + user.getId() + ".jpg")
+                    .transform(new CircleTransform())
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .into(imageUser);
         }
         else
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();

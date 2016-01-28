@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.BlurImages;
@@ -95,12 +97,26 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                 if (user.getPicture() != null && user.getPicture().length() > 15) {
                     Picasso.with(this.context).load(user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
                     holder.connexion_name.setText(this.mNavAccount);
-                    Picasso.with(this.context).load(this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                    Picasso.with(this.context)
+                            .load(this.user.getPicture()).transform(new CircleTransform())
+                            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                            .networkPolicy(NetworkPolicy.NO_CACHE)
+                            .into(holder.mImageViewProfile);
                 } else {
                     if (cd.isConnectedToInternet()) {
-                        Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
+                        Picasso.with(this.context)
+                                .load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture())
+                                .transform(new BlurImages(this.context, 25))
+                                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                                .networkPolicy(NetworkPolicy.NO_CACHE)
+                                .into(holder.mImageBlurred);
                         holder.connexion_name.setText(this.mNavAccount);
-                        Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
+                        Picasso.with(this.context)
+                                .load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture())
+                                .transform(new CircleTransform())
+                                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                                .networkPolicy(NetworkPolicy.NO_CACHE)
+                                .into(holder.mImageViewProfile);
                     }                }
             }
         }
