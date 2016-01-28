@@ -109,7 +109,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
     private int status = 0;
     LocationService locationService;
-    private TextView averagePrice;
     private int progressStatus = 0;
     private Handler handler = new Handler();
 
@@ -126,7 +125,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         imageBlurred = (ImageView) findViewById(R.id.imageproductblurred);
         imageProduct = (ImageView) findViewById(R.id.imageproduct);
-        averagePrice = (TextView) findViewById(R.id.averageprice);
         progressBar = (ProgressBar) findViewById(R.id.progressBarProduct);
 
         prod = getIntent().getExtras().getParcelable("prod");
@@ -204,7 +202,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 mDatabase.close();
                                 lists = new String[listsElements.length];
 
-
                                 for (int i = 0; i < listsElements.length; i++) {
                                     lists[i] = listsElements[i][0];
                                 }
@@ -212,6 +209,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
                                 TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
+
                                 addCustom.setOnClickListener(new View.OnClickListener() {
 
                                     @Override

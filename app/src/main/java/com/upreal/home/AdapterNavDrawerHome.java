@@ -2,7 +2,6 @@ package com.upreal.home;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.utils.BlurImages;
-import com.upreal.utils.CircleImageView;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.IPDefiner;
@@ -31,7 +29,6 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
 
     private String mNavTitles[];
     private String mNavAccount;
-    private CircleImageView mCircle;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int Holderid;
@@ -40,8 +37,6 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         TextView connexion_name;
         ImageView mImageViewProfile;
         ImageView mImageBlurred;
-        //LinearLayout layoutBackground;
-        private SparseBooleanArray selectedItems;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -97,10 +92,6 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
         }
         else {
             if (position == 0) {
-                /*ImageView imageBackground = new ImageView(this.context);
-                Picasso.with(this.context).load("http://163.5.84.202/Symfony/web/images/User/" +this.user.getPicture()).into(imageBackground);
-                holder.layoutBackground.addView(imageBackground);
-                */
                 if (user.getPicture() != null && user.getPicture().length() > 15) {
                     Picasso.with(this.context).load(user.getPicture()).transform(new BlurImages(this.context, 25)).into(holder.mImageBlurred);
                     holder.connexion_name.setText(this.mNavAccount);
@@ -111,10 +102,6 @@ public class AdapterNavDrawerHome extends RecyclerView.Adapter<AdapterNavDrawerH
                         holder.connexion_name.setText(this.mNavAccount);
                         Picasso.with(this.context).load(new IPDefiner().getIP() + "Symfony/web/images/User/" + this.user.getPicture()).transform(new CircleTransform()).into(holder.mImageViewProfile);
                     }                }
-                /*Bitmap bmp = ((BitmapDrawable) holder.mImageViewProfile.getDrawable()).getBitmap();
-                Bitmap output = mCircle.TranformImagetoCircleShape(bmp, bmp.getWidth() * 2);
-                holder.mImageViewProfile.setImageBitmap(output);
-                */
             }
         }
     }

@@ -75,6 +75,8 @@ public class AdapterStoreInfo extends RecyclerView.Adapter<AdapterStoreInfo.View
         if (position == 0) {
             holder.typeName.setText("Store Information");
 
+            if (store == null)
+                return ;
             if (store.getName() != "")
                 value += store.getName() + "\n";
             if (store.getWebsite() != "")
@@ -100,6 +102,8 @@ public class AdapterStoreInfo extends RecyclerView.Adapter<AdapterStoreInfo.View
             else {
                 holder.typeName.setText("Company Information");
 
+                if (company == null)
+                    return ;
                 if (company.getName() != "")
                     value += company.getName() + "\n";
                 if (company.getWebsite() != "")

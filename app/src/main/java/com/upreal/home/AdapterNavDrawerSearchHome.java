@@ -37,7 +37,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
 
         Button but_done;
 
-//        EditText search;
         EditText price_min;
         EditText price_max;
 
@@ -59,7 +58,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (!hasFocus) {
-//                             ((Activity) v.getContext()).onBackPressed();
                             mSearchName = search.getText().toString();
                         }
                     }
@@ -69,9 +67,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
         }
     }
 
-    public AdapterNavDrawerSearchHome(String searchProduct) {
-        this.mSearchName = searchProduct;
-    }
     AdapterNavDrawerSearchHome(Context mContext) {
         context = mContext;
     }
@@ -83,7 +78,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.done_search_home, parent, false);
 
             ViewHolder vhDone = new ViewHolder(v, viewType);
-
             return vhDone;
 
         } else if (viewType == TYPE_RATING) {
@@ -112,7 +106,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
 
     @Override
     public void onBindViewHolder(final AdapterNavDrawerSearchHome.ViewHolder holder, int position) {
-
         if (holder.HolderId == 0) {
             search.setOnEditorActionListener(new OnEditorActionListener() {
                 @Override
@@ -130,7 +123,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             holder.but_done.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     mSearchName = search.getText().toString();
                     if (mSearchName == null || mSearchName.isEmpty()) {
                         Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();

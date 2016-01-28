@@ -13,14 +13,11 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
 import com.upreal.R;
 import com.upreal.utils.SessionManagerUser;
-
-import static android.view.GestureDetector.SimpleOnGestureListener;
 
 /**
  * Created by Elyo on 03/02/2015.
@@ -31,14 +28,11 @@ public class HomeActivity extends AppCompatActivity {
     private TabLayout tablayout;
     private ViewPager viewPager;
 
-    //RecyclerView NavDrawerR
     private RecyclerView mRecyclerViewR;
     private RecyclerView.Adapter mAdapterR;
     private RecyclerView.LayoutManager mLayoutManagerR;
     private DrawerLayout DrawerR;
     private ActionBarDrawerToggle mDrawerToggleR;
-
-    private static boolean toggleAccount = false;
 
     public static final String ACTION_CLOSE_HOME = "HomeActivity.ACTION_CLOSE";
 
@@ -55,8 +49,6 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         sessionManagerUser = new SessionManagerUser(getApplicationContext());
 
-        toggleAccount = sessionManagerUser.isLogged();
-
         toolbar.setBackgroundColor(getResources().getColor(R.color.ColorTabs));
         toolbar.setTitleTextColor(getResources().getColor(R.color.ColorTitle));
         setSupportActionBar(toolbar);
@@ -65,23 +57,11 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewPager);
 
-        if (!sessionManagerUser.isLogged()) {
-            String tab[] = sessionManagerUser.getRegisterLoginUser();
-        }
-
         /*RecyclerView NavigDrawR*/
         mRecyclerViewR = (RecyclerView) findViewById(R.id.RecyclerView_NavigationDrawerR);
         mRecyclerViewR.setHasFixedSize(true);
         mAdapterR = new AdapterNavDrawerSearchHome(HomeActivity.this);
         mRecyclerViewR.setAdapter(mAdapterR);
-
-        final GestureDetector mGestureDetector = new GestureDetector(HomeActivity.this, new SimpleOnGestureListener() {
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-        });
 
         new NavigationBar(this);
 
@@ -94,7 +74,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 final EditText editText = (EditText) drawerView.findViewById(R.id.edittext_search);
-                //editText.requestFocus();
             }
 
             @Override
@@ -104,11 +83,6 @@ public class HomeActivity extends AppCompatActivity {
         };
         DrawerR.setDrawerListener(mDrawerToggleR);
         mDrawerToggleR.syncState();
-    }
-
-    private void setupViewpager(ViewPager viewpager) {
-        AdapterViewPagerHome adapter = new AdapterViewPagerHome(getSupportFragmentManager(), new String[]{"News", "Fil d'actualité"});
-        viewpager.setAdapter(adapter);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class AdapterListCustom extends UltimateViewAdapter {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (products != null) {
+            if (products != null && products.get(position) != null) {
                 ((ViewHolder) holder).nameList.setText(products.get(position).getName());
             }
         }

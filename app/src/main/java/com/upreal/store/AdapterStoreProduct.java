@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -33,7 +32,6 @@ public class AdapterStoreProduct extends RecyclerView.Adapter<AdapterStoreProduc
 
         ImageView productImg;
         TextView productName;
-        RatingBar productRate;
         Button productPrice;
 
         public ViewHolder(View itemView, int viewType) {
@@ -41,7 +39,6 @@ public class AdapterStoreProduct extends RecyclerView.Adapter<AdapterStoreProduc
 
             productImg = (ImageView) itemView.findViewById(R.id.product_image);
             productName = (TextView) itemView.findViewById(R.id.product_name);
-            productRate = (RatingBar) itemView.findViewById(R.id.product_rate);
             productPrice = (Button) itemView.findViewById(R.id.product_price);
             HolderId = 0;
         }
@@ -72,7 +69,6 @@ public class AdapterStoreProduct extends RecyclerView.Adapter<AdapterStoreProduc
 
         Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/Product/" + listProduct.get(position).getPicture()).transform(new CircleTransform()).into(holder.productImg);
         holder.productName.setText(this.listProduct.get(position).getName());
-        holder.productRate.setRating(2f);
         holder.productPrice.setText(this.listStoreSell.get(position).getPrice() + " €");
         holder.productPrice.setOnClickListener(new View.OnClickListener() {
             @Override

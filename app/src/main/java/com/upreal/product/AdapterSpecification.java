@@ -150,11 +150,12 @@ public class AdapterSpecification extends RecyclerView.Adapter<AdapterSpecificat
                     value.setSpan(new ForegroundColorSpan(Color.BLACK), 0, value.length(), 0);
                     builder.append(value);
                 }
-                if (type == 1) {
+                else if (type == 1) {
                     String[] array = c.getValue().split(",");
                     StringBuffer s = new StringBuffer();
                     for (int i = 0; i < array.length; i += 2) {
-                        s.append(array[i] + " : " +  array[i + 1] + "\n");
+                        if (i + 1 < array.length)
+                            s.append(array[i] + " : " +  array[i + 1] + "\n");
                     }
                     SpannableString value = new SpannableString(s);
                     value.setSpan(new ForegroundColorSpan(Color.BLACK), 0, value.length(), 0);
