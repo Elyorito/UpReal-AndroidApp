@@ -36,7 +36,6 @@ public class GetProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_getproduct);
         context = this;
         cd = new ConnectionDetector(context);
-//        mBytes = getIntent().getExtras().getByteArray("bytes");
         mImageFileLocation = getIntent().getExtras().getString("imageLocation");
         // Get Bitmap from file location
         Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
@@ -51,8 +50,7 @@ public class GetProductActivity extends AppCompatActivity {
             new RetrieveProductFromImage().execute(mBytes);
         } else
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
-//        animatedCircleLoadingView.setVisibility(View.VISIBLE);
-//        animatedCircleLoadingView.resetLoading();
+
     }
 
     private class RetrieveProductFromImage extends AsyncTask<byte[], Void, Product> {

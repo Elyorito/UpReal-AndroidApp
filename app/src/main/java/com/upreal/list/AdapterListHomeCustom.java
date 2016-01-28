@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.upreal.R;
 import com.upreal.utils.Lists;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,7 +61,6 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
             public boolean onLongClick(View v) {
                 switch (v.getId()) {
                     case R.id.rowtextlist:
-                        //Toast.makeText(v.getContext(),mListCust.get(position -1)[0], Toast.LENGTH_SHORT).show();
                         lists.remove(position);
                         notifyItemRemoved(position);
                         return true;
@@ -94,9 +92,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
     }
 
     @Override
-    public int getItemCount() {/*
-        if (mListCust.length == 0)
-            return mListCust.length;*/
+    public int getItemCount() {
         return lists.size();
     }
 }

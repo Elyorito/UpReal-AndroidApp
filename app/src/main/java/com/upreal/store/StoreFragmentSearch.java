@@ -60,7 +60,6 @@ public class StoreFragmentSearch extends Fragment {
         protected List<Store> doInBackground(Void... params) {
 
             SoapStoreManager pm =  new SoapStoreManager();
-            /*list_product = ex.getProduct(mSearchName);*/
             liststore = pm.getListStore(mSearchName);
             return liststore;
         }

@@ -155,55 +155,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
         }
     }
 
-/*
-    */
-/**
-     * Fetching user's information name, email, profile pic
-     * *//*
-
-    private void getProfileInformation() {
-        GoogleApiClient mGoogleApiClient = googleConnection.getGoogleApiClient();
-        try {
-            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi
-                        .getCurrentPerson(mGoogleApiClient);
-                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-                SecretKeySpec sks = null;
-                try {
-                    SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-                    sr.setSeed("any data used as random seed".getBytes());
-                    KeyGenerator kg = KeyGenerator.getInstance("AES");
-                    kg.init(128, sr);
-                    sks = new SecretKeySpec((kg.generateKey()).getEncoded(), "AES");
-                } catch (Exception e) {
-                    Log.e(TAG, "AES secret key spec error");
-                }
-
-                // Encode the original data with AES
-                byte[] encodedBytes = null;
-                try {
-                    Cipher c = Cipher.getInstance("AES");
-                    c.init(Cipher.ENCRYPT_MODE, sks);
-                    encodedBytes = c.doFinal(email.getBytes());
-                } catch (Exception e) {
-                    Log.e(TAG, "AES encryption error");
-                }
-*/
-/*
-                new RetrieveInfoFromServer(email, Base64.encodeToString(encodedBytes, Base64.DEFAULT)).execute();
-*//*
-
-            } else {
-                Toast.makeText(mContext,
-                        "Person information is null", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-*/
-
     private class RetrieveUser extends AsyncTask<Void, Void, User> {
 
         User user = new User();
@@ -275,8 +226,6 @@ public class LoginFragmentConnect extends Fragment implements View.OnClickListen
                 getActivity().sendBroadcast(close);
                 new RetrieveUser().execute();
                 startActivity(intent);
-                //getActivity().finish();
-                //Toast.makeText(getActivity().getApplicationContext(), "Response:" + s, Toast.LENGTH_SHORT).show();
             }
         }
     }

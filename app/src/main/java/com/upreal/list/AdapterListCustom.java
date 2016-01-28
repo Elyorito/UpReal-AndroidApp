@@ -1,15 +1,14 @@
 package com.upreal.list;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.upreal.R;
-import com.upreal.utils.Lists;
 import com.upreal.utils.Product;
 
 import java.util.ArrayList;
@@ -105,38 +104,4 @@ public class AdapterListCustom extends UltimateViewAdapter {
     public void swapPositions(List<?> list, int from, int to) {
         super.swapPositions(list, from, to);
     }
-
-    /*
-        public void insert(String string, int position) {
-            insert(stringList, string, position);
-        }
-
-        public void remove(int position) {
-            remove(stringList, position);
-        }
-
-        public void clear() {
-            clear(stringList);
-        }
-
-        @Override
-        public void toggleSelection(int pos) {
-            super.toggleSelection(pos);
-        }
-
-        @Override
-        public void setSelected(int pos) {
-            super.setSelected(pos);
-        }
-
-        @Override
-        public void clearSelection(int pos) {
-            super.clearSelection(pos);
-        }
-
-
-        public void swapPositions(int from, int to) {
-            swapPositions(stringList, from, to);
-        }*/
-
 }

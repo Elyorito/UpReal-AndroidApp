@@ -56,7 +56,6 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         this.Title = mTitle;
         this.nbTab = mNbTab;
         this.mProduct = product;
-//        new RetrieveAddress().execute();
         bundle = new Bundle();
         bundle.putParcelable("product", product);
         bundle.putInt("idProduct", product.getId());
@@ -66,25 +65,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         bundle.putInt("id", product.getId());
         bundle.putInt("type", 2);
         mActivity = activity;
-        //initLocalisation();
     }
-
-//    public void initLocalisation() {
-//        activityWeakReference = new WeakReference<Activity>(mActivity);
-//
-//        gClient = new GoogleApiClient.Builder(activityWeakReference.get().getApplicationContext())
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(LocationServices.API)
-//                .build();
-//
-//        gClient.connect();
-//
-//        mLocRequest = LocationRequest.create()
-//                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-//                .setInterval(10 * 1000)
-//                .setFastestInterval(1 * 1000);
-//    }
 
     @Override
     public Fragment getItem(int position) {
@@ -125,9 +106,6 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 
         if (mLocation == null) {
             Log.i(TAG, "Trying to locate user.");
-/*
-            LocationServices.FusedLocationApi.requestLocationUpdates(gClient, mLocRequest, this);
-*/
         }
     }
 

@@ -27,9 +27,6 @@ import java.util.List;
  */
 public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdapter.ViewHolder> {
 
-/*
-    private String mProduct[];
-*/
     private List<Product> list = new ArrayList<Product>();
     private AlertDialog.Builder builder;
     private Context context;
@@ -54,8 +51,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         }
     }
 
-    ProductSearchAdapter(/*String product[]*/List<Product> listprod, Context context) {
-        /*this.mProduct = product;*/
+    ProductSearchAdapter(List<Product> listprod, Context context) {
 
         this.list = listprod;
         this.context = context;
@@ -72,31 +68,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     @Override
     public void onBindViewHolder(ProductSearchAdapter.ViewHolder holder, final int position) {
-/*
-        holder.mNameProduct.setText(mProduct[position]);
-*/
-/*        holder.mNameProduct.setText(list.get(position).getName());*/
-        //Log.v("Picture", list.get(position).getPicture());
         if (cd.isConnectedToInternet()) {
             Picasso.with(context).load(new IPDefiner().getIP() + "Symfony/web/images/Product/" + list.get(position).getPicture()).placeholder(R.drawable.connection_img).resize(400, 600).into(holder.imageProduct);
             holder.descProduct.setText(list.get(position).getName());
         } else
         Toast.makeText(context, R.string.no_internet_connection + R.string.retry_retrieve_connection, Toast.LENGTH_SHORT).show();
-//        holder.mCardview.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                switch (v.getId()) {
-//                    case R.id.but_cardview_go_product:
-//                        Toast.makeText(v.getContext(), "Fiche Product :[" + list.get(position).getName() + "]", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(v.getContext(), ProductActivity.class);
-//                        intent.putExtra("listprod", list.get(position));
-//                        v.getContext().startActivity(intent);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        });
         holder.descProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,8 +107,6 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     @Override
     public int getItemCount() {
-
-        /*return mProduct.length;*/
-        return list.size();
+       return list.size();
     }
 }

@@ -19,7 +19,6 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
     private static final int TYPE_BASE = 0;
     private static final int TYPE_CUSTOM = 1;
 
-    //private AlertDialog.Builder builder;
     private String mBase_list[];
     private String mDelimiter[];
     private ArrayList<ArrayList<String[]>> mBaseLists;
@@ -47,12 +46,6 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
 
     @Override
     public AdapterListHomeBase.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        /*if (viewType == TYPE_CUSTOM) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_home, parent, false);
-            ViewHolder vhcust = new ViewHolder(v, viewType);
-
-            return vhcust;
-        } else */
         if (viewType == TYPE_BASE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_home, parent, false);
             ViewHolder vhitem = new ViewHolder(v, viewType);
@@ -64,10 +57,6 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
 
     @Override
     public void onBindViewHolder(AdapterListHomeBase.ViewHolder holder, final int position) {
-//        holder.list_name.setText(mBase_list[position]);
-        /*if (holder.HolderId == 1) {
-            holder.list_name.setText(mDelimiter[0]);
-        } else */
         if (holder.HolderId == 0) {
             holder.list_name.setText(mBase_list[position]);
 
@@ -76,7 +65,6 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.rowtextlist://Product liked
-                            //Toast.makeText(v.getContext(), "NbLike=" + mBaseLists.get(0).get(0).length,Toast.LENGTH_LONG).show();
                             intent = new Intent(v.getContext(), ListBaseActivity.class);
                             intent.putExtra("listcustom", mBaseLists.get(0));
                             intent.putExtra("namelist", v.getContext().getString(R.string.liked_product));
@@ -114,8 +102,6 @@ public class AdapterListHomeBase extends RecyclerView.Adapter<AdapterListHomeBas
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_BASE;
-
-        /*return TYPE_CUSTOM;*/
         return TYPE_BASE;
     }
 

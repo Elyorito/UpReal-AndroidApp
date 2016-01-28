@@ -72,11 +72,6 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
         mLayoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        /*
-        toolbar.setBackgroundColor(activity.getResources().getColor(R.color.ColorTabs));
-        toolbar.setTitleTextColor(activity.getResources().getColor(R.color.ColorTitle));
-        */
-
         this.activity = activity;
         sessionManagerUser = new SessionManagerUser(activity.getApplicationContext());
 
@@ -119,7 +114,6 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
 
         if (child != null && mGestureDetector.onTouchEvent(e)) {
             mDrawer.closeDrawers();
-            //                Toast.makeText(HomeActivity.this, "Item :" + rv.getChildPosition(child), Toast.LENGTH_SHORT).show();
             if (sessionManagerUser.isLogged())
                 switch (rv.getChildAdapterPosition(child)) {
                 case 0://Connect

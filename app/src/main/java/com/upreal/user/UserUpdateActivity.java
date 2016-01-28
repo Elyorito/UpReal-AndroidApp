@@ -86,11 +86,6 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
         image = null;
         imageUser = (ImageView) findViewById(R.id.image_user);
 
-   /*     rv = (RecyclerView)findViewById(R.id.RecyclerView_userUpdate);
-        rv.setHasFixedSize(true);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);*/
         LinearLayout name = (LinearLayout) findViewById(R.id.name);
         firstName = (TextView) findViewById(R.id.firstName);
         firstName.setText(user.getFirstname());
@@ -103,7 +98,6 @@ public class UserUpdateActivity extends Activity implements View.OnClickListener
             phoneNumber.setText(R.string.not_defined);
         else
             phoneNumber.setText(String.valueOf(user.getPhone()));
-        //phoneAllow = (ImageView) findViewById(R.id.allowNumber);
 
         LinearLayout address = (LinearLayout) findViewById(R.id.address);
         homeAddress = (TextView) findViewById(R.id.homeAddress);

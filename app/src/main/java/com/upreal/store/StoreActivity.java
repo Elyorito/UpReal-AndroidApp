@@ -195,18 +195,12 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
     private void createMapView() {
         try {
-//            if (map == null) {
-//                map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_store));
-//                if (map == null) {
-//                    Toast.makeText(getApplicationContext(), "Error creating map", Toast.LENGTH_SHORT).show();
-//                }
             if (map_store == null) {
                 map_store = (MapFragment) getFragmentManager()
                         .findFragmentById(R.id.map_store);
                 map_store.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap googleMap) {
-//                        addMarker(store.getName(), storeAddress.getLatitude(), storeAddress.getLongitude());
                     }
                 });
                 if (map == null) {

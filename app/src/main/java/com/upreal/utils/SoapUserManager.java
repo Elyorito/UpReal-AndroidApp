@@ -197,22 +197,6 @@ public class SoapUserManager extends SoapManager {
                 SoapObject result = (SoapObject) response;
                 listUsers.add(ConverterManager.convertToUser(result));
             }
-/*
-            nbProduct = results.getAttributeCount();
-*/
-/*
-            data = results.getProperty("Product").toString();
-                */
-/*
-                for (SoapObject res : results) {
-                    listUsers.add(this.convertToQuery(res, data));
-            }
-*/
-/*
-            if (results instanceof SoapObject) {
-                data = results.getProperty("ean").toString();
-            }
-*/
         } catch (Exception q) {
             q.printStackTrace();
         }

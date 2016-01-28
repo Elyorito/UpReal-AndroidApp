@@ -45,7 +45,6 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_news);
         setContentView(R.layout.test_layout_news);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         imageArticle = (ImageView) findViewById(R.id.imagenews);
@@ -56,14 +55,11 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
         collapsingToolbarLayout.setTitle(article.getTitle());
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.black));
 
-//        toolbar.setTitle(article.getTitle());
-//        bodyArticle.setText(article.getBody());
         cd = new ConnectionDetector(getApplicationContext());
         if (cd.isConnectedToInternet()) {
             Picasso.with(NewsActivity.this).load(new IPDefiner().getIP() + "Symfony/web/images/News/" + article.getPicture()).into(imageArticle);
         } else
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
-//        Toast.makeText(NewsActivity.this, article.getTitle(), Toast.LENGTH_SHORT).show();
         tabLayout = (TabLayout) findViewById(R.id.tabsnews);
         CharSequence Tab[] = {"Info", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);

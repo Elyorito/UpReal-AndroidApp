@@ -83,20 +83,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.done_search_home, parent, false);
 
             ViewHolder vhDone = new ViewHolder(v, viewType);
-/*            vhDone.but_done.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mSearchName == null || mSearchName.isEmpty()) {
-                        Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else {
-                        Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
-                        intent.putExtra("searchname", mSearchName);
-                        v.getContext().startActivity(intent);
-                    }
-                }
-            });*/
+
             return vhDone;
 
         } else if (viewType == TYPE_RATING) {
@@ -115,8 +102,8 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_search_home, parent, false);
 
             ViewHolder vhHeader = new ViewHolder(v, viewType);
-            /*vhHeader.*/search.setHint("produit, marque, magasin, utilisateur");
-            /*vhHeader.*/search.setTag(vhHeader);
+            search.setHint("produit, marque, magasin, utilisateur");
+            search.setTag(vhHeader);
             return vhHeader;
         }
 
@@ -125,22 +112,9 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
 
     @Override
     public void onBindViewHolder(final AdapterNavDrawerSearchHome.ViewHolder holder, int position) {
-        //holder.search.setText("Search !");
-        /*holder.but_done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.search.getText().toString().isEmpty()) {
-                    Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
-                    intent.putExtra("searchname", holder.search.getText().toString());
-                    v.getContext().startActivity(intent);
-                }
-            }
-        });*/
+
         if (holder.HolderId == 0) {
-            /*holder.*/search.setOnEditorActionListener(new OnEditorActionListener() {
+            search.setOnEditorActionListener(new OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -156,15 +130,12 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             holder.but_done.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //holder.search.clearFocus();
+
                     mSearchName = search.getText().toString();
                     if (mSearchName == null || mSearchName.isEmpty()) {
                         Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
                         return;
                     } else {
-/*
-                        Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
-*/
                         Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
                         intent.putExtra("searchname", mSearchName);
                         v.getContext().startActivity(intent);
@@ -173,22 +144,6 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             });
         }
     }
-
-/*
-    @Override
-    public void onClick(View v) {
-*//*
-        if (mSearchName == null || mSearchName.isEmpty()) {
-            Toast.makeText(v.getContext(), "Veuillez rentrer une recherche valide", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            Toast.makeText(v.getContext(), mSearchName.toString(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(v.getContext(), ProductSearchActivity.class);
-            intent.putExtra("searchname", mSearchName);
-            v.getContext().startActivity(intent);
-        }
-*//*
-    }*/
 
     @Override
     public int getItemCount() {

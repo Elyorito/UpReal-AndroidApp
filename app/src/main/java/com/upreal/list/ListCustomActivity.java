@@ -37,10 +37,6 @@ import java.util.List;
 public class ListCustomActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    //private String[] listcustom;
-
-    /*private RecyclerView mRecyclerViewList;
-    private RecyclerView.Adapter mAdapterList;*/
 
     private UltimateRecyclerView mUltimateRecyclerView;
     private UltimateViewAdapter mAdapterList;
@@ -70,33 +66,6 @@ public class ListCustomActivity extends AppCompatActivity {
         mDatabase = mDbHelper.openDataBase();
 
         //Todo Retrieve list item
-//        String getListId[] = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "name=? AND type=?", new String[]{listcustom[0], "8"}, null, null, null);
-//        String getid[] = mDbQuery.MyRawQuery("SELECT id FROM LISTS WHERE NAME=" + "'" + listcustom[0] + "'");
-//
-////        Toast.makeText(getApplicationContext(),"ListID=" + getListId[0],Toast.LENGTH_SHORT).show();
-//  //      Toast.makeText(getApplicationContext(),"getID=" + getid[0],Toast.LENGTH_SHORT).show();
-//        String listItem[][] = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{getListId[0]}, null, null, null);
-//
-//    //    Toast.makeText(getApplicationContext(), "Nb_Item=" + Integer.toString(listItem.length), Toast.LENGTH_SHORT).show();
-//        final ArrayList<Product> products = new ArrayList<>();
-//        Product objProd = new Product();
-//        String[] prod = null;
-//
-//        for (int i = 0; i < listItem.length; i++) {
-//            if (listItem[i][1] != null) {
-//                prod = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, "product_id=?", new String[]{listItem[i][1]}, null, null, null);
-//                Toast.makeText(getApplicationContext(), "ProductName=" + prod[0], Toast.LENGTH_SHORT).show();
-//                objProd.setName(prod[0]);
-//                objProd.setEan(prod[1]);
-//                objProd.setPicture(prod[2]);
-//                objProd.setBrand(prod[3]);
-//                objProd.setId(Integer.parseInt(prod[4]));
-//                products.add(objProd);
-//                objProd = new Product();
-//            }
-//        }
-      //  Toast.makeText(getApplicationContext(), "products.Size()= " +  Integer.toString(products.size()), Toast.LENGTH_LONG).show();
-
         mAdapterList = new AdapterListCustom(listProducts);
         mUltimateRecyclerView = (UltimateRecyclerView) findViewById(R.id.ultimate_recyclerlistCust);
         mUltimateRecyclerView.setHasFixedSize(false);
@@ -114,7 +83,6 @@ public class ListCustomActivity extends AppCompatActivity {
                     @Override
                     public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] ints) {
                         for (final int position : ints) {
-//                            Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
                             mAdapterList.remove(listProducts, position);
                             Snackbar.make(recyclerView.getRootView(), "Voulez vous vraiment supprimer?", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                                 @Override
@@ -128,9 +96,6 @@ public class ListCustomActivity extends AppCompatActivity {
 
                     @Override
                     public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] ints) {
-                        for (int position : ints) {
-  //                          Toast.makeText(recyclerView.getContext(), "SwapDoneLeft :)", Toast.LENGTH_LONG).show();
-                        }
                         mAdapterList.notifyDataSetChanged();
                     }
                 }));
@@ -174,14 +139,7 @@ public class ListCustomActivity extends AppCompatActivity {
                 mAdapterList.notifyDataSetChanged();
             }
         };
-        //dragDropTouchListener.setCustomDragHighlight();
         mUltimateRecyclerView.mRecyclerView.addOnItemTouchListener(dragDropTouchListener);
-
- /*       mAdapterList = new AdapterListCustRecycler(ss);
-        mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlistCust);
-        mRecyclerViewList.setHasFixedSize(true);
-        mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerViewList.setAdapter(mAdapterList);*/
     }
 
     private class RetrieveProductById extends AsyncTask<Void, Void, List<Product>> {
@@ -200,7 +158,6 @@ public class ListCustomActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Product> products) {
             super.onPostExecute(products);
-            //Toast.makeText(getApplicationContext(), "Products:" + products.size() + products.get(0).getName()+ "| listCutomID:" + listcustom.getId(),Toast.LENGTH_SHORT).show();
             if (products != null) {
                 mAdapterList = new AdapterListCustom(products);
                 mUltimateRecyclerView.setAdapter(mAdapterList);

@@ -27,9 +27,6 @@ import java.util.List;
  */
 public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.ViewHolder> {
 
-/*
-    private String mProduct[];
-*/
     private List<User> list = new ArrayList<User>();
     private AlertDialog.Builder builder;
     private Context context;
@@ -48,15 +45,14 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
             super(itemView);
 
             mCardview = (CardView) itemView.findViewById(R.id.cardview_search);
-/*            mNameProduct = (TextView) itemView.findViewById(R.id.but_cardview_go_product);*/
             userUsername = (Button) itemView.findViewById(R.id.but_cardview_go_product);
             shareUser = (Button) itemView.findViewById(R.id.but_cardview_share);
             imageUser = (ImageView) itemView.findViewById(R.id.image_cardview_product);
         }
     }
 
-    UserSearchAdapter(/*String product[]*/List<User> listuser, Context context) {
-        /*this.mProduct = product;*/
+    UserSearchAdapter(List<User> listuser, Context context) {
+
 
         this.list = listuser;
         this.context = context;
@@ -115,8 +111,6 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Vi
 
     @Override
     public int getItemCount() {
-
-        /*return mProduct.length;*/
         return list.size();
     }
 }

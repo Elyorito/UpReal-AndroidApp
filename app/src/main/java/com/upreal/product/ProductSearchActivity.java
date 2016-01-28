@@ -27,13 +27,6 @@ public class ProductSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_search);
         searchname = getIntent().getStringExtra("searchname");
-//        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView_ProductSearch);
-//        mRecyclerView.setHasFixedSize(true);
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-//        //Test
-//        sProduct = new String[]{"Coca", "Coca", "Coca", "Coca", "Coca", "Coca", "Coca"};
-//        mAdapter = new ProductSearchAdapter(sProduct);
-//        mRecyclerView.setAdapter(mAdapter);
 
         Title = new CharSequence[]{getString(R.string.product), getString(R.string.user), getString(R.string.store)};
         toolbar = (Toolbar) findViewById(R.id.app_bar);

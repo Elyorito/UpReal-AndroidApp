@@ -206,29 +206,6 @@ public class LoginFragmentRegister extends Fragment
                     new RetrieveRegisterAccount().execute();
                     complete = true;
                 }
-//                if (!checkedTextView.isChecked()) {
-//                    complete = false;
-//                }
-//                if (edit_password.length() < 6) {
-//                    if (edit_password.length() == 0) {
-//                        e_password.setText("Un mot de passe est requis");
-//                        e_password.setVisibility(View.VISIBLE);
-//                        Toast.makeText(v.getContext(), "Password Empty", Toast.LENGTH_SHORT).show();
-//                        complete = false;
-//                    }
-//                    else {
-//                        e_password.setText("Votre mot de passe doit contenir au moins 6 caractères");
-//                        e_password.setVisibility(View.VISIBLE);
-//                        Toast.makeText(v.getContext(), "Password too short (Length > 6 caracters)", Toast.LENGTH_SHORT).show();
-//                        complete = false;
-//                    }
-//                }
-//                if (edit_password.toString() == edit_confirmpassword.toString()/*!edit_password.toString().equals(edit_confirmpassword.toString())*/) {
-//                    e_confirm.setText("Vous n'avez pas entré le même mot de passe");
-//                    e_confirm.setVisibility(View.VISIBLE);
-//                    Toast.makeText(v.getContext(), "Password doesnt match", Toast.LENGTH_SHORT).show();
-//                    complete = false;
-//                }
                 break;
             case R.id.checktext_cgu:
                 if (!checkedTextView.isChecked())
@@ -336,7 +313,6 @@ public class LoginFragmentRegister extends Fragment
                 getActivity().sendBroadcast(close);
                 startActivity(intent);
                 getActivity().finish();
-                //Toast.makeText(getActivity().getApplicationContext(), "Response:" + s, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -389,10 +365,6 @@ public class LoginFragmentRegister extends Fragment
 
             SoapUserManager um = new SoapUserManager();
             user = um.getUserByUsername(sessionManagerUser.getRegisterLoginUser()[0]);
-/*
-            Log.v("User info", sessionManagerUser.getRegisterLoginUser()[0]);
-            Log.v("User FirstName", user.getFirstname());
-*/
 
             return user;
         }

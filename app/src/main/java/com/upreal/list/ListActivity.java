@@ -2,7 +2,6 @@ package com.upreal.list;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,16 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.github.clans.fab.FloatingActionButton;
 import com.upreal.R;
-import com.upreal.utils.DividerItemDecoration;
 import com.upreal.utils.Items;
 import com.upreal.utils.Lists;
 import com.upreal.utils.SessionManagerUser;
@@ -106,11 +102,6 @@ public class ListActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-/*
-        mDbQuery.MyRawQuery("INSERT INTO Product (name, ean, picture, brand) VALUES ('coca', '53022', 'picture', 'Coca Cola');");
-*/
-
-        //mDbQuery.InsertData(new String("product"), new String[]{"name", "ean", "picture", "brand"}, new String[]{"coca", "53022", "picture", "Coca Cola"});
 
         base_list = new String[] {getString(R.string.liked_product)
                 , getString(R.string.followed_user)
@@ -121,13 +112,8 @@ public class ListActivity extends AppCompatActivity {
         delimiterTextView.setText(getString(R.string.customized_list));
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle(R.string.list);
-/*
-        getSupportActionBar().setHomeButtonEnabled(true);
-*/
         toolbar.setNavigationIcon(R.drawable.ic_action_camera);
-        setSupportActionBar(toolbar);/*
-        toolbar.
-*/
+        setSupportActionBar(toolbar);
         getITEMS = null;
         listLike = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"3"}, null, null, null);
         Toast.makeText(getApplicationContext(), "ListLike" + listLike[0],Toast.LENGTH_SHORT).show();
@@ -137,68 +123,19 @@ public class ListActivity extends AppCompatActivity {
                 listsBase.add(null);
             else {
                 listsBase.add(getProduct(getITEMS, mDbQuery));
-                //Toast.makeText(getApplicationContext(), "GetItems" + getITEMS.length + "/" + getITEMS[0][0], Toast.LENGTH_SHORT).show();
             }
-        /*    Toast.makeText(getApplicationContext(),"GetItem nb=" + getITEMS.length, Toast.LENGTH_SHORT).show();
-            */
         } else
             listsBase.add(null);
         getITEMS = null;
-        /*listUserFollowed = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"2"}, null, null, null);
-        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listUserFollowed[0]}, null, null, null);
-        listsBase.add(getProduct(getITEMS, mDbQuery));
-        getITEMS = null;
-        listHistory = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"10"}, null, null, null);
-        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listHistory[0]}, null, null, null);
-        listsBase.add(getProduct(getITEMS, mDbQuery));
-        getITEMS = null;
-        listCommentary = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"11"}, null, null, null);
-        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listCommentary[0]}, null, null, null);
-        listsBase.add(getProduct(getITEMS, mDbQuery));
-        getITEMS = null;
-        listBater = mDbQuery.QueryGetElement("lists", new String[]{"id", "name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"6"}, null, null, null);
-        getITEMS = mDbQuery.QueryGetElements("items", new String[]{"id_list", "id_product", "id_user"}, "id_list=?", new String[]{listBater[0]}, null, null, null);
-        listsBase.add(getProduct(getITEMS, mDbQuery));
-*/
         floatingButtonAddList = (FloatingActionButton) findViewById(R.id.fabaddlist);
-//        mRecyclerViewList = (RecyclerView) findViewById(R.id.recyclerlist);
-//        mRecyclerViewList.setHasFixedSize(true);
-//        mRecyclerViewList.addItemDecoration(
-//                new DividerItemDecoration(this, null));
-//        mRecyclerViewList.setLayoutManager(new LinearLayoutManager(this));
-//        mAdapterList = new AdapterListHomeBase(listsBase, base_list, delimiter);
-//        mRecyclerViewList.setAdapter(mAdapterList);
-//        mRecyclerViewList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean b) {
-//
-//            }
-//        });
-
         lists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-        //Toast.makeText(getApplicationContext(), "TEST" + " length= " + lists.length, Toast.LENGTH_SHORT).show();
+
         // Boucle de toutes les lists
         ArrayList<Lists> bundleLists = new ArrayList<>();
         Lists singleLists = new Lists();
         String[][] tabLists;
         for (int i = 1; i < 8; i++) {
             tabLists = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{Integer.toString(i)}, null, null, null);
-//            Toast.makeText(getApplicationContext(),"LISTYPE=" + tabLists.length + "| Type=" + i, Toast.LENGTH_SHORT).show();
-            /*if (tabLists.length > 1) {
-                for (int j = 0; j < tabLists.length; j++) {
-                    bundleLists.add(transformStringToLists(tabLists[j]));
-                }
-            }*/
         }
         new SendGetDiffListsServer().execute(bundleLists);
         mDatabase.close();
@@ -209,8 +146,6 @@ public class ListActivity extends AppCompatActivity {
         for(String[] list : lists){
             arrayListCust.add(list);
         }
-//        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
-//        mRecyclerViewListCust.setAdapter(mAdapterListCust);
         RecyclerView.ItemAnimator animator = mRecyclerViewListCust.getItemAnimator();
         animator.setAddDuration(1500);
         animator.setRemoveDuration(1000);
@@ -242,12 +177,9 @@ public class ListActivity extends AppCompatActivity {
                         }
                         new SendCreatedLists().execute(listsend);
                         // TODO Auto-generated method stub
+
                          /*Refresh list item [BUG]*/
-//                        mAdapterListCust = new AdapterListHomeCustom(arrayListCust, delimiter);
-//                        mRecyclerViewListCust.setAdapter(mAdapterListCust);
-//                        mAdapterListCust.notifyDataSetChanged();
                         new RetrieveList().execute();
-                         /*dialog.dismiss();*/
                         mDatabase.close();
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -299,26 +231,8 @@ public class ListActivity extends AppCompatActivity {
         protected void onPostExecute(List<Lists> res) {
             super.onPostExecute(res);
             Log.e("ListActivity", "WebService called. Result:");
-//            for (Lists items : res) {
-//                //Toast.makeText(getApplicationContext(), "Name[" + items.getName() + "]|NbItem[" + items.getNb_items() + "]|id[" + items.getId() + "]",Toast.LENGTH_SHORT).show();
-//            }
             mAdapterListCust = new AdapterListHomeCustom(res, delimiter);
             mRecyclerViewListCust.setAdapter(mAdapterListCust);
-//            if (res != null) {
-//                absLists.clear();
-//                for (Item i : res) {
-//                    absLists.add(i);
-//                    Log.e("ListActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
-//                }
-//            }
-//            if (absLists.isEmpty()) {
-//                Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
-//                intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, ConfirmationActivity.FAILURE_ANIMATION);
-//                intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, getString(R.string.search_empty));
-//                startActivity(intent);
-//                finish();
-//            }
-//            adapter.notifyDataSetChanged();
         }
     }
 
@@ -336,7 +250,6 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Lists> lists) {
             super.onPostExecute(lists);
-  //          Toast.makeText(getApplicationContext(), "Nombre de listes=" + lists.size(),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -353,7 +266,6 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
-    //        Toast.makeText(getApplicationContext(), "CreateListsResponse=" + Integer.toString(integer), Toast.LENGTH_SHORT).show();
         }
     }
 

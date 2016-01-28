@@ -40,12 +40,6 @@ public class UserChangePwd extends Activity implements View.OnClickListener {
 
         SessionManagerUser sessionManagerUser = new SessionManagerUser(getApplicationContext());
         user = sessionManagerUser.getUser();
-
-   /*     rv = (RecyclerView)findViewById(R.id.RecyclerView_userUpdate);
-        rv.setHasFixedSize(true);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);*/
         oldPassword = (EditText) findViewById(R.id.current);
         nPassword = (EditText) findViewById(R.id.newp);
         cPassword = (EditText) findViewById(R.id.conf);

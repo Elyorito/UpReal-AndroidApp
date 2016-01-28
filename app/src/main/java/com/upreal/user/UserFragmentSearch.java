@@ -25,7 +25,6 @@ import java.util.List;
 public class UserFragmentSearch extends Fragment {
 
     //test
-/*    private String sProduct[];*/
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private String mSearchName;
@@ -46,10 +45,6 @@ public class UserFragmentSearch extends Fragment {
             new RetrieveUser().execute();
         else
             Toast.makeText(v.getContext(), getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
-/*//test
-        mAdapter = new ProductSearchAdapter(sProduct);
-*/
- //       mAdapter = new ProductSearchAdapter(listProd);
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
@@ -63,7 +58,6 @@ public class UserFragmentSearch extends Fragment {
         protected List<User> doInBackground(Void... params) {
 
             SoapUserManager pm =  new SoapUserManager();
-            /*list_product = ex.getProduct(mSearchName);*/
             listuser = pm.getListUser(mSearchName);
             return listuser;
         }

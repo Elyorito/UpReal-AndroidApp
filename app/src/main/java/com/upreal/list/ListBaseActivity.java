@@ -44,7 +44,6 @@ public class ListBaseActivity extends AppCompatActivity {
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
-        //Toast.makeText(getApplicationContext(), "NB ELEMENT" + listcustom.size(),Toast.LENGTH_LONG).show();
         if (listcustom != null)
             mAdapterList = new AdapterListBase(listcustom);
         mUltimateRecyclerView = (UltimateRecyclerView) findViewById(R.id.ultimate_recyclerlistCust);

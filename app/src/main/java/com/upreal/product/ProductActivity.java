@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -258,28 +256,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                         .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-//                                        mDbHelper = new DatabaseHelper(dialogView.getContext());
-//                                        mDbQuery = new DatabaseQuery(mDbHelper);
-//                                        mDatabase = mDbHelper.openDataBase();
-//
-//                                        String getProductElement[] = mDbQuery.QueryGetElement("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
-//                                        String getProduct[] = mDbQuery.QueryGetProduct("product", new String[]{"name", "ean", "brand", "picture", "product_id"}, "product_id=?", new String[]{Integer.toString(mProduct.getId())}, null, null, null);
-//                                        if (getProductElement[0] != null) {
-//                                            Toast.makeText(dialogView.getContext(), "|Name=" + getProductElement[0] + "|Ean=" + getProductElement[1] + "|Brand=" + getProductElement[2] + "|Picture=" + getProductElement[3] + "|idProduct=" + getProductElement[4], Toast.LENGTH_SHORT).show();
-//                                            Toast.makeText(dialogView.getContext(), "|Name=" + getProduct[0] + "|Ean=" + getProduct[1] + "|Brand=" + getProduct[2] + "|Picture=" + getProduct[3] + "|idProduct=" + getProduct[4], Toast.LENGTH_SHORT).show();
-//                                        } else if (getProductElement[0] == null) {
-//                                            if (mProduct.getPicture() == null)
-//                                                mProduct.setPicture("");
-//                                            mDbQuery.InsertData("product", new String[]{"name", "ean", "picture", "brand", "product_id"}, new String[]{mProduct.getName(), mProduct.getEan(), mProduct.getPicture(), mProduct.getBrand(), Integer.toString(mProduct.getId())});
-//                                        }
-//                                        for (int i = 0; i < checkedList.size(); i++) {
-//                                            String getListId[][] = mDbQuery.QueryGetElements("lists", new String[]{"id", "public", "nb_items", "id_user", "name"}, "name=? AND type=?", new String[]{lists[checkedList.get(i)], "8"}, null, null, null);
-//
-//                                            String getITEMS[] = mDbQuery.QueryGetElement("items", new String[]{"id_list", "id_product", "id_user"}, "id_product=? AND id_list=?", new String[]{Integer.toString(mProduct.getId()), getListId[0][0]}, null, null, null);
-//                                            if (getITEMS[0] == null)
-//                                                mDbQuery.InsertData("items", new String[]{"id_list", "id_product", "id_user"}, new String[]{getListId[0][0], Integer.toString(mProduct.getId()), Integer.toString(sessionManagerUser.getUserId())});
-//                                        }
-//                                        mDatabase.close();
                                                 dialog.dismiss();
                                             }
                                         }).setNegativeButton(getString(R.string.cancel),
@@ -290,7 +266,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                             }
                                         }
                                 )
-                                        // .setView(dialogView)
                                         .create().show();
                                 break;
                             case 2: // Share
@@ -404,23 +379,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                     dialog.cancel();
                                 }
                             });
-                    // Create the AlertDialog object and return it
-/*
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setTitle("Vous aimez ce produit?").setMessage("Veuillez-vous connecter d'abord.")
-                            .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                                    startActivity(intent);
-                                    dialog.dismiss();
-                                }
-                            }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    }).create().show();*/
                 }
                 else
                     dialog.show();
@@ -456,7 +414,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-//        recreate();
     }
 
     private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {

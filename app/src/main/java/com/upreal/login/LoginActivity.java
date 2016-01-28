@@ -153,33 +153,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.e(TAG, "Name: " + personName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
-
-
-
-                // Check email available
-
-                // Check Username available
-                //new RetrieveIsUsernameTaken().execute(v.getText().toString());
-
-/*
-                new RetrieveRegisterAccount(username != null ? username : personName, currentPerson, email).execute();
-*/
-/*
-                txtName.setText(personName);
-                txtEmail.setText(email);
-*/
-
-                // by default the profile url gives 50x50 px image only
-                // we can replace the value with whatever dimension we want by
-                // replacing sz=X
-/*
-                personPhotoUrl = personPhotoUrl.substring(0,
-                        personPhotoUrl.length() - 2)
-                        + PROFILE_PIC_SIZE;
-
-                new LoadProfileImage().execute(personPhotoUrl);
-*/
-
             } else {
                 Toast.makeText(getApplicationContext(),
                         "Person information is null", Toast.LENGTH_LONG).show();
@@ -215,25 +188,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onResult(People.LoadPeopleResult peopleData) {
         Log.d(TAG, "result.getStatus():" + peopleData.getStatus());
         getProfileInformation();
-        Log.i(TAG, "hallo");
-
-/*
-        if (peopleData.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-            PersonBuffer personBuffer = peopleData.getPersonBuffer();
-            try {
-                int count = personBuffer.getCount();
-                for (int i = 0; i < count; i++) {
-                    Log.d(TAG, "Display name: " + personBuffer.get(i).getDisplayName());
-111                }
-            } finally {
-                personBuffer.release();
-            }
-*/
-/*
-        } else {
-            Log.e(TAG, "Error requesting visible circles: " + peopleData.getStatus());
-        }
-*/
     }
 
     @Override
@@ -249,12 +203,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 onSignInClicked();
                 break;
             case R.id.button_twitter:
-//                if (googleConnection.getGoogleApiClient().isConnected())
-//                    Plus.AccountApi.clearDefaultAccount(googleConnection.getGoogleApiClient());
-//                googleConnection.disconnect();
-//                googleConnection.revokeAccessAndDisconnect();
-
-
                 break;
         }
     }
@@ -301,8 +249,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             user.setPassword("google+");
             String personGooglePlusProfile = currentPerson.getUrl();
             sessionManagerUser.setUser(user);
-            //Toast.makeText(getApplicationContext(), "Username "+ user.getUsername() + "| Firstname " + user.getFirstname() + "| Picture " + user.getPicture(), Toast.LENGTH_SHORT).show();
-            /////////
             WearManager.notifyWear(getApplicationContext(), "Connected successfully !");
 
             mDbHelper = new DatabaseHelper(getApplicationContext());
@@ -375,16 +321,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 System.out.println("JSON Result" + jsonresult);
 
                                 user.setEmail(object.getString("email"));
-                                //user.setId(Integer.parseInt(object.getString("id")));
-                                //user.setFirstname(object.getString("first_name"));
-                                //user.setLastname(object.getString("last_name"));
                                 user.setUsername(object.getString("name"));
                                 user.setPassword("facebook");
                                 sessionManagerUser.setUser(user);
                                mDbHelper = new DatabaseHelper(getApplicationContext());
                                mDbQuery = new DatabaseQuery(mDbHelper);
                                mDatabase = mDbHelper.openDataBase();
-                               //Toast.makeText(this, "Success Facebook !Username="+user.getUsername(), Toast.LENGTH_SHORT).show();
                                sessionManagerUser.setRegisterLoginUser(user.getUsername(), "facebook");
                                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.liked_product), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "3"});
                                mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.followed_user), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "2"});

@@ -190,25 +190,6 @@ public class AddProductFromScan extends Activity implements View.OnClickListener
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 showImage();
-/*
-                int targetImageViewWidth = imageProduct.getWidth();
-                int targetImageViewHeight = imageProduct.getHeight();
-
-                BitmapFactory.Options bfOptions = new BitmapFactory.Options();
-                bfOptions.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
-
-                int cameraImageWidth = bfOptions.outWidth;
-                int cameraImageHeight = bfOptions.outHeight;
-
-                int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
-                bfOptions.inSampleSize = scaleFactor;
-                bfOptions.inJustDecodeBounds = false;
-
-                bitmap = BitmapFactory.decodeFile(mImageFileLocation, bfOptions);
-                if (bitmap != null)
-                imageProduct.setImageBitmap(bitmap);
-*/
             }
         }
     }

@@ -31,13 +31,7 @@ public class ScanActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_camera);
 
-
-        /*scanner = (Button) findViewById(R.id.scanner);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
-        //scanner.setOnClickListener(this);*/
         builder = new AlertDialog.Builder(ScanActivity.this);
         cd = new ConnectionDetector(getApplicationContext());
         intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -51,8 +45,7 @@ public class ScanActivity extends Activity {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 Log.d("xZing", "contents: "+contents+" format: "+format); // Handle successful scan
-                //formatTxt.setText("FORMAT: " + format);
-                //contentTxt.setText(contents);
+
                 if (cd.isConnectedToInternet() && format.toString().equals("QR_CODE")) {
                     Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(contents));
                     startActivity(in);
@@ -75,22 +68,6 @@ public class ScanActivity extends Activity {
             }
         }
     }
-
-/*
-    public void onClick(View v) {
-        if (v.getId() == R.id.scanner) {
-
-            intent = new Intent("com.google.zxing.client.android.SCAN");
-            intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
-*/
-/*
-            intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-*//*
-
-            startActivityForResult(intent, 0);
-        }
-    }
-*/
 
     public class RetrieveScannedProduct extends AsyncTask<String, Void, Product> {
 

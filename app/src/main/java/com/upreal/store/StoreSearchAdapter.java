@@ -50,9 +50,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         }
     }
 
-    StoreSearchAdapter(/*String product[]*/List<Store> liststore, Context context) {
-        /*this.mProduct = product;*/
-
+    StoreSearchAdapter(List<Store> liststore, Context context) {
         this.list = liststore;
         this.context = context;
     }
@@ -106,8 +104,6 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 
     @Override
     public int getItemCount() {
-
-        /*return mProduct.length;*/
         return list.size();
     }
 }

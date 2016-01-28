@@ -28,7 +28,6 @@ public class LoyaltyCardActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_news);
         setContentView(R.layout.activity_loyalty_card);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         image = (ImageView) findViewById(R.id.image_loyalty);
@@ -37,13 +36,10 @@ public class LoyaltyCardActivity extends Activity {
         delete = (Button) findViewById(R.id.button_delete);
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-//        collapsingToolbarLayout.setTitle(loyalty.getName());
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.black));
 
-//        toolbar.setTitle(article.getTitle());
         body.setText(loyalty.getName());
         image.setImageBitmap(loyalty.getBarcode());
-//        Toast.makeText(NewsActivity.this, article.getTitle(), Toast.LENGTH_SHORT).show();
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
