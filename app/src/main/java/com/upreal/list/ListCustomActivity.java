@@ -12,15 +12,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.marshalchen.ultimaterecyclerview.DragDropTouchListener;
 import com.marshalchen.ultimaterecyclerview.ItemTouchListenerAdapter;
 import com.marshalchen.ultimaterecyclerview.SwipeableRecyclerViewTouchListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
-import com.upreal.product.ProductActivity;
 import com.upreal.R;
+import com.upreal.product.ProductActivity;
 import com.upreal.utils.Items;
 import com.upreal.utils.Lists;
 import com.upreal.utils.Product;
@@ -109,10 +108,7 @@ public class ListCustomActivity extends AppCompatActivity {
                 new SwipeableRecyclerViewTouchListener.SwipeListener() {
                     @Override
                     public boolean canSwipe(int i) {
-                        if (i >= 0)
-                            return true;
-                        else
-                            return false;
+                        return i >= 0;
                     }
 
                     @Override

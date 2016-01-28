@@ -9,7 +9,6 @@ import com.upreal.utils.Lists;
 import com.upreal.utils.Rate;
 
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +108,7 @@ public class GlobalManager extends SoapManager {
         request.addProperty("id_target_type", targetType);
 
         try {
-            int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            int res = Integer.parseInt(callService(methodname, request).toString());
             Log.e(NAMESPACE, "'getRateStatus': " + res);
             return res;
         } catch (Exception q) {
@@ -173,7 +172,7 @@ public class GlobalManager extends SoapManager {
         request.addProperty("type", type);
 
         try {
-            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            return Integer.parseInt(callService(methodname, request).toString());
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -188,7 +187,7 @@ public class GlobalManager extends SoapManager {
         request.addProperty("id_target_type", targetType);
 
         try {
-            return ((SoapPrimitive) callService(methodname, request)).toString();
+            return callService(methodname, request).toString();
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -230,7 +229,7 @@ public class GlobalManager extends SoapManager {
         request.addProperty("id_user", idUser);
 
         try {
-            int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            int res = Integer.parseInt(callService(methodname, request).toString());
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -242,7 +241,7 @@ public class GlobalManager extends SoapManager {
         request.addProperty("id", id);
 
         try {
-            boolean res = Boolean.parseBoolean(((SoapPrimitive) callService(methodname, request)).toString());
+            boolean res = Boolean.parseBoolean(callService(methodname, request).toString());
         } catch (Exception q) {
             q.printStackTrace();
         }

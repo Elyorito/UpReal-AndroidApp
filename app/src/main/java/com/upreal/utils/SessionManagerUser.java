@@ -20,9 +20,7 @@ public class SessionManagerUser {
 
     public boolean isLogged() {
         boolean isL = sharedPreferences.getBoolean("isLogged", false);
-        if (isL)
-            return true;
-        return false;
+        return isL;
     }
 
     public void setRegisterLoginUser(String login, String password) {

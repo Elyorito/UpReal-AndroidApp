@@ -35,7 +35,7 @@ public class UserManager extends SoapManager {
         request.addProperty("password", password);
 
         try {
-            res = Boolean.valueOf(((SoapPrimitive) callService(methodname, request)).toString());
+            res = Boolean.valueOf(callService(methodname, request).toString());
             Log.e(NAMESPACE, "'connectAccount': " + res);
             return res;
         } catch (Exception q) {

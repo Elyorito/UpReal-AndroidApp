@@ -148,7 +148,7 @@ public class SoapUserUtilManager extends SoapManager {
         request.addProperty("id_target", idTarget);
 
         try {
-            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            return Integer.parseInt(callService(methodname, request).toString());
         } catch (Exception q) {
             q.printStackTrace();
         }

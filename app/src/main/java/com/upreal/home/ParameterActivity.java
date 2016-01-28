@@ -172,7 +172,7 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
                 } else {
                     sessionManagerUser.deleteCurrentUser();
                     HomeActivity homeActivity = new HomeActivity();
-                    Intent close = new Intent(this.getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
+                    Intent close = new Intent(this.getApplicationContext(), HomeActivity.ACTION_CLOSE_HOME.getClass());
                     Intent intent = new Intent(this.getApplicationContext(), homeActivity.getClass());
                     this.sendBroadcast(close);
                     startActivity(intent);

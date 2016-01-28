@@ -57,7 +57,7 @@ public abstract class SoapManager {
 
     protected final List<HeaderProperty> getHeader() {
         List<HeaderProperty> header = new ArrayList<>();
-        HeaderProperty headerPropertyObj = new HeaderProperty("cookie", this.SESSION_ID);
+        HeaderProperty headerPropertyObj = new HeaderProperty("cookie", SESSION_ID);
         header.add(headerPropertyObj);
         return header;
     }

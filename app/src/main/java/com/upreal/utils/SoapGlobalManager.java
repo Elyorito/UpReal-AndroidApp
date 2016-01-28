@@ -382,7 +382,7 @@ public class SoapGlobalManager extends SoapManager {
         request.addProperty("type", type);
 
         try {
-            return Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            return Integer.parseInt(callService(methodname, request).toString());
         } catch (Exception q) {
             q.printStackTrace();
         }
@@ -399,7 +399,7 @@ public class SoapGlobalManager extends SoapManager {
         request.addProperty("id_target_type", targetType);
 
         try {
-            int res = Integer.parseInt(((SoapPrimitive) callService(methodname, request)).toString());
+            int res = Integer.parseInt(callService(methodname, request).toString());
             return res;
         } catch (Exception q) {
             q.printStackTrace();

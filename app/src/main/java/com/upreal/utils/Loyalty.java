@@ -24,7 +24,7 @@ public class Loyalty implements Parcelable {
     private String ean;
     private Bitmap barcode;
 
-    Loyalty(){};
+    Loyalty(){}
 
     public String getName() {
         return name;

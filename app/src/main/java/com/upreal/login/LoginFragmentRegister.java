@@ -331,7 +331,7 @@ public class LoginFragmentRegister extends Fragment
                 mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "6"});
                 mDatabase.close();
                 HomeActivity homeActivity = new HomeActivity();
-                Intent close = new Intent(getActivity().getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
+                Intent close = new Intent(getActivity().getApplicationContext(), HomeActivity.ACTION_CLOSE_HOME.getClass());
                 Intent intent = new Intent(getActivity().getApplicationContext(), homeActivity.getClass());
                 getActivity().sendBroadcast(close);
                 startActivity(intent);

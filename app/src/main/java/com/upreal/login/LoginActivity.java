@@ -8,13 +8,11 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -318,7 +316,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mDbQuery.InsertData("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, new String[]{getString(R.string.my_barter_product_list), Integer.toString(1), Integer.toString(0), Integer.toString(sessionManagerUser.getUserId()), "6"});
             mDatabase.close();
             HomeActivity homeActivity = new HomeActivity();
-            Intent close = new Intent(getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
+            Intent close = new Intent(getApplicationContext(), HomeActivity.ACTION_CLOSE_HOME.getClass());
             Intent intent = new Intent(LoginActivity.this, homeActivity.getClass());
             LoginActivity.this.sendBroadcast(close);
             startActivity(intent);
@@ -396,7 +394,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                mDatabase.close();
                                WearManager.notifyWear(getApplicationContext(), "Connected successfully !");
                                HomeActivity homeActivity = new HomeActivity();
-                               Intent close = new Intent(getApplicationContext(), homeActivity.ACTION_CLOSE_HOME.getClass());
+                               Intent close = new Intent(getApplicationContext(), HomeActivity.ACTION_CLOSE_HOME.getClass());
                                Intent intent = new Intent(LoginActivity.this, homeActivity.getClass());
                                LoginActivity.this.sendBroadcast(close);
                                startActivity(intent);
