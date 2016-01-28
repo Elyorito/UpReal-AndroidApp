@@ -153,7 +153,6 @@ public class FragmentCommentary extends Fragment {
 
             SoapUserManager um = new SoapUserManager();
             for (int i = 0; i < listRate.size(); i++) {
-                Log.e("FC", "test:" + listRate.get(i).getmCommentary());
                 user = um.getAccountInfoUsername(listRate.get(i).getmId_user());
                 rateComment = new RateComment();
                 rateComment.setId(listRate.get(i).getmId());

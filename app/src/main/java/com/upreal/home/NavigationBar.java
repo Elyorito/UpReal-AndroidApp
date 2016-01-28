@@ -32,7 +32,6 @@ import com.upreal.utils.database.DatabaseHelper;
 public class NavigationBar extends AppCompatActivity implements RecyclerView.OnItemTouchListener {
 
     private Activity activity;
-    private NavigationBar mContext;
     private Toolbar toolbar;
     final GestureDetector mGestureDetector;
     private SessionManagerUser sessionManagerUser;
@@ -49,7 +48,6 @@ public class NavigationBar extends AppCompatActivity implements RecyclerView.OnI
     private Intent intent;
 
     public NavigationBar(Activity activity) {
-        mContext = this;
         toolbar = (Toolbar) activity.findViewById(R.id.app_bar);
         mRecyclerView = (RecyclerView) activity.findViewById(R.id.RecyclerView_NavigationDrawer);
         mDrawer = (DrawerLayout) activity.findViewById(R.id.DrawerLayout);

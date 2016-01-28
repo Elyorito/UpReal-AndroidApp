@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +14,10 @@ import android.widget.Toast;
 import com.upreal.R;
 import com.upreal.bridge.BridgeDeviceActivity;
 import com.upreal.login.LoginActivity;
-import com.upreal.login.LoginViewPagerAdapter;
 import com.upreal.user.UserChangePwd;
 import com.upreal.user.UserUpdateActivity;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.database.DatabaseHelper;
-import com.upreal.view.SlidingTabLayout;
 
 import java.io.File;
 
@@ -29,13 +25,6 @@ import java.io.File;
  * Created by Eric on 22/06/2015.
  */
 public class ParameterActivity extends ActionBarActivity implements View.OnClickListener {
-    private CharSequence Tab[];
-
-    private Toolbar toolbar;
-
-    private ViewPager mViewPager;
-    private LoginViewPagerAdapter mAdapter;
-    private SlidingTabLayout mSlidingTabLayout;
 
     private Button editProfile;
     private Button editPassword;
