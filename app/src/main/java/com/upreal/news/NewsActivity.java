@@ -237,10 +237,10 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
 
                 switch (params[0]) {
                     case 1:
-                        uum.createHistory(userSession.getUserId(), 2, 4, article.getId());
+                        uum.createHistory(userSession.getUserId(), 4, 4, article.getId());
                         break ;
                     case 2:
-                        uum.createHistory(userSession.getUserId(), 4, 4, article.getId());
+                        uum.createHistory(userSession.getUserId(), 2, 4, article.getId());
                         break ;
                     default:
                         break ;

@@ -567,10 +567,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
                 switch (params[0]) {
                     case 1:
-                        uum.createHistory(userSession.getUserId(), 2, 2, prod.getId());
+                        uum.createHistory(userSession.getUserId(), 4, 2, prod.getId());
                         break ;
                     case 2:
-                        uum.createHistory(userSession.getUserId(), 4, 2, prod.getId());
+                        uum.createHistory(userSession.getUserId(), 2, 2, prod.getId());
                         break ;
                     case 3:
                         uum.createHistory(userSession.getUserId(), 3, 2, prod.getId());

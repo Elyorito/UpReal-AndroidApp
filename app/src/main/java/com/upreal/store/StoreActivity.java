@@ -418,10 +418,10 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
                 switch (params[0]) {
                     case 1:
-                        uum.createHistory(userSession.getUserId(), 2, 3, store.getId());
+                        uum.createHistory(userSession.getUserId(), 4, 3, store.getId());
                         break ;
                     case 2:
-                        uum.createHistory(userSession.getUserId(), 4, 3, store.getId());
+                        uum.createHistory(userSession.getUserId(), 2, 3, store.getId());
                         break ;
                     default:
                         break ;

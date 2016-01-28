@@ -371,10 +371,10 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
                 switch (params[0]) {
                     case 1:
-                        uum.createHistory(userSession.getUserId(), 2, 1, user.getId());
+                        uum.createHistory(userSession.getUserId(), 4, 1, user.getId());
                         break ;
                     case 2:
-                        uum.createHistory(userSession.getUserId(), 4, 1, user.getId());
+                        uum.createHistory(userSession.getUserId(), 2, 1, user.getId());
                         break ;
                     default:
                         break ;
