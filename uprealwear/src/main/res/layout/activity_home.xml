@@ -35,22 +35,22 @@
             android:id="@+id/news"
             android:background="@drawable/news"
             android:layout_gravity="bottom|left"
-            android:layout_height="50dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
         <ImageButton
             android:id="@+id/list"
             android:background="@drawable/list"
             android:layout_gravity="center_horizontal|bottom"
-            android:layout_height="50dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
         <ImageButton
             android:id="@+id/search"
             android:background="@drawable/search"
             android:layout_gravity="bottom|right"
-            android:layout_height="50dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
     </FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>

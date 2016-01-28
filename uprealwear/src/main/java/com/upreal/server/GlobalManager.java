@@ -133,21 +133,6 @@ public class GlobalManager extends SoapManager {
         }
     }
 
-    public void dislikeSomething(int idTarget, int targetType, int idUser) {
-        String methodname = "dislikeSomething";
-
-        SoapObject request = new SoapObject(NAMESPACE, methodname);
-        request.addProperty("id_user", idUser);
-        request.addProperty("id_target", idTarget);
-        request.addProperty("id_target_type", targetType);
-
-        try {
-            callService(methodname, request);
-        } catch (Exception q) {
-            q.printStackTrace();
-        }
-    }
-
     public void unLikeSomething(int idTarget, int targetType, int idUser) {
         String methodname = "unLikeSomething";
 

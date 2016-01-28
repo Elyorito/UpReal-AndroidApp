@@ -74,6 +74,8 @@ public class SearchActivity extends Activity implements WearableListView.ClickLi
             categories.clear();
             for (Item i : res) {
                 categories.add(i);
+                categories.add(new Item(0, 10, "Store", null));
+                categories.add(new Item(0, 10, "User", null));
                 Log.e("NewsResultActivity", i.getId() + ":" + i.getName() + " // " + i.getImagePath());
             }
             if (categories.isEmpty()) {

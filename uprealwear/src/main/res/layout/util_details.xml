@@ -33,7 +33,7 @@
             android:fontFamily="sans-serif-condensed-light"
             android:lineSpacingExtra="-4sp"
             android:textColor="@color/black"
-            android:textSize="30dp" />
+            android:textSize="16dp" />
 
         <ImageView
             android:id="@+id/image"
@@ -47,22 +47,22 @@
             android:id="@+id/comment"
             android:background="@drawable/comment"
             android:layout_gravity="bottom|left"
-            android:layout_height="40dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
         <ImageButton
             android:id="@+id/add"
             android:background="@drawable/add"
             android:layout_gravity="center_horizontal|bottom"
-            android:layout_height="50dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
         <ImageButton
             android:id="@+id/like"
             android:background="@drawable/like"
             android:layout_gravity="bottom|right"
-            android:layout_height="50dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
     </FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>
