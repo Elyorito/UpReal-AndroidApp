@@ -84,6 +84,7 @@ public class ListCustomActivity extends AppCompatActivity {
                     public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] ints) {
                         for (final int position : ints) {
                             mAdapterList.remove(listProducts, position);
+                            //new DeleteItem().execute(listProducts.get(position).);
                             Snackbar.make(recyclerView.getRootView(), "Voulez vous vraiment supprimer?", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -140,6 +141,21 @@ public class ListCustomActivity extends AppCompatActivity {
             }
         };
         mUltimateRecyclerView.mRecyclerView.addOnItemTouchListener(dragDropTouchListener);
+    }
+
+    private class DeleteItem extends AsyncTask<Integer, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+            return gm.deleteItem(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+        }
     }
 
     private class RetrieveProductById extends AsyncTask<Void, Void, List<Product>> {

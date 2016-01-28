@@ -1,5 +1,6 @@
 package com.upreal.user;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -68,7 +69,8 @@ public class UserFragmentSearch extends Fragment {
             int nb = list.size();
 
             listUser = list;
-            if (listUser != null && getActivity().getApplicationContext() != null)
+            Activity activity = getActivity();
+            if (activity != null && activity.getApplicationContext() != null && listUser != null)
                 mAdapter = new UserSearchAdapter(listUser, getActivity().getApplicationContext());
             mRecyclerView.setAdapter(mAdapter);
         }

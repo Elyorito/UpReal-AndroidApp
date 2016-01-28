@@ -1,6 +1,7 @@
 package com.upreal.list;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.upreal.R;
 import com.upreal.utils.Lists;
+import com.upreal.utils.SoapGlobalManager;
 
 import java.util.List;
 
@@ -63,6 +65,7 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
                     case R.id.rowtextlist:
                         lists.remove(position);
                         notifyItemRemoved(position);
+                        new DeleteList().execute(position + 1);
                         return true;
                     default:
                         break;
@@ -86,6 +89,20 @@ public class AdapterListHomeCustom  extends RecyclerView.Adapter<AdapterListHome
         });
     }
 
+    private class DeleteList extends AsyncTask<Integer, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+            return gm.deleteLists(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+        }
+    }
     @Override
     public int getItemViewType(int position) {
         return TYPE_CUSTOM;

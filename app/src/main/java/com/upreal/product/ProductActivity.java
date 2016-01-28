@@ -34,6 +34,8 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.home.NavigationBar;
+import com.upreal.list.AdapterListHomeCustom;
+import com.upreal.list.ListActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
@@ -41,6 +43,7 @@ import com.upreal.utils.ConnectionDetector;
 import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
+import com.upreal.utils.Lists;
 import com.upreal.utils.LocationService;
 import com.upreal.utils.Product;
 import com.upreal.utils.Refresh;
@@ -52,6 +55,7 @@ import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -106,6 +110,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Integer> checkedList = new ArrayList<>();
 
     private String[] lists;
+
+    private  ArrayList<Lists> checkList = new ArrayList<>();
 
     private int status = 0;
     LocationService locationService;
@@ -194,79 +200,80 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
                                 break;
                             case 1: // Add to list
-                                mDbHelper = new DatabaseHelper(getApplicationContext());
-                                mDbQuery = new DatabaseQuery(mDbHelper);
-                                mDatabase = mDbHelper.openDataBase();
-
-                                final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-                                mDatabase.close();
-                                lists = new String[listsElements.length];
-
-                                for (int i = 0; i < listsElements.length; i++) {
-                                    lists[i] = listsElements[i][0];
-                                }
-                                Toast.makeText(ProductActivity.this, "ListLength:" + lists[0], Toast.LENGTH_SHORT).show();
-                                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
-                                TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
-
-                                addCustom.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-                                        builderCustom = new AlertDialog.Builder(v.getContext());
-                                        LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                        View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
-                                        final EditText editList = (EditText) view.findViewById(R.id.namelist);
-                                        builderCustom.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                                if (editList.getText().length() <= 0) {
-                                                    dialog.cancel();
-                                                }
-                                                dialog.dismiss();
-                                            }
-                                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
-                                            }
-                                        });
-                                        builderCustom.setView(view).create().show();
-                                    }
-                                });
-
-                                builderList = new AlertDialog.Builder(ProductActivity.this);
-                                builderList.setTitle(getString(R.string.add_product_in_which_list))
-                                        .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                                if (isChecked) {
-                                                    checkedList.add(which);
-                                                } else if (checkedList.contains(which)) {
-                                                    checkedList.remove(Integer.valueOf(which));
-                                                }
-                                                mDbHelper = new DatabaseHelper(dialogView.getContext());
-                                                mDbQuery = new DatabaseQuery(mDbHelper);
-                                                mDatabase = mDbHelper.openDataBase();
-                                            }
-                                        })
-                                        .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        }).setNegativeButton(getString(R.string.cancel),
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
-                                            }
-                                        }
-                                )
-                                        .create().show();
+                                new RetrieveList().execute();
+//                                mDbHelper = new DatabaseHelper(getApplicationContext());
+//                                mDbQuery = new DatabaseQuery(mDbHelper);
+//                                mDatabase = mDbHelper.openDataBase();
+//
+//                                final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
+//                                mDatabase.close();
+//                                lists = new String[listsElements.length];
+//
+//                                for (int i = 0; i < listsElements.length; i++) {
+//                                    lists[i] = listsElements[i][0];
+//                                }
+//                                Toast.makeText(ProductActivity.this, "ListLength:" + lists[0], Toast.LENGTH_SHORT).show();
+//                                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                                dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
+//                                TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
+//
+//                                addCustom.setOnClickListener(new View.OnClickListener() {
+//
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        builderCustom = new AlertDialog.Builder(v.getContext());
+//                                        LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                                        View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
+//                                        final EditText editList = (EditText) view.findViewById(R.id.namelist);
+//                                        builderCustom.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+//
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//
+//                                                if (editList.getText().length() <= 0) {
+//                                                    dialog.cancel();
+//                                                }
+//                                                dialog.dismiss();
+//                                            }
+//                                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                dialog.cancel();
+//                                            }
+//                                        });
+//                                        builderCustom.setView(view).create().show();
+//                                    }
+//                                });
+//
+//                                builderList = new AlertDialog.Builder(ProductActivity.this);
+//                                builderList.setTitle(getString(R.string.add_product_in_which_list))
+//                                        .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+//                                                if (isChecked) {
+//                                                    checkedList.add(which);
+//                                                } else if (checkedList.contains(which)) {
+//                                                    checkedList.remove(Integer.valueOf(which));
+//                                                }
+//                                                mDbHelper = new DatabaseHelper(dialogView.getContext());
+//                                                mDbQuery = new DatabaseQuery(mDbHelper);
+//                                                mDatabase = mDbHelper.openDataBase();
+//                                            }
+//                                        })
+//                                        .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                dialog.dismiss();
+//                                            }
+//                                        }).setNegativeButton(getString(R.string.cancel),
+//                                        new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                dialog.cancel();
+//                                            }
+//                                        }
+//                                )
+//                                        .create().show();
                                 break;
                             case 2: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
@@ -473,6 +480,107 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private class RetrieveList extends AsyncTask<Void, Void, List<Lists>> {
+
+        @Override
+        protected List<Lists> doInBackground(Void... params) {
+
+
+            SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+            if (userSession != null && userSession.isLogged()) {
+                SoapGlobalManager gm = new SoapGlobalManager();
+                List<Lists> lList = gm.getUserList(userSession.getUserId());
+
+                return lList;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final List<Lists> res) {
+            super.onPostExecute(res);
+            ArrayList<CharSequence> lists = new ArrayList<>();
+
+            for (Lists item : res) {
+                if (item.getId() > 5)
+                    lists.add(item.getName());
+            }
+            Log.e("ProductActivity", "WebService called. Result:");
+            if (lists.size() == 0) {
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(getApplicationContext());
+                builder.setTitle("Dialog");
+                builder.setMessage("Veuillez créer une liste.");
+                builder.setPositiveButton("OK", null);
+                builder.show();
+                return;
+            }
+            final CharSequence[] dialogList=  lists.toArray(new CharSequence[lists.size()]);
+            final AlertDialog.Builder builderDialog = new AlertDialog.Builder(ProductActivity.this);
+            builderDialog.setTitle(R.string.add_list);
+            int count = dialogList.length;
+            boolean[] is_checked = new boolean[count];
+
+
+            builderDialog.setMultiChoiceItems(dialogList, is_checked,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        public void onClick(DialogInterface dialog,
+                                            int whichButton, boolean isChecked) {
+                            if (isChecked) {
+                                for (Lists item : res) {
+                                    if (dialogList[whichButton] == item.getName())
+                                        checkList.add(item);
+                                }
+                            } else if (!isChecked) {
+                                for (Lists item : res) {
+                                    if (dialogList[whichButton] == item.getName())
+                                        checkList.remove(item);
+                                }
+                            }
+                            Toast.makeText(getApplicationContext(),"Total List " + checkList.size(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            builderDialog.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (checkList.size() > 0)
+                                new CreateItemList().execute();
+                        }
+                    });
+
+            builderDialog.setNegativeButton("Cancel",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            AlertDialog alert = builderDialog.create();
+            alert.show();
+        }
+    }
+
+    private class CreateItemList extends AsyncTask<Void, Void, Integer> {
+        SessionManagerUser userSession = new SessionManagerUser(getApplicationContext());
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            SoapGlobalManager gm = new SoapGlobalManager();
+            for (Lists item : checkList) {
+                int res = gm.createItem(item.getId(), mProduct.getId(), userSession.getUserId());
+            }
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+        }
     }
 
     private class RetrieveRateStatus extends AsyncTask<Void, Void, Integer> {

@@ -19,6 +19,60 @@ public class SoapGlobalManager extends SoapManager {
         super("GlobalManager");
     }
 
+    public boolean deleteLists(int id) {
+        Boolean result = false;
+        String methodName = "deleteLists";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id", id);
+
+        try {
+            SoapPrimitive response = (SoapPrimitive) callService(methodName, request);
+            result = Boolean.parseBoolean(response.toString());
+
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public boolean deleteItem(int id) {
+        Boolean result = false;
+        String methodName = "deleteLists";
+
+        SoapObject request = new SoapObject(NAMESPACE, methodName);
+        request.addProperty("id", id);
+
+        try {
+            SoapPrimitive response = (SoapPrimitive) callService(methodName, request);
+            result = Boolean.parseBoolean(response.toString());
+
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public int createItem(int id_list, int id_product, int id_user) {
+        int responseLists = 0;
+
+        String methodname = "createItem";
+        SoapObject request = new SoapObject(NAMESPACE, methodname);
+        request.addProperty("id_list", id_list);
+        request.addProperty("id_product", id_product);
+        request.addProperty("id_user", id_user);
+
+        try {
+            SoapPrimitive result = (SoapPrimitive) callService(methodname, request);
+            responseLists = Integer.parseInt(result.toString());
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+        return responseLists;
+    }
+
     public List<Items> getItemsLists(int idList) {
         List<Items> listItems = new ArrayList<>();
         String methodname = "getItemsLists";

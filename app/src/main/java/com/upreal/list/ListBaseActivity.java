@@ -65,7 +65,7 @@ public class ListBaseActivity extends AppCompatActivity {
                         product.setBrand(listcustom.get(i)[3]);
                         product.setId(Integer.parseInt(listcustom.get(i)[4]));
                         Intent intent = new Intent(view.getContext(), ProductActivity.class);
-                        intent.putExtra("listprod", product     );
+                        intent.putExtra("listprod", product);
                         view.getContext().startActivity(intent);
                     }
 
@@ -78,7 +78,5 @@ public class ListBaseActivity extends AppCompatActivity {
                     }
                 });
         mUltimateRecyclerView.mRecyclerView.addOnItemTouchListener(itemTouchListenerAdapter);
-
-
     }
 }
