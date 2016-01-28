@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +15,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -40,6 +38,7 @@ import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.LocationService;
@@ -51,7 +50,6 @@ import com.upreal.utils.SoapProductUtilManager;
 import com.upreal.utils.SoapUserUtilManager;
 import com.upreal.utils.database.DatabaseHelper;
 import com.upreal.utils.database.DatabaseQuery;
-import com.upreal.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 
@@ -69,12 +67,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private TabLayout tabLayout;
     private Context context;
     private Activity activity;
-    private Toolbar toolbar;
 
     private ViewPager mViewPager;
-    //private ProductViewPagerAdapter adapter;
     private ProductNewViewPagerAdapter adapter;
-    private SlidingTabLayout mSlidingTabLayout;
     private SessionManagerUser sessionManagerUser;
 
     private Product prod;
@@ -94,11 +89,13 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView prodPicture;
     private ProgressBar progressBar;
 
-    private Button geoloc;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+    private android.app.AlertDialog.Builder builder;
+    private View layout;
+
+
     private FloatingActionButton menu;
     private FloatingActionButton like;
+    private FloatingActionButton comment;
     private AlertDialog dialog;
     private Spinner spinner;
     private int idType;
@@ -151,6 +148,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         menu.setOnClickListener(this);
         like = (FloatingActionButton) findViewById(R.id.like);
         like.setOnClickListener(this);
+        comment = (FloatingActionButton) findViewById(R.id.comment);
+        comment.setOnClickListener(this);
+
+        builder = new android.app.AlertDialog.Builder(this);
+
         sessionManagerUser = new SessionManagerUser(context);
         new History.createHistory(context, 1, 2 , prod.getId()).execute();
 
@@ -365,7 +367,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.fab:
                 if (!sessionManagerUser.isLogged()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage(R.string.error)
                             .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -406,6 +407,66 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 } else
                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 break ;
+            case R.id.comment:
+                if (cd.isConnectedToInternet()) {
+                    if (!sessionManagerUser.isLogged()) {
+                        builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
+                                .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(context, LoginActivity.class);
+                                        context.startActivity(intent);
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).create().show();
+                    } else {
+                        builder.setTitle("Votre commentaire");
+                        LayoutInflater inflater = LayoutInflater.from(context);
+                        layout = inflater.inflate(R.layout.dialog_comment, null);
+                        builder.setView(layout);
+                        final EditText comment = (EditText) layout.findViewById(R.id.comment);
+                        final TextView limit = (TextView) layout.findViewById(R.id.limit);
+                        comment.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                limit.setText(s.length() + " / " + String.valueOf(250));
+                                if (s.length() > 250)
+                                    comment.setText(s.subSequence(0, 250));
+                            }
+                        });
+                        builder.setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (comment.getText().toString().equals(""))
+                                    Toast.makeText(context, "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
+                                else
+                                    new FragmentCommentary.SendComment(comment.getText().toString(), context, sessionManagerUser.getUserId(), prod.getId(), 2).execute();
+                            }
+                        });
+                        builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.create().show();
+                    }
+                } else
+                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break;
         }

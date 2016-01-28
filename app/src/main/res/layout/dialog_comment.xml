@@ -12,6 +12,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:hint="@string/your_comment"
+        android:textColor="@color/contents_text"
         android:ems="10"
         android:id="@+id/comment" />
 
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:inputType="number"
+        android:textColor="@color/ColorTitle"
         android:gravity="right"
         android:text="0/250"
         android:ems="10"

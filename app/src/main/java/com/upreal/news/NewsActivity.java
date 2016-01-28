@@ -1,5 +1,8 @@
 package com.upreal.news;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,16 +12,22 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
+import com.upreal.login.LoginActivity;
 import com.upreal.utils.Article;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;
@@ -37,8 +46,16 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
     private TextView bodyArticle;
     private TabLayout tabLayout;
     private ViewPager mViewPager;
+    private Context context;
+
     private NewsViewPagerAdapter adapter;
     private FloatingActionButton like;
+    private FloatingActionButton comment;
+
+    private android.app.AlertDialog.Builder builder;
+    private View layout;
+
+    private SessionManagerUser sessionManagerUser;
 
     private int status;
 
@@ -46,9 +63,13 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_layout_news);
+        context = getApplicationContext();
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         imageArticle = (ImageView) findViewById(R.id.imagenews);
         like = (FloatingActionButton) findViewById(R.id.like);
+        comment = (FloatingActionButton) findViewById(R.id.comment);
+
+        sessionManagerUser = new SessionManagerUser(context);
         article = getIntent().getExtras().getParcelable("listnews");
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -67,6 +88,8 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
         like.setOnClickListener(this);
+        comment.setOnClickListener(this);
+        builder = new android.app.AlertDialog.Builder(this);
     }
 
     @Override
@@ -88,6 +111,66 @@ public class NewsActivity extends AppCompatActivity implements View.OnClickListe
                 } else
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 new RetrieveRateStatus().execute();
+                break;
+            case R.id.comment:
+                if (cd.isConnectedToInternet()) {
+                    if (!sessionManagerUser.isLogged()) {
+                        builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
+                                .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(context, LoginActivity.class);
+                                        context.startActivity(intent);
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).create().show();
+                    } else {
+                        builder.setTitle("Votre commentaire");
+                        LayoutInflater inflater = LayoutInflater.from(context);
+                        layout = inflater.inflate(R.layout.dialog_comment, null);
+                        builder.setView(layout);
+                        final EditText comment = (EditText) layout.findViewById(R.id.comment);
+                        final TextView limit = (TextView) layout.findViewById(R.id.limit);
+                        comment.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                limit.setText(s.length() + " / " + String.valueOf(250));
+                                if (s.length() > 250)
+                                    comment.setText(s.subSequence(0, 250));
+                            }
+                        });
+                        builder.setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (comment.getText().toString().equals(""))
+                                    Toast.makeText(context, "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
+                                else
+                                    new FragmentCommentary.SendComment(comment.getText().toString(), context, sessionManagerUser.getUserId(), article.getId(), 4).execute();
+                            }
+                        });
+                        builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.create().show();
+                    }
+                } else
+                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

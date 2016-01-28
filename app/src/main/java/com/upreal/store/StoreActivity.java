@@ -13,6 +13,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +39,7 @@ import com.upreal.login.LoginActivity;
 import com.upreal.utils.Address;
 import com.upreal.utils.CircleTransform;
 import com.upreal.utils.ConnectionDetector;
+import com.upreal.utils.FragmentCommentary;
 import com.upreal.utils.History;
 import com.upreal.utils.IPDefiner;
 import com.upreal.utils.Refresh;
@@ -58,6 +62,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
     private TabLayout tabLayout;
     private Activity activity;
     private Context context;
+    private SessionManagerUser sessionManagerUser;
 
     private ViewPager mViewPager;
 
@@ -65,8 +70,12 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
 
     private Store store;
 
+    private android.app.AlertDialog.Builder builder;
+    private View layout;
+
     private FloatingActionButton menu;
     private FloatingActionButton like;
+    private FloatingActionButton comment;
     private AlertDialog dialog;
     private Address storeAddress;
 
@@ -108,6 +117,12 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         menu.setOnClickListener(this);
         like = (FloatingActionButton) findViewById(R.id.like);
         like.setOnClickListener(this);
+        comment = (FloatingActionButton) findViewById(R.id.comment);
+        comment.setOnClickListener(this);
+
+        builder = new android.app.AlertDialog.Builder(this);
+
+        sessionManagerUser = new SessionManagerUser(context);
         activity = this;
 
         final String[] option = new String[] { "Partager", "Rafraichir", "Suggestion" };
@@ -228,7 +243,6 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.fab:
                 if (!userSession.isLogged()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage(R.string.error)
                             .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -264,6 +278,66 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
                 new RetrieveRateStatus().execute();
                 break ;
+            case R.id.comment:
+                if (cd.isConnectedToInternet()) {
+                    if (!sessionManagerUser.isLogged()) {
+                        builder.setTitle("Vous voulez commenter cet utilisateur ?").setMessage("Connectez vous pour partager votre opinion")
+                                .setPositiveButton(v.getContext().getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(context, LoginActivity.class);
+                                        context.startActivity(intent);
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).create().show();
+                    } else {
+                        builder.setTitle("Votre commentaire");
+                        LayoutInflater inflater = LayoutInflater.from(context);
+                        layout = inflater.inflate(R.layout.dialog_comment, null);
+                        builder.setView(layout);
+                        final EditText comment = (EditText) layout.findViewById(R.id.comment);
+                        final TextView limit = (TextView) layout.findViewById(R.id.limit);
+                        comment.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                limit.setText(s.length() + " / " + String.valueOf(250));
+                                if (s.length() > 250)
+                                    comment.setText(s.subSequence(0, 250));
+                            }
+                        });
+                        builder.setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (comment.getText().toString().equals(""))
+                                    Toast.makeText(context, "Le commentaire ne peut etre vide", Toast.LENGTH_SHORT).show();
+                                else
+                                    new FragmentCommentary.SendComment(comment.getText().toString(), context, sessionManagerUser.getUserId(), store.getId(), 3).execute();
+                            }
+                        });
+                        builder.setNegativeButton(v.getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.create().show();
+                    }
+                } else
+                    Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.retry_retrieve_connection), Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break ;
         }

@@ -29,6 +29,7 @@ public class NewsViewPagerAdapter extends FragmentStatePagerAdapter {
         bundle.putParcelable("article", article);
         bundle.putInt("idArticle", article.getId());
         bundle.putInt("type", 4);
+        bundle.putInt("id", article.getId());
 
     }
 

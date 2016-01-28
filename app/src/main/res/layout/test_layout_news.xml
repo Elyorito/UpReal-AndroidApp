@@ -117,7 +117,19 @@
         android:src="@drawable/floating_action_button_ic_fab_star"
         app:layout_anchor="@+id/tabsnews"
         app:backgroundTint="@color/result_minor_text"
-        app:layout_anchorGravity="bottom|end">
+        app:layout_anchorGravity="end">
+
+    </android.support.design.widget.FloatingActionButton>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="150dp"
+        android:clickable="true"
+        android:src="@drawable/fab_add"
+        app:layout_anchor="@+id/tabsnews"
+        app:backgroundTint="@color/result_minor_text"
+        app:layout_anchorGravity="end">
 
     </android.support.design.widget.FloatingActionButton>
 

@@ -119,6 +119,18 @@
         app:layout_anchorGravity="bottom|end">
 
     </android.support.design.widget.FloatingActionButton>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="145dp"
+        android:clickable="true"
+        android:src="@drawable/fab_add"
+        app:layout_anchor="@id/quickinfo_product"
+        app:backgroundTint="@color/result_minor_text"
+        app:layout_anchorGravity="bottom|right|end">
+
+    </android.support.design.widget.FloatingActionButton>
 </android.support.design.widget.CoordinatorLayout>
 
     <android.support.v7.widget.RecyclerView
