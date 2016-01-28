@@ -102,6 +102,8 @@ public class ProductActivity extends Activity implements View.OnClickListener {
 
             likeV = gm.countRate(item.getId(), item.getTargetType(), 2);
             dislikeV = gm.countRate(item.getId(), item.getTargetType(), 3);
+
+            Log.e("test", likeV + " et " + dislikeV);
             if (userSession != null && userSession.isLogged()) {
                 return gm.getRateStatus(item.getId(), item.getTargetType(), userSession.getUserId());
             }

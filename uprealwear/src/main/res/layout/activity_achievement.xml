@@ -39,8 +39,8 @@
             android:id="@+id/status"
             android:background="@drawable/achievement"
             android:layout_gravity="bottom|right"
-            android:layout_height="50dp"
-            android:layout_width="50dp" />
+            android:layout_height="30dp"
+            android:layout_width="30dp" />
 
     </FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>
