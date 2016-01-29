@@ -1,5 +1,6 @@
 package com.upreal.user;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.upreal.R;
 import com.upreal.home.AdapterHomeHistory;
 import com.upreal.utils.Article;
 import com.upreal.utils.History;
+import com.upreal.utils.Product;
 import com.upreal.utils.SessionManagerUser;
 import com.upreal.utils.SoapGlobalManager;
 import com.upreal.utils.SoapProductManager;
@@ -67,7 +69,10 @@ public class HistoryFragment  extends Fragment {
                             break ;
                         case 2:
                             SoapProductManager pm = new SoapProductManager();
-                            h.setNameTarget(pm.getProductInfo(h.getIdTarget()).getName());
+                            Product product = pm.getProductInfo(h.getIdTarget());
+                            if (product != null) {
+                                h.setNameTarget(product.getName());
+                            }
                             break ;
                         case 3:
                             SoapStoreManager sm = new SoapStoreManager();
@@ -96,8 +101,12 @@ public class HistoryFragment  extends Fragment {
         @Override
         protected void onPostExecute(List<History> hList) {
             super.onPostExecute(hList);
-            mAdapterHistory = new AdapterHomeHistory(hList, getActivity().getApplicationContext());
-            mRecyclerViewHistory.setAdapter(mAdapterHistory);
+            Activity activity = getActivity();
+
+            if (activity != null) {
+                mAdapterHistory = new AdapterHomeHistory(hList, activity.getApplicationContext());
+                mRecyclerViewHistory.setAdapter(mAdapterHistory);
+            }
         }
     }
 }

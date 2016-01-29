@@ -41,8 +41,8 @@ public class GetProductActivity extends AppCompatActivity {
         Bitmap photoCapturedBitmap = BitmapFactory.decodeFile(mImageFileLocation);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Resize
-        photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, false);
-        photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        photoCapturedBitmap = Bitmap.createScaledBitmap(photoCapturedBitmap, 400, 700, true);
+        photoCapturedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         mBytes = stream.toByteArray();
         animatedCircleLoadingView = (AnimatedCircleLoadingView) findViewById(R.id.circle_loading_view);
         animatedCircleLoadingView.startIndeterminate();
