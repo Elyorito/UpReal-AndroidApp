@@ -29,8 +29,6 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
     private Button editProfile;
     private Button editPassword;
     private Button clearCache;
-    private Button likeFacebook;
-    private Button followTwitter;
     private Button bridge;
     private Button contactUs;
     private Button about;
@@ -48,8 +46,6 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
         editProfile = (Button) findViewById(R.id.edit_profil);
         editPassword = (Button) findViewById(R.id.change_password);
         clearCache = (Button) findViewById(R.id.clear_cache);
-        likeFacebook = (Button) findViewById(R.id.like_facebook);
-        followTwitter = (Button) findViewById(R.id.follow_twitter);
         bridge = (Button) findViewById(R.id.bridge);
         contactUs = (Button) findViewById(R.id.contact_us);
         about = (Button) findViewById(R.id.about);
@@ -58,8 +54,6 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
         editProfile.setOnClickListener(this);
         editPassword.setOnClickListener(this);
         clearCache.setOnClickListener(this);
-        likeFacebook.setOnClickListener(this);
-        followTwitter.setOnClickListener(this);
         bridge.setOnClickListener(this);
         contactUs.setOnClickListener(this);
         about.setOnClickListener(this);
@@ -102,10 +96,6 @@ public class ParameterActivity extends ActionBarActivity implements View.OnClick
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                break;
-            case R.id.like_facebook:
-                break;
-            case R.id.follow_twitter:
                 break;
             case R.id.bridge:
                 if (sessionManagerUser.isLogged()) {
