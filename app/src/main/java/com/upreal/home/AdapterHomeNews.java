@@ -32,13 +32,13 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        Button type;
+        Button like;
         TextView title;
         ImageView image;
         LinearLayout news;
         public ViewHolder(View itemView) {
             super(itemView);
-            type = (Button) itemView.findViewById(R.id.fab);
+            like = (Button) itemView.findViewById(R.id.fab);
             title = (TextView) itemView.findViewById(R.id.titlenews);
             image = (ImageView) itemView.findViewById(R.id.imagenews);
             news = (LinearLayout) itemView.findViewById(R.id.newsarticle);
@@ -65,7 +65,7 @@ public class AdapterHomeNews extends RecyclerView.Adapter<AdapterHomeNews.ViewHo
         } else
             Toast.makeText(context, R.string.no_internet_connection + R.string.please_reload, Toast.LENGTH_SHORT).show();
         viewHolder.title.setText(this.articles.get(i).getTitle());
-        viewHolder.type.setText(Integer.toString(this.articles.get(i).getType()));
+        viewHolder.like.setText(Integer.toString(this.articles.get(i).getType()));
         viewHolder.news.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

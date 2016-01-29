@@ -58,6 +58,11 @@ public class NewsFragment extends Fragment {
         protected List<Article> doInBackground(Void... params) {
             SoapGlobalManager gm = new SoapGlobalManager();
             listnews = gm.getNews();
+
+            for (Article a : listnews) {
+                a.setType(gm.countRate(a.getId(), 4, 2));
+            }
+
             return listnews;
         }
 
