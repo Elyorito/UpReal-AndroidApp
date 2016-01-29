@@ -41,7 +41,7 @@
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/button_google"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/holo_red_light"
                     android:layout_margin="10dp"
@@ -49,19 +49,10 @@
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/facebookconnect"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="10dp"/>
-
-                <Button
-                    android:id="@+id/button_twitter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/twitter"
-                    android:background="@android:color/holo_blue_bright"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
