@@ -34,8 +34,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.home.NavigationBar;
-import com.upreal.list.AdapterListHomeCustom;
-import com.upreal.list.ListActivity;
 import com.upreal.login.LoginActivity;
 import com.upreal.utils.BlurImages;
 import com.upreal.utils.CircleTransform;
@@ -145,6 +143,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
         CharSequence Tab[] = {"Info.", "Prix", "Avis"};
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        comment = (FloatingActionButton) findViewById(R.id.comment);
+        comment.setOnClickListener(this);
         adapter = new ProductNewViewPagerAdapter(getSupportFragmentManager(), Tab, 3, prod, this, locationService);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
@@ -152,9 +152,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         menu.setOnClickListener(this);
         like = (FloatingActionButton) findViewById(R.id.like);
         like.setOnClickListener(this);
-        comment = (FloatingActionButton) findViewById(R.id.comment);
-        comment.setOnClickListener(this);
-
         builder = new android.app.AlertDialog.Builder(this);
 
         sessionManagerUser = new SessionManagerUser(context);
@@ -201,79 +198,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                                 break;
                             case 1: // Add to list
                                 new RetrieveList().execute();
-//                                mDbHelper = new DatabaseHelper(getApplicationContext());
-//                                mDbQuery = new DatabaseQuery(mDbHelper);
-//                                mDatabase = mDbHelper.openDataBase();
-//
-//                                final String[][] listsElements = mDbQuery.QueryGetElements("lists", new String[]{"name", "public", "nb_items", "id_user", "type"}, "type=?", new String[]{"8"}, null, null, null);
-//                                mDatabase.close();
-//                                lists = new String[listsElements.length];
-//
-//                                for (int i = 0; i < listsElements.length; i++) {
-//                                    lists[i] = listsElements[i][0];
-//                                }
-//                                Toast.makeText(ProductActivity.this, "ListLength:" + lists[0], Toast.LENGTH_SHORT).show();
-//                                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                                dialogView = layoutInflater.inflate(R.layout.dialog_addproduct_list, null);
-//                                TextView addCustom = (TextView) dialogView.findViewById(R.id.addcustom_list);
-//
-//                                addCustom.setOnClickListener(new View.OnClickListener() {
-//
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        builderCustom = new AlertDialog.Builder(v.getContext());
-//                                        LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                                        View view = layoutInflater.inflate(R.layout.dialog_addlist, null);
-//                                        final EditText editList = (EditText) view.findViewById(R.id.namelist);
-//                                        builderCustom.setCancelable(false).setTitle(R.string.add_list).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-//
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which) {
-//
-//                                                if (editList.getText().length() <= 0) {
-//                                                    dialog.cancel();
-//                                                }
-//                                                dialog.dismiss();
-//                                            }
-//                                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which) {
-//                                                dialog.cancel();
-//                                            }
-//                                        });
-//                                        builderCustom.setView(view).create().show();
-//                                    }
-//                                });
-//
-//                                builderList = new AlertDialog.Builder(ProductActivity.this);
-//                                builderList.setTitle(getString(R.string.add_product_in_which_list))
-//                                        .setMultiChoiceItems(lists, null, new DialogInterface.OnMultiChoiceClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                                                if (isChecked) {
-//                                                    checkedList.add(which);
-//                                                } else if (checkedList.contains(which)) {
-//                                                    checkedList.remove(Integer.valueOf(which));
-//                                                }
-//                                                mDbHelper = new DatabaseHelper(dialogView.getContext());
-//                                                mDbQuery = new DatabaseQuery(mDbHelper);
-//                                                mDatabase = mDbHelper.openDataBase();
-//                                            }
-//                                        })
-//                                        .setPositiveButton(getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which) {
-//                                                dialog.dismiss();
-//                                            }
-//                                        }).setNegativeButton(getString(R.string.cancel),
-//                                        new DialogInterface.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which) {
-//                                                dialog.cancel();
-//                                            }
-//                                        }
-//                                )
-//                                        .create().show();
                                 break;
                             case 2: // Share
                                 Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();

@@ -59,8 +59,7 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
         bundle = new Bundle();
         bundle.putParcelable("product", product);
         bundle.putInt("idProduct", product.getId());
-        bundle.putDouble("latitude", locationService.latitude
-        );
+        bundle.putDouble("latitude", locationService.latitude);
         bundle.putDouble("longitude", locationService.longitude);
         bundle.putInt("id", product.getId());
         bundle.putInt("type", 2);
@@ -69,7 +68,6 @@ public class ProductNewViewPagerAdapter extends FragmentStatePagerAdapter implem
 
     @Override
     public Fragment getItem(int position) {
-
         switch (position) {
             case 0: //Info
                 ProductFragmentInfo comd = new ProductFragmentInfo();

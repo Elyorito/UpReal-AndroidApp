@@ -7,9 +7,9 @@ public class IPDefiner {
 
     public static String getIP() {
         /* OUTSIDE */
-        return "http://163.5.84.202/";
+       return "http://163.5.84.202/";
 
         /* INSIDE */
-        //return "http://10.224.9.202/";
+       // return "http://10.224.9.202/";
     }
 }

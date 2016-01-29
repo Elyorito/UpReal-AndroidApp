@@ -57,7 +57,7 @@
             android:id="@+id/RecyclerView_NavigationDrawerR"
             android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:background="#F4F4F4"
+            android:background="@color/white"
             android:layout_gravity="right"
             android:scrollbars="vertical">
 

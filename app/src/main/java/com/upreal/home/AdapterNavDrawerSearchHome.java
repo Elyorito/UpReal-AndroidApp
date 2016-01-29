@@ -3,6 +3,7 @@ package com.upreal.home;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.upreal.R;
 import com.upreal.product.ProductSearchActivity;
 
@@ -24,33 +27,25 @@ import static android.widget.TextView.OnEditorActionListener;
 public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavDrawerSearchHome.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;
-    private static final int TYPE_PRICE = 1;
-    private static final int TYPE_RATING = 2;
-    private static final int TYPE_BUT_DONE = 3;
+    private static final int TYPE_BUT_DONE = 1;
+    private static final int TYPE_ICON = 2;
 
     private Context context;
     private String mSearchName;
     private EditText search;
+    private ImageView icon;
+
 
     public class ViewHolder extends  RecyclerView.ViewHolder{
         int HolderId;
 
         Button but_done;
 
-        EditText price_min;
-        EditText price_max;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
             if (ViewType == TYPE_BUT_DONE) {
                 but_done = (Button) itemView.findViewById(R.id.but_done_search);
-                HolderId = 3;
-            }
-            if (ViewType == TYPE_RATING) {
-                HolderId = 2;
-            } else if (ViewType == TYPE_PRICE) {
-                price_max = (EditText) itemView.findViewById(R.id.price_search_max);
-                price_min = (EditText) itemView.findViewById(R.id.price_search_min);
                 HolderId = 1;
             } else if (ViewType == TYPE_HEADER){
                 search = (EditText) itemView.findViewById(R.id.edittext_search);
@@ -63,6 +58,10 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                     }
                 });
                 HolderId = 0;
+            } else if (ViewType == TYPE_ICON){
+                icon = (ImageView) itemView.findViewById(R.id.imageView);
+                Log.v("LOL", icon.getWidth() + " " + icon.getHeight());
+                HolderId = 2;
             }
         }
     }
@@ -79,28 +78,18 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
 
             ViewHolder vhDone = new ViewHolder(v, viewType);
             return vhDone;
-
-        } else if (viewType == TYPE_RATING) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rate_search_home, parent, false);
-
-            ViewHolder vhRate = new ViewHolder(v, viewType);
-            return vhRate;
-        } else if (viewType == TYPE_PRICE) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.price_search_home, parent, false);
-
-            ViewHolder vhPrice = new ViewHolder(v, viewType);
-            return vhPrice;
         } else if (viewType == TYPE_HEADER) {
-
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_search_home, parent, false);
 
             ViewHolder vhHeader = new ViewHolder(v, viewType);
             search.setHint("produit, marque, magasin, utilisateur");
             search.setTag(vhHeader);
             return vhHeader;
+        } else if (viewType == TYPE_ICON){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.icon_search_home, parent, false);
+            ViewHolder vhIcon = new ViewHolder(v, viewType);
+            return vhIcon;
         }
-
         return null;
     }
 
@@ -119,7 +108,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
             });
         }
 
-        if (holder.HolderId == 3) {
+        if (holder.HolderId == 1) {
             holder.but_done.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -135,11 +124,18 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
                 }
             });
         }
+
+        if (holder.HolderId == 2) {
+            Picasso.with(context)
+                    .load(R.drawable.flat_magnifier_icon)
+                    .resize(800,566)
+                    .into(icon);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 3;
     }
 
     @Override
@@ -147,9 +143,7 @@ public class AdapterNavDrawerSearchHome extends RecyclerView.Adapter<AdapterNavD
         if (isPositionHeader(position))
             return TYPE_HEADER;
         else if (position == 1)
-            return TYPE_PRICE;
-        else if (position == 2)
-            return TYPE_RATING;
+            return TYPE_ICON;
         else
             return TYPE_BUT_DONE;
     }

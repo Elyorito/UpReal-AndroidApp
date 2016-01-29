@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,14 +24,14 @@ import java.util.List;
  */
 public class FragmentCommentary extends Fragment {
     private ConnectionDetector cd;
-
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Rate> listRate = new ArrayList<Rate>();
     private List<RateComment> listComment = new ArrayList<>();
     private Context context;
+
+    private FloatingActionButton comment;
 
     private int id = 0;
     private int type = 0;
@@ -56,6 +57,7 @@ public class FragmentCommentary extends Fragment {
             new RetrieveComment().execute();
         else
             Toast.makeText(context, getResources().getString(R.string.no_internet_connection) + " " + getResources().getString(R.string.please_reload), Toast.LENGTH_SHORT).show();
+
         return v;
     }
 
