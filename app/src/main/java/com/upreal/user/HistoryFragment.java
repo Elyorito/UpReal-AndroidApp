@@ -56,6 +56,9 @@ public class HistoryFragment  extends Fragment {
         @Override
         protected List<History> doInBackground(Void... params) {
 
+            Activity activity = getActivity();
+            if (activity == null)
+                return hList;
             SessionManagerUser userSession = new SessionManagerUser(getActivity().getApplicationContext());
             if (userSession != null && userSession.isLogged()) {
                 SoapUserUtilManager uum = new SoapUserUtilManager();
