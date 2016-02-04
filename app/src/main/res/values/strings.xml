@@ -38,7 +38,7 @@
     <string name="last_reduc">Dernières réductions</string>
     
     <!--Login-->
-    <string name="mailorid">Via Email ou identifiant</string>
+    <string name="mailorid">Identifiant</string>
     <string name="password">Mot de passe</string>
     <string name="connect">Se Connecter</string>
     <string name="facebook">Facebook</string>

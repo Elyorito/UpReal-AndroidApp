@@ -48,6 +48,7 @@
                     android:layout_weight="1"/>
 
                 <com.facebook.login.widget.LoginButton
+                    android:visibility="gone"
                     android:id="@+id/facebookconnect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

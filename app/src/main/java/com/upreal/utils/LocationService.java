@@ -35,7 +35,6 @@ public class LocationService implements LocationListener {
     public double longitude;
     public double latitude;
 
-
     /**
      * Singleton implementation
      * @return

@@ -122,8 +122,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         googleConnection = GoogleConnection.getInstance(this);
         googleConnection.addObserver(this);
 
-        tConnect = (Button) findViewById(R.id.button_twitter);
-        tConnect.setOnClickListener(this);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -201,8 +199,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 googleConnection.connect();
                 Toast.makeText(v.getContext(), "Google +", Toast.LENGTH_SHORT).show();
                 onSignInClicked();
-                break;
-            case R.id.button_twitter:
                 break;
         }
     }

@@ -22,7 +22,7 @@ import com.upreal.utils.User;
 
 public class BridgeDeviceActivity extends Activity implements MessageApi.MessageListener, GoogleApiClient.ConnectionCallbacks {
 
-    private int idUser = 1;
+    private int idUser = 11;
     private GoogleApiClient gClient;
 
     @Override
@@ -33,7 +33,7 @@ public class BridgeDeviceActivity extends Activity implements MessageApi.Message
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .build();
-//        new RetrieveUser().execute();
+        new RetrieveUser().execute();
     }
 
     @Override

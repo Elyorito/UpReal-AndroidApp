@@ -60,7 +60,7 @@ public class ProductFragmentNewPrice extends android.support.v4.app.Fragment {
         protected List<List<String>> doInBackground(Void... voids) {
             SoapStoreManager sm = new SoapStoreManager();
 
-            List<List<String>> storeNearby = sm.getProductByLocation(latitude, longitude, 2, idProduct);
+            List<List<String>> storeNearby = sm.getProductByLocation(48.815280, 2.363211, 2, idProduct);
             return storeNearby;
         }
 
